@@ -1,6 +1,14 @@
 <template>
   <h1>Codices</h1>
   <Link href="/codex_new">Add Codex</Link>
+  <p>  
+    <Link class="pages" v-for="link in documents.links" 
+    :key="link.label" 
+    :href="link.url" 
+    v-html="link.label" 
+    />
+  </p>
+
   <table>
     <tr>
       <th></th>
@@ -27,10 +35,7 @@
         <input size="3" v-model="search_to" type="text" />
       </td>
     </tr>
-    <tr>
-      <td colspan="6">Search Results: {{ documents.length }}</td>
-    </tr>
-    <tr v-for="document in documents" :key="document.id">
+    <tr v-for="document in documents.data" :key="document.id">
       <td>
         <Link
           :href="'/codex_show/' + document.id"
@@ -60,6 +65,12 @@
       <td v-text="document.start_year + '–' + document.end_year"></td>
     </tr>
   </table>
+  <Link class="pages" v-for="link in documents.links" 
+    :key="link.label" 
+    :href="link.url" 
+    v-html="link.label" 
+  />
+
 </template>
 
 <script setup>
@@ -67,7 +78,7 @@ import { ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
-  documents: Array,
+  documents: Object,
   languages: Array,
   auth: Object,
 });
@@ -173,6 +184,12 @@ watch(search_to, (value) => {
 </script>
 
 <style>
+
+.pages {
+  padding: 4px; 
+  border-style: solid; color: #ffffff; color: #aaaaaa;
+}
+
 td {
   padding: 5px;
 }

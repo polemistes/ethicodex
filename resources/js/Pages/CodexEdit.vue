@@ -693,8 +693,6 @@ function delimage(image) {
 }
 
 function addimages(imagefiles) {
-   // Inertia.remember(form.value, 'form');
-
     Inertia.post("/addimages", {images: imagefiles,
                                 document_id: props.document.id,},
                                 { preserveState: true,
@@ -714,9 +712,7 @@ function addimages(imagefiles) {
                                     
                                     }}
                 )
-
     this.loadImages.value=null;
-//    this.form.images = this.props.images;
 }
 
 function submit() {

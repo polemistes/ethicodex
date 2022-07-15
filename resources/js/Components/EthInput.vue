@@ -105,50 +105,36 @@
 
 
     <div v-if="input_type == 'document_choice_taken'" class="input_oneline">
+      
       <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.standard_name }},</span></p>
+      <p style="border-style: solid;">
+        <b>Selected:</b> 
+        <span v-for="value in modelValue" :key="value.id">
+          {{ value.standard_name }},
+        </span>
+      </p>
+      
       <div v-if="choices.length > 9">
         <label :for="search">Search:</label>
         <input type="text" v-model="search">
       </div>
+      
       <div class="scrollwindow">
-      <div v-for="choice in search_choices_doc" :key="choice.id">
-        <input type="checkbox"
+        <div v-for="choice in search_choices_doc" :key="choice.id">
+          <input type="checkbox"
               :id="choice.id"  
               :value="choice"
               v-model="modelValue"
               @change="$emit('update:modelValue', modelValue)">
-        <label> 
-          {{ choice.standard_name }} (Tr.ID: {{ choice.trismegistos_id }})
-          <span v-if="choice.modern_collection_id && choice.modern_collection_id != collection_id">
-            <b> Assigned to {{ collections.find(x => x.id === choice.modern_collection_id).name }}</b>
-          </span>
-        </label>
-      </div>
+          <label> 
+            {{ choice.standard_name }} (Tr.ID: {{ choice.trismegistos_id }})
+            <span v-if="choice.modern_collection_id && choice.modern_collection_id != collection_id">
+              <b> Assigned to {{ collections.find(x => x.id === choice.modern_collection_id).name }}</b>
+            </span>
+          </label>
+        </div>
       </div>    
     </div>
-
-<!--
-    <div v-if="input_type == 'document_choice_with_collection_id'" class="input_oneline">
-      <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.standard_name }},</span></p>
-      <div class="scrollwindow">
-      <div v-for="choice in choices" :key="choice.id">
-        <input type="checkbox"
-              :id="choice.id"  
-              :value="modelValue"
-              v-model="modelValue"
-              @change="$emit('update:modelValue', modelValue)">
-        <label for="choice.id"> 
-          {{ choice.standard_name }} (Tr.ID: {{ choice.trismegistos_id }})
-          <span v-if="(choice.modern_collection_id =! collection_id) && (choice.modern_collection_id =! null)">
-            (Assigned to Other Collection)
-          </span>
-        </label>
-      </div>
-      </div>    
-    </div>
--->
 
     <div v-if="input_type == 'multi_choice_edit_delete'" class="input_oneline">
       <label :for="input_id"><slot /></label>
@@ -227,7 +213,8 @@ const search_choices = computed(() => {
 
 const search_choices_doc = computed(() => {
   return search.value != "" ? props.choices.filter(function (el) {
-      return (el.standard_name != null) ? el.standard_name.includes(search.value) : null || el.trismegistos_id.toString().includes(search.value)}) : props.choices
+      return (el.standard_name != null) ? el.standard_name.includes(search.value) : null || 
+            (el.trismegistos_id != null) ? el.trismegistos_id.toString().includes(search.value) : null}) : props.choices
 })
 
 </script>
