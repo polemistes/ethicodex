@@ -72,13 +72,13 @@ class DocumentController extends Controller
             ->when($search_to, function ($query, $search_to) {
                 $query->where('start_year', '<=', $search_to);
             })
-            ->get();
+            ->paginate(10)->withQueryString();
 
         return (Inertia::render('Codices', [
-            'documents' => $documents
-
+            'documents' => $documents,
         ]));
     }
+
 
     /**
      * Show the form for creating a new resource.

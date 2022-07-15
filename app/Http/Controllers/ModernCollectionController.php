@@ -88,17 +88,18 @@ class ModernCollectionController extends Controller
      * @param  \App\Models\ModernCollection  $modernCollection
      * @return \Illuminate\Http\Response
      */
-    public function edit(ModernCollection $modernCollection)
+    public function edit(Request $request, ModernCollection $modernCollection)
     {
         $this->authorize('update', $modernCollection);
-        
+
+        $search_string = $request->search_string;
+
         return (Inertia::render('ModernCollectionEdit', [
             'modern_collection' => $modernCollection,
             'modern_collections_all' => ModernCollection::all(),
-            'documents' => $modernCollection->documents()->get(),
-            'documents_all' => Document::all(),
+            'documents' => $modernCollection->documents()->get(['id', 'standard_name', 'modern_collection_id', 'trismegistos_id']),
+            'documents_all' => Document::all(['id', 'standard_name', 'modern_collection_id', 'trismegistos_id'])
         ]));
-
     }
 
     /**
