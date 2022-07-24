@@ -1,70 +1,64 @@
 <template>
-  <h1>Codices</h1>
-  <Link href="/codex_new">Add Codex</Link>
-  <p>  
+  <div id="topline">
+    <Link class="pages" href="/codex_new">Add Codex</Link>  
     <Link class="pages" v-for="link in documents.links" 
-    :key="link.label" 
-    :href="link.url" 
-    v-html="link.label" 
+      :key="link.label" 
+      :href="link.url" 
+      v-html="link.label" 
     />
-  </p>
+  </div>
+  <div class="flex-container">
+      <div class="first">Nothing</div>
+      <div class="second">Standard Name</div>
+      <div class="third">Shelfmark</div>
+      <div class="fourth">Publication</div>
+      <div class="fifth">Trismegistos ID</div>
+      <div class="sixth">Date</div>
+  </div>
+  <div class="flex-container">
+      <div class="first">Search:</div>
+      <div class="second"><input class="searchfield" v-model="search_standard" type="text" /></div>
+      <div class="third"><input class="searchfield" v-model="search_shelf" type="text" /></div>
+      <div class="fourth"><input class="searchfield" v-model="search_pub" type="text" /></div>
+      <div class="fifth"><input class="searchfield" v-model="search_tri" type="text" /></div>
+      <div class="sixth">
+        <span class="searchfield">
+          <input size="3" v-model="search_from" type="text" /> –
+          <input size="3" v-model="search_to" type="text" />
+        </span>
+      </div>
+  </div>
 
-  <table>
-    <tr>
-      <th></th>
-      <th>Standard Name</th>
-      <th>Shelfmark</th>
-      <th>Publication</th>
-      <th>Language</th>
-      <th>Date</th>
-    </tr>
-    <tr>
-      <td>Search:</td>
-      <td><input v-model="search_standard" type="text" /></td>
-      <td><input v-model="search_shelf" type="text" /></td>
-      <td><input v-model="search_pub" type="text" /></td>
-      <td>
-        <select v-model="search_lang">
-          <option></option>
-          <option>Greek</option>
-          <option>Latin</option>
-        </select>
-      </td>
-      <td style="white-space: nowrap">
-        <input size="3" v-model="search_from" type="text" /> –
-        <input size="3" v-model="search_to" type="text" />
-      </td>
-    </tr>
-    <tr v-for="document in documents.data" :key="document.id">
-      <td>
-        <Link
+  <div class="flex-container" v-for="document in documents.data" :key="document.id">
+    <div class="first">
+      <Link
           :href="'/codex_show/' + document.id"
           class="text-blue-800 hover:underline"
-          >Show </Link
-        >
-        <Link
+          >Show 
+      </Link>
+      <Link
           v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
           :href="'/codex_edit/' + document.id"
           class="text-blue-800 hover:underline"
           >Edit
-        </Link>
-        <Link
+      </Link>
+      <Link
           v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
           onclick="return confirm('Are you sure?')"
           :href="'/codex_delete/' + document.id"
           class="text-blue-800 hover:underline"
           method="post"
           >Delete
-        </Link>
-      </td>
+      </Link>
+    </div>
 
-      <td v-text="document.standard_name"></td>
-      <td v-text="document.current_shelfmarks"></td>
-      <td v-text="document.publication"></td>
-      <td v-text="document.language_comment"></td>
-      <td v-text="document.start_year + '–' + document.end_year"></td>
-    </tr>
-  </table>
+    <div class="second" v-text="document.standard_name"></div>
+    <div class="third" v-text="document.current_shelfmarks"></div>
+    <div class="fourth" v-text="document.publication"></div>
+    <div class="fifth" v-text="document.trismegistos_id"></div>
+    <div class="sixth" v-text="document.start_year + '–' + document.end_year"></div>
+  </div>
+  
   <Link class="pages" v-for="link in documents.links" 
     :key="link.label" 
     :href="link.url" 
@@ -88,7 +82,7 @@ let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 let search_standard = ref("");
 let search_shelf = ref("");
 let search_pub = ref("");
-let search_lang = ref("");
+let search_tri = ref("");
 let search_from = ref("");
 let search_to = ref("");
 
@@ -99,7 +93,7 @@ watch(search_standard, (value) => {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -114,7 +108,7 @@ watch(search_shelf, (value) => {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -129,7 +123,7 @@ watch(search_pub, (value) => {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -137,14 +131,14 @@ watch(search_pub, (value) => {
   );
 });
 
-watch(search_lang, (value) => {
+watch(search_tri, (value) => {
   Inertia.get(
     "/codices",
     {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -159,7 +153,7 @@ watch(search_from, (value) => {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -174,7 +168,7 @@ watch(search_to, (value) => {
       search_standard: search_standard.value,
       search_shelf: search_shelf.value,
       search_pub: search_pub.value,
-      search_lang: search_lang.value,
+      search_tri: search_tri.value,
       search_from: search_from.value,
       search_to: search_to.value,
     },
@@ -184,26 +178,62 @@ watch(search_to, (value) => {
 </script>
 
 <style>
+#topline {
+  display: flex;
+  flex-direction: row;
+}
 
+#topline div {
+  align-self: center;
+  justify-self: center;
+}
 .pages {
-  padding: 4px; 
-  border-style: solid; color: #ffffff; color: #aaaaaa;
+  padding: 1em; 
 }
 
-td {
-  padding: 5px;
-}
-tr:nth-child(even) {
-  background: #eee;
-}
-tr:nth-child(odd) {
-  background: #aaa;
+.flex-container {
+  display: flex;
+  border-style: none;
+  border-radius: 0.5em;
+  padding: 1em;
+  margin: 0.5em;
+  gap: 1em;
+  background-color: lightgray;
 }
 
-table {
-  margin-top: 10px;
-  overflow: hidden;
-  border-radius: 10px;
-  border-spacing: 0;
+.first {
+  flex: 0 0 10em;
+  align-self: center;
+  justify-self: end;
+}
+
+.second {
+  flex: 0 0 10%;
+  align-self: center;
+  justify-self: end;
+}
+.third {
+  flex: 0 0 30%;
+  align-self: center;
+  justify-self: end;
+}
+.fourth {
+  flex: 0 0 30%;
+  align-self: center;
+  justify-self: end;
+}
+.fifth {
+  flex: 0 0 8%;
+  align-self: center;
+  justify-self: end;
+}
+.sixth {
+  flex: 0 0 8%;
+  align-self: center;
+  justify-self: end;
+}
+
+.searchfield {
+  width: 100%;
 }
 </style>

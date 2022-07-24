@@ -18,15 +18,6 @@ function toggle() {
 </script>
 
 <style>
-.container {
-  display: flex;
-  background-color: #bbb;
-  margin: 10px;
-  padding: 20px;
-  font-family: sans-serif;
-  font-size: 14px;
-  flex-direction: column;
-  border-radius: 10px;
-}
+
 
 </style>
