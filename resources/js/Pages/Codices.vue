@@ -16,15 +16,60 @@
       <div class="sixth">Date</div>
   </div>
   <div class="flex-container">
-      <div class="first">Search:</div>
-      <div class="second"><input class="searchfield" v-model="search_standard" type="text" /></div>
-      <div class="third"><input class="searchfield" v-model="search_shelf" type="text" /></div>
-      <div class="fourth"><input class="searchfield" v-model="search_pub" type="text" /></div>
-      <div class="fifth"><input class="searchfield" v-model="search_tri" type="text" /></div>
+      <div class="first">
+        Search:
+      </div>
+
+      <div class="second">
+        <input
+          v-model="search_standard"
+          @keyup="sendsearch()" 
+          class="searchfield" 
+          type="text" 
+        />
+      </div>
+
+      <div class="third">
+        <input
+          v-model="search_shelf" 
+          @keyup="sendsearch()" 
+          class="searchfield" 
+          type="text" 
+        />
+      </div>
+      
+      <div class="fourth">
+        <input 
+          v-model="search_pub"
+          @keyup="sendsearch()" 
+          class="searchfield" 
+          type="text" 
+        />
+      </div>
+
+      <div class="fifth">
+        <input
+          v-model="search_tri"
+          @keyup="sendsearch()" 
+          class="searchfield" 
+          type="text" 
+        />
+      </div>
+
       <div class="sixth">
         <span class="searchfield">
-          <input size="3" v-model="search_from" type="text" /> –
-          <input size="3" v-model="search_to" type="text" />
+          <input
+            v-model="search_from"
+            @keyup="sendsearch()" 
+            size="3" 
+            type="text" 
+          /> –
+          <input 
+            v-model="search_to"
+            @keyup="sendsearch()" 
+            size="3" 
+            type="text" 
+          />
         </span>
       </div>
   </div>
@@ -68,25 +113,30 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
   documents: Object,
-  languages: Array,
+  search_standard: String,
+  search_shelf: String,
+  search_pub: String,
+  search_tri: String,
+  search_from: String,
+  search_to: String,
   auth: Object,
 });
 
-let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
+  let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 
-let search_standard = ref("");
-let search_shelf = ref("");
-let search_pub = ref("");
-let search_tri = ref("");
-let search_from = ref("");
-let search_to = ref("");
+  let search_standard = ref(props.search_standard);
+  let search_shelf = ref(props.search_shelf);
+  let search_pub = ref(props.search_pub);
+  let search_tri = ref(props.search_tri);
+  let search_from = ref(props.search_from);
+  let search_to = ref(props.search_to);
 
-watch(search_standard, (value) => {
+function sendsearch() {
   Inertia.get(
     "/codices",
     {
@@ -97,84 +147,11 @@ watch(search_standard, (value) => {
       search_from: search_from.value,
       search_to: search_to.value,
     },
-    { preserveState: true }
-  );
-});
+    { preserveState: true,
+      preserveScroll: true, }
+  );  
+}
 
-watch(search_shelf, (value) => {
-  Inertia.get(
-    "/codices",
-    {
-      search_standard: search_standard.value,
-      search_shelf: search_shelf.value,
-      search_pub: search_pub.value,
-      search_tri: search_tri.value,
-      search_from: search_from.value,
-      search_to: search_to.value,
-    },
-    { preserveState: true }
-  );
-});
-
-watch(search_pub, (value) => {
-  Inertia.get(
-    "/codices",
-    {
-      search_standard: search_standard.value,
-      search_shelf: search_shelf.value,
-      search_pub: search_pub.value,
-      search_tri: search_tri.value,
-      search_from: search_from.value,
-      search_to: search_to.value,
-    },
-    { preserveState: true }
-  );
-});
-
-watch(search_tri, (value) => {
-  Inertia.get(
-    "/codices",
-    {
-      search_standard: search_standard.value,
-      search_shelf: search_shelf.value,
-      search_pub: search_pub.value,
-      search_tri: search_tri.value,
-      search_from: search_from.value,
-      search_to: search_to.value,
-    },
-    { preserveState: true }
-  );
-});
-
-watch(search_from, (value) => {
-  Inertia.get(
-    "/codices",
-    {
-      search_standard: search_standard.value,
-      search_shelf: search_shelf.value,
-      search_pub: search_pub.value,
-      search_tri: search_tri.value,
-      search_from: search_from.value,
-      search_to: search_to.value,
-    },
-    { preserveState: true }
-  );
-});
-
-watch(search_to, (value) => {
-  Inertia.get(
-    "/codices",
-    {
-      search_standard: search_standard.value,
-      search_shelf: search_shelf.value,
-      search_pub: search_pub.value,
-      search_tri: search_tri.value,
-      search_from: search_from.value,
-      search_to: search_to.value,
-    },
-    { preserveState: true }
-  );
-});
 </script>
 
 <style>

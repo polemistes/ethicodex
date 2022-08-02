@@ -76,6 +76,12 @@ class DocumentController extends Controller
 
         return (Inertia::render('Codices', [
             'documents' => $documents,
+            'search_standard' => $search_standard,
+            'search_shelf' => $search_shelf,
+            'search_pub' => $search_pub,
+            'search_tri' => $search_tri,
+            'search_from' => $search_from,
+            'search_to' => $search_to,
         ]));
     }
 
