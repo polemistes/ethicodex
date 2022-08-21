@@ -1,7 +1,7 @@
 <template>
   <div class="grid-container">
     <a class="grid-logo" href="/">
-      <img src="images/ethicodex.jpg" width="80" alt="Ethicodex Logo">
+      <img src="images/ethicodex.jpg" width="132" alt="Ethicodex Logo">
     </a>
     <div class="grid-header">
       <h1>The Early History of the Codex</h1>
@@ -89,7 +89,7 @@ html, body {
   grid-template-columns: auto 1fr auto;
 
   grid-template-areas:  'logo header user'
-                        'navigation navigation navigation'
+                        'logo navigation navigation'
                         'content content content'
                         'bottom bottom bottom';
 }
@@ -98,13 +98,15 @@ html, body {
 .grid-logo {
   grid-area: logo;
   align-self: start;
+  justify-self: start;
+  padding-right: 2em;
 }
 
 .grid-header {
   grid-area: header;
   align-self: center;
   justify-self: start;
-  margin-left: 5em;
+  margin-left: 0em;
 }
 
 .grid-user {
