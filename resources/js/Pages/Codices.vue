@@ -176,36 +176,37 @@ function sendsearch() {
   margin: 0.5em;
   gap: 1em;
   background-color: lightgray;
+  width: 100%;
 }
 
 .first {
-  flex: 0 0 10em;
+  flex: 0 0 10%;
   align-self: center;
   justify-self: end;
 }
 
 .second {
-  flex: 0 0 10%;
+  flex: 0 0 12%;
   align-self: center;
   justify-self: end;
 }
 .third {
-  flex: 0 0 30%;
+  flex: 0 0 26%;
   align-self: center;
   justify-self: end;
 }
 .fourth {
-  flex: 0 0 30%;
+  flex: 0 0 26%;
   align-self: center;
   justify-self: end;
 }
 .fifth {
-  flex: 0 0 8%;
+  flex: 0 0 10%;
   align-self: center;
   justify-self: end;
 }
 .sixth {
-  flex: 0 0 8%;
+  flex: 0 0 10%;
   align-self: center;
   justify-self: end;
 }
