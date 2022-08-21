@@ -19,15 +19,69 @@
 
     <nav class="grid-navigation">
       <ul>
-        <li class="active"><Link href="/">Home</Link></li>
-        <li v-if="loggedin"><Link href="/codices">Codices</Link></li>              
-        <li v-if="loggedin"><Link href="/purchases">Purchases</Link></li>                
-        <li v-if="loggedin"><Link href="/purchase_parties">Purchase Parties</Link></li>
-        <li v-if="loggedin"><Link href="/modern_collections">Modern Collections</Link></li>                 
-        <li v-if="!loggedin" style="float:right"><Link href="/user_register">Register</Link></li>
-        <li v-if="!loggedin" style="float:right"><Link href="/login">Log in</Link></li>
-        <li v-if="loggedin" style="float:right"><Link href="/logout" method="post">Log out</Link></li>                
-        <li style="float:right"><Link href="/about">About</Link></li>
+        <li 
+          :class="{active: (isActive == 'Login' && loggedin)  || isActive == 'Home'}"
+        >
+          <Link href="/" @click="isActive='Home'">Home</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Codices'}"
+        >
+          <Link href="/codices" @click="isActive='Codices'">Codices</Link>
+        </li>              
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Transactions'}"
+        >
+          <Link href="/purchases" @click="isActive='Transactions'">Transactions</Link>
+        </li>                
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Parties'}"
+        >
+          <Link href="/purchase_parties" @click="isActive='Parties'">Transaction Parties</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Collections'}"
+        >
+          <Link href="/modern_collections" @click="isActive='Collections'">Modern Collections</Link>
+        </li>                 
+        
+        <li 
+          v-if="!loggedin" 
+          :class="{active: isActive == 'Register'}" 
+          style="float:right"
+        >
+          <Link href="/user_register" @click="isActive='Register'">Register</Link>
+        </li>
+        
+        <li 
+          v-if="!loggedin" 
+          :class="{active: isActive == 'Login'}" 
+          style="float:right"
+        >
+          <Link href="/login" @click="isActive='Login'">Log in</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          style="float:right"
+        >
+          <Link href="/logout" method="post" @click="isActive='Home'">Log out</Link>
+        </li>                
+        
+        <li 
+          :class="{active: isActive == 'About'}" 
+          style="float:right"
+        >
+          <Link href="/about" @click="isActive='About'">About</Link>
+        </li>
       </ul>
     </nav>
 
@@ -59,6 +113,13 @@ computed: {
 };
 
 </script>
+
+<script setup>
+  import { ref } from "vue";
+
+  let isActive = ref("Home");
+</script>
+
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
