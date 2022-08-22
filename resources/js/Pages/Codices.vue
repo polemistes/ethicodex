@@ -171,11 +171,10 @@ function sendsearch() {
 .flex-container {
   display: flex;
   border-style: none;
-  border-radius: 0.5em;
   padding: 1em;
-  margin: 0.5em;
+  margin: 0.5em 0em;
   gap: 1em;
-  background-color: lightgray;
+  background-color: #eee;
   width: 100%;
 }
 

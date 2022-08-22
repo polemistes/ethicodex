@@ -1,23 +1,23 @@
 <template>
     <div class="tab">
-        <button class="tablinks" @click="activetab = 'general'">
+        <button :class="activetab == 'general' ? 'selected' : 'unselected'" @click="activetab = 'general'">
             General Information
         </button>
-        <button class="tablinks" @click="activetab = 'codicology'">
+        <button :class="activetab == 'codicology' ? 'selected' : 'unselected'" @click="activetab = 'codicology'">
             Codicology
         </button>
-        <button class="tablinks" @click="activetab = 'conservation'">
+        <button  :class="activetab == 'conservation' ? 'selected' : 'unselected'" @click="activetab = 'conservation'">
             Conservation and Analysis
         </button>
-        <button class="tablinks" @click="activetab = 'provenance'">
+        <button :class="activetab == 'provenance' ? 'selected' : 'unselected'" @click="activetab = 'provenance'">
             Provenance
         </button>
-        <button class="tablinks" @click="activetab = 'images'">Images</button>
+        <button :class="activetab == 'images' ? 'selected' : 'unselected'" @click="activetab = 'images'">Images</button>
     </div>
+ 
     <form @submit.prevent="submit">
         <fieldset v-if="activetab == 'general'" class="container">
-            <legend>General Information</legend>
-            <input type="hidden" input_id="id" v-model="form.id" />
+             <input type="hidden" input_id="id" v-model="form.id" />
             <EthInput
                 input_type="text"
                 input_id="standard_name"
@@ -150,8 +150,6 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'codicology'" class="container">
-            <legend>Codicology</legend>
-
             <EthInput
                 input_type="single_choice"
                 input_id="material"
@@ -382,8 +380,6 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'conservation'" class="container">
-            <legend>Conservation and Analysis</legend>
-
             <EthInput
                 input_type="single_choice"
                 input_id="storage_condition"
@@ -420,7 +416,6 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'provenance'" class="container">
-            <legend>Provenance</legend>
             <EthInput
                 input_type="single_choice"
                 input_id="first_procurement"
@@ -493,8 +488,6 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'images'" class="container">
-            <legend>Images</legend>
- 
             <EthInput
                 input_type="textarea"
                 input_id="images_info"
@@ -721,48 +714,63 @@ function submit() {
 </script>
 
 <style>
+
 .tab {
+    display: flex;
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
+    width: 100%;
+    justify-content: stretch;
 }
 
 .tab button {
-    background-color: inherit;
     float: left;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
+    padding: 14px 5px;
     font-size: 17px;
+    width: 100%;
+      transition: 50ms;
 }
 
-.tab button:hover {
-    background-color: #ddd;
+
+button.unselected {
+  background-color: rgb(225, 225, 228);
 }
 
-.tab button.active {
-    background-color: #ccc;
+button.unselected:hover {
+  background-color: rgb(186, 189, 185);
 }
+
+button.selected:hover {
+  background-color: rgb(77, 87, 66);
+}
+
+button.selected {
+  background-color: rgb(119, 128, 111);
+}
+
+
 
 .container {
     display: flex;
-    background-color: #bbb;
-    margin: 10px;
+    background-color: #eee;
+    margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
     font-size: 14px;
     flex-direction: column;
-    border-radius: 10px;
+    width: 100%;
 }
-
+/*
 .flex-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
-
+*/
 .box {
     padding: 10px;
     background-color: lightslategrey;

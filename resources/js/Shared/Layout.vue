@@ -90,7 +90,7 @@
     </section>
 
     <footer class="grid-bottom">
-      This is the bottom of the page.
+      The.
     </footer>
   </div>
 </template>
