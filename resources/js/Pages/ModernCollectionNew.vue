@@ -1,7 +1,9 @@
 <template>
+  
+  <h1 class="addcollectionheader">Add Modern Collection</h1>
+
    <form @submit.prevent="submit" >
-    <fieldset class="container">
-      <legend>Add Modern Collection</legend>
+    <fieldset class="addcollectioncontainer">
       <EthInput input_type="text" input_id="name" v-model="form.name">Modern Collection</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
 
@@ -45,52 +47,27 @@ function submit() {
 </script>
 
 <style>
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+.scrollwindow {
+  max-height: 180px;
+  overflow: auto;
 }
 
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+.addcollectionheader {
+    font-size: larger;
+    font-weight: bold;
+    padding: 1em 1em 0em 1em;
+
 }
 
-.tab button:hover {
-  background-color: #ddd;
+.addcollectioncontainer {
+    display: flex;
+    background-color: #eee;
+    margin-top: 4px;
+    padding: 20px;
+    font-family: sans-serif;
+    font-size: 14px;
+    flex-direction: column;
+    width: 100%;
 }
 
-.tab button.active {
-  background-color: #ccc;
-}
-
-
-.container {
-  display: flex;
-  background-color: #bbb;
-  margin: 10px;
-  padding: 20px;
-  font-family: sans-serif;
-  font-size: 14px;
-  flex-direction: column;
-  border-radius: 10px;
-}
-
-legend {
-  border-radius: 10px;
-  padding: 15px;
-  background-color: #333;
-  color: #fff;
-  font-size: 16px;
-}
-label {
-  padding-top: 15px;
-  padding-right: 15px;
-}
 </style>

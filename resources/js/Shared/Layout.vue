@@ -1,7 +1,7 @@
 <template>
   <div class="grid-container">
     <a class="grid-logo" href="/">
-      <img src="images/ethicodex.jpg" width="132" alt="Ethicodex Logo">
+      <img src="images/ethicodex.jpg" alt="Ethicodex Logo">
     </a>
     <div class="grid-header">
       <h1>The Early History of the Codex</h1>
@@ -90,7 +90,7 @@
     </section>
 
     <footer class="grid-bottom">
-      The.
+      <p>A New Methodology and Ethics for Manuscript Studies (EthiCodex)</p>
     </footer>
   </div>
 </template>
@@ -136,13 +136,16 @@ computed: {
 
 html, body {
   width: 90%;
+  min-width: 1024px;
   height: 100%;
   margin: auto;
-  background-color: rgb(255, 255, 255);
+  background-color: #ddd;
   color: black;
 }
 
 .grid-container {
+  padding-top: 0.5em;
+  background-color: #fff;
   min-height: 100vh;
   display: grid;
 
@@ -160,7 +163,12 @@ html, body {
   grid-area: logo;
   align-self: start;
   justify-self: start;
-  padding-right: 2em;
+  padding-right: 1em;
+}
+.grid-logo img {
+  width: 134px;
+  height: 130px;
+  object-fit: contain;
 }
 
 .grid-header {
@@ -173,6 +181,7 @@ html, body {
 .grid-user {
   grid-area: user;
   align-self: center;
+  margin-right: 1em;
 }
 
 .grid-navigation {
@@ -214,10 +223,15 @@ html, body {
 .grid-content {
   grid-area: content;
   background-color: white;
+  padding-bottom: 0.5em;
 }
 
 .grid-bottom {
   grid-area: bottom;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  width: 100%;
 }
 
 </style>

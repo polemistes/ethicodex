@@ -1,26 +1,28 @@
 <template>
-  <div id="topline">
-    <Link class="pages" href="/codex_new">Add Codex</Link>  
-    <Link class="pages" v-for="link in documents.links" 
-      :key="link.label" 
-      :href="link.url" 
-      v-html="link.label" 
-    />
+  <div class="pageline">
+    <Link class="pages" href="/codex_new">Add Codex</Link> 
+    <div class="pagecontainer"> 
+      <Link class="pages" v-for="link in documents.links" 
+        :key="link.label" 
+        :href="link.url"
+        v-html="link.label" 
+      />
+    </div>
   </div>
-  <div class="flex-container">
-      <div class="first">Nothing</div>
-      <div class="second">Standard Name</div>
-      <div class="third">Shelfmark</div>
-      <div class="fourth">Publication</div>
-      <div class="fifth">Trismegistos ID</div>
-      <div class="sixth">Date</div>
+  <div class="flex-container" style="background-color: #ccc;">
+      <div class="cod_first"></div>
+      <div class="cod_second"><b>Standard Name</b></div>
+      <div class="cod_third"><b>Shelfmark</b></div>
+      <div class="cod_fourth"><b>Publication</b></div>
+      <div class="cod_fifth"><b>Trismegistos ID</b></div>
+      <div class="cod_sixth"><b>Date</b></div>
   </div>
-  <div class="flex-container">
-      <div class="first">
+  <div class="flex-container" style="background-color: #bbb;">
+      <div class="cod_first">
         Search:
       </div>
 
-      <div class="second">
+      <div class="cod_second">
         <input
           v-model="search_standard"
           @keyup="sendsearch()" 
@@ -29,7 +31,7 @@
         />
       </div>
 
-      <div class="third">
+      <div class="cod_third">
         <input
           v-model="search_shelf" 
           @keyup="sendsearch()" 
@@ -38,7 +40,7 @@
         />
       </div>
       
-      <div class="fourth">
+      <div class="cod_fourth">
         <input 
           v-model="search_pub"
           @keyup="sendsearch()" 
@@ -47,7 +49,7 @@
         />
       </div>
 
-      <div class="fifth">
+      <div class="cod_fifth">
         <input
           v-model="search_tri"
           @keyup="sendsearch()" 
@@ -56,7 +58,7 @@
         />
       </div>
 
-      <div class="sixth">
+      <div class="cod_sixth">
         <span class="searchfield">
           <input
             v-model="search_from"
@@ -75,7 +77,7 @@
   </div>
 
   <div class="flex-container" v-for="document in documents.data" :key="document.id">
-    <div class="first">
+    <div class="cod_first">
       <Link
           :href="'/codex_show/' + document.id"
           class="text-blue-800 hover:underline"
@@ -97,19 +99,21 @@
       </Link>
     </div>
 
-    <div class="second" v-text="document.standard_name"></div>
-    <div class="third" v-text="document.current_shelfmarks"></div>
-    <div class="fourth" v-text="document.publication"></div>
-    <div class="fifth" v-text="document.trismegistos_id"></div>
-    <div class="sixth" v-text="document.start_year + '–' + document.end_year"></div>
+    <div class="cod_second" v-text="document.standard_name"></div>
+    <div class="cod_third" v-text="document.current_shelfmarks"></div>
+    <div class="cod_fourth" v-text="document.publication"></div>
+    <div class="cod_fifth" v-text="document.trismegistos_id"></div>
+    <div class="cod_sixth" v-text="document.start_year + '–' + document.end_year"></div>
   </div>
-  
-  <Link class="pages" v-for="link in documents.links" 
-    :key="link.label" 
-    :href="link.url" 
-    v-html="link.label" 
-  />
-
+  <div class="pageline"> 
+    <div class="pagecontainer">
+      <Link class="pages" v-for="link in documents.links" 
+       :key="link.label" 
+       :href="link.url" 
+       v-html="link.label" 
+      />
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -155,19 +159,20 @@ function sendsearch() {
 </script>
 
 <style>
-#topline {
+.pageline {
   display: flex;
   flex-direction: row;
 }
 
-#topline div {
+.pageline div {
   align-self: center;
-  justify-self: center;
 }
 .pages {
-  padding: 1em; 
+  padding: 1em;
 }
-
+.pagecontainer {
+  margin-left: auto;
+}
 .flex-container {
   display: flex;
   border-style: none;
@@ -178,33 +183,33 @@ function sendsearch() {
   width: 100%;
 }
 
-.first {
+.cod_first {
   flex: 0 0 10%;
   align-self: center;
   justify-self: end;
 }
 
-.second {
+.cod_second {
   flex: 0 0 12%;
   align-self: center;
   justify-self: end;
 }
-.third {
+.cod_third {
   flex: 0 0 26%;
   align-self: center;
   justify-self: end;
 }
-.fourth {
+.cod_fourth {
   flex: 0 0 26%;
   align-self: center;
   justify-self: end;
 }
-.fifth {
+.cod_fifth {
   flex: 0 0 10%;
   align-self: center;
   justify-self: end;
 }
-.sixth {
+.cod_sixth {
   flex: 0 0 10%;
   align-self: center;
   justify-self: end;

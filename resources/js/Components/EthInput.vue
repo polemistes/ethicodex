@@ -158,6 +158,7 @@
     <div v-if="input_type == 'bifolia'" class="input_oneline">
       <label :for="input_id"><slot /></label>
       <div v-for="n in range(1, num)" :key="n" ><p><span v-if="num > 1">{{ n }}:</span><input type="number" min="1" required :value="bifolia[n-1] ? bifolia[n-1] : 1" @input="bifolia_input(n, $event.target.value)"></p></div>    
+    <!--  {{ JSON.stringify(bifolia) }} -->
     </div>
 
 </template>
@@ -166,7 +167,6 @@
 import { onMounted, watch } from 'vue';
 import { ref, computed } from 'vue'
 
-let bifolia = ref([0]);
 let search = ref("");
 
 const props = defineProps({
@@ -179,6 +179,8 @@ const props = defineProps({
   num: Number,
   name: {type: String, default: "name"}
 })
+
+let bifolia = ref(props.modelValue);
 
 const emit = defineEmits(['update:modelValue'])
 //const ch = ref(props.choices);
@@ -223,6 +225,7 @@ const search_choices_doc = computed(() => {
 label {
   padding-top: 15px;
   padding-right: 15px;
+  font-weight: bold;
 }
 
 .scrollwindow {

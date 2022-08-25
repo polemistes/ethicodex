@@ -16,7 +16,7 @@
     </div>
  
     <form @submit.prevent="submit">
-        <fieldset v-if="activetab == 'general'" class="container">
+        <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
              <input type="hidden" input_id="id" v-model="form.id" />
             <EthInput
                 input_type="text"
@@ -149,7 +149,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'codicology'" class="container">
+        <fieldset v-if="activetab == 'codicology'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="material"
@@ -337,6 +337,15 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
+            <label :for="bifolia">Number of Bifolia in each Quire</label>
+            <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
+                <p>
+                    <span v-if="parseInt(form.quire_number) > 1">{{ n }}:</span>
+                    <input type="number" min="1" required v-model="form.bifolia[n-1]">
+                </p>
+            </div>    
+            <p> {{ JSON.stringify(form.bifolia) }} </p>
+<!--                
                 <EthInput
                     input_type="bifolia"
                     input_id="bifolia"
@@ -345,6 +354,9 @@
                 >
                     Number of Bifolia in each Quire
                 </EthInput>
+                
+-->
+
             </div>
 
             <div v-if="form.quire_structure_id == 3">
@@ -379,7 +391,7 @@
             <button @click="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'conservation'" class="container">
+        <fieldset v-if="activetab == 'conservation'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="storage_condition"
@@ -415,7 +427,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'provenance'" class="container">
+        <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="first_procurement"
@@ -487,7 +499,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'images'" class="container">
+        <fieldset v-if="activetab == 'images'" class="editcodexcontainer">
             <EthInput
                 input_type="textarea"
                 input_id="images_info"
@@ -495,7 +507,7 @@
                 >Image Information</EthInput
             >
 
-            <label for="images">Upload Images</label>
+            <label class="labelpadding" for="images">Upload Images</label>
             <input
                 type="file"
                 @change="addimages($event.target.files)"
@@ -504,7 +516,7 @@
             />
             <button @click.prevent="submit">Store All Changes</button>
 
-            <div class="flex-container">
+            <div>
                 <div
                     class="box"
                     v-for="(image, index) in form.images"
@@ -514,7 +526,7 @@
                         <img :src="'/storage/' + image.filename" height="400" />
                     </a>
                     <button @click.prevent="delimage(image)">Delete</button>
-                    <label :for="'image_description_' + index">Description: </label>
+                    <label class="labelpadding" :for="'image_description_' + index">Description: </label>
                     <textarea :id="'image_description_' + index" v-model="image.description" />
                     
                     <EthInput
@@ -668,6 +680,14 @@ const loadImages = ref(null);
 
 let activetab = ref("general");
 
+function range(start, end) {
+    var foo = [];
+    for (var i = start; i <= end; i++) {
+        foo.push(i);
+    }
+    return foo;
+}
+
 function delimage(image) {
     let image_id = image.id
     if (confirm('Do you want to delete this image?')) {
@@ -754,7 +774,7 @@ button.selected {
 
 
 
-.container {
+.editcodexcontainer {
     display: flex;
     background-color: #eee;
     margin-top: 4px;
@@ -764,13 +784,7 @@ button.selected {
     flex-direction: column;
     width: 100%;
 }
-/*
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-*/
+
 .box {
     padding: 10px;
     background-color: lightslategrey;
@@ -779,14 +793,8 @@ button.selected {
     flex-direction: column;
 }
 
-legend {
-    border-radius: 10px;
-    padding: 15px;
-    background-color: #333;
-    color: #fff;
-    font-size: 16px;
-}
-label {
+
+.labelpadding {
     padding-top: 15px;
     padding-right: 15px;
 }

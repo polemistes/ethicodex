@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="registercontainer">
     <h1>Register User</h1>
     <form @submit.prevent="submit">
         <EthInput input_type="text" input_id="name" v-model="form.name">Name</EthInput>
@@ -29,14 +29,25 @@ let submit = () => {
 </script>
 
 <style>
-.container {
+
+.registercontainer {
+  width: 45%;
   display: flex;
-  background-color: #bbb;
-  margin: 10px;
+  background-color: #eee;
+  margin: auto;
   padding: 20px;
   font-family: sans-serif;
   font-size: 14px;
   flex-direction: column;
-  border-radius: 10px;
 }
+
+.submitline {
+  margin-top: 1em;
+}
+
+button {
+  margin-top: 2em;
+  padding: 0.5em;
+}
+
 </style>
