@@ -21,14 +21,14 @@
     </div>
 
     <div v-if="input_type == 'bool'" class="input_oneline">
-      <p><input  
+      <input  
           :id="input_id" 
           type="checkbox"
           :value="modelValue"
           @change="$emit('update:modelValue', $event.target.value)"
           required
         />
-        <label :for="input_id"><slot /></label></p>
+        <label :for="input_id"><slot /></label>
     </div>
 
     <div v-if="input_type == 'year'" class="input_year">

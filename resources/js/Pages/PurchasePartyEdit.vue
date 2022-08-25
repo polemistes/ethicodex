@@ -6,6 +6,7 @@
     <fieldset class="edittransactionpartycontainer">
       <EthInput input_type="text" input_id="name" v-model="form.name">Transaction Party</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
+
       <p><input id="institution" type="checkbox" :value="form.institution" v-model="form.institution">
       <label for="institution">Institution</label></p>
 
@@ -49,7 +50,6 @@ function submit() {
 </script>
 
 <style>
-
 
 .edittransactionpartyheader {
     font-size: larger;
