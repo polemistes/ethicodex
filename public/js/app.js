@@ -21678,6 +21678,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'EthInput',
   props: {
     modelValue: [String, Number, Array, Boolean],
     input_id: String,
@@ -21773,6 +21774,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'EthRatio',
   props: {
     dividend: Number,
     divisor: Number
@@ -21803,6 +21805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'About',
   props: {
     test: {
       type: Boolean,
@@ -21854,6 +21857,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'CodexEdit',
   props: {
     analyses: Object,
     analyses_all: Object,
@@ -22070,6 +22074,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'CodexShow',
   props: {
     analyses: Object,
     analyses_all: Object,
@@ -22159,6 +22164,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'Codices',
   props: {
     documents: Array,
     languages: Array,
@@ -22282,6 +22288,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'Home',
   props: {
     test: {
       type: Boolean,
@@ -22328,6 +22335,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'ModernCollectionEdit',
   props: {
     modern_collection: Object,
     modern_collections_all: Array,
@@ -22386,6 +22394,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'ModernCollectionNew',
   props: {
     modern_collections_all: Array,
     documents_all: Array,
@@ -22440,6 +22449,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'ModernCollections',
   props: {
     modern_collections: Object,
     auth: Object
@@ -22484,6 +22494,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'PurchaseEdit',
   props: {
     purchase: Object,
     documents: Object,
@@ -22545,6 +22556,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'PurchaseNew',
   props: {
     documents_all: Object,
     purchase_parties_all: Object,
@@ -22601,6 +22613,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'PurchaseParties',
   props: {
     purchase_parties: Array,
     auth: Object
@@ -22645,6 +22658,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'PurchasePartyEdit',
   props: {
     purchase_party: Object,
     purchases: Object,
@@ -22703,6 +22717,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'PurchasePartyNew',
   props: {
     purchases_all: Object,
     auth: Object
@@ -22757,6 +22772,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'Purchases',
   props: {
     purchases: Array,
     auth: Object
@@ -22799,6 +22815,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'UserLogin',
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
@@ -22848,6 +22865,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'UserRegister',
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
@@ -54477,6 +54495,11 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
