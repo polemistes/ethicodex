@@ -1,33 +1,98 @@
 <template>
-    <section class="navbar">
-        <nav>
-            <a href="/" class="logo">
-            <img src="images/ethicodex.jpg" width="80px" alt="Ethicodex Logo">
-            </a>
-            <h1>Ethicodex Database</h1>
-            <ul class="nav-links">
-                <li class="nav-item"><Link href="/">Home</Link></li>
-                <li v-if="loggedin" class="nav-item"><Link href="/codices">Codices</Link></li>              
-                <li v-if="loggedin" class="nav-item"><Link href="/purchases">Purchases</Link></li>                
-                <li v-if="loggedin" class="nav-item"><Link href="/purchase_parties">Purchase Parties</Link></li>
-                <li v-if="loggedin" class="nav-item"><Link href="/modern_collections">Modern Collections</Link></li>                 
-                <li class="nav-item"><Link href="/about">About</Link></li>
-                <li v-if="!loggedin" class="nav-item"><Link href="/user_register">Register</Link></li>
-                <li v-if="!loggedin" class="nav-item"><Link href="/login">Log in</Link></li>
+  <div class="grid-container">
+    <a class="grid-logo" href="/">
+      <img src="images/ethicodex.jpg" alt="Ethicodex Logo">
+    </a>
+    <div class="grid-header">
+      <h1>The Early History of the Codex</h1>
+      <h2>Database of Early Codices</h2>
+    </div>
 
-                <li v-if="loggedin" class="nav-item"><Link href="/logout" method="post">Log out</Link></li>                
-<!--                <li v-if="loggedin" class="nav-item">({{ name }}, {{ role ? role.name : "" }})</li> -->
-            </ul>
-            <div v-if="loggedin" style="float: right">
-                ({{ name }}, {{ role ? role.name : "" }})
-            </div>
-        </nav>
+    <div class="grid-user">          
+      <span v-if="loggedin">
+        Username: {{ name }}, {{ role ? role.name : "" }}
+      </span>
+      <span v-else>
+        Not logged in.
+      </span>
+    </div>
+
+    <nav class="grid-navigation">
+      <ul>
+        <li 
+          :class="{active: (isActive == 'Login' && loggedin)  || isActive == 'Home'}"
+        >
+          <Link href="/" @click="isActive='Home'">Home</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Codices'}"
+        >
+          <Link href="/codices" @click="isActive='Codices'">Codices</Link>
+        </li>              
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Transactions'}"
+        >
+          <Link href="/purchases" @click="isActive='Transactions'">Transactions</Link>
+        </li>                
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Parties'}"
+        >
+          <Link href="/purchase_parties" @click="isActive='Parties'">Transaction Parties</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          :class="{active: isActive == 'Collections'}"
+        >
+          <Link href="/modern_collections" @click="isActive='Collections'">Modern Collections</Link>
+        </li>                 
+        
+        <li 
+          v-if="!loggedin" 
+          :class="{active: isActive == 'Register'}" 
+          style="float:right"
+        >
+          <Link href="/user_register" @click="isActive='Register'">Register</Link>
+        </li>
+        
+        <li 
+          v-if="!loggedin" 
+          :class="{active: isActive == 'Login'}" 
+          style="float:right"
+        >
+          <Link href="/login" @click="isActive='Login'">Log in</Link>
+        </li>
+        
+        <li 
+          v-if="loggedin" 
+          style="float:right"
+        >
+          <Link href="/logout" method="post" @click="isActive='Home'">Log out</Link>
+        </li>                
+        
+        <li 
+          :class="{active: isActive == 'About'}" 
+          style="float:right"
+        >
+          <Link href="/about" @click="isActive='About'">About</Link>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="grid-content">
+      <slot />
     </section>
-    <section>
-        <div class="content">
-            <slot />
-        </div>
-    </section>
+
+    <footer class="grid-bottom">
+      <p>A New Methodology and Ethics for Manuscript Studies (EthiCodex)</p>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -49,83 +114,124 @@ computed: {
 
 </script>
 
+<script setup>
+  import { ref } from "vue";
+
+  let isActive = ref("Home");
+</script>
+
+
 <style>
-html {
-  box-sizing: border-box;
-  font-size: 16px;
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+* {
+  font-family: "Open Sans", sans-serif;
 }
 
 *, *::before, *::after {
-  box-sizing: inherit;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  width: 1280px;
+html, body {
+  width: 90%;
+  min-width: 1024px;
+  height: 100%;
   margin: auto;
-  background-color: #777;
-  font-family: Helvetica;
+  background-color: #ddd;
+  color: black;
 }
 
-table {
-  width: 100%;
-}
-.navbar {
-    font-family: sans-serif;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    overflow: hidden;
+.grid-container {
+  padding-top: 0.5em;
+  background-color: #fff;
+  min-height: 100vh;
+  display: grid;
+
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+
+  grid-template-areas:  'logo header user'
+                        'logo navigation navigation'
+                        'content content content'
+                        'bottom bottom bottom';
 }
 
-.content {
-    font-family: sans-serif;
+
+.grid-logo {
+  grid-area: logo;
+  align-self: start;
+  justify-self: start;
+  padding-right: 1em;
+}
+.grid-logo img {
+  width: 134px;
+  height: 130px;
+  object-fit: contain;
 }
 
-.navbar h1 {
-    font-size: 18px;
+.grid-header {
+  grid-area: header;
+  align-self: center;
+  justify-self: start;
+  margin-left: 0em;
 }
 
-.navbar nav {
-  width: 100%;
-  background-color: rgb(60, 63, 60);
-  color: #fff;
-  padding-left: 30px;
-  padding-right: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.grid-user {
+  grid-area: user;
+  align-self: center;
+  margin-right: 1em;
 }
 
-.logo {
-  display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.grid-navigation {
+  grid-area: navigation;
 }
 
-.nav-links {
-  list-style: none;
-  display: flex;
+.grid-navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
 }
 
-.nav-item a {
-  display: inline-block;
-  padding: 15px;
+.grid-navigation li {
+  float: left;
+}
+
+.grid-navigation li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
   text-decoration: none;
-  color: rgb(231, 173, 173);
-  font-size: 16px;
 }
 
-.nav-item:hover {
-  background-color: rgb(161, 143, 143);
+.grid-navigation li a:hover:not(.active) {
+  background-color: rgb(194, 181, 166);
 }
 
-.nav-item:hover a {
-  color: rgb(2, 41, 2);
+.active a {
+  background-color: rgb(140, 150, 129);
 }
 
-.logo img {
-  width: 80px;
-  vertical-align: middle;
+.active a:hover {
+  background-color: rgb(119, 128, 111);
 }
+
+.grid-content {
+  grid-area: content;
+  background-color: white;
+  padding-bottom: 0.5em;
+}
+
+.grid-bottom {
+  grid-area: bottom;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+
 </style>

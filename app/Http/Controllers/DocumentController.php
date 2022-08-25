@@ -50,7 +50,7 @@ class DocumentController extends Controller
         $search_standard = $request->get('search_standard', "");
         $search_shelf = $request->get('search_shelf', "");
         $search_pub = $request->get('search_pub', "");
-        $search_lang = $request->get('search_lang', "");
+        $search_tri = $request->get('search_tri', "");
         $search_from = $request->get('search_from', "");
         $search_to = $request->get('search_to', "");
         $documents = Document::query()
@@ -63,8 +63,8 @@ class DocumentController extends Controller
             ->when($search_pub, function ($query, $search_pub) {
                 $query->where('publication', 'like', "%{$search_pub}%");
             })
-            ->when($search_lang, function ($query, $search_lang) {
-                $query->where('language_comment', 'like', "%{$search_lang}%");
+            ->when($search_tri, function ($query, $search_tri) {
+                $query->where('trismegistos_id', 'like', "%{$search_tri}%");
             })
             ->when($search_from, function ($query, $search_from) {
                 $query->where('end_year', '>=', $search_from);
@@ -72,13 +72,19 @@ class DocumentController extends Controller
             ->when($search_to, function ($query, $search_to) {
                 $query->where('start_year', '<=', $search_to);
             })
-            ->get();
+            ->paginate(10)->withQueryString();
 
         return (Inertia::render('Codices', [
-            'documents' => $documents
-
+            'documents' => $documents,
+            'search_standard' => $search_standard,
+            'search_shelf' => $search_shelf,
+            'search_pub' => $search_pub,
+            'search_tri' => $search_tri,
+            'search_from' => $search_from,
+            'search_to' => $search_to,
         ]));
     }
+
 
     /**
      * Show the form for creating a new resource.

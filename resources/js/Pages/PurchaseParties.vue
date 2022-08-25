@@ -1,29 +1,29 @@
 <template>
-  <h1>Purchase Parties</h1>
-  <Link href="/purchase_party_new" method="post">Add Purchase Party</Link>
-  <table>
-    <tr>
-      <th></th>
-      <th>Purchase Party</th>
-      <th>Description</th>
-      <th>Institution</th>
-      <th>Purchases</th>
-    </tr>
-    <tr v-for="purchase_party in purchase_parties" :key="purchase_party.id">
-      <td>
+  <div class="newparty">
+    <Link href="/purchase_party_new" method="post">Add Transaction Party</Link>
+  </div>
+
+  <div class="partycontainer" style="background-color: #ccc;">
+    <div class="par_first"></div>
+    <div class="par_second"><b>Transaction Party</b></div>
+    <div class="par_third"><b>Description</b></div>
+    <div class="par_fourth"><b>Institution</b></div>
+    <div class="par_fifth"><b>Transactions</b></div>
+  </div>
+  <div v-for="purchase_party in purchase_parties" :key="purchase_party.id" class="partycontainer">
+      <div class="par_first">
         <Link :href="'/purchase_party_edit/' + purchase_party.id" class="text-blue-800 hover:underline">Edit </Link>
         <Link :href="'/purchase_party_delete/' + purchase_party.id" onclick="return confirm('Are you sure?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
-      </td>
-      <td>{{ purchase_party.name }}</td>
-      <td>{{ purchase_party.description }}</td>
-      <td>{{ purchase_party.institution ? "Institution" : "Person" }}</td>
-      <td>
+      </div>
+      <div class="par_second">{{ purchase_party.name }}</div>
+      <div class="par_third">{{ purchase_party.description }}</div>
+      <div class="par_fourth">{{ purchase_party.institution ? "Institution" : "Person" }}</div>
+      <div class="par_fifth">
         <span v-for="purchase in purchase_party.purchases" :key="purchase.id">
           {{ purchase.name }}<br>
         </span>
-      </td>
-    </tr>
-  </table>
+      </div>
+  </div>
 </template>
 
 <script setup>
@@ -41,16 +41,44 @@ let edit = ref((props.auth == null) ? 0 : (props.auth.user.role.id >=2) ? 1 : 0)
 </script>
 
 <style>
-td {
-  padding: 5px;
+.newparty {
+  padding: 1em;
 }
-tr:nth-child(even) {background: #EEE}
-tr:nth-child(odd) {background: #AAA}
+.partycontainer {
+  display: flex;
+  border-style: none;
+  padding: 1em;
+  margin: 0.5em 0em;
+  gap: 1em;
+  background-color: #eee;
+  width: 100%;
+}
 
-table {
-  margin-top: 10px;
-  overflow: hidden;
-  border-radius: 10px;
-  border-spacing: 0;
+.par_first {
+  flex: 0 0 8%;
+  align-self: center;
+  justify-self: end;
 }
+
+.par_second {
+  flex: 0 0 15%;
+  align-self: center;
+  justify-self: end;
+}
+.par_third {
+  flex: 0 0 30%;
+  align-self: center;
+  justify-self: end;
+}
+.par_fourth {
+  flex: 0 0 15%;
+  align-self: center;
+  justify-self: end;
+}
+.par_fifth {
+  flex: 0 0 25%;
+  align-self: center;
+  justify-self: end;
+}
+
 </style>

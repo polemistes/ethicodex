@@ -93,8 +93,8 @@ class PurchaseController extends Controller
 
         return (Inertia::render('PurchaseEdit', [
             'purchase' => $purchase,
-            'documents' => $purchase->documents()->get()->makeHidden('pivot'),
-            'documents_all' => Document::all(),
+            'documents' => $purchase->documents(['id', 'standard_name', 'trismegistos_id'])->get(),
+            'documents_all' => Document::all(['id', 'standard_name', 'trismegistos_id']),
             'purchase_parties' => $purchase->purchase_parties()->get()->makeHidden('pivot'),
             'purchase_parties_all' => PurchaseParty::all(),
         ]));

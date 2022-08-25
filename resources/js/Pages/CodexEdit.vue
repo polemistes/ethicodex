@@ -1,23 +1,23 @@
 <template>
     <div class="tab">
-        <button class="tablinks" @click="activetab = 'general'">
+        <button :class="activetab == 'general' ? 'selected' : 'unselected'" @click="activetab = 'general'">
             General Information
         </button>
-        <button class="tablinks" @click="activetab = 'codicology'">
+        <button :class="activetab == 'codicology' ? 'selected' : 'unselected'" @click="activetab = 'codicology'">
             Codicology
         </button>
-        <button class="tablinks" @click="activetab = 'conservation'">
+        <button  :class="activetab == 'conservation' ? 'selected' : 'unselected'" @click="activetab = 'conservation'">
             Conservation and Analysis
         </button>
-        <button class="tablinks" @click="activetab = 'provenance'">
+        <button :class="activetab == 'provenance' ? 'selected' : 'unselected'" @click="activetab = 'provenance'">
             Provenance
         </button>
-        <button class="tablinks" @click="activetab = 'images'">Images</button>
+        <button :class="activetab == 'images' ? 'selected' : 'unselected'" @click="activetab = 'images'">Images</button>
     </div>
+ 
     <form @submit.prevent="submit">
-        <fieldset v-if="activetab == 'general'" class="container">
-            <legend>General Information</legend>
-            <input type="hidden" input_id="id" v-model="form.id" />
+        <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
+             <input type="hidden" input_id="id" v-model="form.id" />
             <EthInput
                 input_type="text"
                 input_id="standard_name"
@@ -149,9 +149,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'codicology'" class="container">
-            <legend>Codicology</legend>
-
+        <fieldset v-if="activetab == 'codicology'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="material"
@@ -339,6 +337,15 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
+            <label :for="bifolia">Number of Bifolia in each Quire</label>
+            <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
+                <p>
+                    <span v-if="parseInt(form.quire_number) > 1">{{ n }}:</span>
+                    <input type="number" min="1" required v-model="form.bifolia[n-1]">
+                </p>
+            </div>    
+            <p> {{ JSON.stringify(form.bifolia) }} </p>
+<!--                
                 <EthInput
                     input_type="bifolia"
                     input_id="bifolia"
@@ -347,6 +354,9 @@
                 >
                     Number of Bifolia in each Quire
                 </EthInput>
+                
+-->
+
             </div>
 
             <div v-if="form.quire_structure_id == 3">
@@ -381,9 +391,7 @@
             <button @click="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'conservation'" class="container">
-            <legend>Conservation and Analysis</legend>
-
+        <fieldset v-if="activetab == 'conservation'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="storage_condition"
@@ -419,8 +427,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'provenance'" class="container">
-            <legend>Provenance</legend>
+        <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
             <EthInput
                 input_type="single_choice"
                 input_id="first_procurement"
@@ -492,9 +499,7 @@
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
-        <fieldset v-if="activetab == 'images'" class="container">
-            <legend>Images</legend>
- 
+        <fieldset v-if="activetab == 'images'" class="editcodexcontainer">
             <EthInput
                 input_type="textarea"
                 input_id="images_info"
@@ -502,7 +507,7 @@
                 >Image Information</EthInput
             >
 
-            <label for="images">Upload Images</label>
+            <label class="labelpadding" for="images">Upload Images</label>
             <input
                 type="file"
                 @change="addimages($event.target.files)"
@@ -511,7 +516,7 @@
             />
             <button @click.prevent="submit">Store All Changes</button>
 
-            <div class="flex-container">
+            <div>
                 <div
                     class="box"
                     v-for="(image, index) in form.images"
@@ -521,7 +526,7 @@
                         <img :src="'/storage/' + image.filename" height="400" />
                     </a>
                     <button @click.prevent="delimage(image)">Delete</button>
-                    <label :for="'image_description_' + index">Description: </label>
+                    <label class="labelpadding" :for="'image_description_' + index">Description: </label>
                     <textarea :id="'image_description_' + index" v-model="image.description" />
                     
                     <EthInput
@@ -675,6 +680,14 @@ const loadImages = ref(null);
 
 let activetab = ref("general");
 
+function range(start, end) {
+    var foo = [];
+    for (var i = start; i <= end; i++) {
+        foo.push(i);
+    }
+    return foo;
+}
+
 function delimage(image) {
     let image_id = image.id
     if (confirm('Do you want to delete this image?')) {
@@ -693,8 +706,6 @@ function delimage(image) {
 }
 
 function addimages(imagefiles) {
-   // Inertia.remember(form.value, 'form');
-
     Inertia.post("/addimages", {images: imagefiles,
                                 document_id: props.document.id,},
                                 { preserveState: true,
@@ -714,9 +725,7 @@ function addimages(imagefiles) {
                                     
                                     }}
                 )
-
     this.loadImages.value=null;
-//    this.form.images = this.props.images;
 }
 
 function submit() {
@@ -725,46 +734,55 @@ function submit() {
 </script>
 
 <style>
+
 .tab {
+    display: flex;
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
+    width: 100%;
+    justify-content: stretch;
 }
 
 .tab button {
-    background-color: inherit;
     float: left;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
+    padding: 14px 5px;
     font-size: 17px;
+    width: 100%;
+      transition: 50ms;
 }
 
-.tab button:hover {
-    background-color: #ddd;
+
+button.unselected {
+  background-color: rgb(225, 225, 228);
 }
 
-.tab button.active {
-    background-color: #ccc;
+button.unselected:hover {
+  background-color: rgb(186, 189, 185);
 }
 
-.container {
+button.selected:hover {
+  background-color: rgb(77, 87, 66);
+}
+
+button.selected {
+  background-color: rgb(119, 128, 111);
+}
+
+
+
+.editcodexcontainer {
     display: flex;
-    background-color: #bbb;
-    margin: 10px;
+    background-color: #eee;
+    margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
     font-size: 14px;
     flex-direction: column;
-    border-radius: 10px;
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 .box {
@@ -775,14 +793,8 @@ function submit() {
     flex-direction: column;
 }
 
-legend {
-    border-radius: 10px;
-    padding: 15px;
-    background-color: #333;
-    color: #fff;
-    font-size: 16px;
-}
-label {
+
+.labelpadding {
     padding-top: 15px;
     padding-right: 15px;
 }

@@ -1,7 +1,9 @@
 <template>
+
+  <h1 class="edittransactionheader">Edit transaction: {{ form.name }}</h1>
+
    <form @submit.prevent="submit">
-    <fieldset class="container">
-      <legend>Edit Purchase</legend>
+    <fieldset class="edittransactioncontainer">
       <input type="hidden" input_id="id" v-model="form.id" />
       <EthInput input_type="year" input_id="date" v-model="form.date">Year</EthInput>
       <EthInput input_type="text" input_id="name" v-model="form.name">Purchase</EthInput>
@@ -60,52 +62,23 @@ function submit() {
 </script>
 
 <style>
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+
+.edittransactionheader {
+    font-size: larger;
+    font-weight: bold;
+    padding: 1em 1em 0em 1em;
+
 }
 
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+.edittransactioncontainer {
+    display: flex;
+    background-color: #eee;
+    margin-top: 4px;
+    padding: 20px;
+    font-family: sans-serif;
+    font-size: 14px;
+    flex-direction: column;
+    width: 100%;
 }
 
-.tab button:hover {
-  background-color: #ddd;
-}
-
-.tab button.active {
-  background-color: #ccc;
-}
-
-
-.container {
-  display: flex;
-  background-color: #bbb;
-  margin: 10px;
-  padding: 20px;
-  font-family: sans-serif;
-  font-size: 14px;
-  flex-direction: column;
-  border-radius: 10px;
-}
-
-legend {
-  border-radius: 10px;
-  padding: 15px;
-  background-color: #333;
-  color: #fff;
-  font-size: 16px;
-}
-label {
-  padding-top: 15px;
-  padding-right: 15px;
-}
 </style>
