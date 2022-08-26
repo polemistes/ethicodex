@@ -129,4 +129,15 @@ class Document extends Model
     {
         return $this->belongsToMany(Genre::class);
     }
+
+    public function critical_symbols()
+    {
+        return $this->belongsToMany(CriticalSymbol::class);
+    }
+
+    public function punctuations()
+    {
+        return $this->belongsToMany(Punctuation::class);
+    }
+
 }

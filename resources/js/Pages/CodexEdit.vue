@@ -18,12 +18,24 @@
     <form @submit.prevent="submit">
         <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
              <input type="hidden" input_id="id" v-model="form.id" />
+            
+            <div>
+                <label :for="published">Published</label>
+                <input  
+                    :id="published" 
+                    type="checkbox"
+                    v-model="form.published"
+                > 
+            </div>
+
             <EthInput
                 input_type="text"
                 input_id="standard_name"
                 v-model="form.standard_name"
-                >Standard Name</EthInput
             >
+                Standard Name
+            </EthInput>
+            
             <EthInput
                 input_type="textarea"
                 input_id="other_names"
@@ -74,7 +86,7 @@
                 :choices="tags_all"
                 v-model="form.tags"
             >
-                Tags
+                Content Tags
             </EthInput>
 
             <EthInput
@@ -267,11 +279,29 @@
 
             <EthInput
                 input_type="multi_choice"
+                input_id="punctuations"
+                :choices="punctuations_all"
+                v-model="form.punctuations"
+            >
+                Punctuation
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice"
+                input_id="critical_symbols"
+                :choices="critical_symbols_all"
+                v-model="form.critical_symbols"
+            >
+                Critical Symbols
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice"
                 input_id="decorations"
                 :choices="decorations_all"
                 v-model="form.decorations"
             >
-                Decorations
+                Decorative Symbols
             </EthInput>
 
             <EthInput
@@ -563,20 +593,22 @@ import EthInput from "../Components/EthInput.vue";
 import EthRatio from "../Components/EthRatio.vue";
 
 const props = defineProps({
-    analyses: Object,
-    analyses_all: Object,
+    analyses: Array,
+    analyses_all: Array,
     ancient_provenance: Object,
     ancient_provenances: Array,
     ancient_provenance_certainty: Object,
     ancient_provenance_certainties: Array,
     cover: Object,
     covers: Array,
+    critical_symbols: Array,
+    critical_symbols_all: Array,
     dating_certainty: Object,
     dating_certainties: Array,
     dating_method: Object,
     dating_methods: Array,
-    decorations: Object,
-    decorations_all: Object,
+    decorations: Array,
+    decorations_all: Array,
     document: Object,
     genres: Array,
     genres_all: Array,
@@ -599,6 +631,9 @@ const props = defineProps({
     paginations: Array,
     paratexts: Array,
     paratexts_all: Array,
+    published: Boolean,
+    punctuations: Array,
+    punctuations_all: Array,
     purchases: Array,
     purchases_all: Array,
     quire_signature: Array,
@@ -616,6 +651,7 @@ const props = defineProps({
 
 const form = useForm({
     id: props.document.id,
+    published: props.document.published == 1 ? true : false,
     standard_name: props.document.standard_name,
     other_names: props.document.other_names,
     publication: props.document.publication,
@@ -650,6 +686,8 @@ const form = useForm({
     hand_number: props.document.hand_number,
     script_description: props.document.script_description,
     paratexts: props.paratexts,
+    punctuations: props.punctuations,
+    critical_symbols: props.critical_symbols,
     decorations: props.decorations,
     pagination_id: props.document.pagination_id,
     cover_id: props.document.cover_id,

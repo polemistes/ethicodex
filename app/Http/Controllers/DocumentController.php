@@ -31,6 +31,8 @@ use App\Models\Script;
 use App\Models\StorageCondition;
 use App\Models\Tag;
 use App\Models\License;
+use App\Models\CriticalSymbol;
+use App\Models\Punctuation;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -173,7 +175,7 @@ class DocumentController extends Controller
             'storage_conditions' => StorageCondition::all(),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'tags_all' => Tag::all(),
+            'tags_all' => Tag::all(),g
         ]));
     }
 
@@ -189,6 +191,8 @@ class DocumentController extends Controller
             'ancient_provenance' => $document->ancient_provenance()->get(),
             'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
             'ancient_provenance_certainty' => $document->ancient_provenance()->get(),
+            'critical_symbols' => $document->critical_symbols()->get()->makeHidden('pivot'),
+            'critical_symbols_all' => CriticalSymbol::all(),
             'covers' => Cover::all(),
             'cover' => $document->cover()->get(),
             'dating_certainties' => DatingCertainty::all(),
@@ -217,6 +221,8 @@ class DocumentController extends Controller
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
             'paratexts_all' => Paratext::all(),
+            'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
+            'punctuations_all' => Punctuation::all(),
             'purchases' => $document->purchases()->get()->makeHidden('pivot'),
             'purchases_all' => Purchase::all(),
             'quire_signatures' => QuireSignature::all(),
@@ -244,6 +250,7 @@ class DocumentController extends Controller
         $this->authorize('update', $document);
         $fields = $request->validate([
             'id' => 'required',
+            'published' => 'nullable',
             'standard_name' => 'nullable',
             'other_names' => 'nullable',
             'publication' => 'nullable',
@@ -277,6 +284,8 @@ class DocumentController extends Controller
             'hand_number' => 'nullable',
             'script_description' => 'nullable',
             'paratexts' => 'nullable',
+            'punctuations' => 'nullable',
+            'critical_symbols' => 'nullable',
             'decorations' => 'nullable',
             'pagination_id' => 'nullable',
             'cover_id' => 'nullable',
@@ -303,6 +312,7 @@ class DocumentController extends Controller
             'images' => 'nullable',
         ]);
 
+        $document->published = $fields['published'];
         $document->standard_name = $fields['standard_name'];
         $document->other_names = $fields['other_names'];
         $document->publication = $fields['publication'];
@@ -355,6 +365,8 @@ class DocumentController extends Controller
         $document->languages()->sync(array_column($fields['languages'], 'id'));
         $document->scripts()->sync(array_column($fields['scripts'], 'id'));
         $document->paratexts()->sync(array_column($fields['paratexts'], 'id'));
+        $document->punctuations()->sync(array_column($fields['punctuations'], 'id'));
+        $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));
         $document->analyses()->sync(array_column($fields['analyses'], 'id'));
         $document->purchases()->sync(array_column($fields['purchases'], 'id'));
