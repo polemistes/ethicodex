@@ -144,8 +144,6 @@ class DocumentController extends Controller
             'dating_method' => $document->dating_method()->get(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
-            'first_procurement' => $document->first_procurement()->get(),
-            'first_procurements' => FirstProcurement::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -201,8 +199,6 @@ class DocumentController extends Controller
             'dating_method' => $document->dating_method()->get(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
-            'first_procurement' => $document->first_procurement()->get(),
-            'first_procurements' => FirstProcurement::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -303,7 +299,8 @@ class DocumentController extends Controller
             'ancient_provenance_id' => 'nullable',
             'ancient_provenance_certainty_id' => 'nullable',
             'ancient_provenance_comment' => 'nullable',
-            'first_procurement_id' => 'nullable',
+            'scientifically_excavated' => 'nullable',
+            'excavation_comment' => 'nullable',
             'modern_collection_id' => 'nullable',
             'legal_classification_id' => 'nullable',
             'legal_classification_explanation' => 'nullable',
@@ -356,8 +353,8 @@ class DocumentController extends Controller
         $document->ancient_provenance_id = $fields['ancient_provenance_id'];
         $document->ancient_provenance_certainty_id = $fields['ancient_provenance_certainty_id'];
         $document->ancient_provenance_comment = $fields['ancient_provenance_comment'];
-        $document->first_procurement_id = $fields['first_procurement_id'];
-        $document->modern_collection_id = $fields['modern_collection_id'];
+        $document->scientifically_excavated = $fields['scientifically_excavated'];
+        $document->excavation_comment = $fields['excavation_comment'];
         $document->legal_classification_id = $fields['legal_classification_id'];
         $document->legal_classification_explanation = $fields['legal_classification_explanation'];
         $document->images_info = $fields['images_info'];

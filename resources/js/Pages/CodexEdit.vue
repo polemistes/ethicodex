@@ -458,13 +458,21 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
+            <div>
+                <label :for="scientifically_excavated">Scientifically Excavated</label>
+                <input  
+                    :id="scientifically_excavated" 
+                    type="checkbox"
+                    v-model="form.scientifically_excavated"
+                > 
+            </div>
+            
             <EthInput
-                input_type="single_choice"
-                input_id="first_procurement"
-                :choices="first_procurements"
-                v-model="form.first_procurement_id"
+                input_type="textarea"
+                input_id="excavation_comment"
+                v-model="form.excavation_comment"
+                >Comments on Excavation
             >
-                Mode of First Procurement
             </EthInput>
 
             <EthInput
@@ -612,8 +620,6 @@ const props = defineProps({
     document: Object,
     genres: Array,
     genres_all: Array,
-    first_procurement: Object,
-    first_procurements: Array,
     images: Array,
     ink: Object,
     inks: Array,
@@ -659,7 +665,8 @@ const form = useForm({
     trismegistos_id: props.document.trismegistos_id,
     title: props.document.title,
     genres: props.genres,
-    first_procurement_id: props.document.first_procurement_id,
+    scientifically_excavated: props.document.scientifically_excavated == 1 ? true : false,
+    excavation_comment: props.document.excavation_comment,
     ancient_author: props.document.ancient_author,
     tags: props.tags,
     content_description: props.document.content_description,

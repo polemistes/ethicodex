@@ -45,11 +45,6 @@ class Document extends Model
         return $this->belongsTo(AncientProvenance::class);
     }
 
-    public function first_procurement()
-    {
-        return $this->belongsTo(FirstProcurement::class);
-    }
-
     public function ancient_provenance_certainty()
     {
         return $this->belongsTo(AncientProvenanceCertainty::class);
