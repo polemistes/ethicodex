@@ -138,9 +138,42 @@
       </div>    
     </div>
 
-
+<!--
     <div v-if="input_type == 'document_choice_taken'" class="input_oneline">
       
+      <label :for="input_id"><slot /></label>
+      <p style="border-style: solid;">
+        <b>Selected:</b> 
+        <span v-for="value in modelValue" :key="value.id">
+          {{ value.standard_name }},
+        </span>
+      </p>
+      
+      <div v-if="choices.length > 9">
+        <label :for="search">Search:</label>
+        <input type="text" v-model="search">
+      </div>
+      
+      <div class="scrollwindow">
+        <div v-for="choice in search_choices_doc" :key="choice.id">
+          <input type="checkbox"
+              :id="choice.id"  
+              :value="choice"
+              v-model="modelValue"
+              @change="$emit('update:modelValue', modelValue)">
+          <label> 
+            {{ choice.standard_name }} (Tr.ID: {{ choice.trismegistos_id }})
+            <span v-if="choice.modern_collection_id && choice.modern_collection_id != collection_id">
+              <b> Assigned to {{ collections.find(x => x.id === choice.modern_collection_id).name }}</b>
+            </span>
+          </label>
+        </div>
+      </div>    
+    </div>
+-->
+
+    <div v-if="input_type == 'document_choice_modern'" class="input_oneline">
+ 
       <label :for="input_id"><slot /></label>
       <p style="border-style: solid;">
         <b>Selected:</b> 

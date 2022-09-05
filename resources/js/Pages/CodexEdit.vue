@@ -502,12 +502,12 @@
             </EthInput>
             
             <EthInput
-                input_type="single_choice"
+                input_type="multi_choice"
                 input_id="modern_collection"
-                :choices="modern_collections"
-                v-model="form.modern_collection_id"
+                :choices="modern_collections_all"
+                v-model="form.modern_collections"
             >
-                Modern Collection
+                Modern Collections
             </EthInput>
 
             <EthInput
@@ -630,8 +630,8 @@ const props = defineProps({
     licenses: Array,
     material: Object,
     materials: Array,
-    modern_collection: Object,
     modern_collections: Array,
+    modern_collections_all: Array,
     newimages: Array,
     pagination: Object,
     paginations: Array,
@@ -712,7 +712,7 @@ const form = useForm({
     ancient_provenance_id: props.document.ancient_provenance_id,
     ancient_provenance_certainty_id: props.document.ancient_provenance_certainty_id,
     ancient_provenance_comment: props.document.ancient_provenance_comment,
-    modern_collection_id: props.document.modern_collection_id,
+    modern_collections: props.modern_collections,
     legal_classification_id: props.document.legal_classification_id,
     legal_classification_explanation: props.document.legal_classification_explanation,
     purchases: props.purchases,

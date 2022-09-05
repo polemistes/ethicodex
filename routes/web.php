@@ -44,7 +44,7 @@ Route::post('/codex_delete/{document}', [DocumentController::class, 'destroy']);
 
 Route::get('/purchases', [PurchaseController::class, 'index'])->name('Purchases');
 Route::get('/purchase_edit/{purchase}', [PurchaseController::class, 'edit'])->name('PurchaseEdit');
-Route::post('/purchase_update/{purchase}', [PurchaseController::class, 'PurchaseUpdate']);
+Route::post('/purchase_update/{purchase}', [PurchaseController::class, 'update']);
 Route::post('/purchase_new', [PurchaseController::class, 'create']);
 Route::post('/purchase_store', [PurchaseController::class, 'store']);
 Route::post('/purchase_delete/{purchase}', [PurchaseController::class, 'destroy']);

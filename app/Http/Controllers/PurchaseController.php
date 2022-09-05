@@ -93,7 +93,7 @@ class PurchaseController extends Controller
 
         return (Inertia::render('PurchaseEdit', [
             'purchase' => $purchase,
-            'documents' => $purchase->documents(['id', 'standard_name', 'trismegistos_id'])->get(),
+            'documents' => $purchase->documents()->get(['documents.id', 'standard_name', 'trismegistos_id'])->makeHidden('pivot'),
             'documents_all' => Document::all(['id', 'standard_name', 'trismegistos_id']),
             'purchase_parties' => $purchase->purchase_parties()->get()->makeHidden('pivot'),
             'purchase_parties_all' => PurchaseParty::all(),
@@ -111,8 +111,7 @@ class PurchaseController extends Controller
     {
         $this->authorize('update', $purchase);
 
-        $fields = $request->validate([
-            'id' => 'required',
+         $fields = $request->validate([
             'name' => 'nullable',
             'date' => 'nullable',
             'description' => 'nullable',
@@ -123,10 +122,10 @@ class PurchaseController extends Controller
         $purchase->name = $fields['name'];
         $purchase->date = $fields['date'];
         $purchase->description = $fields['description'];
+        $purchase->save();
 
         $purchase->documents()->sync(array_column($fields['documents'], 'id'));
         $purchase->purchase_parties()->sync(array_column($fields['purchase_parties'], 'id'));
-        $purchase->save();
 
         return Redirect::route('Purchases');
     }

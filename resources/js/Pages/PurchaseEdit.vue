@@ -6,7 +6,7 @@
     <fieldset class="edittransactioncontainer">
       <input type="hidden" input_id="id" v-model="form.id" />
       <EthInput input_type="year" input_id="date" v-model="form.date">Year</EthInput>
-      <EthInput input_type="text" input_id="name" v-model="form.name">Purchase</EthInput>
+      <EthInput input_type="text" input_id="name" v-model="form.name">Transaction</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
 
   
@@ -14,7 +14,7 @@
                   input_id="documents" 
                   :choices="documents_all"
                   v-model="form.documents">
-                  Documents in Purchase
+                  Documents in Transaction
         </EthInput>
  
 
@@ -22,7 +22,7 @@
                   input_id="purchase_parties" 
                   :choices="purchase_parties_all"
                   v-model="form.purchase_parties">
-                  Parties to the Purchase
+                  Parties to the Transaction
         </EthInput>
 
 
@@ -41,10 +41,10 @@ import EthInput from '../Components/EthInput.vue'
 
 const props = defineProps({ 
   purchase: Object,
-  documents: Object,
-  documents_all: Object,
-  purchase_parties: Object,
-  purchase_parties_all: Object,
+  documents: Array,
+  documents_all: Array,
+  purchase_parties: Array,
+  purchase_parties_all: Array,
   auth: Object,
   });
 
@@ -58,7 +58,7 @@ const form = reactive({
 
 function submit() {
       Inertia.post(`/purchase_update/${props.purchase.id}`, form)
-    }
+}
 </script>
 
 <style>

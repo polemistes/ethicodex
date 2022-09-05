@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('scripts', function (Blueprint $table) {
-            $table->foreignId('language_id')->nullable()->after('name'); 
+        Schema::table('documents', function (Blueprint $table) {
+ /*           $table->dropForeign(['modern_collection_id']);*/
+            $table->dropColumn('modern_collection_id');
         });
     }
 
@@ -25,9 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('scripts', function (Blueprint $table) {
-            $table->dropForeign(['language_id']);
-            $table->dropColumn('language_id');
+        Schema::table('documents', function (Blueprint $table) {
+            $table->foreignId('modern_collection_id')->nullable()->after('ancient_provenance_comment');  
         });
     }
 };

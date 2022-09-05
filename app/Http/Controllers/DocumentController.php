@@ -156,8 +156,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => ModernCollection::all(),
-            'modern_collection' => $document->modern_collection()->get(),
+            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'modern_collections_all' => ModernCollection::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -211,8 +211,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => ModernCollection::all(),
-            'modern_collection' => $document->modern_collection()->get(),
+            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'modern_collections_all' => ModernCollection::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -301,7 +301,7 @@ class DocumentController extends Controller
             'ancient_provenance_comment' => 'nullable',
             'scientifically_excavated' => 'nullable',
             'excavation_comment' => 'nullable',
-            'modern_collection_id' => 'nullable',
+            'modern_collections' => 'nullable',
             'legal_classification_id' => 'nullable',
             'legal_classification_explanation' => 'nullable',
             'purchases' => 'nullable',
@@ -366,6 +366,7 @@ class DocumentController extends Controller
         $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));
         $document->analyses()->sync(array_column($fields['analyses'], 'id'));
+        $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
         $document->purchases()->sync(array_column($fields['purchases'], 'id'));
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));

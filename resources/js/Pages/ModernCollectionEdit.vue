@@ -8,40 +8,26 @@
       <EthInput input_type="text" input_id="name" v-model="form.name">Modern Collection</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
 
-      <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;">
-        <b>Selected:</b> 
-        <span v-for="document in form.documents" :key="document.id">
-          {{ document.standard_name }},
-        </span>
+      <label :for="documents">Codices in Collection</label>
+      <p style="border-style: solid;"><b>Selected:</b> 
+        <span v-for="document in form.documents" :key="document.id">{{ document.standard_name }},</span>
       </p>
       
-      <label :for="search">Search:</label>
-      <input id="search" type="text" v-model="search">
-
-      <div class="scrollwindow">
-      <div v-for="document in documents_all.data" :key="document.id">
-        <input type="checkbox"
-              :id="document.id"  
-              :value="form.documents"
-              v-model="form.documents">
-        <label> 
-          {{ document.standard_name }} (Tr.ID: {{ document.trismegistos_id }})
-          <span v-if="document.modern_collection_id && document.modern_collection_id != modern_collection.id">
-            <b> Assigned to {{ modern_collections_all.find(x => x.id === document.modern_collection_id).name }}</b>
-          </span>
-        </label>
+      <div v-if="documents_all.length > 20">
+        <label :for="search">Search:</label>
+        <input type="text" v-model="search">
       </div>
-      </div>    
-
-      <EthInput input_type="document_choice_taken" 
-                  input_id="documents" 
-                  :choices="documents_all"
-                  :collection_id="modern_collection.id"
-                  :collections="modern_collections_all"
-                  v-model="form.documents">
-                  Codices in Collection
-      </EthInput>
+      
+      <div class="scrollwindow">
+        <div v-for="document in search_documents" :key="document.id">
+          <input type="checkbox"
+              :id="document.id"  
+              :value="document"
+              v-model="form.documents"
+          >
+          <label> {{ document.standard_name }} (Tr.ID: {{ document.trismegistos_id }})</label>
+        </div>
+      </div>  
 
       <button @click.prevent="submit">Store All Changes</button>
     </fieldset>
@@ -53,14 +39,13 @@
 
 <script setup>
 import {Inertia} from "@inertiajs/inertia";
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import EthInput from '../Components/EthInput.vue'
 
 const props = defineProps({ 
   modern_collection: Object,
-  modern_collections_all: Array,
   documents: Array,
-  documents_all: Object,
+  documents_all: Array,
   auth: Object,
   });
 
@@ -72,7 +57,7 @@ const form = reactive({
 
 let search = ref("");
 
-watch(search, (value) => {
+/*watch(search, (value) => {
   Inertia.get(
     "/modern_collection_edit",
     {
@@ -82,6 +67,14 @@ watch(search, (value) => {
       preserveScroll: true, }
   );
 });
+*/
+
+const search_documents = computed(() => {
+  return search.value != "" ? props.documents_all.filter(function (el) {
+      return (el.standard_name != null) ? el.standard_name.includes(search.value) : null || 
+            (el.trismegistos_id != null) ? el.trismegistos_id.toString().includes(search.value) : null}) : props.documents_all
+})
+
 
 function submit() {
       Inertia.post(`/modern_collection_update/${props.modern_collection.id}`, form)

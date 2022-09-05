@@ -13,4 +13,9 @@ class Script extends Model
     {
         return $this->belongsToMany(Document::class);
     }
+
+    public function language()
+    {
+        return $this->belongsTo(Language::class);
+    }
 }
