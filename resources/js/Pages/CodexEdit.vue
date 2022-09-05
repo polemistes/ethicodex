@@ -471,8 +471,8 @@
                 input_type="textarea"
                 input_id="excavation_comment"
                 v-model="form.excavation_comment"
-                >Comments on Excavation
             >
+                Comments on Excavation
             </EthInput>
 
             <EthInput
