@@ -84,6 +84,41 @@
       </div>    
     </div>
 
+    <div v-if="input_type == 'multi_choice_scripts'" class="input_oneline">
+      <label :for="input_id"><slot /></label>
+      <p style="border-style: solid;">
+        <b>Selected:</b> 
+        <span v-for="value in modelValue" :key="value.id">{{ value.name }}
+          ,
+        </span>
+      </p>
+      <h3>Greek Scripts:</h3>
+      <div v-for="choice in search_choices" :key="choice.id">
+        <div v-if="choice.language_id == '1'">
+          <input type="checkbox"
+              :id="choice.id"  
+              :value="choice"
+              v-model="modelValue"
+              @change="$emit('update:modelValue', modelValue)"
+          >
+          <label>{{ choice.name }}</label>
+        </div>
+      </div>
+
+      <h3>Latin Scripts:</h3>
+      <div v-for="choice in search_choices" :key="choice.id">
+        <div v-if="choice.language_id == '2'">
+          <input type="checkbox"
+              :id="choice.id"  
+              :value="choice"
+              v-model="modelValue"
+              @change="$emit('update:modelValue', modelValue)"
+          >
+          <label>{{ choice.name }}</label>
+        </div>
+      </div>
+    </div>
+
     <div v-if="input_type == 'document_choice'" class="input_oneline">
       <label :for="input_id"><slot /></label>
       <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.standard_name }},</span></p>
@@ -241,5 +276,8 @@ label {
 .input_year {
   display: flex;
   flex-direction: column;
+}
+h3 {
+  padding-top: 1em;
 }
 </style>

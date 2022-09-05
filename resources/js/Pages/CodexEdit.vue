@@ -247,7 +247,7 @@
             >
 
             <EthInput
-                input_type="multi_choice"
+                input_type="multi_choice_scripts"
                 input_id="scripts"
                 :choices="scripts_all"
                 v-model="form.scripts"
