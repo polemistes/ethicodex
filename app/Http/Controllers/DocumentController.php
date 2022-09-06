@@ -343,6 +343,24 @@ class DocumentController extends Controller
         $document->ink_id = $fields['ink_id'];
         $document->quire_signature_id = $fields['quire_signature_id'];
         $document->quire_structure_id = $fields['quire_structure_id'];
+        if($fields['quire_structure_id'] == 1)
+        {
+            $fields['quire_number'] = 1;
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
+        }
+        elseif($fields['quire_structure_id'] == 2)
+        {   
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,$fields['quire_number']);
+        }
+        elseif($fields['quire_structure_id'] == 3)
+        {
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
+        }
+        else
+        {
+            $fields['quire_number'] = null;
+            $fields['bifolia'] = ["1"];
+        }
         $document->quire_number = $fields['quire_number'];
         $document->bifolia = $fields['bifolia'];
         $document->quire_comment = $fields['quire_comment'];

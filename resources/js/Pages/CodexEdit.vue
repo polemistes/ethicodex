@@ -349,15 +349,20 @@
                 Quire Structure
             </EthInput>
 
+            
             <div v-if="form.quire_structure_id == 1">
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="1"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in the Quire
-                </EthInput>
+                <label :for="bifolia">Number of Bifolia in the Quire</label>
+                <div>
+                    <p>
+                        <input
+                            type="number"
+                            id="bifolia" 
+                            min="1" 
+                            required
+                            v-model="form.bifolia[0]"
+                        >
+                    </p>
+                </div>
             </div>
 
             <div v-if="form.quire_structure_id == 2">
@@ -367,26 +372,14 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-            <label :for="bifolia">Number of Bifolia in each Quire</label>
-            <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
-                <p>
-                    <span v-if="parseInt(form.quire_number) > 1">{{ n }}:</span>
-                    <input type="number" min="1" required v-model="form.bifolia[n-1]">
-                </p>
-            </div>    
-            <p> {{ JSON.stringify(form.bifolia) }} </p>
-<!--                
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="parseInt(form.quire_number)"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in each Quire
-                </EthInput>
-                
--->
 
+                <label :for="bifolia">Number of Bifolia in each Quire</label>
+                <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
+                    <p>
+                        {{ n }}:
+                        <input type="number" min="1" required v-model="form.bifolia[n-1]">
+                    </p>
+                </div>    
             </div>
 
             <div v-if="form.quire_structure_id == 3">
@@ -396,14 +389,19 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="1"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in the Quires
-                </EthInput>
+
+                <label :for="bifolia">Number of Bifolia in each Quire</label>
+                <div>
+                    <p>
+                        <input
+                            type="number"
+                            id="bifolia" 
+                            min="1" 
+                            required
+                            v-model="form.bifolia[0]"
+                        >
+                    </p>
+                </div>
             </div>
 
             <EthInput
@@ -592,7 +590,7 @@
 
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { useRemember } from "@inertiajs/inertia-vue3";
 
@@ -702,7 +700,7 @@ const form = useForm({
     quire_signature_id: props.document.quire_signature_id,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,
-    bifolia: props.document.bifolia,
+    bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],
     quire_comment: props.document.quire_comment,
     binding_description: props.document.binding_description,
     storage_condition_id: props.document.storage_condition_id,
@@ -720,6 +718,11 @@ const form = useForm({
     images: props.images,
 });
 
+onMounted(() => {
+  if(!form.bifolia) {
+    form.bifolia[0] = 0;
+    }
+})
 
 const loadImages = ref(null);
 

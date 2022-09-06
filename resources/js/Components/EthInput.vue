@@ -226,7 +226,7 @@
     <div v-if="input_type == 'bifolia'" class="input_oneline">
       <label :for="input_id"><slot /></label>
       <div v-for="n in range(1, num)" :key="n" ><p><span v-if="num > 1">{{ n }}:</span><input type="number" min="1" required :value="bifolia[n-1] ? bifolia[n-1] : 1" @input="bifolia_input(n, $event.target.value)"></p></div>    
-    <!--  {{ JSON.stringify(bifolia) }} -->
+      {{ JSON.stringify(bifolia) }} 
     </div>
 
 </template>
