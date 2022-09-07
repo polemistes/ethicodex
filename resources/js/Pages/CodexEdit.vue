@@ -509,7 +509,7 @@
             </EthInput>
 
             <EthInput
-                input_type="single_choice"
+                input_type="legal_choice"
                 input_id="legal_classification"
                 :choices="legal_classifications"
                 v-model="form.legal_classification_id"

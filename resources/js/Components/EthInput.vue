@@ -66,6 +66,22 @@
       </select>
     </div>
 
+    <div v-if="input_type == 'legal_choice'" class="input_oneline">
+      <label :for="input_id"><slot /></label>
+      <select 
+          :id="input_id" 
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)">
+          <option value=""></option>
+          <option 
+              v-for="choice in choices" 
+              :value="choice.id" 
+              :key="choice.id">
+              {{ choice.name }}: {{ choice.description }}
+          </option>
+      </select>
+    </div>
+
     <div v-if="input_type == 'multi_choice'" class="input_oneline">
       <label :for="input_id"><slot /></label>
       <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.name }},</span></p>
