@@ -18,7 +18,7 @@ class PurchasePartyPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->role->id >= 1;
+        return $user->role->id >= 2;
     }
 
     /**
@@ -30,7 +30,7 @@ class PurchasePartyPolicy
      */
     public function view(User $user, PurchaseParty $purchaseParty)
     {
-        return $user->role->id >= 1;
+        return $user->role->id >= 2;
     }
 
     /**

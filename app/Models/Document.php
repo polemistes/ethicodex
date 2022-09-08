@@ -45,11 +45,6 @@ class Document extends Model
         return $this->belongsTo(AncientProvenance::class);
     }
 
-    public function first_procurement()
-    {
-        return $this->belongsTo(FirstProcurement::class);
-    }
-
     public function ancient_provenance_certainty()
     {
         return $this->belongsTo(AncientProvenanceCertainty::class);
@@ -85,9 +80,9 @@ class Document extends Model
         return $this->belongsTo(Material::class);
     }
 
-    public function modern_collection()
+    public function modern_collections()
     {
-        return $this->belongsTo(ModernCollection::class);
+        return $this->belongsToMany(ModernCollection::class);
     }
 
     public function pagination()

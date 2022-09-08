@@ -60,13 +60,8 @@ class ModernCollectionController extends Controller
         $fields = $request->validate([
             'documents' => 'nullable',
         ]);
-    
-        foreach($fields['documents'] as $document) {
-            $doc = Document::find($document['id']);
-            $doc->modern_collection_id = $modernCollection->id;
-            $doc->save();
-        }
 
+        $modernCollection->documents()->sync(array_column($fields['documents'], 'id'));
 
         return Redirect::route('ModernCollections');
     }
@@ -92,13 +87,10 @@ class ModernCollectionController extends Controller
     {
         $this->authorize('update', $modernCollection);
 
-        $search_string = $request->search_string;
-
         return (Inertia::render('ModernCollectionEdit', [
             'modern_collection' => $modernCollection,
-            'modern_collections_all' => ModernCollection::all(),
-            'documents' => $modernCollection->documents()->get(['id', 'standard_name', 'modern_collection_id', 'trismegistos_id']),
-            'documents_all' => Document::all(['id', 'standard_name', 'modern_collection_id', 'trismegistos_id'])
+            'documents' => $modernCollection->documents()->get(['documents.id', 'standard_name', 'trismegistos_id'])->makeHidden('pivot'),
+            'documents_all' => Document::all(['id', 'standard_name', 'trismegistos_id'])
         ]));
     }
 
@@ -123,16 +115,7 @@ class ModernCollectionController extends Controller
         $modernCollection->description = $fields['description'];
         $modernCollection->save();
 
-        foreach($modernCollection->documents as $doc) {
-            $doc->modern_collection_id = null;
-            $doc->save();
-        }
-    
-        foreach($fields['documents'] as $document) {
-            $doc = Document::find($document['id']);
-            $doc->modern_collection_id = $modernCollection->id;
-            $doc->save();
-        }
+        $modernCollection->documents()->sync(array_column($fields['documents'], 'id'));
 
         return Redirect::route('ModernCollections');
     }
@@ -146,8 +129,7 @@ class ModernCollectionController extends Controller
     public function destroy(ModernCollection $modernCollection)
     {
         $this->authorize('delete', $modernCollection);
-        
-        Document::where('modern_collection_id', $modernCollection->id)->update(['modern_collection_id' => null]);
+        $modernCollection->documents()->detach();
         $modernCollection->delete();
 
         return Redirect::route('ModernCollections');

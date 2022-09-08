@@ -5,7 +5,7 @@
 
   <div class="transactioncontainer" style="background-color: #ccc;">
     <div class="pur_first"></div>
-    <div class="pur_second"><b>Date</b></div>
+    <div class="pur_second"><b>Year</b></div>
     <div class="pur_third"><b>Transaction</b></div>
     <div class="pur_fourth"><b>Description</b></div>
     <div class="pur_fifth"><b>Codices</b></div>
@@ -16,7 +16,7 @@
       <Link :href="'/purchase_edit/' + purchase.id" class="text-blue-800 hover:underline">Edit </Link>
       <Link :href="'/purchase_delete/' + purchase.id" onclick="return confirm('Are you sure?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
     </div>
-    <div class="pur_second">{{ purchase.date }}</div>
+    <div class="pur_second">{{ purchase.year }}</div>
     <div class="pur_third">{{ purchase.name }}</div>
     <div class="pur_fourth">{{ purchase.description }}</div>
     <div class="pur_fifth">

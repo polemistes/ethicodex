@@ -12,6 +12,6 @@ class ModernCollection extends Model
 
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->belongsToMany(Document::class);
     }
 }

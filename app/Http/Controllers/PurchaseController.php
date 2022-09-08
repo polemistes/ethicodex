@@ -56,15 +56,19 @@ class PurchaseController extends Controller
      
         $purchase = Purchase::create($request->validate([
             'name' => 'nullable',
-            'date' => 'nullable',
+            'year' => 'nullable',
             'description' => 'nullable',
         ]));
-
-        //        $this->authorize('update', $document);
-
-        $purchase->documents()->sync(array_column($request->validate(['documents' => 'nullable'])['documents'], 'id'));
-        $purchase->purchase_parties()->sync(array_column($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'], 'id'));
         $purchase->save();
+        $purchase->documents()->sync(array_column($request->validate(['documents' => 'nullable'])['documents'], 'id'));
+
+        $purchase_parties = [];
+
+        foreach($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'] as $party) {
+            $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
+        }
+   
+        $purchase->purchase_parties()->sync($purchase_parties);
 
         return Redirect::route('Purchases');
 
@@ -93,9 +97,9 @@ class PurchaseController extends Controller
 
         return (Inertia::render('PurchaseEdit', [
             'purchase' => $purchase,
-            'documents' => $purchase->documents(['id', 'standard_name', 'trismegistos_id'])->get(),
+            'documents' => $purchase->documents()->get(['documents.id', 'standard_name', 'trismegistos_id'])->makeHidden('pivot'),
             'documents_all' => Document::all(['id', 'standard_name', 'trismegistos_id']),
-            'purchase_parties' => $purchase->purchase_parties()->get()->makeHidden('pivot'),
+            'purchase_parties' => $purchase->purchase_parties()->get(),
             'purchase_parties_all' => PurchaseParty::all(),
         ]));
     }
@@ -111,22 +115,29 @@ class PurchaseController extends Controller
     {
         $this->authorize('update', $purchase);
 
-        $fields = $request->validate([
-            'id' => 'required',
+         $fields = $request->validate([
             'name' => 'nullable',
-            'date' => 'nullable',
+            'year' => 'nullable',
             'description' => 'nullable',
             'documents' => 'nullable',
             'purchase_parties' => 'nullable',
         ]);
 
         $purchase->name = $fields['name'];
-        $purchase->date = $fields['date'];
+        $purchase->year = $fields['year'];
         $purchase->description = $fields['description'];
-
-        $purchase->documents()->sync(array_column($fields['documents'], 'id'));
-        $purchase->purchase_parties()->sync(array_column($fields['purchase_parties'], 'id'));
         $purchase->save();
+
+        $documents = $fields['documents'];
+
+        $purchase_parties = [];
+        foreach($fields['purchase_parties'] as $party) {
+            $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
+        }
+   
+
+        $purchase->documents()->sync(array_column($documents, 'id'));
+        $purchase->purchase_parties()->sync($purchase_parties);
 
         return Redirect::route('Purchases');
     }
@@ -141,6 +152,8 @@ class PurchaseController extends Controller
     {
         $this->authorize('delete', $purchase);
 
+        $purchase->documents()->detach();
+        $purchase->purchase_parties()->detach();
         $purchase->delete();
         return Redirect::route('Purchases');
     }

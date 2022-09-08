@@ -47,8 +47,9 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Document::class);
+  //      $this->authorize('viewAny', Document::class)
 
+        $role_id = $request->user() ? $request->user()->role_id : 0;
         $search_standard = $request->get('search_standard', "");
         $search_shelf = $request->get('search_shelf', "");
         $search_pub = $request->get('search_pub', "");
@@ -56,6 +57,9 @@ class DocumentController extends Controller
         $search_from = $request->get('search_from', "");
         $search_to = $request->get('search_to', "");
         $documents = Document::query()
+            ->when($role_id < 2, function ($query, $search_standard) {
+                $query->where('published', '=', true);
+            })
             ->when($search_standard, function ($query, $search_standard) {
                 $query->where('standard_name', 'like', "%{$search_standard}%");
             })
@@ -126,7 +130,7 @@ class DocumentController extends Controller
      */
     public function show(Document  $document)
     {
-    $this->authorize('view', $document);
+  //  $this->authorize('view', $document);
 
     return (Inertia::render('CodexShow', [
             'document' => $document,
@@ -144,8 +148,6 @@ class DocumentController extends Controller
             'dating_method' => $document->dating_method()->get(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
-            'first_procurement' => $document->first_procurement()->get(),
-            'first_procurements' => FirstProcurement::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -158,8 +160,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => ModernCollection::all(),
-            'modern_collection' => $document->modern_collection()->get(),
+            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'modern_collections_all' => ModernCollection::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -175,7 +177,7 @@ class DocumentController extends Controller
             'storage_conditions' => StorageCondition::all(),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'tags_all' => Tag::all(),g
+            'tags_all' => Tag::all(),
         ]));
     }
 
@@ -201,8 +203,6 @@ class DocumentController extends Controller
             'dating_method' => $document->dating_method()->get(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
-            'first_procurement' => $document->first_procurement()->get(),
-            'first_procurements' => FirstProcurement::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -215,8 +215,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => ModernCollection::all(),
-            'modern_collection' => $document->modern_collection()->get(),
+            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'modern_collections_all' => ModernCollection::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -303,8 +303,9 @@ class DocumentController extends Controller
             'ancient_provenance_id' => 'nullable',
             'ancient_provenance_certainty_id' => 'nullable',
             'ancient_provenance_comment' => 'nullable',
-            'first_procurement_id' => 'nullable',
-            'modern_collection_id' => 'nullable',
+            'scientifically_excavated' => 'nullable',
+            'excavation_comment' => 'nullable',
+            'modern_collections' => 'nullable',
             'legal_classification_id' => 'nullable',
             'legal_classification_explanation' => 'nullable',
             'purchases' => 'nullable',
@@ -346,6 +347,24 @@ class DocumentController extends Controller
         $document->ink_id = $fields['ink_id'];
         $document->quire_signature_id = $fields['quire_signature_id'];
         $document->quire_structure_id = $fields['quire_structure_id'];
+        if($fields['quire_structure_id'] == 1)
+        {
+            $fields['quire_number'] = 1;
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
+        }
+        elseif($fields['quire_structure_id'] == 2)
+        {   
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,$fields['quire_number']);
+        }
+        elseif($fields['quire_structure_id'] == 3)
+        {
+            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
+        }
+        else
+        {
+            $fields['quire_number'] = null;
+            $fields['bifolia'] = ["1"];
+        }
         $document->quire_number = $fields['quire_number'];
         $document->bifolia = $fields['bifolia'];
         $document->quire_comment = $fields['quire_comment'];
@@ -356,8 +375,8 @@ class DocumentController extends Controller
         $document->ancient_provenance_id = $fields['ancient_provenance_id'];
         $document->ancient_provenance_certainty_id = $fields['ancient_provenance_certainty_id'];
         $document->ancient_provenance_comment = $fields['ancient_provenance_comment'];
-        $document->first_procurement_id = $fields['first_procurement_id'];
-        $document->modern_collection_id = $fields['modern_collection_id'];
+        $document->scientifically_excavated = $fields['scientifically_excavated'];
+        $document->excavation_comment = $fields['excavation_comment'];
         $document->legal_classification_id = $fields['legal_classification_id'];
         $document->legal_classification_explanation = $fields['legal_classification_explanation'];
         $document->images_info = $fields['images_info'];
@@ -369,6 +388,7 @@ class DocumentController extends Controller
         $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));
         $document->analyses()->sync(array_column($fields['analyses'], 'id'));
+        $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
         $document->purchases()->sync(array_column($fields['purchases'], 'id'));
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
@@ -406,6 +426,13 @@ class DocumentController extends Controller
     {
         $this->authorize('delete', $document);
 
+        $document->genres()->detach();
+        $document->languages()->detach();
+        $document->punctuations()->detach();
+        $document->tags()->detach();
+        $document->decorations()->detach();
+        $document->paratexts()->detach();
+        $document->scripts()->detach();
         $document->delete();
         return redirect()->back();
     }

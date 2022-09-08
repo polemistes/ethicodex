@@ -18,7 +18,7 @@ class DocumentPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->role->id >= 1;
+        return $user->role->id >= 2;
     }
 
     /**
@@ -30,7 +30,7 @@ class DocumentPolicy
      */
     public function view(User $user, Document $document)
     {
-        return $user->role->id >= 1;
+        return $document->published ? $user->role->id >= 1 : $user->role->id >= 2;
     }
 
     /**

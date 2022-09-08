@@ -247,7 +247,7 @@
             >
 
             <EthInput
-                input_type="multi_choice"
+                input_type="multi_choice_scripts"
                 input_id="scripts"
                 :choices="scripts_all"
                 v-model="form.scripts"
@@ -349,15 +349,20 @@
                 Quire Structure
             </EthInput>
 
+            
             <div v-if="form.quire_structure_id == 1">
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="1"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in the Quire
-                </EthInput>
+                <label :for="bifolia">Number of Bifolia in the Quire</label>
+                <div>
+                    <p>
+                        <input
+                            type="number"
+                            id="bifolia" 
+                            min="1" 
+                            required
+                            v-model="form.bifolia[0]"
+                        >
+                    </p>
+                </div>
             </div>
 
             <div v-if="form.quire_structure_id == 2">
@@ -367,26 +372,14 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-            <label :for="bifolia">Number of Bifolia in each Quire</label>
-            <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
-                <p>
-                    <span v-if="parseInt(form.quire_number) > 1">{{ n }}:</span>
-                    <input type="number" min="1" required v-model="form.bifolia[n-1]">
-                </p>
-            </div>    
-            <p> {{ JSON.stringify(form.bifolia) }} </p>
-<!--                
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="parseInt(form.quire_number)"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in each Quire
-                </EthInput>
-                
--->
 
+                <label v-if="form.quire_number" :for="bifolia">Number of Bifolia in each Quire</label>
+                <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
+                    <p>
+                        {{ n }}:
+                        <input type="number" min="1" required v-model="form.bifolia[n-1]">
+                    </p>
+                </div>    
             </div>
 
             <div v-if="form.quire_structure_id == 3">
@@ -396,14 +389,19 @@
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-                <EthInput
-                    input_type="bifolia"
-                    input_id="bifolia"
-                    :num="1"
-                    v-model="form.bifolia"
-                >
-                    Number of Bifolia in the Quires
-                </EthInput>
+
+                <label :for="bifolia">Number of Bifolia in each Quire</label>
+                <div>
+                    <p>
+                        <input
+                            type="number"
+                            id="bifolia" 
+                            min="1" 
+                            required
+                            v-model="form.bifolia[0]"
+                        >
+                    </p>
+                </div>
             </div>
 
             <EthInput
@@ -458,13 +456,21 @@
         </fieldset>
 
         <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
+            <div>
+                <label :for="scientifically_excavated">Scientifically Excavated</label>
+                <input  
+                    :id="scientifically_excavated" 
+                    type="checkbox"
+                    v-model="form.scientifically_excavated"
+                > 
+            </div>
+            
             <EthInput
-                input_type="single_choice"
-                input_id="first_procurement"
-                :choices="first_procurements"
-                v-model="form.first_procurement_id"
+                input_type="textarea"
+                input_id="excavation_comment"
+                v-model="form.excavation_comment"
             >
-                Mode of First Procurement
+                Comments on Excavation
             </EthInput>
 
             <EthInput
@@ -489,21 +495,21 @@
                 input_type="textarea"
                 input_id="ancient_provenance_comment"
                 v-model="form.ancient_provenance_comment"
-                >Comments on Ancient Provenance
-            >
+                >
+                Comments on Ancient Provenance
             </EthInput>
             
             <EthInput
-                input_type="single_choice"
+                input_type="multi_choice"
                 input_id="modern_collection"
-                :choices="modern_collections"
-                v-model="form.modern_collection_id"
+                :choices="modern_collections_all"
+                v-model="form.modern_collections"
             >
-                Modern Collection
+                Modern Collections
             </EthInput>
 
             <EthInput
-                input_type="single_choice"
+                input_type="legal_choice"
                 input_id="legal_classification"
                 :choices="legal_classifications"
                 v-model="form.legal_classification_id"
@@ -584,7 +590,7 @@
 
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { useRemember } from "@inertiajs/inertia-vue3";
 
@@ -612,8 +618,6 @@ const props = defineProps({
     document: Object,
     genres: Array,
     genres_all: Array,
-    first_procurement: Object,
-    first_procurements: Array,
     images: Array,
     ink: Object,
     inks: Array,
@@ -624,8 +628,8 @@ const props = defineProps({
     licenses: Array,
     material: Object,
     materials: Array,
-    modern_collection: Object,
     modern_collections: Array,
+    modern_collections_all: Array,
     newimages: Array,
     pagination: Object,
     paginations: Array,
@@ -659,7 +663,8 @@ const form = useForm({
     trismegistos_id: props.document.trismegistos_id,
     title: props.document.title,
     genres: props.genres,
-    first_procurement_id: props.document.first_procurement_id,
+    scientifically_excavated: props.document.scientifically_excavated == 1 ? true : false,
+    excavation_comment: props.document.excavation_comment,
     ancient_author: props.document.ancient_author,
     tags: props.tags,
     content_description: props.document.content_description,
@@ -695,7 +700,7 @@ const form = useForm({
     quire_signature_id: props.document.quire_signature_id,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,
-    bifolia: props.document.bifolia,
+    bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],
     quire_comment: props.document.quire_comment,
     binding_description: props.document.binding_description,
     storage_condition_id: props.document.storage_condition_id,
@@ -705,7 +710,7 @@ const form = useForm({
     ancient_provenance_id: props.document.ancient_provenance_id,
     ancient_provenance_certainty_id: props.document.ancient_provenance_certainty_id,
     ancient_provenance_comment: props.document.ancient_provenance_comment,
-    modern_collection_id: props.document.modern_collection_id,
+    modern_collections: props.modern_collections,
     legal_classification_id: props.document.legal_classification_id,
     legal_classification_explanation: props.document.legal_classification_explanation,
     purchases: props.purchases,
@@ -713,6 +718,11 @@ const form = useForm({
     images: props.images,
 });
 
+onMounted(() => {
+  if(!form.bifolia) {
+    form.bifolia[0] = 0;
+    }
+})
 
 const loadImages = ref(null);
 
