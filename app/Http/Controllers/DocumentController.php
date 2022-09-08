@@ -47,8 +47,9 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Document::class);
+  //      $this->authorize('viewAny', Document::class)
 
+        $role_id = $request->user() ? $request->user()->role_id : 0;
         $search_standard = $request->get('search_standard', "");
         $search_shelf = $request->get('search_shelf', "");
         $search_pub = $request->get('search_pub', "");
@@ -56,6 +57,9 @@ class DocumentController extends Controller
         $search_from = $request->get('search_from', "");
         $search_to = $request->get('search_to', "");
         $documents = Document::query()
+            ->when($role_id < 2, function ($query, $search_standard) {
+                $query->where('published', '=', true);
+            })
             ->when($search_standard, function ($query, $search_standard) {
                 $query->where('standard_name', 'like', "%{$search_standard}%");
             })
@@ -126,7 +130,7 @@ class DocumentController extends Controller
      */
     public function show(Document  $document)
     {
-    $this->authorize('view', $document);
+  //  $this->authorize('view', $document);
 
     return (Inertia::render('CodexShow', [
             'document' => $document,
@@ -173,7 +177,7 @@ class DocumentController extends Controller
             'storage_conditions' => StorageCondition::all(),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'tags_all' => Tag::all(),g
+            'tags_all' => Tag::all(),
         ]));
     }
 
@@ -422,6 +426,9 @@ class DocumentController extends Controller
     {
         $this->authorize('delete', $document);
 
+        $document->decorations()->detach();
+        $document->paratexts()->detach();
+        $document->scripts()->detach();
         $document->delete();
         return redirect()->back();
     }

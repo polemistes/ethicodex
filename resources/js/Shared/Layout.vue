@@ -26,7 +26,6 @@
         </li>
         
         <li 
-          v-if="loggedin" 
           :class="{active: isActive == 'Codices'}"
         >
           <Link href="/codices" @click="isActive='Codices'">Codices</Link>

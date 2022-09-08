@@ -495,8 +495,8 @@
                 input_type="textarea"
                 input_id="ancient_provenance_comment"
                 v-model="form.ancient_provenance_comment"
-                >Comments on Ancient Provenance
-            >
+                >
+                Comments on Ancient Provenance
             </EthInput>
             
             <EthInput
