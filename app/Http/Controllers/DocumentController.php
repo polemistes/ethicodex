@@ -426,6 +426,10 @@ class DocumentController extends Controller
     {
         $this->authorize('delete', $document);
 
+        $document->genres()->detach();
+        $document->languages()->detach();
+        $document->punctuations()->detach();
+        $document->tags()->detach();
         $document->decorations()->detach();
         $document->paratexts()->detach();
         $document->scripts()->detach();

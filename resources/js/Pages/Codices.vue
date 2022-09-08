@@ -121,7 +121,7 @@ import { ref, watch, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
-  documents: Object,
+  documents: Array,
   search_standard: String,
   search_shelf: String,
   search_pub: String,

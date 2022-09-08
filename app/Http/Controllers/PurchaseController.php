@@ -152,6 +152,8 @@ class PurchaseController extends Controller
     {
         $this->authorize('delete', $purchase);
 
+        $purchase->documents()->detach();
+        $purchase->purchase_parties()->detach();
         $purchase->delete();
         return Redirect::route('Purchases');
     }

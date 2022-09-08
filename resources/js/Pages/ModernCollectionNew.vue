@@ -1,20 +1,33 @@
 <template>
-  
+
   <h1 class="addcollectionheader">Add Modern Collection</h1>
 
-   <form @submit.prevent="submit" >
+   <form @submit.prevent="submit">
     <fieldset class="addcollectioncontainer">
+      <input type="hidden" input_id="id" v-model="form.id" />
       <EthInput input_type="text" input_id="name" v-model="form.name">Modern Collection</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
 
-      <EthInput input_type="document_choice_taken" 
-                  input_id="documents" 
-                  :choices="documents_all"
-                  collection_id="0"
-                  :collections="modern_collections_all"
-                  v-model="form.documents">
-                  Codices in Collection
-      </EthInput>
+      <label :for="documents">Codices in Collection</label>
+      <p style="border-style: solid;"><b>Selected:</b> 
+        <span v-for="document in form.documents" :key="document.id">{{ document.standard_name }},</span>
+      </p>
+      
+      <div v-if="documents_all.length > 20">
+        <label :for="search">Search:</label>
+        <input type="text" v-model="search">
+      </div>
+      
+      <div class="scrollwindow">
+        <div v-for="document in search_documents" :key="document.id">
+          <input type="checkbox"
+              :id="document.id"  
+              :value="document"
+              v-model="form.documents"
+          >
+          <label> {{ document.standard_name }} (Tr.ID: {{ document.trismegistos_id }})</label>
+        </div>
+      </div>  
 
       <button @click.prevent="submit">Store All Changes</button>
     </fieldset>
@@ -26,11 +39,10 @@
 
 <script setup>
 import {Inertia} from "@inertiajs/inertia";
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import EthInput from '../Components/EthInput.vue'
 
-const props = defineProps({
-  modern_collections_all: Array,
+const props = defineProps({ 
   documents_all: Array,
   auth: Object,
   });
@@ -41,17 +53,26 @@ const form = reactive({
     documents: [],
 })
 
+let search = ref("");
+
+const search_documents = computed(() => {
+  return search.value != "" ? props.documents_all.filter(function (el) {
+      return (el.standard_name != null) ? el.standard_name.includes(search.value) : null || 
+            (el.trismegistos_id != null) ? el.trismegistos_id.toString().includes(search.value) : null}) : props.documents_all
+})
+
+
 function submit() {
       Inertia.post(`/modern_collection_store`, form)
     }
 </script>
 
 <style>
+
 .scrollwindow {
   max-height: 180px;
   overflow: auto;
 }
-
 .addcollectionheader {
     font-size: larger;
     font-weight: bold;
@@ -69,5 +90,4 @@ function submit() {
     flex-direction: column;
     width: 100%;
 }
-
 </style>

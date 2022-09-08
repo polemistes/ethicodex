@@ -60,13 +60,8 @@ class ModernCollectionController extends Controller
         $fields = $request->validate([
             'documents' => 'nullable',
         ]);
-    
-        foreach($fields['documents'] as $document) {
-            $doc = Document::find($document['id']);
-            $doc->modern_collection_id = $modernCollection->id;
-            $doc->save();
-        }
 
+        $modernCollection->documents()->sync(array_column($fields['documents'], 'id'));
 
         return Redirect::route('ModernCollections');
     }
@@ -134,8 +129,7 @@ class ModernCollectionController extends Controller
     public function destroy(ModernCollection $modernCollection)
     {
         $this->authorize('delete', $modernCollection);
-        
-        Document::where('modern_collection_id', $modernCollection->id)->update(['modern_collection_id' => null]);
+        $modernCollection->documents()->detach();
         $modernCollection->delete();
 
         return Redirect::route('ModernCollections');

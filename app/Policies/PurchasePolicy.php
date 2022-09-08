@@ -18,7 +18,7 @@ class PurchasePolicy
      */
     public function viewAny(User $user)
     {
-        return $user->role->id >= 1;
+        return $user->role->id >= 2;
     }
 
     /**
@@ -30,7 +30,7 @@ class PurchasePolicy
      */
     public function view(User $user, Purchase $purchase)
     {
-        return $user->role->id >= 1;
+        return $user->role->id >= 2;
     }
 
     /**
