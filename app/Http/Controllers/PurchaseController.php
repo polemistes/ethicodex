@@ -131,14 +131,9 @@ class PurchaseController extends Controller
             $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
         }
    
-     //   dd($purchase_parties);
 
         $purchase->documents()->sync(array_column($documents, 'id'));
         $purchase->purchase_parties()->sync($purchase_parties);
-
-      //  $purchase->purchase_parties()->sync(array_column($purchase_parties, 'id'));
-
-
 
         return Redirect::route('Purchases');
     }

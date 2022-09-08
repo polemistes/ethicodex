@@ -373,7 +373,7 @@
                     >Number of Quires</EthInput
                 >
 
-                <label :for="bifolia">Number of Bifolia in each Quire</label>
+                <label v-if="form.quire_number" :for="bifolia">Number of Bifolia in each Quire</label>
                 <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
                     <p>
                         {{ n }}:
