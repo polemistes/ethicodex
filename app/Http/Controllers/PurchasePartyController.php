@@ -53,17 +53,20 @@ class PurchasePartyController extends Controller
     {
         $this->authorize('create', PurchaseParty::class);
 
-        $purchase_party = PurchaseParty::create($request->validate([
+        $purchaseParty = PurchaseParty::create($request->validate([
             'name' => 'nullable',
             'description' => 'nullable',
             'institution' => 'nullable',
         ]));
+        $purchaseParty->save();
 
-        //        $this->authorize('update', $document);
+        $purchases = [];
+        foreach($request->validate(['purchases' => 'nullable'])['purchases'] as $purchase) {
+            $purchases[$purchase['id']] = ['party_role' => $purchase['party_role']];
+        }
 
-        $purchase_party->purchases()->sync(array_column($request->validate(['purchases' => 'nullable'])['purchases'], 'id'));
-        $purchase_party->save();
-
+        $purchaseParty->purchases()->sync($purchases);
+ 
         return Redirect::route('PurchaseParties');
     }
 
@@ -90,7 +93,7 @@ class PurchasePartyController extends Controller
 
         return (Inertia::render('PurchasePartyEdit', [
             'purchase_party' => $purchaseParty,
-            'purchases' => $purchaseParty->purchases()->get()->makeHidden('pivot'),
+            'purchases' => $purchaseParty->purchases()->get(),
             'purchases_all' => Purchase::all(),
         ]));
     }
@@ -116,8 +119,14 @@ class PurchasePartyController extends Controller
         $purchaseParty->name = $fields['name'];
         $purchaseParty->description = $fields['description'];
         $purchaseParty->institution = $fields['institution'] ? 1 : 0;
-        $purchaseParty->purchases()->sync(array_column($fields['purchases'], 'id'));
         $purchaseParty->save();
+
+        $purchases = [];
+        foreach($fields['purchases'] as $purchase) {
+            $purchases[$purchase['id']] = ['party_role' => $purchase['party_role']];
+        }
+
+        $purchaseParty->purchases()->sync($purchases);
 
         return Redirect::route('PurchaseParties');
     }

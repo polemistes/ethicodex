@@ -59,12 +59,16 @@ class PurchaseController extends Controller
             'date' => 'nullable',
             'description' => 'nullable',
         ]));
-
-        //        $this->authorize('update', $document);
-
-        $purchase->documents()->sync(array_column($request->validate(['documents' => 'nullable'])['documents'], 'id'));
-        $purchase->purchase_parties()->sync(array_column($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'], 'id'));
         $purchase->save();
+        $purchase->documents()->sync(array_column($request->validate(['documents' => 'nullable'])['documents'], 'id'));
+
+        $purchase_parties = [];
+
+        foreach($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'] as $party) {
+            $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
+        }
+   
+        $purchase->purchase_parties()->sync($purchase_parties);
 
         return Redirect::route('Purchases');
 

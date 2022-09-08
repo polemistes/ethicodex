@@ -120,9 +120,9 @@ const search_choices = computed(() => {
 
 function changerole(id, value) {
   const index1 = form.purchase_parties.findIndex(obj => { return obj.id === id})
-  const index2 = props.purchase_parties_all.findIndex(obj => { return obj.id === id})
+  const index2 = all_purchase_parties.findIndex(obj => { return obj.id === id})
   form.purchase_parties[index1].party_role = value
-  props.purchase_parties_all[index2].party_role = value
+  all_purchase_parties[index2].party_role = value
 }
 
 function submit() {
