@@ -95,7 +95,7 @@ class PurchaseController extends Controller
             'purchase' => $purchase,
             'documents' => $purchase->documents()->get(['documents.id', 'standard_name', 'trismegistos_id'])->makeHidden('pivot'),
             'documents_all' => Document::all(['id', 'standard_name', 'trismegistos_id']),
-            'purchase_parties' => $purchase->purchase_parties()->get()->makeHidden('pivot'),
+            'purchase_parties' => $purchase->purchase_parties()->get(),
             'purchase_parties_all' => PurchaseParty::all(),
         ]));
     }
@@ -124,8 +124,21 @@ class PurchaseController extends Controller
         $purchase->description = $fields['description'];
         $purchase->save();
 
-        $purchase->documents()->sync(array_column($fields['documents'], 'id'));
-        $purchase->purchase_parties()->sync(array_column($fields['purchase_parties'], 'id'));
+        $documents = $fields['documents'];
+
+        $purchase_parties = [];
+        foreach($fields['purchase_parties'] as $party) {
+            $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
+        }
+   
+     //   dd($purchase_parties);
+
+        $purchase->documents()->sync(array_column($documents, 'id'));
+        $purchase->purchase_parties()->sync($purchase_parties);
+
+      //  $purchase->purchase_parties()->sync(array_column($purchase_parties, 'id'));
+
+
 
         return Redirect::route('Purchases');
     }

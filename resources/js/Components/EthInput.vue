@@ -100,6 +100,27 @@
       </div>    
     </div>
 
+    <div v-if="input_type == 'party_choice'" class="input_oneline">
+      <label :for="input_id"><slot /></label>
+      <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.name }},</span></p>
+      <div v-if="choices.length > 9">
+        <label :for="search">Search:</label>
+        <input type="text" v-model="search">
+      </div>      
+      
+      <div class="scrollwindow">
+        <div v-for="choice in search_choices" :key="choice.id">
+          <input type="checkbox"
+              :id="choice.id"  
+              :value="choice"
+              v-model="modelValue"
+              @change="$emit('update:modelValue', modelValue)"
+          >
+          <label>{{ choice.name }}</label>
+        </div>
+      </div>    
+    </div>
+
     <div v-if="input_type == 'multi_choice_scripts'" class="input_oneline">
       <label :for="input_id"><slot /></label>
       <p style="border-style: solid;">
