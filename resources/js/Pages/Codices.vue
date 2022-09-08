@@ -78,11 +78,15 @@
 
   <div class="flex-container" v-for="document in documents.data" :key="document.id">
     <div class="cod_first">
+
+ <!--   Show does not work yet. Enable it when it works.  
+
       <Link
           :href="'/codex_show/' + document.id"
           class="text-blue-800 hover:underline"
           >Show 
       </Link>
+-->
       <Link
           v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
           :href="'/codex_edit/' + document.id"
