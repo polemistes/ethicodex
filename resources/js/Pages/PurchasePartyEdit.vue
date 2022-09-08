@@ -78,7 +78,8 @@ const form = reactive({
 
 for (let p of props.purchases) {
     form.purchases.push({
-    id: p.id, 
+    id: p.id,
+    year: p.year,
     name: p.name, 
     description: p.description,
     party_role: p.pivot.party_role
@@ -90,6 +91,7 @@ const all_purchases = reactive([])
 for (let p of props.purchases_all) {
   all_purchases.push({
     id: p.id, 
+    year: p.year,
     name: p.name, 
     description: p.description, 
     party_role: form.purchases.some(e => e.id === p.id) ? 
@@ -107,10 +109,8 @@ const search_choices = computed(() => {
 function changerole(id, value) {
   const index1 = form.purchases.findIndex(obj => { return obj.id === id})
   const index2 = all_purchases.findIndex(obj => { return obj.id === id})
-//  const index2 = props.purchases_all.findIndex(obj => { return obj.id === id})
   form.purchases[index1].party_role = value
   all_purchases[index2].party_role = value
-  //props.purchases_all[index2].party_role = value
 }
 
 function submit() {

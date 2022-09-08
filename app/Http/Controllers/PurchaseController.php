@@ -56,7 +56,7 @@ class PurchaseController extends Controller
      
         $purchase = Purchase::create($request->validate([
             'name' => 'nullable',
-            'date' => 'nullable',
+            'year' => 'nullable',
             'description' => 'nullable',
         ]));
         $purchase->save();
@@ -117,14 +117,14 @@ class PurchaseController extends Controller
 
          $fields = $request->validate([
             'name' => 'nullable',
-            'date' => 'nullable',
+            'year' => 'nullable',
             'description' => 'nullable',
             'documents' => 'nullable',
             'purchase_parties' => 'nullable',
         ]);
 
         $purchase->name = $fields['name'];
-        $purchase->date = $fields['date'];
+        $purchase->year = $fields['year'];
         $purchase->description = $fields['description'];
         $purchase->save();
 

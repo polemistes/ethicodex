@@ -79,6 +79,7 @@ const all_purchases = reactive([])
 for (let p of props.purchases_all) {
   all_purchases.push({
     id: p.id, 
+    year: p.year,
     name: p.name, 
     description: p.description, 
     party_role: null

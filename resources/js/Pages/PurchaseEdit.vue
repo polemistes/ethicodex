@@ -5,7 +5,7 @@
    <form @submit.prevent="submit">
     <fieldset class="edittransactioncontainer">
       <input type="hidden" input_id="id" v-model="form.id" />
-      <EthInput input_type="year" input_id="date" v-model="form.date">Year</EthInput>
+      <EthInput input_type="year" input_id="year" v-model="form.year">Year</EthInput>
       <EthInput input_type="text" input_id="name" v-model="form.name">Transaction</EthInput>
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
 
@@ -81,7 +81,7 @@ const props = defineProps({
 
 
 const form = reactive({
-    date: props.purchase.date,
+    year: props.purchase.year,
     name: props.purchase.name,
     description: props.purchase.description,
     documents: props.documents,
