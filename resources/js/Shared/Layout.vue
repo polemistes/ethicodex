@@ -32,21 +32,21 @@
         </li>              
         
         <li 
-          v-if="loggedin" 
+          v-if="editor" 
           :class="{active: isActive == 'Transactions'}"
         >
           <Link href="/purchases" @click="isActive='Transactions'">Transactions</Link>
         </li>                
         
         <li 
-          v-if="loggedin" 
+          v-if="editor" 
           :class="{active: isActive == 'Parties'}"
         >
           <Link href="/purchase_parties" @click="isActive='Parties'">Transaction Parties</Link>
         </li>
         
         <li 
-          v-if="loggedin" 
+          v-if="editor" 
           :class="{active: isActive == 'Collections'}"
         >
           <Link href="/modern_collections" @click="isActive='Collections'">Modern Collections</Link>
@@ -102,6 +102,9 @@ computed: {
   loggedin() {
     return (this.$page.props.auth == null) ? 0 : 1;
   },
+  editor() {
+    return (this.$page.props.auth ? this.$page.props.auth.user.role.id >= 2 : 0)
+  },
   name() {
     return (this.$page.props.auth == null) ? "" : this.$page.props.auth.user.name;
   },
@@ -117,6 +120,10 @@ computed: {
   import { ref } from "vue";
 
   let isActive = ref("Home");
+
+  const props = defineProps({
+  auth: Object,
+});
 </script>
 
 

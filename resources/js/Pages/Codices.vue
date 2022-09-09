@@ -1,6 +1,6 @@
 <template>
   <div class="pageline">
-    <Link class="pages" href="/codex_new">Add Codex</Link> 
+    <Link v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0" class="pages" href="/codex_new">Add Codex</Link> 
     <div class="pagecontainer"> 
       <Link class="pages" v-for="link in documents.links" 
         :key="link.label" 
