@@ -1,6 +1,13 @@
 <template>
   <div class="newtransaction">
-    <Link href="/purchase_new" method="post">Add Transaction</Link>
+    <Link 
+      href="/purchase_new" 
+      method="post"
+      as="button"
+      style="padding:0.3em 0.5em;"
+    >
+      Add Transaction
+    </Link>
   </div>
 
   <div class="transactioncontainer" style="background-color: #ccc;">
@@ -13,8 +20,8 @@
   </div>
   <div v-for="purchase in purchases" :key="purchase.id" class="transactioncontainer">
     <div class="pur_first">
-      <Link :href="'/purchase_edit/' + purchase.id" class="text-blue-800 hover:underline">Edit </Link>
-      <Link :href="'/purchase_delete/' + purchase.id" onclick="return confirm('Are you sure?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
+      <Link :href="'/purchase_edit/' + purchase.id" as="button" style="margin-right:1em; padding:0.3em 0.5em;">Edit </Link>
+      <Link :href="'/purchase_delete/' + purchase.id" as="button" style="padding:0.3em 0.5em;" onclick="return confirm('Are you sure you want to delete this Transaction?')" method="post">Delete</Link>
     </div>
     <div class="pur_second">{{ purchase.year }}</div>
     <div class="pur_third">{{ purchase.name }}</div>
@@ -62,13 +69,13 @@ let edit = ref((props.auth == null) ? 0 : (props.auth.user.role.id >=2) ? 1 : 0)
 }
 
 .pur_first {
-  flex: 0 0 6%;
+  flex: 0 0 8%;
   align-self: center;
   justify-self: end;
 }
 
 .pur_second {
-  flex: 0 0 6%;
+  flex: 0 0 5%;
   align-self: center;
   justify-self: end;
 }
@@ -83,7 +90,7 @@ let edit = ref((props.auth == null) ? 0 : (props.auth.user.role.id >=2) ? 1 : 0)
   justify-self: end;
 }
 .pur_fifth {
-  flex: 0 0 15%;
+  flex: 0 0 14%;
   align-self: center;
   justify-self: end;
 }

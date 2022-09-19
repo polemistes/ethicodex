@@ -1,6 +1,15 @@
 <template>
   <div class="pageline">
-    <Link v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0" class="pages" href="/codex_new">Add Codex</Link> 
+    <Link 
+      v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0" 
+      class="pages" 
+      href="/codex_new"
+      as="button"
+      style="margin-left: 1em; padding:0.3em 0.5em;"
+    >
+      Add Codex
+    </Link>
+
     <div class="pagecontainer"> 
       <Link class="pages" v-for="link in documents.links" 
         :key="link.label" 
@@ -88,19 +97,24 @@
       </Link>
 -->
       <Link
+          as="button" type="button"
           v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
           :href="'/codex_edit/' + document.id"
-          class="text-blue-800 hover:underline"
-          >Edit
+          style="margin-right:1em; padding:0.3em 0.5em;"
+      >
+        Edit
       </Link>
       <Link
+          as="button" type="button"
           v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
-          onclick="return confirm('Are you sure?')"
+          onclick="return confirm('Are you sure you want to delete this codex?')"
           :href="'/codex_delete/' + document.id"
-          class="text-blue-800 hover:underline"
           method="post"
-          >Delete
+          style="padding:0.3em 0.5em;"
+      >
+        Delete
       </Link>
+
     </div>
 
     <div class="cod_second" v-text="document.standard_name"></div>
@@ -125,7 +139,7 @@ import { ref, watch, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
-  documents: Array,
+  documents: Object,
   search_standard: String,
   search_shelf: String,
   search_pub: String,

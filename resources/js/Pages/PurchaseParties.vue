@@ -1,6 +1,13 @@
 <template>
   <div class="newparty">
-    <Link href="/purchase_party_new" method="post">Add Transaction Party</Link>
+    <Link 
+      href="/purchase_party_new" 
+      method="post"
+      as="button"
+      style="padding:0.3em 0.5em;"
+    >
+      Add Transaction Party
+    </Link>
   </div>
 
   <div class="partycontainer" style="background-color: #ccc;">
@@ -12,8 +19,8 @@
   </div>
   <div v-for="purchase_party in purchase_parties" :key="purchase_party.id" class="partycontainer">
       <div class="par_first">
-        <Link :href="'/purchase_party_edit/' + purchase_party.id" class="text-blue-800 hover:underline">Edit </Link>
-        <Link :href="'/purchase_party_delete/' + purchase_party.id" onclick="return confirm('Are you sure?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
+        <Link :href="'/purchase_party_edit/' + purchase_party.id" as="button" style="margin-right:1em; padding:0.3em 0.5em;">Edit </Link>
+        <Link :href="'/purchase_party_delete/' + purchase_party.id" as="button" style="padding:0.3em 0.5em;" onclick="return confirm('Are you sure you want to delete this Transaction Party?')" method="post">Delete</Link>
       </div>
       <div class="par_second">{{ purchase_party.name }}</div>
       <div class="par_third">{{ purchase_party.description }}</div>

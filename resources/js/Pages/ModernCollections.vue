@@ -1,6 +1,13 @@
 <template>
   <div class="newcollection">
-    <Link href="/modern_collection_new" method="post">Add Modern Collection</Link>
+    <Link 
+      href="/modern_collection_new" 
+      method="post"
+      as="button"
+      style="padding:0.3em 0.5em;"
+    >
+      Add Modern Collection
+    </Link>
   </div>
 
   <div class="collectioncontainer" style="background-color: #ccc;">
@@ -12,8 +19,8 @@
 
   <div v-for="modern_collection in modern_collections" :key="modern_collection.id" class="collectioncontainer">
     <div class="coll_first">
-      <Link :href="'/modern_collection_edit/' + modern_collection.id" class="text-blue-800 hover:underline">Edit </Link>
-      <Link :href="'/modern_collection_delete/' + modern_collection.id" onclick="return confirm('Are you sure?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
+      <Link :href="'/modern_collection_edit/' + modern_collection.id" as="button" style="margin-right:1em; padding:0.3em 0.5em;">Edit </Link>
+      <Link :href="'/modern_collection_delete/' + modern_collection.id" as="button" style="padding:0.3em 0.5em;" onclick="return confirm('Are you sure you want to delete this Modern Collection?')" method="post" class="text-blue-800 hover:underline">Delete</Link>
     </div>
     <div class="coll_second">{{ modern_collection.name }}</div>
     <div class="coll_third">{{ modern_collection.description }}</div>
