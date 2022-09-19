@@ -284,9 +284,11 @@ class DocumentController extends Controller
             'hand_number' => 'nullable',
             'script_description' => 'nullable',
             'paratexts' => 'nullable',
+            'paratext_description' => 'nullable',
             'punctuations' => 'nullable',
             'critical_symbols' => 'nullable',
             'decorations' => 'nullable',
+            'decoration_description' => 'nullable',
             'pagination_id' => 'nullable',
             'cover_id' => 'nullable',
             'ink_id' => 'nullable',
@@ -342,6 +344,8 @@ class DocumentController extends Controller
         $document->measurement_comment = $fields['measurement_comment'];
         $document->hand_number = $fields['hand_number'];
         $document->script_description = $fields['script_description'];
+        $document->paratext_description = $fields['paratext_description'];
+        $document->decoration_description = $fields['decoration_description'];
         $document->pagination_id = $fields['pagination_id'];
         $document->cover_id = $fields['cover_id'];
         $document->ink_id = $fields['ink_id'];

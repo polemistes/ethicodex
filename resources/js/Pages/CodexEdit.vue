@@ -265,7 +265,7 @@
                 input_type="textarea"
                 input_id="script_description"
                 v-model="form.script_description"
-                >Script Description</EthInput
+                >Description of Scripts</EthInput
             >
 
             <EthInput
@@ -276,6 +276,15 @@
             >
                 Paratexts
             </EthInput>
+            
+            <EthInput
+                input_type="textarea"
+                input_id="paratext_description"
+                v-model="form.paratext_description"
+                >Description fo Paratexts</EthInput
+            >
+
+
 
             <EthInput
                 input_type="multi_choice"
@@ -303,6 +312,13 @@
             >
                 Decorative Symbols
             </EthInput>
+
+            <EthInput
+                input_type="textarea"
+                input_id="decoration_description"
+                v-model="form.decoration_description"
+                >Description of Decorative Symbols</EthInput
+            >
 
             <EthInput
                 input_type="single_choice"
@@ -691,9 +707,11 @@ const form = useForm({
     hand_number: props.document.hand_number,
     script_description: props.document.script_description,
     paratexts: props.paratexts,
+    paratext_description: props.document.paratext_description,
     punctuations: props.punctuations,
     critical_symbols: props.critical_symbols,
     decorations: props.decorations,
+    decoration_description: props.document.decoration_description,
     pagination_id: props.document.pagination_id,
     cover_id: props.document.cover_id,
     ink_id: props.document.ink_id,
