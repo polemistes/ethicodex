@@ -175,13 +175,13 @@
                 input_type="text"
                 input_id="full_page_width"
                 v-model="form.full_page_width"
-                >Full Page Width</EthInput
+                >Full Page Width (cm)</EthInput
             >
             <EthInput
                 input_type="text"
                 input_id="full_page_height"
                 v-model="form.full_page_height"
-                >Full Page Height</EthInput
+                >Full Page Height (cm)</EthInput
             >
             <EthRatio
                 :dividend="form.full_page_width"
@@ -193,13 +193,13 @@
                 input_type="text"
                 input_id="upper_margin"
                 v-model="form.upper_margin"
-                >Upper Margin</EthInput
+                >Upper Margin (cm)</EthInput
             >
             <EthInput
                 input_type="text"
                 input_id="lower_margin"
                 v-model="form.lower_margin"
-                >Lower Margin</EthInput
+                >Lower Margin (cm)</EthInput
             >
             <EthRatio :dividend="form.upper_margin" :divisor="form.lower_margin"
                 >Upper/Lower Margin Ratio</EthRatio
@@ -209,13 +209,13 @@
                 input_type="text"
                 input_id="inner_margin"
                 v-model="form.inner_margin"
-                >Inner Margin</EthInput
+                >Inner Margin (cm)</EthInput
             >
             <EthInput
                 input_type="text"
                 input_id="outer_margin"
                 v-model="form.outer_margin"
-                >Outer Margin</EthInput
+                >Outer Margin (cm)</EthInput
             >
             <EthRatio :dividend="form.inner_margin" :divisor="form.outer_margin"
                 >Inner/Outer Margin Ratio</EthRatio
@@ -225,13 +225,13 @@
                 input_type="text"
                 input_id="full_text_block_width"
                 v-model="form.full_text_block_width"
-                >Full Text Block Width</EthInput
+                >Full Text Block Width (cm)</EthInput
             >
             <EthInput
                 input_type="text"
                 input_id="full_text_block_height"
                 v-model="form.full_text_block_height"
-                >Full Text Block Height</EthInput
+                >Full Text Block Height (cm)</EthInput
             >
             <EthRatio
                 :dividend="form.full_text_block_width"
