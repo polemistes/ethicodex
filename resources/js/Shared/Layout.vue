@@ -89,7 +89,7 @@
     </section>
 
     <footer class="grid-bottom">
-      <p>A New Methodology and Ethics for Manuscript Studies (EthiCodex)<span style="float: right">v0.3</span></p>
+      <p>A New Methodology and Ethics for Manuscript Studies (EthiCodex)<span style="float: right">v0.4</span></p>
     </footer>
   </div>
 </template>
