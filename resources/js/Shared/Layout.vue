@@ -44,14 +44,14 @@
         >
           <Link href="/purchase_parties" @click="isActive='Parties'">Transaction Parties</Link>
         </li>
-        
+<!--        
         <li 
           v-if="editor" 
           :class="{active: isActive == 'Collections'}"
         >
           <Link href="/modern_collections" @click="isActive='Collections'">Modern Collections</Link>
         </li>                 
-        
+-->        
         <li 
           v-if="!loggedin" 
           :class="{active: isActive == 'Register'}" 

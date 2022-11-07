@@ -514,7 +514,7 @@
                 >
                 Comments on Ancient Provenance
             </EthInput>
-            
+<!--         
             <EthInput
                 input_type="multi_choice"
                 input_id="modern_collection"
@@ -523,7 +523,7 @@
             >
                 Modern Collections
             </EthInput>
-
+-->
             <EthInput
                 input_type="legal_choice"
                 input_id="legal_classification"
