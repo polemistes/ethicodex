@@ -1,31 +1,48 @@
 <template>
     <div class="tab">
-        <button :class="activetab == 'general' ? 'selected' : 'unselected'" @click="activetab = 'general'">
+        <button
+            :class="activetab == 'general' ? 'selected' : 'unselected'"
+            @click="activetab = 'general'"
+        >
             General Information
         </button>
-        <button :class="activetab == 'codicology' ? 'selected' : 'unselected'" @click="activetab = 'codicology'">
+        <button
+            :class="activetab == 'codicology' ? 'selected' : 'unselected'"
+            @click="activetab = 'codicology'"
+        >
             Codicology
         </button>
-        <button  :class="activetab == 'conservation' ? 'selected' : 'unselected'" @click="activetab = 'conservation'">
+        <button
+            :class="activetab == 'conservation' ? 'selected' : 'unselected'"
+            @click="activetab = 'conservation'"
+        >
             Conservation and Analysis
         </button>
-        <button :class="activetab == 'provenance' ? 'selected' : 'unselected'" @click="activetab = 'provenance'">
+        <button
+            :class="activetab == 'provenance' ? 'selected' : 'unselected'"
+            @click="activetab = 'provenance'"
+        >
             Provenance
         </button>
-        <button :class="activetab == 'images' ? 'selected' : 'unselected'" @click="activetab = 'images'">Images</button>
+        <button
+            :class="activetab == 'images' ? 'selected' : 'unselected'"
+            @click="activetab = 'images'"
+        >
+            Images
+        </button>
     </div>
- 
+
     <form @submit.prevent="submit">
         <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
-             <input type="hidden" input_id="id" v-model="form.id" />
-            
+            <input type="hidden" input_id="id" v-model="form.id" />
+
             <div>
                 <label :for="published">Published</label>
-                <input  
-                    :id="published" 
+                <input
+                    :id="published"
                     type="checkbox"
                     v-model="form.published"
-                > 
+                />
             </div>
 
             <EthInput
@@ -35,7 +52,7 @@
             >
                 Standard Name
             </EthInput>
-            
+
             <EthInput
                 input_type="textarea"
                 input_id="other_names"
@@ -171,73 +188,115 @@
                 Material
             </EthInput>
 
-            <EthInput
-                input_type="text"
-                input_id="full_page_width"
-                v-model="form.full_page_width"
-                >Full Page Width (cm)</EthInput
-            >
-            <EthInput
-                input_type="text"
-                input_id="full_page_height"
-                v-model="form.full_page_height"
-                >Full Page Height (cm)</EthInput
-            >
-            <EthRatio
-                :dividend="form.full_page_width"
-                :divisor="form.full_page_height"
-                >Full Page Width/Height Ratio</EthRatio
-            >
+            <div>
+                <label :for="page_dimensions_known"
+                    >Page Dimensions Known</label
+                >
+                <input
+                    :id="page_dimensions_known"
+                    type="checkbox"
+                    v-model="form.page_dimensions_known"
+                />
+            </div>
+            <div v-if="!form.page_dimensions_known">
+                <EthInput
+                    input_type="text"
+                    input_id="fragment_width"
+                    v-model="form.fragment_width"
+                    >Fragment Width (cm)</EthInput
+                >
+                <EthInput
+                    input_type="text"
+                    input_id="fragment_height"
+                    v-model="form.fragment_height"
+                    >Fragment Height (cm)</EthInput
+                >
+            </div>
 
-            <EthInput
-                input_type="text"
-                input_id="upper_margin"
-                v-model="form.upper_margin"
-                >Upper Margin (cm)</EthInput
-            >
-            <EthInput
-                input_type="text"
-                input_id="lower_margin"
-                v-model="form.lower_margin"
-                >Lower Margin (cm)</EthInput
-            >
-            <EthRatio :dividend="form.upper_margin" :divisor="form.lower_margin"
-                >Upper/Lower Margin Ratio</EthRatio
-            >
+            <div v-if="form.page_dimensions_known">
+                <EthInput
+                    input_type="text"
+                    input_id="full_page_width"
+                    v-model="form.full_page_width"
+                    >Full Page Width (cm)</EthInput
+                >
+                <EthInput
+                    input_type="text"
+                    input_id="full_page_height"
+                    v-model="form.full_page_height"
+                    >Full Page Height (cm)</EthInput
+                >
+                <EthRatio
+                    :dividend="form.full_page_width"
+                    :divisor="form.full_page_height"
+                    >Full Page Width/Height Ratio</EthRatio
+                >
+                <div>
+                    <label :for="textbox_size_stable"
+                        >Size of Textbox is Stable</label
+                    >
+                    <input
+                        :id="textbox_size_stable"
+                        type="checkbox"
+                        v-model="form.textbox_size_stable"
+                    />
+                </div>
+                <div v-if="form.textbox_size_stable">
+                    <EthInput
+                        input_type="text"
+                        input_id="upper_margin"
+                        v-model="form.upper_margin"
+                        >Upper Margin (cm)</EthInput
+                    >
+                    <EthInput
+                        input_type="text"
+                        input_id="lower_margin"
+                        v-model="form.lower_margin"
+                        >Lower Margin (cm)</EthInput
+                    >
+                    <EthRatio
+                        :dividend="form.upper_margin"
+                        :divisor="form.lower_margin"
+                        >Upper/Lower Margin Ratio</EthRatio
+                    >
 
-            <EthInput
-                input_type="text"
-                input_id="inner_margin"
-                v-model="form.inner_margin"
-                >Inner Margin (cm)</EthInput
-            >
-            <EthInput
-                input_type="text"
-                input_id="outer_margin"
-                v-model="form.outer_margin"
-                >Outer Margin (cm)</EthInput
-            >
-            <EthRatio :dividend="form.inner_margin" :divisor="form.outer_margin"
-                >Inner/Outer Margin Ratio</EthRatio
-            >
+                    <EthInput
+                        input_type="text"
+                        input_id="inner_margin"
+                        v-model="form.inner_margin"
+                        >Inner Margin (cm)</EthInput
+                    >
+                    <EthInput
+                        input_type="text"
+                        input_id="outer_margin"
+                        v-model="form.outer_margin"
+                        >Outer Margin (cm)</EthInput
+                    >
+                    <EthRatio
+                        :dividend="form.inner_margin"
+                        :divisor="form.outer_margin"
+                        >Inner/Outer Margin Ratio</EthRatio
+                    >
 
-            <EthInput
-                input_type="text"
-                input_id="full_text_block_width"
-                v-model="form.full_text_block_width"
-                >Full Text Block Width (cm)</EthInput
-            >
-            <EthInput
-                input_type="text"
-                input_id="full_text_block_height"
-                v-model="form.full_text_block_height"
-                >Full Text Block Height (cm)</EthInput
-            >
-            <EthRatio
-                :dividend="form.full_text_block_width"
-                :divisor="form.full_text_block_height"
-                >Full Text Block Width/Height Ratio</EthRatio
-            >
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_width"
+                        v-model="form.full_text_block_width"
+                        >Full Text Block Width (cm)</EthInput
+                    >
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_height"
+                        v-model="form.full_text_block_height"
+                        >Full Text Block Height (cm)</EthInput
+                    >
+                    <EthRatio
+                        :dividend="form.full_text_block_width"
+                        :divisor="form.full_text_block_height"
+                        >Full Text Block Width/Height Ratio</EthRatio
+                    >
+                </div>
+            </div>
 
             <EthInput
                 input_type="textarea"
@@ -276,15 +335,13 @@
             >
                 Paratexts
             </EthInput>
-            
+
             <EthInput
                 input_type="textarea"
                 input_id="paratext_description"
                 v-model="form.paratext_description"
-                >Description fo Paratexts</EthInput
+                >Description of Paratexts</EthInput
             >
-
-
 
             <EthInput
                 input_type="multi_choice"
@@ -294,6 +351,22 @@
             >
                 Punctuation
             </EthInput>
+
+            <EthInput
+                input_type="multi_choice"
+                input_id="diacritics"
+                :choices="diacritics_all"
+                v-model="form.diacritics"
+            >
+                Diacritics
+            </EthInput>
+
+            <EthInput
+                input_type="textarea"
+                input_id="diacritic_description"
+                v-model="form.diacritic_description"
+                >Description of Diacritics</EthInput
+            >
 
             <EthInput
                 input_type="multi_choice"
@@ -365,18 +438,17 @@
                 Quire Structure
             </EthInput>
 
-            
             <div v-if="form.quire_structure_id == 1">
                 <label :for="bifolia">Number of Bifolia in the Quire</label>
                 <div>
                     <p>
                         <input
                             type="number"
-                            id="bifolia" 
-                            min="1" 
+                            id="bifolia"
+                            min="1"
                             required
                             v-model="form.bifolia[0]"
-                        >
+                        />
                     </p>
                 </div>
             </div>
@@ -389,13 +461,23 @@
                     >Number of Quires</EthInput
                 >
 
-                <label v-if="form.quire_number" :for="bifolia">Number of Bifolia in each Quire</label>
-                <div v-for="n in range(1, parseInt(form.quire_number))" :key="n" >
+                <label v-if="form.quire_number" :for="bifolia"
+                    >Number of Bifolia in each Quire</label
+                >
+                <div
+                    v-for="n in range(1, parseInt(form.quire_number))"
+                    :key="n"
+                >
                     <p>
                         {{ n }}:
-                        <input type="number" min="1" required v-model="form.bifolia[n-1]">
+                        <input
+                            type="number"
+                            min="1"
+                            required
+                            v-model="form.bifolia[n - 1]"
+                        />
                     </p>
-                </div>    
+                </div>
             </div>
 
             <div v-if="form.quire_structure_id == 3">
@@ -411,11 +493,11 @@
                     <p>
                         <input
                             type="number"
-                            id="bifolia" 
-                            min="1" 
+                            id="bifolia"
+                            min="1"
                             required
                             v-model="form.bifolia[0]"
-                        >
+                        />
                     </p>
                 </div>
             </div>
@@ -473,14 +555,16 @@
 
         <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
             <div>
-                <label :for="scientifically_excavated">Scientifically Excavated</label>
-                <input  
-                    :id="scientifically_excavated" 
+                <label :for="scientifically_excavated"
+                    >Scientifically Excavated</label
+                >
+                <input
+                    :id="scientifically_excavated"
                     type="checkbox"
                     v-model="form.scientifically_excavated"
-                > 
+                />
             </div>
-            
+
             <EthInput
                 input_type="textarea"
                 input_id="excavation_comment"
@@ -511,10 +595,10 @@
                 input_type="textarea"
                 input_id="ancient_provenance_comment"
                 v-model="form.ancient_provenance_comment"
-                >
+            >
                 Comments on Ancient Provenance
             </EthInput>
-<!--         
+            <!--         
             <EthInput
                 input_type="multi_choice"
                 input_id="modern_collection"
@@ -546,7 +630,7 @@
                 :choices="purchases_all"
                 v-model="form.purchases"
             >
-                Purchases
+                Transactions
             </EthInput>
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
@@ -578,15 +662,22 @@
                         <img :src="'/storage/' + image.filename" height="400" />
                     </a>
                     <button @click.prevent="delimage(image)">Delete</button>
-                    <label class="labelpadding" :for="'image_description_' + index">Description: </label>
-                    <textarea :id="'image_description_' + index" v-model="image.description" />
-                    
+                    <label
+                        class="labelpadding"
+                        :for="'image_description_' + index"
+                        >Description:
+                    </label>
+                    <textarea
+                        :id="'image_description_' + index"
+                        v-model="image.description"
+                    />
+
                     <EthInput
                         input_type="text"
                         input_id="image_source"
                         v-model="image.source"
                     >
-                    Source
+                        Source
                     </EthInput>
 
                     <EthInput
@@ -595,9 +686,8 @@
                         :choices="licenses"
                         v-model="image.license_id"
                     >
-                    License:
+                        License:
                     </EthInput>
-
                 </div>
             </div>
         </fieldset>
@@ -609,7 +699,6 @@ import { Inertia } from "@inertiajs/inertia";
 import { reactive, ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { useRemember } from "@inertiajs/inertia-vue3";
-
 
 import EthInput from "../Components/EthInput.vue";
 import EthRatio from "../Components/EthRatio.vue";
@@ -631,6 +720,8 @@ const props = defineProps({
     dating_methods_all: Array,
     decorations: Array,
     decorations_all: Array,
+    diacritics: Array,
+    diacritics_all: Array,
     document: Object,
     genres: Array,
     genres_all: Array,
@@ -668,7 +759,6 @@ const props = defineProps({
     tags_all: Array,
 });
 
-
 const form = useForm({
     id: props.document.id,
     published: props.document.published == 1 ? true : false,
@@ -694,8 +784,12 @@ const form = useForm({
     internal_comment: props.document.internal_comment,
     general_comment: props.document.general_comment,
     material_id: props.document.material_id,
+    page_dimensions_known: props.document.page_dimensions_known == 1 ? true : false,
+    fragment_width: props.document.fragment_width,
+    fragment_height: props.document.fragment_height,
     full_page_width: props.document.full_page_width,
     full_page_height: props.document.full_page_height,
+    textbox_size_stable: props.document.textbox_size_stable == 1 ? true : false,
     upper_margin: props.document.upper_margin,
     lower_margin: props.document.lower_margin,
     inner_margin: props.document.inner_margin,
@@ -709,6 +803,8 @@ const form = useForm({
     paratexts: props.paratexts,
     paratext_description: props.document.paratext_description,
     punctuations: props.punctuations,
+    diacritics: props.diacritics,
+    diacritic_description: props.document.diacritic_description,
     critical_symbols: props.critical_symbols,
     decorations: props.decorations,
     decoration_description: props.document.decoration_description,
@@ -726,21 +822,23 @@ const form = useForm({
     analyses: props.analyses,
     analyses_comment: props.document.analyses_comment,
     ancient_provenance_id: props.document.ancient_provenance_id,
-    ancient_provenance_certainty_id: props.document.ancient_provenance_certainty_id,
+    ancient_provenance_certainty_id:
+        props.document.ancient_provenance_certainty_id,
     ancient_provenance_comment: props.document.ancient_provenance_comment,
     modern_collections: props.modern_collections,
     legal_classification_id: props.document.legal_classification_id,
-    legal_classification_explanation: props.document.legal_classification_explanation,
+    legal_classification_explanation:
+        props.document.legal_classification_explanation,
     purchases: props.purchases,
     images_info: props.document.images_info,
     images: props.images,
 });
 
 onMounted(() => {
-  if(!form.bifolia) {
-    form.bifolia[0] = 0;
+    if (!form.bifolia) {
+        form.bifolia[0] = 0;
     }
-})
+});
 
 const loadImages = ref(null);
 
@@ -755,43 +853,47 @@ function range(start, end) {
 }
 
 function delimage(image) {
-    let image_id = image.id
-    if (confirm('Do you want to delete this image?')) {
+    let image_id = image.id;
+    if (confirm("Do you want to delete this image?")) {
         Inertia.post("/delimage/" + image_id, null, {
-                                preserveState: true,
-                                preserveScroll: true,
-                                resetOnSuccess: false,
-                                onSuccess: () => {
-                                    let index = form.images.findIndex(function(o){
-                                        return o.id === image_id;
-                                    })
-                                    if (index !== -1) {form.images.splice(index,1)};
-                                }
-        })
+            preserveState: true,
+            preserveScroll: true,
+            resetOnSuccess: false,
+            onSuccess: () => {
+                let index = form.images.findIndex(function (o) {
+                    return o.id === image_id;
+                });
+                if (index !== -1) {
+                    form.images.splice(index, 1);
+                }
+            },
+        });
     }
 }
 
 function addimages(imagefiles) {
-    Inertia.post("/addimages", {images: imagefiles,
-                                document_id: props.document.id,},
-                                { preserveState: true,
-                                preserveScroll: true,
-                                resetOnSuccess: false,
-                                onSuccess: () => {
-                                    props.images.forEach( (image, index) => {
-                                        if (!form.images.findIndex(x => x.id == image.id)) {
-                                        form.images.push(image)
-                                        }
-                                    } ) 
-                                    if(form.images.length == 0) {
-                                        props.images.forEach((image, index) => {
-                                            form.images.push(image)
-                                        } )
-                                    }
-                                    
-                                    }}
-                )
-    this.loadImages.value=null;
+    Inertia.post(
+        "/addimages",
+        { images: imagefiles, document_id: props.document.id },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            resetOnSuccess: false,
+            onSuccess: () => {
+                props.images.forEach((image, index) => {
+                    if (!form.images.findIndex((x) => x.id == image.id)) {
+                        form.images.push(image);
+                    }
+                });
+                if (form.images.length == 0) {
+                    props.images.forEach((image, index) => {
+                        form.images.push(image);
+                    });
+                }
+            },
+        }
+    );
+    this.loadImages.value = null;
 }
 
 function submit() {
@@ -800,7 +902,6 @@ function submit() {
 </script>
 
 <style>
-
 .tab {
     display: flex;
     overflow: hidden;
@@ -818,27 +919,24 @@ function submit() {
     padding: 14px 5px;
     font-size: 17px;
     width: 100%;
-      transition: 50ms;
+    transition: 50ms;
 }
 
-
 button.unselected {
-  background-color: rgb(225, 225, 228);
+    background-color: rgb(225, 225, 228);
 }
 
 button.unselected:hover {
-  background-color: rgb(186, 189, 185);
+    background-color: rgb(186, 189, 185);
 }
 
 button.selected:hover {
-  background-color: rgb(77, 87, 66);
+    background-color: rgb(77, 87, 66);
 }
 
 button.selected {
-  background-color: rgb(119, 128, 111);
+    background-color: rgb(119, 128, 111);
 }
-
-
 
 .editcodexcontainer {
     display: flex;
@@ -858,7 +956,6 @@ button.selected {
     display: flex;
     flex-direction: column;
 }
-
 
 .labelpadding {
     padding-top: 15px;

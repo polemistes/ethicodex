@@ -33,6 +33,7 @@ use App\Models\Tag;
 use App\Models\License;
 use App\Models\CriticalSymbol;
 use App\Models\Punctuation;
+use App\Models\Diacritic;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -148,6 +149,8 @@ class DocumentController extends Controller
             'dating_methods_all' => DatingMethod::all(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
+            'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
+            'diacritics_all' => Diacritic::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -203,6 +206,8 @@ class DocumentController extends Controller
             'dating_methods_all' => DatingMethod::all(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
+            'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
+            'diacritics_all' => Diacritic::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
@@ -271,6 +276,10 @@ class DocumentController extends Controller
             'internal_comment' => 'nullable',
             'general_comment' => 'nullable',
             'material_id' => 'nullable',
+            'page_dimensions_known' => 'nullable',
+            'fragment_width' => 'nullable',
+            'fragment_height' => 'nullable',
+            'textbox_size_stable' => 'nullable',
             'full_page_width' => 'nullable',
             'full_page_height' => 'nullable',
             'upper_margin' => 'nullable',
@@ -290,6 +299,8 @@ class DocumentController extends Controller
             'decorations' => 'nullable',
             'decoration_description' => 'nullable',
             'pagination_id' => 'nullable',
+            'diacritics' => 'nullable',
+            'diacritic_description' => 'nullable',
             'cover_id' => 'nullable',
             'ink_id' => 'nullable',
             'quire_signature_id' => 'nullable',
@@ -332,8 +343,12 @@ class DocumentController extends Controller
         $document->internal_comment = $fields['internal_comment'];
         $document->general_comment = $fields['general_comment'];
         $document->material_id = $fields['material_id'];
+        $document->page_dimensions_known = $fields['page_dimensions_known'];
+        $document->fragment_width = $fields['fragment_width'];
+        $document->fragment_height = $fields['fragment_height'];
         $document->full_page_width = $fields['full_page_width'];
         $document->full_page_height = $fields['full_page_height'];
+        $document->textbox_size_stable = $fields['textbox_size_stable'];
         $document->upper_margin = $fields['upper_margin'];
         $document->lower_margin = $fields['lower_margin'];
         $document->inner_margin = $fields['inner_margin'];
@@ -344,6 +359,7 @@ class DocumentController extends Controller
         $document->hand_number = $fields['hand_number'];
         $document->script_description = $fields['script_description'];
         $document->paratext_description = $fields['paratext_description'];
+        $document->diacritic_description = $fields['diacritic_description'];
         $document->decoration_description = $fields['decoration_description'];
         $document->pagination_id = $fields['pagination_id'];
         $document->cover_id = $fields['cover_id'];
@@ -387,6 +403,7 @@ class DocumentController extends Controller
         $document->languages()->sync(array_column($fields['languages'], 'id'));
         $document->scripts()->sync(array_column($fields['scripts'], 'id'));
         $document->paratexts()->sync(array_column($fields['paratexts'], 'id'));
+        $document->diacritics()->sync(array_column($fields['diacritics'], 'id'));
         $document->punctuations()->sync(array_column($fields['punctuations'], 'id'));
         $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));

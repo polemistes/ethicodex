@@ -135,4 +135,9 @@ class Document extends Model
         return $this->belongsToMany(Punctuation::class);
     }
 
+    public function diacritics()
+    {
+        return $this->belongsToMany(Diacritic::class);
+    }
+
 }
