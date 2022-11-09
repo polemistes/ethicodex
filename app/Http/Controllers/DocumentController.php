@@ -144,8 +144,8 @@ class DocumentController extends Controller
             'cover' => $document->cover()->get(),
             'dating_certainties' => DatingCertainty::all(),
             'dating_certainty' => $document->dating_certainty()->get(),
-            'dating_methods' => DatingMethod::all(),
-            'dating_method' => $document->dating_method()->get(),
+            'dating_methods' => $document->dating_methods()->get()->makeHidden('pivot'),
+            'dating_methods_all' => DatingMethod::all(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
@@ -199,8 +199,8 @@ class DocumentController extends Controller
             'cover' => $document->cover()->get(),
             'dating_certainties' => DatingCertainty::all(),
             'dating_certainty' => $document->dating_certainty()->get(),
-            'dating_methods' => DatingMethod::all(),
-            'dating_method' => $document->dating_method()->get(),
+            'dating_methods' => $document->dating_methods()->get()->makeHidden('pivot'),
+            'dating_methods_all' => DatingMethod::all(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'decorations_all' => Decoration::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
@@ -264,7 +264,7 @@ class DocumentController extends Controller
             'start_year' => 'nullable',
             'end_year' => 'nullable',
             'languages' => 'nullable',
-            'dating_method_id' => 'nullable',
+            'dating_methods' => 'nullable',
             'dating_certainty_id' => 'nullable',
             'dating_comment' => 'nullable',
             'bibliography' => 'nullable',
@@ -326,7 +326,6 @@ class DocumentController extends Controller
         $document->content_description = $fields['content_description'];
         $document->start_year = $fields['start_year'];
         $document->end_year = $fields['end_year'];
-        $document->dating_method_id = $fields['dating_method_id'];
         $document->dating_certainty_id = $fields['dating_certainty_id'];
         $document->dating_comment = $fields['dating_comment'];
         $document->bibliography = $fields['bibliography'];
@@ -396,6 +395,7 @@ class DocumentController extends Controller
         $document->purchases()->sync(array_column($fields['purchases'], 'id'));
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
+        $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
         
         $document->save();
 
@@ -430,6 +430,7 @@ class DocumentController extends Controller
     {
         $this->authorize('delete', $document);
 
+        $document->dating_methods()->detach();
         $document->genres()->detach();
         $document->languages()->detach();
         $document->punctuations()->detach();

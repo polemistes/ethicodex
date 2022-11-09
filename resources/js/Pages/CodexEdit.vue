@@ -119,10 +119,10 @@
             >
 
             <EthInput
-                input_type="single_choice"
-                input_id="dating_method"
-                :choices="dating_methods"
-                v-model="form.dating_method_id"
+                input_type="multi_choice"
+                input_id="dating_methods"
+                :choices="dating_methods_all"
+                v-model="form.dating_methods"
             >
                 Basis of Date
             </EthInput>
@@ -627,8 +627,8 @@ const props = defineProps({
     critical_symbols_all: Array,
     dating_certainty: Object,
     dating_certainties: Array,
-    dating_method: Object,
     dating_methods: Array,
+    dating_methods_all: Array,
     decorations: Array,
     decorations_all: Array,
     document: Object,
@@ -687,7 +687,7 @@ const form = useForm({
     start_year: props.document.start_year,
     end_year: props.document.end_year,
     languages: props.languages,
-    dating_method_id: props.document.dating_method_id,
+    dating_methods: props.dating_methods,
     dating_certainty_id: props.document.dating_certainty_id,
     dating_comment: props.document.dating_comment,
     bibliography: props.document.bibliography,

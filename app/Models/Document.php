@@ -60,9 +60,9 @@ class Document extends Model
         return $this->belongsTo(DatingCertainty::class);
     }
 
-    public function dating_method()
+    public function dating_methods()
     {
-        return $this->belongsTo(DatingMethod::class);
+        return $this->belongsToMany(DatingMethod::class);
     }
 
     public function ink()
