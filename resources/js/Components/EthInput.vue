@@ -1,5 +1,6 @@
 <template>
-    <div v-if="input_type == 'number' || input_type == 'text'" class="input_oneline">
+    <div v-if="input_type == 'number' || input_type == 'text'">
+      <div class="input_oneline">
       <label :for="input_id"><slot /></label>
       <input 
           :id="input_id" 
@@ -7,6 +8,7 @@
           :value="modelValue"
           @input="$emit('update:modelValue', $event.target.value)"
         />
+      </div>
     </div>
 
     <div v-if="input_type == 'password'" class="input_oneline">
@@ -41,7 +43,7 @@
         />
     </div>
 
-    <div v-if="input_type == 'textarea'" class="input_oneline">
+    <div v-if="input_type == 'textarea'" class="input_area">
       <label :for="input_id"><slot /></label>
       <textarea 
           :id="input_id" 
@@ -341,6 +343,31 @@ label {
 .input_oneline {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.input_oneline input {
+  padding: 8px;
+  margin: 4px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input_area {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.input_area textarea {
+  resize: none;
+  box-sizing: border-box;
+  height: 100%;
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 16px;
 }
 
 .input_year {

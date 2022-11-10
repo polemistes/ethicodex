@@ -36,15 +36,19 @@
         <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
             <input type="hidden" input_id="id" v-model="form.id" />
 
-            <div>
+            <div class="editcodex_generalgrid">
+
+            <div class="edit_published">
                 <label :for="published">Published</label>
                 <input
                     :id="published"
                     type="checkbox"
                     v-model="form.published"
                 />
-            </div>
 
+            </div>
+            
+            <div class="edit_standard">
             <EthInput
                 input_type="text"
                 input_id="standard_name"
@@ -52,42 +56,73 @@
             >
                 Standard Name
             </EthInput>
+            </div>
 
+            <div class="edit_other">
             <EthInput
+                class="edit_other"
                 input_type="textarea"
                 input_id="other_names"
                 v-model="form.other_names"
                 >Other Names</EthInput
             >
+            </div>
+
+            <div class="edit_publ">
             <EthInput
                 input_type="text"
                 input_id="publication"
                 v-model="form.publication"
                 >Publication</EthInput
             >
+            </div>
+
+            <div class="edit_shelf">
             <EthInput
                 input_type="text"
                 input_id="current_shelfmarks"
                 v-model="form.current_shelfmarks"
                 >Current Shelfmarks</EthInput
             >
+            </div>
+
+            <div class="edit_trismegistos">
             <EthInput
                 input_type="text"
                 input_id="trismegistos_id"
                 v-model="form.trismegistos_id"
                 >Trismegistos ID</EthInput
             >
+            </div>
 
-            <EthInput input_type="text" input_id="title" v-model="form.title"
-                >Title</EthInput
+            <div class="edit_bibliography">
+            <EthInput
+                input_type="textarea"
+                input_id="bibliography"
+                v-model="form.bibliography"
+                >Bibliography</EthInput
             >
+            </div>
+            </div>
+
+            <div class="editcodex_contentgrid">
+            
+            <div class="edit_title">
+            <EthInput input_type="text" input_id="title" v-model="form.title"
+                >Title of Work</EthInput
+            >
+            </div>
+
+            <div class="edit_author">
             <EthInput
                 input_type="text"
                 input_id="ancient_author"
                 v-model="form.ancient_author"
                 >Author</EthInput
             >
+            </div>
 
+            <div class="edit_genre">
             <EthInput
                 input_type="multi_choice"
                 input_id="genres"
@@ -96,7 +131,9 @@
             >
                 Genre
             </EthInput>
+            </div>
 
+            <div class="edit_content">
             <EthInput
                 input_type="multi_choice"
                 input_id="tags"
@@ -105,14 +142,18 @@
             >
                 Content Tags
             </EthInput>
-
+            </div>
+            
+            <div class="edit_contdesc">
             <EthInput
                 input_type="textarea"
                 input_id="content_description"
                 v-model="form.content_description"
                 >Description of Content</EthInput
             >
+            </div>
 
+            <div class="edit_language">
             <EthInput
                 input_type="multi_choice"
                 input_id="languages"
@@ -121,20 +162,29 @@
             >
                 Languages
             </EthInput>
+            </div>
+            </div>
 
+            <div class="editcodex_date">
+            <div class="edit_early">
             <EthInput
                 input_type="year"
                 input_id="start_year"
                 v-model="form.start_year"
                 >Earliest Date</EthInput
             >
+            </div>
+
+            <div class="edit_late">
             <EthInput
                 input_type="year"
                 input_id="end_year"
                 v-model="form.end_year"
                 >Latest Date</EthInput
             >
+            </div>
 
+            <div class="edit_basis">
             <EthInput
                 input_type="multi_choice"
                 input_id="dating_methods"
@@ -143,6 +193,9 @@
             >
                 Basis of Date
             </EthInput>
+            </div>
+
+            <div class="edit_certainty">
             <EthInput
                 input_type="single_choice"
                 input_id="dating_certainty"
@@ -151,30 +204,38 @@
             >
                 Certainty of Date
             </EthInput>
+            </div>
+
+            <div class="edit_datecomm">
             <EthInput
                 input_type="textarea"
                 input_id="dating_comment"
                 v-model="form.dating_comment"
                 >Comments on Date</EthInput
             >
-            <EthInput
-                input_type="textarea"
-                input_id="bibliography"
-                v-model="form.bibliography"
-                >Bibliography</EthInput
-            >
+            </div>
+            </div>
+
+            <div class="editcodex_comments">
+            <div class="edit_internal">
             <EthInput
                 input_type="textarea"
                 input_id="internal_comment"
                 v-model="form.internal_comment"
                 >Internal Comments</EthInput
             >
+            </div>
+
+            <div class="edit_general">
             <EthInput
                 input_type="textarea"
                 input_id="general_comment"
                 v-model="form.general_comment"
                 >General Comments</EthInput
             >
+            </div>
+            </div>
+            
             <button @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
@@ -917,7 +978,7 @@ function submit() {
     outline: none;
     cursor: pointer;
     padding: 14px 5px;
-    font-size: 17px;
+    font-size: 18px;
     width: 100%;
     transition: 50ms;
 }
@@ -944,9 +1005,100 @@ button.selected {
     margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     flex-direction: column;
     width: 100%;
+    justify-content: center;
+}
+
+.edit_published { grid-area: published; align-self: start; }
+.edit_trismegistos { grid-area: trismegistos; }
+.edit_standard { grid-area: standard; }
+.edit_other { grid-area: other; }
+.edit_publ { grid-area: publ; }
+.edit_shelf { grid-area: shelf; }
+.edit_bibliography { grid-area: biblio; }
+
+.editcodex_generalgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 4fr 4fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'published trismegistos standard other'
+        'published trismegistos standard other'
+        'publ publ publ other'
+        'publ publ publ biblio'
+        'shelf shelf shelf biblio'
+        'shelf shelf shelf biblio';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.edit_title { grid-area: title; }
+.edit_author { grid-area: author; }
+.edit_contdesc { grid-area: desc; }
+.edit_language { grid-area: language; }
+.edit_genre { grid-area: genre; }
+.edit_content { grid-area: cont; }
+
+.editcodex_contentgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        'title title title author author author desc desc desc' 
+        'language language genre genre cont cont desc desc desc';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_early { grid-area: early; }
+.edit_late { grid-area: late; }
+.edit_datecomm { grid-area: datecomm; }
+.edit_basis { grid-area: basis; }
+.edit_certainty { grid-area: certainty; }
+
+.editcodex_date {
+    display: grid;
+    grid-template-columns: 1fr 1fr 4fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'early late datecomm' 
+        'basis certainty datecomm';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_general { grid-area: general; }
+.edit_internal { grid-area: internal; }
+
+.editcodex_comments {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'general internal';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
 }
 
 .box {
