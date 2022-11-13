@@ -236,10 +236,13 @@
             </div>
             </div>
             
-            <button @click.prevent="submit">Store All Changes</button>
+            <button class="submitbutton" @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
         <fieldset v-if="activetab == 'codicology'" class="editcodexcontainer">
+
+            <div class="editcodex_materiality">
+            <div class="edit_material">
             <EthInput
                 input_type="single_choice"
                 input_id="material"
@@ -248,230 +251,9 @@
             >
                 Material
             </EthInput>
-
-            <div>
-                <label :for="page_dimensions_known"
-                    >Page Dimensions Known</label
-                >
-                <input
-                    :id="page_dimensions_known"
-                    type="checkbox"
-                    v-model="form.page_dimensions_known"
-                />
-            </div>
-            <div v-if="!form.page_dimensions_known">
-                <EthInput
-                    input_type="text"
-                    input_id="fragment_width"
-                    v-model="form.fragment_width"
-                    >Fragment Width (cm)</EthInput
-                >
-                <EthInput
-                    input_type="text"
-                    input_id="fragment_height"
-                    v-model="form.fragment_height"
-                    >Fragment Height (cm)</EthInput
-                >
             </div>
 
-            <div v-if="form.page_dimensions_known">
-                <EthInput
-                    input_type="text"
-                    input_id="full_page_width"
-                    v-model="form.full_page_width"
-                    >Full Page Width (cm)</EthInput
-                >
-                <EthInput
-                    input_type="text"
-                    input_id="full_page_height"
-                    v-model="form.full_page_height"
-                    >Full Page Height (cm)</EthInput
-                >
-                <EthRatio
-                    :dividend="form.full_page_width"
-                    :divisor="form.full_page_height"
-                    >Full Page Width/Height Ratio</EthRatio
-                >
-                <div>
-                    <label :for="textbox_size_stable"
-                        >Size of Textbox is Stable</label
-                    >
-                    <input
-                        :id="textbox_size_stable"
-                        type="checkbox"
-                        v-model="form.textbox_size_stable"
-                    />
-                </div>
-                <div v-if="form.textbox_size_stable">
-                    <EthInput
-                        input_type="text"
-                        input_id="upper_margin"
-                        v-model="form.upper_margin"
-                        >Upper Margin (cm)</EthInput
-                    >
-                    <EthInput
-                        input_type="text"
-                        input_id="lower_margin"
-                        v-model="form.lower_margin"
-                        >Lower Margin (cm)</EthInput
-                    >
-                    <EthRatio
-                        :dividend="form.upper_margin"
-                        :divisor="form.lower_margin"
-                        >Upper/Lower Margin Ratio</EthRatio
-                    >
-
-                    <EthInput
-                        input_type="text"
-                        input_id="inner_margin"
-                        v-model="form.inner_margin"
-                        >Inner Margin (cm)</EthInput
-                    >
-                    <EthInput
-                        input_type="text"
-                        input_id="outer_margin"
-                        v-model="form.outer_margin"
-                        >Outer Margin (cm)</EthInput
-                    >
-                    <EthRatio
-                        :dividend="form.inner_margin"
-                        :divisor="form.outer_margin"
-                        >Inner/Outer Margin Ratio</EthRatio
-                    >
-
-                    <EthInput
-                        input_type="text"
-                        input_id="full_text_block_width"
-                        v-model="form.full_text_block_width"
-                        >Full Text Block Width (cm)</EthInput
-                    >
-                    <EthInput
-                        input_type="text"
-                        input_id="full_text_block_height"
-                        v-model="form.full_text_block_height"
-                        >Full Text Block Height (cm)</EthInput
-                    >
-                    <EthRatio
-                        :dividend="form.full_text_block_width"
-                        :divisor="form.full_text_block_height"
-                        >Full Text Block Width/Height Ratio</EthRatio
-                    >
-                </div>
-            </div>
-
-            <EthInput
-                input_type="textarea"
-                input_id="measurement_comment"
-                v-model="form.measurement_comment"
-                >Comments on Measurements</EthInput
-            >
-
-            <EthInput
-                input_type="multi_choice_scripts"
-                input_id="scripts"
-                :choices="scripts_all"
-                v-model="form.scripts"
-            >
-                Scripts
-            </EthInput>
-
-            <EthInput
-                input_type="number"
-                input_id="hand_number"
-                v-model="form.hand_number"
-                >Number of Hands</EthInput
-            >
-            <EthInput
-                input_type="textarea"
-                input_id="script_description"
-                v-model="form.script_description"
-                >Description of Scripts</EthInput
-            >
-
-            <EthInput
-                input_type="multi_choice"
-                input_id="paratexts"
-                :choices="paratexts_all"
-                v-model="form.paratexts"
-            >
-                Paratexts
-            </EthInput>
-
-            <EthInput
-                input_type="textarea"
-                input_id="paratext_description"
-                v-model="form.paratext_description"
-                >Description of Paratexts</EthInput
-            >
-
-            <EthInput
-                input_type="multi_choice"
-                input_id="punctuations"
-                :choices="punctuations_all"
-                v-model="form.punctuations"
-            >
-                Punctuation
-            </EthInput>
-
-            <EthInput
-                input_type="multi_choice"
-                input_id="diacritics"
-                :choices="diacritics_all"
-                v-model="form.diacritics"
-            >
-                Diacritics
-            </EthInput>
-
-            <EthInput
-                input_type="textarea"
-                input_id="diacritic_description"
-                v-model="form.diacritic_description"
-                >Description of Diacritics</EthInput
-            >
-
-            <EthInput
-                input_type="multi_choice"
-                input_id="critical_symbols"
-                :choices="critical_symbols_all"
-                v-model="form.critical_symbols"
-            >
-                Critical Symbols
-            </EthInput>
-
-            <EthInput
-                input_type="multi_choice"
-                input_id="decorations"
-                :choices="decorations_all"
-                v-model="form.decorations"
-            >
-                Decorative Symbols
-            </EthInput>
-
-            <EthInput
-                input_type="textarea"
-                input_id="decoration_description"
-                v-model="form.decoration_description"
-                >Description of Decorative Symbols</EthInput
-            >
-
-            <EthInput
-                input_type="single_choice"
-                input_id="pagination"
-                :choices="paginations"
-                v-model="form.pagination_id"
-            >
-                Pagination
-            </EthInput>
-
-            <EthInput
-                input_type="single_choice"
-                input_id="cover"
-                :choices="covers"
-                v-model="form.cover_id"
-            >
-                Cover
-            </EthInput>
-
+            <div class="edit_ink">
             <EthInput
                 input_type="single_choice"
                 input_id="ink"
@@ -480,16 +262,20 @@
             >
                 Ink
             </EthInput>
+            </div>
 
+            <div class="edit_cover">
             <EthInput
                 input_type="single_choice"
-                input_id="quire_signature"
-                :choices="quire_signatures"
-                v-model="form.quire_signature_id"
+                input_id="cover"
+                :choices="covers"
+                v-model="form.cover_id"
             >
-                Quire Signatures
+                Cover
             </EthInput>
+            </div>
 
+            <div class="edit_structure">
             <EthInput
                 input_type="single_choice"
                 input_id="quire_structure"
@@ -498,8 +284,9 @@
             >
                 Quire Structure
             </EthInput>
+            </div>
 
-            <div v-if="form.quire_structure_id == 1">
+            <div v-if="form.quire_structure_id == 1" class="edit_numquire">
                 <label :for="bifolia">Number of Bifolia in the Quire</label>
                 <div>
                     <p>
@@ -514,14 +301,14 @@
                 </div>
             </div>
 
-            <div v-if="form.quire_structure_id == 2">
+            <div v-if="form.quire_structure_id == 2" class="edit_numquire">
                 <EthInput
                     input_type="number"
                     input_id="quire_number"
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-
+                <div class="edit_quirenum">
                 <label v-if="form.quire_number" :for="bifolia"
                     >Number of Bifolia in each Quire</label
                 >
@@ -539,46 +326,342 @@
                         />
                     </p>
                 </div>
+                </div>
             </div>
 
-            <div v-if="form.quire_structure_id == 3">
+            <div v-if="form.quire_structure_id == 3" class="edit_numquire">
                 <EthInput
                     input_type="number"
                     input_id="quire_number"
                     v-model="form.quire_number"
                     >Number of Quires</EthInput
                 >
-
-                <label :for="bifolia">Number of Bifolia in each Quire</label>
-                <div>
-                    <p>
-                        <input
-                            type="number"
-                            id="bifolia"
-                            min="1"
-                            required
-                            v-model="form.bifolia[0]"
-                        />
-                    </p>
-                </div>
             </div>
-
+            <div v-if="form.quire_structure_id == 3" class="edit_quirenum">    
+            <label :for="bifolia">Number of Bifolia in each Quire</label>
+            <div>
+                <p>
+                    <input
+                        type="number"
+                        id="bifolia"
+                        min="1"
+                        required
+                        v-model="form.bifolia[0]"
+                    />
+                </p>
+            </div>
+            </div>
+            
+            <div class="edit_quirecomm">
             <EthInput
                 input_type="textarea"
                 input_id="quire_comment"
                 v-model="form.quire_comment"
                 >Comments on Quire(s)</EthInput
             >
+            </div>
+
+            <div class="edit_bindingdesc">
             <EthInput
                 input_type="textarea"
                 input_id="binding_description"
                 v-model="form.binding_description"
                 >Binding Description</EthInput
             >
-            <button @click="submit">Store All Changes</button>
+            </div>
+            </div>
+
+            <div class="editcodex_measurements">
+            <div class="edit_dimknown">
+                <label :for="page_dimensions_known"
+                    >Page Dimensions Known</label
+                >
+                <input
+                    :id="page_dimensions_known"
+                    type="checkbox"
+                    v-model="form.page_dimensions_known"
+                />
+            </div>
+
+                
+            <template v-if="!form.page_dimensions_known">
+                <div class="edit_pagewidth">
+                <EthInput
+                    input_type="text"
+                    input_id="fragment_width"
+                    v-model="form.fragment_width"
+                    >Fragment Width (cm)</EthInput
+                >
+                </div>
+                <div class="edit_pageheight">
+                <EthInput
+                    input_type="text"
+                    input_id="fragment_height"
+                    v-model="form.fragment_height"
+                    >Fragment Height (cm)</EthInput
+                >
+                </div>
+
+            </template>
+
+            <template v-if="form.page_dimensions_known">
+                <div class="edit_pagewidth">
+                <EthInput
+                    input_type="text"
+                    input_id="full_page_width"
+                    v-model="form.full_page_width"
+                    >Full Page Width (cm)</EthInput
+                >
+                </div>
+                <div class="edit_pageheight">
+                <EthInput
+                    input_type="text"
+                    input_id="full_page_height"
+                    v-model="form.full_page_height"
+                    >Full Page Height (cm)</EthInput
+                >
+                </div>
+                <div class="edit_pratio">
+                <EthRatio
+                    :dividend="form.full_page_width"
+                    :divisor="form.full_page_height"
+                    >Full Page Width/Height Ratio</EthRatio
+                >
+                </div>
+
+                <div class="edit_stable">
+                <div>
+                    <label :for="textbox_size_stable"
+                        >Size of Textbox is Stable</label
+                    >
+                    <input
+                        :id="textbox_size_stable"
+                        type="checkbox"
+                        v-model="form.textbox_size_stable"
+                    />
+                </div>
+                </div>
+
+                <template v-if="form.textbox_size_stable">
+                    <div class="edit_uppmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="upper_margin"
+                        v-model="form.upper_margin"
+                        >Upper Margin (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_lowmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="lower_margin"
+                        v-model="form.lower_margin"
+                        >Lower Margin (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_ulratio">
+                    <EthRatio
+                        :dividend="form.upper_margin"
+                        :divisor="form.lower_margin"
+                        >Upper/Lower Margin Ratio</EthRatio
+                    >
+                    </div>
+
+                    <div class="edit_innmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="inner_margin"
+                        v-model="form.inner_margin"
+                        >Inner Margin (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_outmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="outer_margin"
+                        v-model="form.outer_margin"
+                        >Outer Margin (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_ioratio">
+                    <EthRatio
+                        :dividend="form.inner_margin"
+                        :divisor="form.outer_margin"
+                        >Inner/Outer Margin Ratio</EthRatio
+                    >
+                    </div>
+
+                    <div class="edit_blockwidth">
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_width"
+                        v-model="form.full_text_block_width"
+                        >Full Text Block Width (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_blockheight">
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_height"
+                        v-model="form.full_text_block_height"
+                        >Full Text Block Height (cm)</EthInput
+                    >
+                    </div>
+                    <div class="edit_bratio">
+                    <EthRatio
+                        :dividend="form.full_text_block_width"
+                        :divisor="form.full_text_block_height"
+                        >Full Text Block Width/Height Ratio</EthRatio
+                    >
+                    </div>
+                </template>
+            </template>
+
+                <div class="edit_meascomm">
+                <EthInput
+                input_type="textarea"
+                input_id="measurement_comment"
+                v-model="form.measurement_comment"
+                >Comments on Measurements</EthInput
+            >
+                </div>
+            </div>
+            
+            <div class="editcodex_textualfeatures">
+            <div class="edit_scripts">
+            <EthInput
+                input_type="multi_choice_scripts"
+                input_id="scripts"
+                :choices="scripts_all"
+                v-model="form.scripts"
+            >
+                Scripts
+            </EthInput>
+            </div>
+            <div class="edit_numhands">
+            <EthInput
+                input_type="number"
+                input_id="hand_number"
+                v-model="form.hand_number"
+                >Number of Hands</EthInput
+            >
+            </div>
+            <div class="edit_scriptdesc">
+            <EthInput
+                input_type="textarea"
+                input_id="script_description"
+                v-model="form.script_description"
+                >Description of Scripts</EthInput
+            >
+            </div>
+            <div class="edit_paratext">
+            <EthInput
+                input_type="multi_choice"
+                input_id="paratexts"
+                :choices="paratexts_all"
+                v-model="form.paratexts"
+            >
+                Paratexts
+            </EthInput>
+            </div>
+            
+            <div class="edit_paradesc">
+            <EthInput
+                input_type="textarea"
+                input_id="paratext_description"
+                v-model="form.paratext_description"
+                >Description of Paratexts</EthInput
+            >
+            </div>
+            <div class="edit_punctuation">
+            <EthInput
+                input_type="multi_choice"
+                input_id="punctuations"
+                :choices="punctuations_all"
+                v-model="form.punctuations"
+            >
+                Punctuation
+            </EthInput>
+            </div>
+            <div class="edit_diacritics">
+            <EthInput
+                input_type="multi_choice"
+                input_id="diacritics"
+                :choices="diacritics_all"
+                v-model="form.diacritics"
+            >
+                Diacritics
+            </EthInput>
+            </div>
+            <div class="edit_diacritdesc">
+            <EthInput
+                input_type="textarea"
+                input_id="diacritic_description"
+                v-model="form.diacritic_description"
+                >Description of Diacritics</EthInput
+            >
+            </div>
+            <div class="edit_critical">
+            <EthInput
+                input_type="multi_choice"
+                input_id="critical_symbols"
+                :choices="critical_symbols_all"
+                v-model="form.critical_symbols"
+            >
+                Critical Symbols
+            </EthInput>
+            </div>
+
+            <div class="edit_decorative">
+            <EthInput
+                input_type="multi_choice"
+                input_id="decorations"
+                :choices="decorations_all"
+                v-model="form.decorations"
+            >
+                Decorative Symbols
+            </EthInput>
+            </div>
+
+            <div class="edit_decodesc">
+            <EthInput
+                input_type="textarea"
+                input_id="decoration_description"
+                v-model="form.decoration_description"
+                >Description of Decorative Symbols</EthInput
+            >
+            </div>
+
+            <div class="edit_pagination">
+            <EthInput
+                input_type="single_choice"
+                input_id="pagination"
+                :choices="paginations"
+                v-model="form.pagination_id"
+            >
+                Pagination
+            </EthInput>
+            </div>
+
+            <div class="edit_quiresig">
+            <EthInput
+                input_type="single_choice"
+                input_id="quire_signature"
+                :choices="quire_signatures"
+                v-model="form.quire_signature_id"
+            >
+                Quire Signatures
+            </EthInput>
+            </div>
+            </div>
+
+            <button class="submitbutton" @click="submit">Store All Changes</button>
         </fieldset>
 
         <fieldset v-if="activetab == 'conservation'" class="editcodexcontainer">
+
+            <div class="editcodex_conservanalys">
+            <div class="edit_storage">
             <EthInput
                 input_type="single_choice"
                 input_id="storage_condition"
@@ -587,14 +670,16 @@
             >
                 Storage Condition
             </EthInput>
-
+            </div>
+            <div class="edit_conshist">
             <EthInput
                 input_type="textarea"
                 input_id="conservation_history"
                 v-model="form.conservation_history"
                 >Conservation History</EthInput
             >
-
+            </div>
+            <div class="edit_scientific">
             <EthInput
                 input_type="multi_choice"
                 input_id="analyses"
@@ -603,19 +688,23 @@
             >
                 Scientific Analysis
             </EthInput>
-
+            </div>
+            <div class="analyscomm">
             <EthInput
                 input_type="textarea"
                 input_id="analyses_comment"
                 v-model="form.analyses_comment"
                 >Comments on Analysis</EthInput
             >
+            </div>
+            </div>
 
-            <button @click.prevent="submit">Store All Changes</button>
+            <button class="submitbutton" @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
         <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
-            <div>
+            <div class="editcodex_provenance">
+            <div class="edit_sciex">
                 <label :for="scientifically_excavated"
                     >Scientifically Excavated</label
                 >
@@ -626,6 +715,7 @@
                 />
             </div>
 
+            <div class="edit_excomm">
             <EthInput
                 input_type="textarea"
                 input_id="excavation_comment"
@@ -633,7 +723,9 @@
             >
                 Comments on Excavation
             </EthInput>
+            </div>
 
+            <div class="edit_anciprov">
             <EthInput
                 input_type="single_choice"
                 input_id="ancient_provenance"
@@ -642,16 +734,21 @@
             >
                 Ancient Provenance
             </EthInput>
+            </div>
 
+
+            <div class="edit_ancicert">
             <EthInput
                 input_type="single_choice"
                 input_id="ancient_provenance_certainty"
                 :choices="ancient_provenance_certainties"
                 v-model="form.ancient_provenance_certainty_id"
             >
-                Certainty of Ancient Provenance
+                Certainty of A. Provenance
             </EthInput>
+            </div>
 
+            <div class="edit_ancicomm">
             <EthInput
                 input_type="textarea"
                 input_id="ancient_provenance_comment"
@@ -659,6 +756,8 @@
             >
                 Comments on Ancient Provenance
             </EthInput>
+            </div>
+
             <!--         
             <EthInput
                 input_type="multi_choice"
@@ -669,6 +768,7 @@
                 Modern Collections
             </EthInput>
 -->
+            <div class="edit_legalclass">
             <EthInput
                 input_type="legal_choice"
                 input_id="legal_classification"
@@ -677,14 +777,18 @@
             >
                 Legal Classification
             </EthInput>
+            </div>
 
+            <div class="edit_legalcomm">
             <EthInput
                 input_type="textarea"
                 input_id="legal_classification_explanation"
                 v-model="form.legal_classification_explanation"
                 >Comments on Legal Classification</EthInput
             >
+            </div>
 
+            <div class="edit_transactions">
             <EthInput
                 input_type="multi_choice"
                 input_id="purchases"
@@ -693,17 +797,27 @@
             >
                 Transactions
             </EthInput>
-            <button @click.prevent="submit">Store All Changes</button>
+            </div>
+            </div>
+            <button class="submitbutton" @click.prevent="submit">Store All Changes</button>
         </fieldset>
 
         <fieldset v-if="activetab == 'images'" class="editcodexcontainer">
+
+            <div class="editcodex_images">
+            <div class="edit_img">
             <EthInput
                 input_type="textarea"
                 input_id="images_info"
                 v-model="form.images_info"
                 >Image Information</EthInput
             >
+            </div>
+            </div>
 
+            <button class="submitbutton" @click.prevent="submit">Store All Changes</button>
+
+                        
             <label class="labelpadding" for="images">Upload Images</label>
             <input
                 type="file"
@@ -711,8 +825,7 @@
                 multiple
                 ref="loadImages"
             />
-            <button @click.prevent="submit">Store All Changes</button>
-
+            
             <div>
                 <div
                     class="box"
@@ -999,6 +1112,16 @@ button.selected {
     background-color: rgb(119, 128, 111);
 }
 
+.submitbutton {
+    font-size: 20px;
+    width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 15px;
+    align-self: center;
+    margin: 20px;
+}
+
 .editcodexcontainer {
     display: flex;
     background-color: #eee;
@@ -1100,6 +1223,171 @@ button.selected {
     border-radius: 10px;
     margin-top: 15px;
 }
+
+.edit_material { grid-area: material; }
+.edit_ink { grid-area: ink; }
+.edit_cover { grid-area: cover; }
+.edit_structure { grid-area: structure; }
+.edit_numquire { grid-area: numquire; }
+.edit_quirenum { grid-area: quirenum; }
+.edit_quirecomm { grid-area: quirecomm; }
+.edit_bindingdesc { grid-area: bindingdesc; }
+
+.editcodex_materiality {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'material bindingdesc'
+        'ink bindingdesc'
+        'cover bindingdesc'
+        'structure quirecomm'
+        'numquire quirecomm'
+        'quirenum quirecomm';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_dimknown { grid-area: dimknown; }
+.edit_meascomm { grid-area: meascomm; }
+.edit_pagewidth { grid-area: pagewidth; }
+.edit_pageheight { grid-area: pageheight; }
+.edit_pratio { grid-area: pratio; }
+.edit_stable { grid-area: stable; }
+.edit_blockwidth { grid-area: blockwidth; }
+.edit_blockheight { grid-area: blockheight; }
+.edit_bratio { grid-area: bratio; }
+.edit_uppmarg { grid-area: uppmarg; }
+.edit_lowmarg { grid-area: lowmarg; }
+.edit_ulratio { grid-area: ulratio; }
+.edit_innmarg { grid-area: innmarg; }
+.edit_outmarg { grid-area: outmarg; }
+.edit_ioratio { grid-area: ioratio; }
+
+.editcodex_measurements {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'dimknown . . meascomm'
+        'pagewidth pageheight pratio meascomm'
+        'stable . . meascomm'
+        'blockwidth blockheight bratio meascomm'
+        'uppmarg lowmarg ulratio meascomm'
+        'innmarg outmarg ioratio meascomm';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_numhands { grid-area: numhands; }
+.edit_scripts { grid-area: scripts; }
+.edit_scriptdesc { grid-area: scriptdesc; }
+.edit_pagination { grid-area: pagination; }
+.edit_paratext { grid-area: paratext; }
+.edit_paradesc { grid-area: paradesc; }
+.edit_punctuation { grid-area: punctuation; }
+.edit_diacritics { grid-area: diacritics; }
+.edit_diacritdesc { grid-area: diacritdesc; }
+.edit_critical { grid-area: critical; }
+.edit_decorative { grid-area: decorative; }
+.edit_decodesc { grid-area: decodesc; }
+.edit_quiresig { grid-area: quiresig; }
+
+.editcodex_textualfeatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'scripts numhands diacritics diacritics'
+        'scriptdesc scriptdesc diacritdesc diacritdesc'
+        'paratext paratext decorative decorative'
+        'paradesc paradesc decodesc decodesc'
+        'punctuation critical pagination quiresig';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_storage { grid-area: storage; }
+.edit_scientific { grid-area: scientific; }
+.edit_conshist { grid-area: conshist; }
+.edit_analyscomm { grid-area: analyscomm; }
+
+.editcodex_conservanalys {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'storage scientific'
+        'conshist analyscomm';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_sciex { grid-area: sciex; }
+.edit_excomm { grid-area: excomm; }
+.edit_anciprov { grid-area: anciprov; }
+.edit_ancicert { grid-area: ancicert; }
+.edit_ancicomm { grid-area: ancicomm; }
+.edit_transactions { grid-area: transactions; }
+.edit_legalclass { grid-area: legalclass; }
+.edit_legalcomm { grid-area: legalcomm; }
+
+.editcodex_provenance {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'sciex anciprov ancicert'
+        'excomm ancicomm ancicomm'
+        'transactions legalclass legalclass'
+        'transactions legalcomm legalcomm';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.edit_img { grid-area: img; }
+
+.editcodex_images {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        'img';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+
 
 .box {
     padding: 10px;

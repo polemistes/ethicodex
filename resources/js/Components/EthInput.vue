@@ -86,11 +86,14 @@
 
     <div v-if="input_type == 'multi_choice'" class="input_oneline">
       <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.name }},</span></p>
-      <div v-if="choices.length > 9">
+      <button @click.prevent="dropdown=!dropdown" class="drowdownbutton">Select</button>
+      <p class="topborder"><span v-for="value in modelValue" :key="value.id" class="choiceelement">{{ value.name }}</span></p>
+      <div v-if="dropdown" class="dropdown-content" @mouseleave="dropdown=false">
+      <div v-if="choices.length > 20">
         <label :for="search">Search:</label>
         <input type="text" v-model="search">
-      </div>      <div class="scrollwindow">
+      </div>      
+      <div class="scrollwindow">
       <div v-for="choice in search_choices" :key="choice.id">
         <input type="checkbox"
               :id="choice.id"  
@@ -100,7 +103,9 @@
         <label>{{ choice.name }}</label>
       </div>
       </div>    
+      </div>
     </div>
+
 
     <div v-if="input_type == 'party_choice'" class="input_oneline">
       <label :for="input_id"><slot /></label>
@@ -125,12 +130,13 @@
 
     <div v-if="input_type == 'multi_choice_scripts'" class="input_oneline">
       <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;">
-        <b>Selected:</b> 
-        <span v-for="value in modelValue" :key="value.id">{{ value.name }}
-          ,
+      <button @click.prevent="dropdown=!dropdown" class="drowdownbutton">Select</button>
+      <p class="topborder">
+        <span v-for="value in modelValue" :key="value.id" class="choiceelement">
+          {{ value.name }}
         </span>
       </p>
+      <div v-if="dropdown" class="dropdown-content" @mouseleave="dropdown=false">
       <h3>Greek Scripts:</h3>
       <div v-for="choice in search_choices" :key="choice.id">
         <div v-if="choice.language_id == '1'">
@@ -155,6 +161,7 @@
           >
           <label>{{ choice.name }}</label>
         </div>
+      </div>
       </div>
     </div>
 
@@ -276,6 +283,8 @@ import { ref, computed } from 'vue'
 
 let search = ref("");
 
+let dropdown = ref(false);
+
 const props = defineProps({
   modelValue: [String, Number, Array, Boolean],
   input_id: String, 
@@ -329,6 +338,42 @@ const search_choices_doc = computed(() => {
 </script>
 
 <style>
+.dropdownbutton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 20px;
+  border-style: solid;
+  border-color: #999;
+  border: 4px;
+  border-radius: 10px;
+}
+
+.choiceelement {
+    background-color: gray; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: auto; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 5px 10px 5px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 16px; /* Changing font size */
+}
+
+.topborder {
+  margin-top: 10px;
+}
 label {
   padding-top: 15px;
   padding-right: 15px;
