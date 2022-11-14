@@ -3,21 +3,33 @@
   <h1 class="addtransactionpartyheader">Add Transaction Party</h1>
 
    <form @submit.prevent="submit" >
-    <fieldset class="addtransactionpartycontainer">
+    <fieldset class="newtransactionpartycontainer">
+      <div class="newparty_partygrid">
+      <div class="newparty_transparty">
       <EthInput input_type="text" input_id="name" v-model="form.name">Transaction Party</EthInput>
-      <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
+      </div>
+      <div class="newparty_partydesc">
+      <EthInput input_type="textarea" input_id="description" v-model="form.description">Description of Transaction Party</EthInput>
+      </div>
 
+      <div class="newparty_institution">
       <p><input id="institution" type="checkbox" :value="form.institution" v-model="form.institution">
       <label for="institution">Institution</label></p>
+      </div>
 
+      <div class="newparty_transactions">
       <label :for="input_id">Transactions</label>
-       <p style="border-style: solid;">
-         <b>Selected:</b> 
-         <span v-for="purchase in form.purchases" :key="purchase.id">
-           {{ purchase.name }}, 
-         </span>
-       </p>
-
+      <button @click.prevent="dropdown=!dropdown" class="dropdownbutton">Select</button>
+      <p class="topborder">
+        <span 
+          v-for="purchase in form.purchases" 
+          :key="purchase.id"
+          class="choiceelement"
+        >
+          {{ purchase.name }} 
+        </span>
+      </p>
+      <div v-if="dropdown" class="dropdown-content">      
         <div v-if="all_purchases.length > 12">
           <label :for="search">Search:</label>
           <input type="text" v-model="search">
@@ -37,8 +49,12 @@
               <option v-for="party_role in party_roles" :key="party_role">{{ party_role }}</option>
             </select>
           </div>
-        </div>    
+        </div> 
+        <button @click.prevent="dropdown=false" class="dropdownbutton">Close</button>
 
+      </div>  
+      </div>
+      </div>
 <!--
       <EthInput input_type="multi_choice" 
                   input_id="purchases" 
@@ -47,7 +63,7 @@
                   Transactions
       </EthInput>
 -->
-      <button @click.prevent="submit">Store All Changes</button>
+      <button class="submitbutton" @click.prevent="submit">Store All Changes</button>
     </fieldset>
   
   </form>
@@ -61,6 +77,7 @@ import { reactive, ref, computed } from 'vue'
 import EthInput from '../Components/EthInput.vue'
 
 let party_roles = ["Seller", "Buyer", "Broker"];
+let dropdown = ref(false);
 
 const props = defineProps({
   purchases_all: Array,
@@ -124,5 +141,36 @@ function submit() {
     flex-direction: column;
     width: 100%;
 }
+
+.submitbutton {
+    font-size: 20px;
+    width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 15px;
+    align-self: center;
+    margin: 20px;
+}
+
+.newparty_transparty { grid-area: transparty; }
+.newparty_institution { grid-area: institution; }
+.newparty_partydesc { grid-area: partydesc; }
+.newparty_transactions { grid-area: transactions; }
+
+.newparty_partygrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'transparty institution partydesc'
+        'transactions transactions partydesc';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+}
+
 
 </style>

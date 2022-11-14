@@ -85,8 +85,8 @@
     </div>
 
     <div v-if="input_type == 'multi_choice'" class="input_oneline">
-      <label :for="input_id"><slot /></label>
-      <button @click.prevent="dropdown=!dropdown" class="drowdownbutton">Select</button>
+      <label :for="input_id"></label>
+      <button @click.prevent="dropdown=!dropdown" class="dropdownbutton"><slot /></button>
       <p class="topborder"><span v-for="value in modelValue" :key="value.id" class="choiceelement">{{ value.name }}</span></p>
       <div v-if="dropdown" class="dropdown-content" @mouseleave="dropdown=false">
       <div v-if="choices.length > 20">
@@ -167,8 +167,10 @@
 
     <div v-if="input_type == 'document_choice'" class="input_oneline">
       <label :for="input_id"><slot /></label>
-      <p style="border-style: solid;"><b>Selected:</b> <span v-for="value in modelValue" :key="value.id">{{ value.standard_name }},</span></p>
-      <div v-if="choices.length > 9">
+      <button @click.prevent="dropdown=!dropdown" class="dropdownbutton">Select</button>
+      <p class="topborder"><span v-for="value in modelValue" :key="value.id" class="choiceelement">{{ value.standard_name }}</span></p>
+      <div v-if="dropdown" class="dropdown-content" @mouseleave="dropdown=false">
+      <div v-if="choices.length > 20">
         <label :for="search">Search:</label>
         <input type="text" v-model="search">
       </div>
@@ -181,7 +183,8 @@
               @change="$emit('update:modelValue', modelValue)">
         <label> {{ choice.standard_name }} (Tr.ID: {{ choice.trismegistos_id }})</label>
       </div>
-      </div>    
+      </div>  
+      </div>  
     </div>
 
 <!--
@@ -339,9 +342,13 @@ const search_choices_doc = computed(() => {
 
 <style>
 .dropdownbutton {
-  background-color: #4CAF50;
+  background-color: #6f726f;
   color: white;
-  padding: 16px;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -374,6 +381,7 @@ const search_choices_doc = computed(() => {
 .topborder {
   margin-top: 10px;
 }
+
 label {
   padding-top: 15px;
   padding-right: 15px;

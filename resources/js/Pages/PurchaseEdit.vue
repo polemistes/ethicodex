@@ -4,27 +4,40 @@
 
    <form @submit.prevent="submit">
     <fieldset class="edittransactioncontainer">
+      <div class="edittransaction">
       <input type="hidden" input_id="id" v-model="form.id" />
-      <EthInput input_type="year" input_id="year" v-model="form.year">Year</EthInput>
+      <div class="edittrans_year">
+      <EthInput input_type="number" input_id="year" v-model="form.year">Year</EthInput>
+      </div>
+      <div class="edittrans_transaction">
       <EthInput input_type="text" input_id="name" v-model="form.name">Transaction</EthInput>
+      </div>
+      <div class="edittrans_transdesc">
       <EthInput input_type="textarea" input_id="description" v-model="form.description">Description</EthInput>
+      </div>
 
-  
+        <div class="edittrans_docs">
         <EthInput input_type="document_choice" 
                   input_id="documents" 
                   :choices="documents_all"
                   v-model="form.documents">
                   Documents in Transaction
         </EthInput>
- 
+        </div>
+
+        <div class="edittrans_parties">
         <label :for="input_id">Parties to the Transaction</label>
-        <p style="border-style: solid;">
-          <b>Selected:</b> 
-          <span v-for="party in form.purchase_parties" :key="party.id">
-            {{ party.name }}, 
+        <button @click.prevent="dropdown=!dropdown" class="dropdownbutton">Select</button>
+        <p class="topborder">
+          <span 
+            v-for="party in form.purchase_parties" 
+            :key="party.id" 
+            class="choiceelement"
+          >
+            {{ party.name }}
           </span>
         </p>
-
+        <div v-if="dropdown" class="dropdown-content">
         <div v-if="all_purchase_parties.length > 12">
           <label :for="search">Search:</label>
           <input type="text" v-model="search">
@@ -44,7 +57,11 @@
               <option v-for="party_role in party_roles" :key="party_role">{{ party_role }}</option>
             </select>
           </div>
+        </div>
+        <button @click.prevent="dropdown=false" class="dropdownbutton">Close</button>
         </div>    
+        </div>
+      </div>
 <!--
         <EthInput input_type="party_choice" 
                   input_id="purchase_parties" 
@@ -55,7 +72,7 @@
         </EthInput>
 -->
 
-      <button @click.prevent="submit">Store All Changes</button>
+      <button @click.prevent="submit" class="submitbutton">Store All Changes</button>
     </fieldset>
   
   </form>
@@ -69,6 +86,7 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import EthInput from '../Components/EthInput.vue'
 
 let party_roles = ["Seller", "Buyer", "Broker"];
+let dropdown = ref(false);
 
 const props = defineProps({ 
   purchase: Object,
@@ -149,5 +167,78 @@ function submit() {
     flex-direction: column;
     width: 100%;
 }
+
+.edittrans_year { grid-area: year; }
+.edittrans_transaction { grid-area: transaction; }
+.edittrans_transdesc { grid-area: transdesc; }
+.edittrans_parties { grid-area: parties; }
+.edittrans_docs { grid-area: docs; }
+
+.edittransaction {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        'transaction year transdesc'
+        'parties docs transdesc';
+    gap: 20px;
+    width: 99%;
+    align-self: center;
+    background-color: #ccc;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.dropdownbutton {
+  background-color: #6f726f;
+  color: white;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 20px;
+  border-style: solid;
+  border-color: #999;
+  border: 4px;
+  border-radius: 10px;
+}
+
+.choiceelement {
+    background-color: gray; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: auto; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 5px 10px 5px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 16px; /* Changing font size */
+}
+
+.topborder {
+  margin-top: 10px;
+}
+
+.submitbutton {
+    font-size: 20px;
+    width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 15px;
+    align-self: center;
+    margin: 20px;
+}
+
 
 </style>
