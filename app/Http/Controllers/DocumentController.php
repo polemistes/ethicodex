@@ -48,7 +48,7 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-  //      $this->authorize('viewAny', Document::class)
+        //      $this->authorize('viewAny', Document::class)
 
         $role_id = $request->user() ? $request->user()->role_id : 0;
         $search_standard = $request->get('search_standard', "");
@@ -131,56 +131,36 @@ class DocumentController extends Controller
      */
     public function show(Document  $document)
     {
-  //  $this->authorize('view', $document);
+        $this->authorize('view', $document);
 
-    return (Inertia::render('CodexShow', [
+        return (Inertia::render('CodexShow', [
             'document' => $document,
             'analyses' => $document->analyses()->get()->makeHidden('pivot'),
-            'analyses_all' => Analysis::all(),
-            'ancient_provenances' => AncientProvenance::all(),
             'ancient_provenance' => $document->ancient_provenance()->get(),
-            'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
-            'ancient_provenance_certainty' => $document->ancient_provenance_certainty()->get(),
-            'covers' => Cover::all(),
+            'ancient_provenance_certainty' => $document->ancient_provenance()->get(),
+            'critical_symbols' => $document->critical_symbols()->get()->makeHidden('pivot'),
             'cover' => $document->cover()->get(),
-            'dating_certainties' => DatingCertainty::all(),
             'dating_certainty' => $document->dating_certainty()->get(),
             'dating_methods' => $document->dating_methods()->get()->makeHidden('pivot'),
-            'dating_methods_all' => DatingMethod::all(),
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
-            'decorations_all' => Decoration::all(),
             'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
-            'diacritics_all' => Diacritic::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
-            'genres_all' => Genre::all(),
             'images' => $document->images()->get(),
-            'inks' => Ink::all(),
             'ink' => $document->ink()->get(),
             'languages' => $document->languages()->get()->makeHidden('pivot'),
-            'languages_all' => Language::all(),
-            'legal_classifications' => LegalClassification::all(),
             'legal_classification' => $document->legal_classification()->get(),
-            'licenses' => License::all(),
-            'materials' => Material::all(),
+            'license' => $document->license()->get(),
             'material' => $document->material()->get(),
             'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
-            'modern_collections_all' => ModernCollection::all(),
-            'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
-            'paratexts_all' => Paratext::all(),
+            'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'purchases' => $document->purchases()->get()->makeHidden('pivot'),
-            'purchases_all' => Purchase::all(),
-            'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
-            'quire_structures' => QuireStructure::all(),
             'quire_structure' => $document->quire_structure()->get(),
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
-            'scripts_all' => Script::all(),
-            'storage_conditions' => StorageCondition::all(),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'tags_all' => Tag::all(),
         ]));
     }
 
@@ -218,6 +198,7 @@ class DocumentController extends Controller
             'legal_classifications' => LegalClassification::all(),
             'legal_classification' => $document->legal_classification()->get(),
             'licenses' => License::all(),
+            'license' => $document->license()->get(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
             'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
@@ -366,21 +347,14 @@ class DocumentController extends Controller
         $document->ink_id = $fields['ink_id'];
         $document->quire_signature_id = $fields['quire_signature_id'];
         $document->quire_structure_id = $fields['quire_structure_id'];
-        if($fields['quire_structure_id'] == 1)
-        {
+        if ($fields['quire_structure_id'] == 1) {
             $fields['quire_number'] = 1;
-            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
-        }
-        elseif($fields['quire_structure_id'] == 2)
-        {   
-            $fields['bifolia'] = array_slice($fields['bifolia'],0,$fields['quire_number']);
-        }
-        elseif($fields['quire_structure_id'] == 3)
-        {
-            $fields['bifolia'] = array_slice($fields['bifolia'],0,1);
-        }
-        else
-        {
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
+        } elseif ($fields['quire_structure_id'] == 2) {
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, $fields['quire_number']);
+        } elseif ($fields['quire_structure_id'] == 3) {
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
+        } else {
             $fields['quire_number'] = null;
             $fields['bifolia'] = ["1"];
         }
@@ -413,18 +387,18 @@ class DocumentController extends Controller
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
-        
+
         $document->save();
 
         $img_fields = $request->validate([
             'images' => 'nullable',
         ]);
-    
-        foreach($document->images as $image) {
+
+        foreach ($document->images as $image) {
             $image->delete();
         }
 
-        foreach($img_fields['images'] as $image) {
+        foreach ($img_fields['images'] as $image) {
             Image::create([
                 'description' => $image['description'],
                 'filename' => $image['filename'],
