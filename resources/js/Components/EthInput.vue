@@ -5,7 +5,7 @@
             <input
                 :id="input_id"
                 type="number"
-                :min="minumum"
+                :min="minimum"
                 :max="maximum"
                 :value="modelValue"
                 @input="$emit('update:modelValue', $event.target.value)"
@@ -395,7 +395,7 @@ const props = defineProps({
     collection_id: Number,
     collections: Array,
     num: Number,
-    minumum: Number,
+    minimum: Number,
     maximum: Number,
     name: { type: String, default: "name" },
 });
