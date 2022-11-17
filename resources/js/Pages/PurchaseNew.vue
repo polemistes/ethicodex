@@ -13,6 +13,27 @@
                         >Year</EthInput
                     >
                 </div>
+                <div class="newtrans_month">
+                    <EthInput
+                        input_type="number"
+                        input_id="month"
+                        minimum="1"
+                        maximum="12"
+                        v-model="form.month"
+                        >Month</EthInput
+                    >
+                </div>
+                <div class="newtrans_day">
+                    <EthInput
+                        input_type="number"
+                        input_id="day"
+                        minumum="1"
+                        maximum="12"
+                        v-model="form.day"
+                        >Day</EthInput
+                    >
+                </div>
+
                 <div class="newtrans_transaction">
                     <EthInput
                         input_type="text"
@@ -143,7 +164,9 @@ const props = defineProps({
 });
 
 const form = useForm({
-    date: "",
+    year: "",
+    month: "",
+    day: "",
     name: "",
     description: "",
     documents: [],
@@ -231,6 +254,12 @@ function submit() {
 .newtrans_year {
     grid-area: year;
 }
+.newtrans_month {
+    grid-area: month;
+}
+.newtrans_day {
+    grid-area: day;
+}
 .newtrans_transaction {
     grid-area: transaction;
 }
@@ -246,11 +275,12 @@ function submit() {
 
 .newtransaction {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50%;
     grid-template-rows: auto;
     grid-template-areas:
-        "transaction year transdesc"
-        "parties docs transdesc";
+        "transaction transaction transaction transaction transaction transaction transdesc"
+        "year year month month day day transdesc"
+        "parties parties parties docs docs docs transdesc";
     gap: 20px;
     width: 99%;
     align-self: center;

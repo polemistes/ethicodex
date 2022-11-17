@@ -13,6 +13,27 @@
                         >Year</EthInput
                     >
                 </div>
+                <div class="edittrans_month">
+                    <EthInput
+                        input_type="number"
+                        input_id="month"
+                        minimum="1"
+                        maximum="12"
+                        v-model="form.month"
+                        >Month</EthInput
+                    >
+                </div>
+                <div class="edittrans_day">
+                    <EthInput
+                        input_type="number"
+                        input_id="day"
+                        minimum="1"
+                        maximum="31"
+                        v-model="form.day"
+                        >Day</EthInput
+                    >
+                </div>
+
                 <div class="edittrans_transaction">
                     <EthInput
                         input_type="text"
@@ -160,6 +181,8 @@ for (let p of props.purchase_parties) {
 
 const form = useForm({
     year: props.purchase.year,
+    month: props.purchase.month,
+    day: props.purchase.day,
     name: props.purchase.name,
     description: props.purchase.description,
     documents: props.documents,
@@ -248,6 +271,12 @@ function submit() {
 .edittrans_year {
     grid-area: year;
 }
+.edittrans_month {
+    grid-area: month;
+}
+.edittrans_day {
+    grid-area: day;
+}
 .edittrans_transaction {
     grid-area: transaction;
 }
@@ -263,11 +292,12 @@ function submit() {
 
 .edittransaction {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50%;
     grid-template-rows: auto;
     grid-template-areas:
-        "transaction year transdesc"
-        "parties docs transdesc";
+        "transaction transaction transaction transaction transaction transaction transdesc"
+        "year year month month day day transdesc"
+        "parties parties parties docs docs docs transdesc";
     gap: 20px;
     width: 99%;
     align-self: center;

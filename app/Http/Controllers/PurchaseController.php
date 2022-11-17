@@ -51,12 +51,14 @@ class PurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $this->authorize('create', Purchase::class);
-     
+
         $purchase = Purchase::create($request->validate([
             'name' => 'nullable',
             'year' => 'nullable',
+            'month' => 'nullable',
+            'day' => 'nullable',
             'description' => 'nullable',
         ]));
         $purchase->save();
@@ -64,14 +66,13 @@ class PurchaseController extends Controller
 
         $purchase_parties = [];
 
-        foreach($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'] as $party) {
+        foreach ($request->validate(['purchase_parties' => 'nullable'])['purchase_parties'] as $party) {
             $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
         }
-   
+
         $purchase->purchase_parties()->sync($purchase_parties);
 
         return Redirect::route('Purchases');
-
     }
 
     /**
@@ -115,9 +116,11 @@ class PurchaseController extends Controller
     {
         $this->authorize('update', $purchase);
 
-         $fields = $request->validate([
+        $fields = $request->validate([
             'name' => 'nullable',
             'year' => 'nullable',
+            'month' => 'nullable',
+            'day' => 'nullable',
             'description' => 'nullable',
             'documents' => 'nullable',
             'purchase_parties' => 'nullable',
@@ -125,16 +128,17 @@ class PurchaseController extends Controller
 
         $purchase->name = $fields['name'];
         $purchase->year = $fields['year'];
+        $purchase->month = $fields['month'];
+        $purchase->day = $fields['day'];
         $purchase->description = $fields['description'];
         $purchase->save();
 
         $documents = $fields['documents'];
 
         $purchase_parties = [];
-        foreach($fields['purchase_parties'] as $party) {
+        foreach ($fields['purchase_parties'] as $party) {
             $purchase_parties[$party['id']] = ['party_role' => $party['party_role']];
         }
-   
 
         $purchase->documents()->sync(array_column($documents, 'id'));
         $purchase->purchase_parties()->sync($purchase_parties);

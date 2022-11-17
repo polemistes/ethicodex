@@ -1,10 +1,24 @@
 <template>
-    <div v-if="input_type == 'number' || input_type == 'text'">
+    <div v-if="input_type == 'number'">
         <div class="input_oneline">
             <label :for="input_id"><slot /></label>
             <input
                 :id="input_id"
-                :type="input_type"
+                type="number"
+                :min="minumum"
+                :max="maximum"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
+        </div>
+    </div>
+
+    <div v-if="input_type == 'text'">
+        <div class="input_oneline">
+            <label :for="input_id"><slot /></label>
+            <input
+                :id="input_id"
+                type="text"
                 :value="modelValue"
                 @input="$emit('update:modelValue', $event.target.value)"
             />
@@ -381,6 +395,8 @@ const props = defineProps({
     collection_id: Number,
     collections: Array,
     num: Number,
+    minumum: Number,
+    maximum: Number,
     name: { type: String, default: "name" },
 });
 
