@@ -3,7 +3,10 @@
         Edit Modern Collection: {{ form.name }}
     </h1>
 
-    <form @submit.prevent="submit">
+    <form
+        @submit.prevent="submit"
+        style="min-height: 95%; background-color: #eee"
+    >
         <fieldset class="editcollectioncontainer">
             <input type="hidden" input_id="id" v-model="form.id" />
             <EthInput input_type="text" input_id="name" v-model="form.name"

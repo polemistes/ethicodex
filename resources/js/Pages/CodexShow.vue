@@ -32,705 +32,676 @@
         </button>
     </div>
 
-    <div v-if="activetab == 'general'" class="showcodexcontainer">
-        <div class="showcodex_generalgrid">
-            <div class="show_published">
-                <label>Published</label>
-                <p>{{ document.published ? "Yes" : "No" }}</p>
-            </div>
-
-            <div class="show_standard">
-                <label>Standard name</label>
-                <p>{{ document.standard_name }}</p>
-            </div>
-
-            <div class="show_other">
-                <label>Other Names</label>
-                <p>{{ document.other_names }}</p>
-            </div>
-
-            <div class="show_publ">
-                <label>Publication</label>
-                <p>{{ document.publication }}</p>
-            </div>
-
-            <div class="show_shelf">
-                <label>Current Shelfmarks</label>
-                <p>{{ document.current_shelfmark }}</p>
-            </div>
-
-            <div class="show_trismegistos">
-                <label>Trismegistos ID</label>
-                <p>{{ document.trismegistos_id }}</p>
-            </div>
-
-            <div class="show_bibliography">
-                <label>Bibliography</label>
-                <div>{{ document.bibliography }}</div>
-            </div>
-        </div>
-
-        <!--
-            <div class="showcodex_contentgrid">
-                <div class="show_title">
-                    <EthInput
-                        input_type="text"
-                        input_id="title"
-                        v-model="form.title"
-                        >Title of Work</EthInput
-                    >
-                </div>
-
-                <div class="show_author">
-                    <EthInput
-                        input_type="text"
-                        input_id="ancient_author"
-                        v-model="form.ancient_author"
-                        >Author</EthInput
-                    >
-                </div>
-
-                <div class="show_genre">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="genres"
-                        :choices="genres_all"
-                        v-model="form.genres"
-                    >
-                        Genre
-                    </EthInput>
-                </div>
-
-                <div class="show_content">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="tags"
-                        :choices="tags_all"
-                        v-model="form.tags"
-                    >
-                        Content Tags
-                    </EthInput>
-                </div>
-
-                <div class="show_contdesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="content_description"
-                        v-model="form.content_description"
-                        >Description of Content</EthInput
-                    >
-                </div>
-
-                <div class="show_language">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="languages"
-                        :choices="languages_all"
-                        v-model="form.languages"
-                    >
-                        Languages
-                    </EthInput>
-                </div>
-            </div>
-
-            <div class="showcodex_date">
-                <div class="show_early">
-                    <EthInput
-                        input_type="year"
-                        input_id="start_year"
-                        v-model="form.start_year"
-                        >Earliest Date</EthInput
-                    >
-                </div>
-
-                <div class="show_late">
-                    <EthInput
-                        input_type="year"
-                        input_id="end_year"
-                        v-model="form.end_year"
-                        >Latest Date</EthInput
-                    >
-                </div>
-
-                <div class="show_basis">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="dating_methods"
-                        :choices="dating_methods_all"
-                        v-model="form.dating_methods"
-                    >
-                        Basis of Date
-                    </EthInput>
-                </div>
-
-                <div class="show_certainty">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="dating_certainty"
-                        :choices="dating_certainties"
-                        v-model="form.dating_certainty_id"
-                    >
-                        Certainty of Date
-                    </EthInput>
-                </div>
-
-                <div class="show_datecomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="dating_comment"
-                        v-model="form.dating_comment"
-                        >Comments on Date</EthInput
-                    >
-                </div>
-            </div>
-
-            <div class="showcodex_comments">
-                <div class="show_internal">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="internal_comment"
-                        v-model="form.internal_comment"
-                        >Internal Comments</EthInput
-                    >
-                </div>
-
-                <div class="show_general">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="general_comment"
-                        v-model="form.general_comment"
-                        >General Comments</EthInput
-                    >
-                </div>
-            </div>
-
-            <button class="submitbutton" @click.prevent="submit">
-                Store All Changes
-            </button>
--->
-    </div>
-    <!--
-        <fieldset v-if="activetab == 'codicology'" class="showcodexcontainer">
-            <div class="showcodex_materiality">
-                <div class="show_material">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="material"
-                        :choices="materials"
-                        v-model="form.material_id"
-                    >
-                        Material
-                    </EthInput>
-                </div>
-
-                <div class="show_ink">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="ink"
-                        :choices="inks"
-                        v-model="form.ink_id"
-                    >
-                        Ink
-                    </EthInput>
-                </div>
-
-                <div class="show_cover">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="cover"
-                        :choices="covers"
-                        v-model="form.cover_id"
-                    >
-                        Cover
-                    </EthInput>
-                </div>
-
-                <div class="show_structure">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="quire_structure"
-                        :choices="quire_structures"
-                        v-model="form.quire_structure_id"
-                    >
-                        Quire Structure
-                    </EthInput>
-                </div>
-
-                <div v-if="form.quire_structure_id == 1" class="show_numquire">
-                    <label :for="bifolia">Number of Bifolia in the Quire</label>
-                    <div>
-                        <p>
-                            <input
-                                type="number"
-                                id="bifolia"
-                                min="1"
-                                required
-                                v-model="form.bifolia[0]"
-                            />
-                        </p>
+    <div style="min-height: 95%; background-color: #eee">
+        <div v-if="activetab == 'general'" class="showcodexcontainer">
+            <fieldset class="showcodex_generalgrid">
+                <legend class="showcodex_sectionheading">
+                    Publication Info
+                </legend>
+                <div
+                    v-if="
+                        props.auth == null
+                            ? 0
+                            : props.auth.user.role.id >= 2
+                            ? 1
+                            : 0
+                    "
+                    class="show_published"
+                >
+                    <label>Published</label>
+                    <div class="showcodex_bool">
+                        {{ document.published ? "Yes" : "No" }}
                     </div>
                 </div>
 
-                <div v-if="form.quire_structure_id == 2" class="show_numquire">
-                    <EthInput
-                        input_type="number"
-                        input_id="quire_number"
-                        v-model="form.quire_number"
-                        >Number of Quires</EthInput
+                <div class="show_standard">
+                    <label>Standard name</label>
+                    <div class="showcodex_string">
+                        {{ document.standard_name }}
+                    </div>
+                </div>
+
+                <div class="show_other">
+                    <label>Other Names</label>
+                    <div class="showcodex_text" v-html="document.other_names" />
+                </div>
+
+                <div class="show_publ">
+                    <label>Publication</label>
+                    <div
+                        class="showcodex_string"
+                        v-html="document.publication"
+                    />
+                </div>
+
+                <div class="show_shelf">
+                    <label>Current Shelfmarks</label>
+                    <div class="showcodex_string">
+                        {{ document.current_shelfmarks }}
+                    </div>
+                </div>
+
+                <div class="show_trismegistos">
+                    <label>Trismegistos ID</label>
+                    <div class="showcodex_string_short">
+                        {{ document.trismegistos_id }}
+                    </div>
+                </div>
+
+                <div class="show_bibliography">
+                    <label>Bibliography</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.bibliography"
+                    />
+                </div>
+            </fieldset>
+
+            <fieldset class="showcodex_contentgrid">
+                <legend class="showcodex_sectionheading">Content</legend>
+                <div class="show_title">
+                    <label>Title of Work</label>
+                    <div class="showcodex_string">{{ document.title }}</div>
+                </div>
+
+                <div class="show_author">
+                    <label>Author</label>
+                    <div class="showcodex_string">
+                        {{ document.ancient_author }}
+                    </div>
+                </div>
+
+                <div class="show_genre">
+                    <label>Genre</label>
+                    <div
+                        v-for="genre in genres"
+                        :key="genre.id"
+                        class="showcodex_multi_stack"
                     >
-                    <div class="show_quirenum">
-                        <label v-if="form.quire_number" :for="bifolia"
-                            >Number of Bifolia in each Quire</label
-                        >
+                        {{ genre.name }}
+                    </div>
+                </div>
+
+                <div class="show_content">
+                    <label>Content Tags</label>
+
+                    <div class="showcodex_multi">
                         <div
-                            v-for="n in range(1, parseInt(form.quire_number))"
-                            :key="n"
+                            v-for="tag in tags"
+                            :key="tag.id"
+                            class="showcodex_multi_line"
                         >
-                            <p>
-                                {{ n }}:
-                                <input
-                                    type="number"
-                                    min="1"
-                                    required
-                                    v-model="form.bifolia[n - 1]"
-                                />
-                            </p>
+                            {{ tag.name }}
                         </div>
                     </div>
                 </div>
 
-                <div v-if="form.quire_structure_id == 3" class="show_numquire">
-                    <EthInput
-                        input_type="number"
-                        input_id="quire_number"
-                        v-model="form.quire_number"
-                        >Number of Quires</EthInput
-                    >
+                <div class="show_contdesc">
+                    <label>Description of Content</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.content_description"
+                    />
                 </div>
-                <div v-if="form.quire_structure_id == 3" class="show_quirenum">
+
+                <div class="show_language">
+                    <label>Language(s)</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="language in languages"
+                            :key="language.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ language.name }}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="showcodex_date">
+                <legend class="showcodex_sectionheading">Date</legend>
+                <div class="show_early">
+                    <label>Earliest Date (AD)</label>
+                    <div class="showcodex_string">
+                        {{ document.start_year }}
+                    </div>
+                </div>
+
+                <div class="show_late">
+                    <label>Latest Date (AD)</label>
+                    <div class="showcodex_string">{{ document.end_year }}</div>
+                </div>
+
+                <div class="show_basis">
+                    <label>Basis of Date</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="dating_method in dating_methods"
+                            :key="dating_method.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ dating_method.name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_certainty">
+                    <label>Certainty of Date</label>
+                    <div class="showcodex_string">
+                        {{
+                            dating_certainty.length > 0
+                                ? dating_certainty[0].name
+                                : ""
+                        }}
+                    </div>
+                </div>
+
+                <div class="show_datecomm">
+                    <label>Comments on Date</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.dating_comment"
+                    />
+                </div>
+            </fieldset>
+
+            <fieldset class="showcodex_comments">
+                <legend class="showcodex_sectionheading">Comments</legend>
+                <div class="show_internal">
+                    <label>Internal Comments</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.internal_comment"
+                    />
+                </div>
+
+                <div class="show_general">
+                    <label>General Comments</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.general_comment"
+                    />
+                </div>
+            </fieldset>
+        </div>
+
+        <div v-if="activetab == 'codicology'" class="showcodexcontainer">
+            <fieldset class="showcodex_materiality">
+                <legend class="showcodex_sectionheading">Materiality</legend>
+                <div class="show_material">
+                    <label>Material</label>
+                    <div class="showcodex_string_short">
+                        {{ material.length > 0 ? material[0].name : "" }}
+                    </div>
+                </div>
+
+                <div class="show_ink">
+                    <label>Ink</label>
+                    <div class="showcodex_string_short">
+                        {{ ink.length > 0 ? ink[0].name : "" }}
+                    </div>
+                </div>
+
+                <div class="show_cover">
+                    <label>Cover</label>
+                    <div class="showcodex_string_short">
+                        {{ cover.length > 0 ? cover[0].name : "" }}
+                    </div>
+                </div>
+
+                <div class="show_structure">
+                    <label>Quire Structure</label>
+                    <div class="showcodex_string_short">
+                        {{
+                            quire_structure.length > 0
+                                ? quire_structure[0].name
+                                : ""
+                        }}
+                    </div>
+                </div>
+
+                <div
+                    v-if="document.quire_structure_id == 1"
+                    class="show_numquire"
+                >
+                    <label for="bifolia">Number of Bifolia in the Quire</label>
+                    <div class="showcodex_string_short">
+                        {{ bifolia[0] }}
+                    </div>
+                </div>
+
+                <div
+                    v-if="document.quire_structure_id == 2"
+                    class="show_numquire"
+                >
+                    <label>Number of Quires</label>
+                    <div class="showcodex_string_short">
+                        {{ document.quire_number }}
+                    </div>
+                </div>
+
+                <div
+                    v-if="document.quire_structure_id == 2"
+                    class="show_quirenum"
+                >
+                    <label v-if="document.quire_number" :for="bifolia"
+                        >Number of Bifolia in each Quire</label
+                    >
+                    <div class="showcodex_multi">
+                        <div
+                            class="showcodex_multi_line"
+                            v-for="n in range(
+                                1,
+                                parseInt(document.quire_number)
+                            )"
+                            :key="n"
+                        >
+                            {{ n }}: {{ bifolia[n - 1] }}
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    v-if="document.quire_structure_id == 3"
+                    class="show_numquire"
+                >
+                    <label>Number of Quires</label>
+                    <div class="showcodex_string_short">
+                        {{ document.quire_number }}
+                    </div>
+                </div>
+
+                <div
+                    v-if="document.quire_structure_id == 3"
+                    class="show_quirenum"
+                >
                     <label :for="bifolia"
                         >Number of Bifolia in each Quire</label
                     >
-                    <div>
-                        <p>
-                            <input
-                                type="number"
-                                id="bifolia"
-                                min="1"
-                                required
-                                v-model="form.bifolia[0]"
-                            />
-                        </p>
+                    <div class="showcodex_string_short">
+                        {{ bifolia[0] }}
                     </div>
                 </div>
 
                 <div class="show_quirecomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="quire_comment"
-                        v-model="form.quire_comment"
-                        >Comments on Quire(s)</EthInput
-                    >
-                </div>
-
-                <div class="show_bindingdesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="binding_description"
-                        v-model="form.binding_description"
-                        >Binding Description</EthInput
-                    >
-                </div>
-            </div>
-
-            <div class="showcodex_measurements">
-                <div class="show_dimknown">
-                    <label :for="page_dimensions_known"
-                        >Page Dimensions Known</label
-                    >
-                    <input
-                        :id="page_dimensions_known"
-                        type="checkbox"
-                        v-model="form.page_dimensions_known"
+                    <label>Comments on Quire(s)</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.quire_comment"
                     />
                 </div>
 
-                <template v-if="!form.page_dimensions_known">
+                <div class="show_bindingdesc">
+                    <label>Description of Binding</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.binding_description"
+                    />
+                </div>
+            </fieldset>
+
+            <fieldset class="showcodex_measurements">
+                <legend class="showcodex_sectionheading">Measurements</legend>
+                <template v-if="!document.page_dimensions_known">
                     <div class="show_pagewidth">
-                        <EthInput
-                            input_type="text"
-                            input_id="fragment_width"
-                            v-model="form.fragment_width"
-                            >Fragment Width (cm)</EthInput
-                        >
+                        <label>Fragmen Width (cm)</label>
+                        <div class="showcodex_string_short">
+                            {{ document.fragment_width }}
+                        </div>
                     </div>
                     <div class="show_pageheight">
-                        <EthInput
-                            input_type="text"
-                            input_id="fragment_height"
-                            v-model="form.fragment_height"
-                            >Fragment Height (cm)</EthInput
-                        >
+                        <label>Fragment Height (cm)</label>
+                        <div class="showcodex_string_short">
+                            {{ document.fragment_height }}
+                        </div>
                     </div>
                 </template>
 
-                <template v-if="form.page_dimensions_known">
+                <template v-if="document.page_dimensions_known">
                     <div class="show_pagewidth">
-                        <EthInput
-                            input_type="text"
-                            input_id="full_page_width"
-                            v-model="form.full_page_width"
-                            >Full Page Width (cm)</EthInput
-                        >
+                        <label>Full Page Width (cm)</label>
+                        <div class="showcodex_string_short">
+                            {{ document.full_page_width }}
+                        </div>
                     </div>
                     <div class="show_pageheight">
-                        <EthInput
-                            input_type="text"
-                            input_id="full_page_height"
-                            v-model="form.full_page_height"
-                            >Full Page Height (cm)</EthInput
-                        >
+                        <label>Full Page Height (cm)</label>
+                        <div class="showcodex_string_short">
+                            {{ document.full_page_height }}
+                        </div>
                     </div>
                     <div class="show_pratio">
                         <EthRatio
-                            :dividend="form.full_page_width"
-                            :divisor="form.full_page_height"
-                            >Full Page Width/Height Ratio</EthRatio
+                            :dividend="document.full_page_width"
+                            :divisor="document.full_page_height"
+                            >Ratio</EthRatio
                         >
                     </div>
 
-                    <div class="show_stable">
-                        <div>
-                            <label :for="textbox_size_stable"
-                                >Size of Textbox is Stable</label
-                            >
-                            <input
-                                :id="textbox_size_stable"
-                                type="checkbox"
-                                v-model="form.textbox_size_stable"
-                            />
-                        </div>
-                    </div>
-
-                    <template v-if="form.textbox_size_stable">
+                    <template v-if="document.textbox_size_stable">
                         <div class="show_uppmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="upper_margin"
-                                v-model="form.upper_margin"
-                                >Upper Margin (cm)</EthInput
-                            >
+                            <label>Upper Margin (cm)</label>
+                            <div class="showcodex_string_short">
+                                {{ document.upper_margin }}
+                            </div>
                         </div>
                         <div class="show_lowmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="lower_margin"
-                                v-model="form.lower_margin"
-                                >Lower Margin (cm)</EthInput
-                            >
+                            <label>Lower Margin (cm)</label>
+                            <div class="showcodex_string_short">
+                                {{ document.lower_margin }}
+                            </div>
                         </div>
                         <div class="show_ulratio">
                             <EthRatio
-                                :dividend="form.upper_margin"
-                                :divisor="form.lower_margin"
-                                >Upper/Lower Margin Ratio</EthRatio
+                                :dividend="document.upper_margin"
+                                :divisor="document.lower_margin"
+                                >Ratio</EthRatio
                             >
                         </div>
 
                         <div class="show_innmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="inner_margin"
-                                v-model="form.inner_margin"
-                                >Inner Margin (cm)</EthInput
-                            >
+                            <label>Inner Margin (cm)</label>
+                            <div class="showcodex_string_short">
+                                {{ document.inner_margin }}
+                            </div>
                         </div>
                         <div class="show_outmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="outer_margin"
-                                v-model="form.outer_margin"
-                                >Outer Margin (cm)</EthInput
-                            >
+                            <label>Outer Margin</label>
+                            <div class="showcodex_string_short">
+                                {{ document.outer_margin }}
+                            </div>
                         </div>
                         <div class="show_ioratio">
                             <EthRatio
-                                :dividend="form.inner_margin"
-                                :divisor="form.outer_margin"
-                                >Inner/Outer Margin Ratio</EthRatio
+                                :dividend="document.inner_margin"
+                                :divisor="document.outer_margin"
+                                >Ratio</EthRatio
                             >
                         </div>
 
                         <div class="show_blockwidth">
-                            <EthInput
-                                input_type="text"
-                                input_id="full_text_block_width"
-                                v-model="form.full_text_block_width"
-                                >Full Text Block Width (cm)</EthInput
-                            >
+                            <label>Full Text Block Width (cm)</label>
+                            <div class="showcodex_string_short">
+                                {{ document.full_text_block_width }}
+                            </div>
                         </div>
                         <div class="show_blockheight">
-                            <EthInput
-                                input_type="text"
-                                input_id="full_text_block_height"
-                                v-model="form.full_text_block_height"
-                                >Full Text Block Height (cm)</EthInput
-                            >
+                            <label>Full Text Block Height (cm)</label>
+                            <div class="showcodex_string_short">
+                                {{ document.full_text_block_height }}
+                            </div>
                         </div>
                         <div class="show_bratio">
                             <EthRatio
-                                :dividend="form.full_text_block_width"
-                                :divisor="form.full_text_block_height"
-                                >Full Text Block Width/Height Ratio</EthRatio
+                                :dividend="document.full_text_block_width"
+                                :divisor="document.full_text_block_height"
+                                >Ratio</EthRatio
                             >
                         </div>
                     </template>
                 </template>
 
                 <div class="show_meascomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="measurement_comment"
-                        v-model="form.measurement_comment"
-                        >Comments on Measurements</EthInput
-                    >
+                    <label>Comments on Measurements</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.measurement_comment"
+                    />
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="showcodex_textualfeatures">
+            <fieldset class="showcodex_textualfeatures">
+                <legend class="showcodex_sectionheading">
+                    Textual Features
+                </legend>
                 <div class="show_scripts">
-                    <EthInput
-                        input_type="multi_choice_scripts"
-                        input_id="scripts"
-                        :choices="scripts_all"
-                        v-model="form.scripts"
-                    >
-                        Scripts
-                    </EthInput>
+                    <div v-if="checklanguage(1)">
+                        <label>Greek Script(s)</label>
+                        <div class="showcodex_multi">
+                            <template
+                                v-for="script in scripts"
+                                :key="script.id"
+                            >
+                                <div
+                                    v-if="script.language_id == 1"
+                                    class="showcodex_multi_line"
+                                >
+                                    {{ script.name }}
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div v-if="checklanguage(2)" style="padding-top: 10px">
+                        <label>Latin Script(s)</label>
+                        <div class="showcodex_multi">
+                            <template
+                                v-for="script in scripts"
+                                :key="script.id"
+                            >
+                                <div
+                                    v-if="script.language_id == 2"
+                                    class="showcodex_multi_line"
+                                >
+                                    {{ script.name }}
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                 </div>
                 <div class="show_numhands">
-                    <EthInput
-                        input_type="number"
-                        input_id="hand_number"
-                        v-model="form.hand_number"
-                        >Number of Hands</EthInput
-                    >
+                    <label>Number of Hands</label>
+                    <div class="showcodex_string_short">
+                        {{ document.hand_number }}
+                    </div>
                 </div>
                 <div class="show_scriptdesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="script_description"
-                        v-model="form.script_description"
-                        >Description of Scripts</EthInput
-                    >
+                    <label>Description of Scripts</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.script_description"
+                    />
                 </div>
                 <div class="show_paratext">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="paratexts"
-                        :choices="paratexts_all"
-                        v-model="form.paratexts"
-                    >
-                        Paratexts
-                    </EthInput>
+                    <label>Paratexts</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="paratext in paratexts"
+                            :key="paratext.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ paratext.name }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="show_paradesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="paratext_description"
-                        v-model="form.paratext_description"
-                        >Description of Paratexts</EthInput
-                    >
+                    <label>Description of Paratexts</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.paratext_description"
+                    />
                 </div>
+
                 <div class="show_punctuation">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="punctuations"
-                        :choices="punctuations_all"
-                        v-model="form.punctuations"
-                    >
-                        Punctuation
-                    </EthInput>
+                    <label>Punctuation</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="punctuation in punctuations"
+                            :key="punctuation.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ punctuation.name }}
+                        </div>
+                    </div>
                 </div>
                 <div class="show_diacritics">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="diacritics"
-                        :choices="diacritics_all"
-                        v-model="form.diacritics"
-                    >
-                        Diacritics
-                    </EthInput>
+                    <label>Diacritics</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="diacritic in diacritics"
+                            :key="diacritic.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ diacritic.name }}
+                        </div>
+                    </div>
                 </div>
                 <div class="show_diacritdesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="diacritic_description"
-                        v-model="form.diacritic_description"
-                        >Description of Diacritics</EthInput
-                    >
+                    <label>Description of Diacritics</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.diacritic_description"
+                    />
                 </div>
                 <div class="show_critical">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="critical_symbols"
-                        :choices="critical_symbols_all"
-                        v-model="form.critical_symbols"
-                    >
-                        Critical Symbols
-                    </EthInput>
+                    <label>Critical Symbols</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="critical_symbol in critical_symbols"
+                            :key="critical_symbol.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ critical_symbol.name }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="show_decorative">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="decorations"
-                        :choices="decorations_all"
-                        v-model="form.decorations"
-                    >
-                        Decorative Symbols
-                    </EthInput>
+                    <label>Decorative Symbols</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="decoration in decorations"
+                            :key="decoration.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ decoration.name }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="show_decodesc">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="decoration_description"
-                        v-model="form.decoration_description"
-                        >Description of Decorative Symbols</EthInput
-                    >
+                    <label>Description of Decorative Symbols</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.decoration_description"
+                    />
                 </div>
 
                 <div class="show_pagination">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="pagination"
-                        :choices="paginations"
-                        v-model="form.pagination_id"
-                    >
-                        Pagination
-                    </EthInput>
+                    <label>Pagination</label>
+                    <div class="showcodex_string_short">
+                        {{ pagination.length > 0 ? pagination[0].name : "" }}
+                    </div>
                 </div>
 
                 <div class="show_quiresig">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="quire_signature"
-                        :choices="quire_signatures"
-                        v-model="form.quire_signature_id"
-                    >
-                        Quire Signatures
-                    </EthInput>
+                    <label>Quire Signatures</label>
+                    <div class="showcodex_string_short">
+                        {{
+                            quire_signature.length > 0
+                                ? quire_signature[0].name
+                                : ""
+                        }}
+                    </div>
                 </div>
-            </div>
+            </fieldset>
+        </div>
 
-            <button class="submitbutton" @click="submit">
-                Store All Changes
-            </button>
-        </fieldset>
-
-        <fieldset v-if="activetab == 'conservation'" class="showcodexcontainer">
-            <div class="showcodex_conservanalys">
+        <div v-if="activetab == 'conservation'" class="showcodexcontainer">
+            <fieldset class="showcodex_conservanalys">
+                <legend class="showcodex_sectionheading">
+                    Conservation and Analysis
+                </legend>
                 <div class="show_storage">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="storage_condition"
-                        :choices="storage_conditions"
-                        v-model="form.storage_condition_id"
-                    >
-                        Storage Condition
-                    </EthInput>
+                    <label>Storage Condition</label>
+                    <div class="showcodex_string">
+                        {{
+                            storage_condition.length > 0
+                                ? storage_condition[0].name
+                                : ""
+                        }}
+                    </div>
                 </div>
                 <div class="show_conshist">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="conservation_history"
-                        v-model="form.conservation_history"
-                        >Conservation History</EthInput
-                    >
+                    <label>Conservation History</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.conservation_history"
+                    />
                 </div>
                 <div class="show_scientific">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="analyses"
-                        :choices="analyses_all"
-                        v-model="form.analyses"
+                    <label>Scientific Analyses</label>
+                    <div
+                        v-for="analysis in analyses"
+                        :key="analysis.id"
+                        class="showcodex_multi_stack"
                     >
-                        Scientific Analysis
-                    </EthInput>
+                        {{ analysis.name }}
+                    </div>
                 </div>
+
                 <div class="analyscomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="analyses_comment"
-                        v-model="form.analyses_comment"
-                        >Comments on Analysis</EthInput
-                    >
+                    <label>Comments on Analysis</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.analyses_comment"
+                    />
                 </div>
-            </div>
+            </fieldset>
+        </div>
 
-            <button class="submitbutton" @click.prevent="submit">
-                Store All Changes
-            </button>
-        </fieldset>
-
-        <fieldset v-if="activetab == 'provenance'" class="showcodexcontainer">
-            <div class="showcodex_provenance">
+        <div v-if="activetab == 'provenance'" class="showcodexcontainer">
+            <fieldset class="showcodex_provenance">
+                <legend class="showcodex_sectionheading">Provenance</legend>
                 <div class="show_sciex">
                     <label :for="scientifically_excavated"
                         >Scientifically Excavated</label
                     >
-                    <input
-                        :id="scientifically_excavated"
-                        type="checkbox"
-                        v-model="form.scientifically_excavated"
-                    />
+                    <div class="showcodex_bool">
+                        {{ document.scientifically_excavated ? "Yes" : "No" }}
+                    </div>
                 </div>
 
                 <div class="show_excomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="excavation_comment"
-                        v-model="form.excavation_comment"
-                    >
-                        Comments on Excavation
-                    </EthInput>
+                    <label>Comments on Excavation</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.excavation_comment"
+                    />
                 </div>
 
                 <div class="show_anciprov">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="ancient_provenance"
-                        :choices="ancient_provenances"
-                        v-model="form.ancient_provenance_id"
-                    >
-                        Ancient Provenance
-                    </EthInput>
+                    <label>Ancient Provenance</label>
+                    <div class="showcodex_string">
+                        {{
+                            ancient_provenance.length > 0
+                                ? ancient_provenance[0].name
+                                : ""
+                        }}
+                    </div>
                 </div>
 
                 <div class="show_ancicert">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="ancient_provenance_certainty"
-                        :choices="ancient_provenance_certainties"
-                        v-model="form.ancient_provenance_certainty_id"
-                    >
-                        Certainty of A. Provenance
-                    </EthInput>
+                    <label>Certainty of Ancient Provenance</label>
+                    <div class="showcodex_string_short">
+                        {{
+                            ancient_provenance_certainty.length > 0
+                                ? ancient_provenance_certainty[0].name
+                                : ""
+                        }}
+                    </div>
                 </div>
 
                 <div class="show_ancicomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="ancient_provenance_comment"
-                        v-model="form.ancient_provenance_comment"
-                    >
-                        Comments on Ancient Provenance
-                    </EthInput>
+                    <label>Comments on Ancient Provenance</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.ancient_provenance_comment"
+                    />
                 </div>
--->
-    <!--
+
+                <!--
                         
             <EthInput
                 input_type="multi_choice"
@@ -741,107 +712,131 @@
                 Modern Collections
             </EthInput>
 -->
-    <!--
+
                 <div class="show_legalclass">
-                    <EthInput
-                        input_type="legal_choice"
-                        input_id="legal_classification"
-                        :choices="legal_classifications"
-                        v-model="form.legal_classification_id"
-                    >
-                        Legal Classification
-                    </EthInput>
+                    <label>Legal Classification</label>
+                    <div class="showcodex_string">
+                        {{
+                            legal_classification.length > 0
+                                ? legal_classification[0].name
+                                : ""
+                        }}
+                    </div>
                 </div>
 
                 <div class="show_legalcomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="legal_classification_explanation"
-                        v-model="form.legal_classification_explanation"
-                        >Comments on Legal Classification</EthInput
-                    >
+                    <label>Comments on Legal Classification</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.legal_classification_explanation"
+                    />
                 </div>
 
                 <div class="show_transactions">
-                    <EthInput
-                        input_type="multi_choice"
-                        input_id="purchases"
-                        :choices="purchases_all"
-                        v-model="form.purchases"
+                    <label>Transactions</label>
+                    <div
+                        v-for="purchase in purchases"
+                        :key="purchase.id"
+                        class="showcodex_multi_stack"
                     >
-                        Transactions
-                    </EthInput>
+                        <button @click="seltrans = purchase">Info</button>
+                        {{ purchase.name }}
+                    </div>
                 </div>
-            </div>
-            <button class="submitbutton" @click.prevent="submit">
-                Store All Changes
-            </button>
-        </fieldset>
 
-        <fieldset v-if="activetab == 'images'" class="showcodexcontainer">
-            <div class="showcodex_images">
+                <div class="show_transinfo">
+                    <label>Transaction Information</label>
+                    <div class="showcodex_text">
+                        <div v-if="Object.keys(seltrans).length !== 0">
+                            <h1>{{ seltrans.name }}</h1>
+                            <p>
+                                Date:
+                                <span v-if="seltrans.year">{{
+                                    seltrans.year
+                                }}</span>
+                                <span v-if="seltrans.month"
+                                    >-{{ seltrans.month }}</span
+                                >
+                                <span v-if="seltrans.day"
+                                    >-{{ seltrans.day }}</span
+                                >
+                            </p>
+                            <span v-if="seltrans.description">
+                                <p>Description: {{ seltrans.description }}</p>
+                            </span>
+                            <h2>Codices in Transaction</h2>
+                            <p
+                                v-for="codex in seltrans.documents"
+                                :key="codex.id"
+                            >
+                                <Link
+                                    as="button"
+                                    type="button"
+                                    :href="'/codex_show/' + codex.id"
+                                    style="
+                                        margin-right: 5px;
+                                        padding: 2px 3px
+                                        font-size: 12px;
+                                    "
+                                    >Show
+                                </Link>
+                                {{ codex.standard_name }}
+                            </p>
+                            <h2>Parties to the Transaction</h2>
+                            <p
+                                v-for="party in seltrans.purchase_parties"
+                                :key="party.id"
+                                :title="party.description"
+                            >
+                                {{ party.name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div v-if="activetab == 'images'" class="showcodexcontainer">
+            <fieldset class="showcodex_images">
+                <legend class="showcodex_sectionheading">Images</legend>
                 <div class="show_img">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="images_info"
-                        v-model="form.images_info"
-                        >Image Information</EthInput
-                    >
+                    <label>Image Information</label>
+                    <div class="showcodex_text" v-html="document.images_info" />
                 </div>
-            </div>
 
-            <button class="submitbutton" @click.prevent="submit">
-                Store All Changes
-            </button>
-
-            <label class="labelpadding" for="images">Upload Images</label>
-            <input
-                type="file"
-                @change="addimages($event.target.files)"
-                multiple
-                ref="loadImages"
-            />
-
-            <div>
-                <div
-                    class="box"
-                    v-for="(image, index) in form.images"
-                    :key="image.id"
-                >
-                    <a :href="'/storage/' + image.filename" target="_blank">
-                        <img :src="'/storage/' + image.filename" height="400" />
-                    </a>
-                    <button @click.prevent="delimage(image)">Delete</button>
-                    <label
-                        class="labelpadding"
-                        :for="'image_description_' + index"
-                        >Description:
-                    </label>
-                    <textarea
-                        :id="'image_description_' + index"
-                        v-model="image.description"
-                    />
-
-                    <EthInput
-                        input_type="text"
-                        input_id="image_source"
-                        v-model="image.source"
+                <div class="images_rows">
+                    <div
+                        class="box"
+                        v-for="(image, index) in images"
+                        :key="image.id"
                     >
-                        Source
-                    </EthInput>
+                        <a :href="'/storage/' + image.filename" target="_blank">
+                            <img
+                                :src="'/storage/' + image.filename"
+                                height="360"
+                            />
+                        </a>
+                        <label
+                            class="labelpadding"
+                            :for="'image_description_' + index"
+                            >Description:
+                        </label>
+                        <div
+                            class="showcodex_text"
+                            v-html="image.description"
+                        />
+                        <label>Source</label>
+                        <div class="showcodex_string" v-html="image.source" />
 
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="license"
-                        :choices="licenses"
-                        v-model="image.license_id"
-                    >
-                        License:
-                    </EthInput>
+                        <label>License</label>
+                        <div class="showcodex_string">
+                            {{ image.license ? image.license.name : "" }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-        -->
+            </fieldset>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -851,39 +846,56 @@ import EthRatio from "../Components/EthRatio.vue";
 
 const props = defineProps({
     analyses: Array,
-    ancient_provenance: Object,
-    ancient_provenance_certainty: Object,
-    cover: Object,
+    ancient_provenance: Array,
+    ancient_provenance_certainty: Array,
+    cover: Array,
     critical_symbols: Array,
-    dating_certainty: Object,
+    dating_certainty: Array,
     dating_methods: Array,
     decorations: Array,
     diacritics: Array,
     document: Object,
     genres: Array,
     images: Array,
-    ink: Object,
+    ink: Array,
     languages: Array,
-    legal_classification: Object,
-    licenses: Array,
-    material: Object,
+    legal_classification: Array,
+    material: Array,
     modern_collections: Array,
     newimages: Array,
-    pagination: Object,
+    pagination: Array,
     paratexts: Array,
-    published: Boolean,
     punctuations: Array,
     purchases: Array,
     quire_signature: Array,
-    quire_structure: Object,
+    quire_structure: Array,
     scripts: Array,
-    storage_condition: Object,
+    storage_condition: Array,
     tags: Array,
+    auth: Object,
 });
+
+const bifolia = props.document.bifolia
+    ? JSON.parse(props.document.bifolia)
+    : [];
+if (!bifolia) {
+    bifolia[0] = 0;
+}
 
 const loadImages = ref(null);
 
 let activetab = ref("general");
+let seltrans = ref({});
+
+function checklanguage(lang) {
+    let found = false;
+    for (const s of props.scripts) {
+        if (s.language_id == lang) {
+            found = true;
+        }
+    }
+    return found;
+}
 
 function range(start, end) {
     var foo = [];
@@ -931,16 +943,6 @@ button.selected {
     background-color: rgb(119, 128, 111);
 }
 
-.submitbutton {
-    font-size: 20px;
-    width: auto;
-    height: auto;
-    padding: 20px;
-    border-radius: 15px;
-    align-self: center;
-    margin: 20px;
-}
-
 .showcodexcontainer {
     display: flex;
     background-color: #eee;
@@ -950,15 +952,18 @@ button.selected {
     font-size: 16px;
     flex-direction: column;
     width: 100%;
+    height: auto;
     justify-content: center;
 }
 
 .show_published {
     grid-area: published;
-    align-self: start;
+    justify-self: start;
 }
+
 .show_trismegistos {
     grid-area: trismegistos;
+    justify-self: start;
 }
 .show_standard {
     grid-area: standard;
@@ -978,11 +983,12 @@ button.selected {
 
 .showcodex_generalgrid {
     display: grid;
-    grid-template-columns: 1fr 1fr 4fr 4fr;
+    grid-template-columns: 1fr 2fr 4fr 4fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "published trismegistos standard other"
-        "published trismegistos standard other"
+        "published . . ."
+        "trismegistos standard standard other"
+        "trismegistos standard standard other"
         "publ publ publ other"
         "publ publ publ biblio"
         "shelf shelf shelf biblio"
@@ -1006,12 +1012,16 @@ button.selected {
 }
 .show_language {
     grid-area: language;
+    display: flex;
+    flex-direction: column;
 }
 .show_genre {
     grid-area: genre;
 }
 .show_content {
     grid-area: cont;
+    display: flex;
+    flex-direction: column;
 }
 
 .showcodex_contentgrid {
@@ -1041,6 +1051,8 @@ button.selected {
 }
 .show_basis {
     grid-area: basis;
+    display: flex;
+    flex-direction: column;
 }
 .show_certainty {
     grid-area: certainty;
@@ -1073,7 +1085,9 @@ button.selected {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
-    grid-template-areas: "general internal";
+    grid-template-areas:
+        "general internal"
+        "general published";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1100,6 +1114,8 @@ button.selected {
 }
 .show_quirenum {
     grid-area: quirenum;
+    display: flex;
+    flex-direction: column;
 }
 .show_quirecomm {
     grid-area: quirecomm;
@@ -1199,6 +1215,8 @@ button.selected {
 }
 .show_scripts {
     grid-area: scripts;
+    display: flex;
+    flex-direction: column;
 }
 .show_scriptdesc {
     grid-area: scriptdesc;
@@ -1208,24 +1226,34 @@ button.selected {
 }
 .show_paratext {
     grid-area: paratext;
+    display: flex;
+    flex-direction: column;
 }
 .show_paradesc {
     grid-area: paradesc;
 }
 .show_punctuation {
     grid-area: punctuation;
+    display: flex;
+    flex-direction: column;
 }
 .show_diacritics {
     grid-area: diacritics;
+    display: flex;
+    flex-direction: column;
 }
 .show_diacritdesc {
     grid-area: diacritdesc;
 }
 .show_critical {
     grid-area: critical;
+    display: flex;
+    flex-direction: column;
 }
 .show_decorative {
     grid-area: decorative;
+    display: flex;
+    flex-direction: column;
 }
 .show_decodesc {
     grid-area: decodesc;
@@ -1307,15 +1335,19 @@ button.selected {
     grid-area: legalcomm;
 }
 
+.show_transinfo {
+    grid-area: transinfo;
+}
+
 .showcodex_provenance {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 2fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
         "sciex anciprov ancicert"
         "excomm ancicomm ancicomm"
-        "transactions legalclass legalclass"
-        "transactions legalcomm legalcomm";
+        "legalclass legalcomm legalcomm"
+        "transactions transinfo transinfo";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1345,14 +1377,93 @@ button.selected {
 
 .box {
     padding: 10px;
-    background-color: lightslategrey;
+    background-color: #bbb;
     margin: 5px;
     display: flex;
     flex-direction: column;
+    width: fit-content;
 }
 
+.images_rows {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 .labelpadding {
     padding-top: 15px;
     padding-right: 15px;
+}
+
+.showcodex_sectionheading {
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 5px 15px;
+    font-size: 18px;
+}
+
+.showcodexcontainer label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.showcodex_string {
+    background-color: #ddd;
+    padding: 5px;
+    border-style: none;
+    border-radius: 5px;
+    min-height: 2em;
+}
+
+.showcodex_string_short {
+    background-color: #ddd;
+    padding: 5px;
+    border-style: none;
+    border-radius: 5px;
+    min-height: 2em;
+    width: 10em;
+}
+
+.showcodex_text {
+    background-color: #ddd;
+    padding: 10px;
+    border-style: none;
+    border-radius: 5px;
+    min-height: 5em;
+}
+
+.showcodex_bool {
+    background-color: #ddd;
+    padding: 5px;
+    border-style: none;
+    border-radius: 5px;
+    min-height: 2em;
+    width: 5em;
+}
+
+.showcodex_multi {
+    display: inline-block;
+}
+
+.showcodex_multi_line {
+    display: inline-block;
+    background-color: #eee; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: fit-content; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 5px 10px 5px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 16px; /* Changing font size */
+}
+
+.showcodex_multi_stack {
+    background-color: #eee; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: auto; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 5px 10px 5px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 16px; /* Changing font size */
 }
 </style>

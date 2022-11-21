@@ -47,15 +47,17 @@
         <label :for="input_id"><slot /></label>
     </div>
 
-    <div v-if="input_type == 'year'" class="input_year">
+    <div v-if="input_type == 'year'" class="input_oneline">
         <label :for="input_id"><slot /></label>
-        AD
-        <input
-            :id="input_id"
-            type="text"
-            :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)"
-        />
+        <div class="input_ad_year">
+            AD
+            <input
+                :id="input_id"
+                type="text"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
+        </div>
     </div>
 
     <div v-if="input_type == 'textarea'" class="input_area">
@@ -74,7 +76,7 @@
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
         >
-            <option value=""></option>
+            <option value="">Select</option>
             <option
                 v-for="choice in choices"
                 :value="choice.id"
@@ -91,6 +93,7 @@
             :id="input_id"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
+            class="dropdownmenu"
         >
             <option value=""></option>
             <option
@@ -104,37 +107,52 @@
     </div>
 
     <div v-if="input_type == 'multi_choice'" class="input_oneline">
-        <label :for="input_id"></label>
-        <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
-            <slot />
-        </button>
-        <p class="topborder">
-            <span
-                v-for="value in modelValue"
-                :key="value.id"
-                class="choiceelement"
-                >{{ value.name }}</span
-            >
-        </p>
-        <div
-            v-if="dropdown"
-            class="dropdown-content"
-            @mouseleave="dropdown = false"
+        <label :for="input_id"><slot /></label>
+        <button
+            :id="input_id"
+            @click.prevent="dropdown = !dropdown"
+            class="dropdownbutton"
         >
-            <div v-if="choices.length > 20">
-                <label :for="search">Search:</label>
-                <input type="text" v-model="search" />
+            <span>Select</span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div class="topborder">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
+                    >
+                        ✕
+                    </button>
+
+                    {{ value.name }}
+                </span>
             </div>
-            <div class="scrollwindow">
-                <div v-for="choice in search_choices" :key="choice.id">
-                    <input
-                        type="checkbox"
-                        :id="choice.id"
-                        :value="choice"
-                        v-model="checked"
-                        @change="$emit('update:modelValue', checked)"
-                    />
-                    <label>{{ choice.name }}</label>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div v-if="choices.length > 20">
+                    <label :for="search">Search:</label>
+                    <input type="text" v-model="search" />
+                </div>
+                <div class="scrollwindow">
+                    <div v-for="choice in search_choices" :key="choice.id">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked)"
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,48 +187,57 @@
 
     <div v-if="input_type == 'multi_choice_scripts'" class="input_oneline">
         <label :for="input_id"><slot /></label>
-        <button @click.prevent="dropdown = !dropdown" class="drowdownbutton">
-            Select
+        <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
+            <span>Select</span>
+            <span>⌄</span>
         </button>
-        <p class="topborder">
-            <span
-                v-for="value in modelValue"
-                :key="value.id"
-                class="choiceelement"
+        <div>
+            <p class="topborder">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
+                    >
+                        ✕
+                    </button>
+                    {{ value.name }}
+                </span>
+            </p>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
             >
-                {{ value.name }}
-            </span>
-        </p>
-        <div
-            v-if="dropdown"
-            class="dropdown-content"
-            @mouseleave="dropdown = false"
-        >
-            <h3>Greek Scripts:</h3>
-            <div v-for="choice in search_choices" :key="choice.id">
-                <div v-if="choice.language_id == '1'">
-                    <input
-                        type="checkbox"
-                        :id="choice.id"
-                        :value="choice"
-                        v-model="checked"
-                        @change="$emit('update:modelValue', checked)"
-                    />
-                    <label>{{ choice.name }}</label>
+                <h3>Greek Scripts:</h3>
+                <div v-for="choice in search_choices" :key="choice.id">
+                    <div v-if="choice.language_id == '1'">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked)"
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
                 </div>
-            </div>
 
-            <h3>Latin Scripts:</h3>
-            <div v-for="choice in search_choices" :key="choice.id">
-                <div v-if="choice.language_id == '2'">
-                    <input
-                        type="checkbox"
-                        :id="choice.id"
-                        :value="choice"
-                        v-model="checked"
-                        @change="$emit('update:modelValue', checked)"
-                    />
-                    <label>{{ choice.name }}</label>
+                <h3>Latin Scripts:</h3>
+                <div v-for="choice in search_choices" :key="choice.id">
+                    <div v-if="choice.language_id == '2'">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked)"
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -219,38 +246,48 @@
     <div v-if="input_type == 'document_choice'" class="input_oneline">
         <label :for="input_id"><slot /></label>
         <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
-            Select
+            <span>Select</span>
+            <span>⌄</span>
         </button>
-        <p class="topborder">
-            <span
-                v-for="value in modelValue"
-                :key="value.id"
-                class="choiceelement"
-                >{{ value.standard_name }}</span
-            >
-        </p>
-        <div
-            v-if="dropdown"
-            class="dropdown-content"
-            @mouseleave="dropdown = false"
-        >
-            <div v-if="choices.length > 20">
-                <label :for="search">Search:</label>
-                <input type="text" v-model="search" />
-            </div>
-            <div class="scrollwindow">
-                <div v-for="choice in search_choices_doc" :key="choice.id">
-                    <input
-                        type="checkbox"
-                        :id="choice.id"
-                        :value="choice"
-                        v-model="checked"
-                        @change="$emit('update:modelValue', checked)"
-                    />
-                    <label>
-                        {{ choice.standard_name }} (Tr.ID:
-                        {{ choice.trismegistos_id }})</label
+        <div>
+            <p class="topborder">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
                     >
+                        ✕
+                    </button>
+                    {{ value.standard_name }}</span
+                >
+            </p>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div v-if="choices.length > 20">
+                    <label :for="search">Search:</label>
+                    <input type="text" v-model="search" />
+                </div>
+                <div class="scrollwindow">
+                    <div v-for="choice in search_choices_doc" :key="choice.id">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked)"
+                        />
+                        <label>
+                            {{ choice.standard_name }} (Tr.ID:
+                            {{ choice.trismegistos_id }})</label
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -413,6 +450,14 @@ function del_choice(id) {
     }
 }
 
+function removechoice(choice) {
+    this.checked = this.checked.filter((obj) => {
+        return obj.id !== choice.id;
+    });
+
+    emit("update:modelValue", checked);
+}
+
 function edit_choice(id) {
     alert("Edit #" + id + ".");
 }
@@ -452,14 +497,14 @@ const search_choices_doc = computed(() => {
 </script>
 
 <style>
-.dropdownbutton {
-    background-color: #6f726f;
-    color: white;
+select {
+    background-color: #eee;
+    min-width: 10em;
     width: fit-content;
     height: fit-content;
     border-radius: 10px;
     margin-top: 10px;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -473,30 +518,22 @@ const search_choices_doc = computed(() => {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 20px;
-    border-style: solid;
-    border-color: #999;
-    border: 4px;
     border-radius: 10px;
 }
 
 .choiceelement {
-    background-color: gray; /* Changing background color */
+    display: inline-block;
+    background-color: #fff; /* Changing background color */
     border-radius: 10px; /* Making border radius */
     width: auto; /* Making auto-sizable width */
     height: auto; /* Making auto-sizable height */
-    padding: 5px 10px 5px 10px; /* Making space around letters */
+    padding: 2px 10px 2px 10px; /* Making space around letters */
     margin: 2px;
-    font-size: 16px; /* Changing font size */
+    font-size: 12px; /* Changing font size */
 }
 
 .topborder {
     margin-top: 10px;
-}
-
-label {
-    padding-top: 15px;
-    padding-right: 15px;
-    font-weight: bold;
 }
 
 .scrollwindow {
@@ -511,6 +548,11 @@ label {
     width: 100%;
 }
 
+.input_oneline label {
+    padding-top: 15px;
+    padding-right: 15px;
+    font-weight: bold;
+}
 .input_oneline input {
     padding: 8px;
     margin: 4px;
@@ -534,11 +576,18 @@ label {
     font-size: 16px;
 }
 
-.input_year {
+.input_ad_year {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
 }
+
 h3 {
     padding-top: 1em;
+}
+
+.removebutton {
+    all: unset;
+    cursor: pointer;
 }
 </style>

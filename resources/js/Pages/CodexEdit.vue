@@ -32,11 +32,17 @@
         </button>
     </div>
 
-    <form @submit.prevent="submit">
-        <fieldset v-if="activetab == 'general'" class="editcodexcontainer">
+    <form
+        @submit.prevent="submit"
+        style="min-height: 95%; background-color: #eee"
+    >
+        <div v-if="activetab == 'general'" class="editcodexcontainer">
             <input type="hidden" input_id="id" v-model="form.id" />
 
-            <div class="editcodex_generalgrid">
+            <fieldset class="editcodex_generalgrid">
+                <legend class="editcodex_sectionheading">
+                    Publication Info
+                </legend>
                 <div class="edit_published">
                     <label :for="published">Published</label>
                     <input
@@ -101,9 +107,10 @@
                         >Bibliography</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="editcodex_contentgrid">
+            <fieldset class="editcodex_contentgrid">
+                <legend class="editcodex_sectionheading">Content</legend>
                 <div class="edit_title">
                     <EthInput
                         input_type="text"
@@ -163,9 +170,10 @@
                         Languages
                     </EthInput>
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="editcodex_date">
+            <fieldset class="editcodex_date">
+                <legend class="editcodex_sectionheading">Date</legend>
                 <div class="edit_early">
                     <EthInput
                         input_type="year"
@@ -214,9 +222,10 @@
                         >Comments on Date</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="editcodex_comments">
+            <fieldset class="editcodex_comments">
+                <legend class="editcodex_sectionheading">Comments</legend>
                 <div class="edit_internal">
                     <EthInput
                         input_type="textarea"
@@ -234,15 +243,16 @@
                         >General Comments</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
 
-        <fieldset v-if="activetab == 'codicology'" class="editcodexcontainer">
-            <div class="editcodex_materiality">
+        <div v-if="activetab == 'codicology'" class="editcodexcontainer">
+            <fieldset class="editcodex_materiality">
+                <legend class="editcodex_sectionheading">Materiality</legend>
                 <div class="edit_material">
                     <EthInput
                         input_type="single_choice"
@@ -372,9 +382,10 @@
                         >Binding Description</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="editcodex_measurements">
+            <fieldset class="editcodex_measurements">
+                <legend class="editcodex_sectionheading">Measurements</legend>
                 <div class="edit_dimknown">
                     <label :for="page_dimensions_known"
                         >Page Dimensions Known</label
@@ -526,9 +537,12 @@
                         >Comments on Measurements</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
-            <div class="editcodex_textualfeatures">
+            <fieldset class="editcodex_textualfeatures">
+                <legend class="editcodex_sectionheading">
+                    Textual Features
+                </legend>
                 <div class="edit_scripts">
                     <EthInput
                         input_type="multi_choice_scripts"
@@ -654,15 +668,18 @@
                         Quire Signatures
                     </EthInput>
                 </div>
-            </div>
+            </fieldset>
 
             <button class="submitbutton" @click="submit">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
 
-        <fieldset v-if="activetab == 'conservation'" class="editcodexcontainer">
-            <div class="editcodex_conservanalys">
+        <div v-if="activetab == 'conservation'" class="editcodexcontainer">
+            <fieldset class="editcodex_conservanalys">
+                <legend class="editcodex_sectionheading">
+                    Conservation and Analysis
+                </legend>
                 <div class="edit_storage">
                     <EthInput
                         input_type="single_choice"
@@ -699,15 +716,16 @@
                         >Comments on Analysis</EthInput
                     >
                 </div>
-            </div>
+            </fieldset>
 
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
 
-        <fieldset v-if="activetab == 'provenance'" class="editcodexcontainer">
-            <div class="editcodex_provenance">
+        <div v-if="activetab == 'provenance'" class="editcodexcontainer">
+            <fieldset class="editcodex_provenance">
+                <legend class="editcodex_sectionheading">Provenance</legend>
                 <div class="edit_sciex">
                     <label :for="scientifically_excavated"
                         >Scientifically Excavated</label
@@ -801,14 +819,15 @@
                         Transactions
                     </EthInput>
                 </div>
-            </div>
+            </fieldset>
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
 
-        <fieldset v-if="activetab == 'images'" class="editcodexcontainer">
-            <div class="editcodex_images">
+        <div v-if="activetab == 'images'" class="editcodexcontainer">
+            <fieldset class="editcodex_images">
+                <legend class="editcodex_sectionheading">Images</legend>
                 <div class="edit_img">
                     <EthInput
                         input_type="textarea"
@@ -817,59 +836,61 @@
                         >Image Information</EthInput
                     >
                 </div>
-            </div>
 
-            <button class="submitbutton" @click.prevent="submit">
-                Store All Changes
-            </button>
+                <button class="submitbutton" @click.prevent="submit">
+                    Store All Changes
+                </button>
 
-            <label class="labelpadding" for="images">Upload Images</label>
-            <input
-                type="file"
-                @change="addimages($event.target.files)"
-                multiple
-                ref="loadImages"
-            />
-
-            <div>
-                <div
-                    class="box"
-                    v-for="(image, index) in form.images"
-                    :key="image.id"
-                >
-                    <a :href="'/storage/' + image.filename" target="_blank">
-                        <img :src="'/storage/' + image.filename" height="400" />
-                    </a>
-                    <button @click.prevent="delimage(image)">Delete</button>
-                    <label
-                        class="labelpadding"
-                        :for="'image_description_' + index"
-                        >Description:
-                    </label>
-                    <textarea
-                        :id="'image_description_' + index"
-                        v-model="image.description"
-                    />
-
-                    <EthInput
-                        input_type="text"
-                        input_id="image_source"
-                        v-model="image.source"
+                <label class="labelpadding" for="images">Upload Images</label>
+                <input
+                    type="file"
+                    @change="addimages($event.target.files)"
+                    multiple
+                    ref="loadImages"
+                />
+                <div class="images_rows">
+                    <div
+                        class="box"
+                        v-for="(image, index) in form.images"
+                        :key="image.id"
                     >
-                        Source
-                    </EthInput>
+                        <a :href="'/storage/' + image.filename" target="_blank">
+                            <img
+                                :src="'/storage/' + image.filename"
+                                height="360"
+                            />
+                        </a>
+                        <button @click.prevent="delimage(image)">Delete</button>
+                        <label
+                            class="labelpadding"
+                            :for="'image_description_' + index"
+                            >Description:
+                        </label>
+                        <textarea
+                            :id="'image_description_' + index"
+                            v-model="image.description"
+                        />
 
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="license"
-                        :choices="licenses"
-                        v-model="image.license_id"
-                    >
-                        License:
-                    </EthInput>
+                        <EthInput
+                            input_type="text"
+                            input_id="image_source"
+                            v-model="image.source"
+                        >
+                            Source
+                        </EthInput>
+
+                        <EthInput
+                            input_type="single_choice"
+                            input_id="license"
+                            :choices="licenses"
+                            v-model="image.license_id"
+                        >
+                            License:
+                        </EthInput>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
+        </div>
     </form>
 </template>
 
@@ -1162,9 +1183,18 @@ button.selected {
     justify-content: center;
 }
 
+.editcodex_sectionheading {
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 5px 15px;
+    font-size: 18px;
+}
+
 .edit_published {
     grid-area: published;
-    align-self: start;
+    align-self: center;
 }
 .edit_trismegistos {
     grid-area: trismegistos;
@@ -1554,10 +1584,17 @@ button.selected {
 
 .box {
     padding: 10px;
-    background-color: lightslategrey;
+    background-color: #bbb;
     margin: 5px;
     display: flex;
     flex-direction: column;
+    width: fit-content;
+}
+
+.images_rows {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .labelpadding {

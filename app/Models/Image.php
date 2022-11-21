@@ -14,4 +14,9 @@ class Image extends Model
     {
         return $this->belongsTo(Document::class);
     }
+
+    public function license()
+    {
+        return $this->belongsTo(License::class);
+    }
 }

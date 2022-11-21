@@ -1,7 +1,10 @@
 <template>
-    <h1 class="addtransactionpartyheader">Add Transaction Party</h1>
+    <h1 class="newtransactionpartyheader">Add Transaction Party</h1>
 
-    <form @submit.prevent="submit">
+    <form
+        @submit.prevent="submit"
+        style="min-height: 95%; background-color: #eee"
+    >
         <fieldset class="newtransactionpartycontainer">
             <div class="newparty_partygrid">
                 <div class="newparty_transparty">
@@ -39,7 +42,8 @@
                         @click.prevent="dropdown = !dropdown"
                         class="dropdownbutton"
                     >
-                        Select
+                        <span>Select</span>
+                        <span>⌄</span>
                     </button>
                     <p class="topborder">
                         <span
@@ -47,6 +51,12 @@
                             :key="purchase.id"
                             class="choiceelement"
                         >
+                            <button
+                                @click.prevent="removepurchase(purchase)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
                             {{ purchase.name }}
                         </span>
                     </p>
@@ -192,6 +202,12 @@ function changerole(id, value) {
     all_purchases[index2].party_role = value;
 }
 
+function removepurchase(choice) {
+    form.purchases = form.purchases.filter((obj) => {
+        return obj.id !== choice.id;
+    });
+}
+
 function submit() {
     submitted = true;
     form.post(`/purchase_party_store`);
@@ -199,15 +215,16 @@ function submit() {
 </script>
 
 <style>
-.addtransactionpartyheader {
+.newtransactionpartyheader {
     font-size: larger;
     font-weight: bold;
     padding: 1em 1em 0em 1em;
 }
 
-.addtransactionpartycontainer {
+.newtransactionpartycontainer {
     display: flex;
     background-color: #eee;
+    border-style: none;
     margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
@@ -252,5 +269,46 @@ function submit() {
     background-color: #ccc;
     padding: 25px;
     border-radius: 10px;
+}
+
+.dropdownbutton {
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    width: 10em;
+    height: fit-content;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.choiceelement {
+    display: inline-block;
+    background-color: #fff; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: auto; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 2px 10px 2px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 12px; /* Changing font size */
+}
+
+.removebutton {
+    all: unset;
+    cursor: pointer;
 }
 </style>

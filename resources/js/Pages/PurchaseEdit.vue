@@ -1,7 +1,10 @@
 <template>
     <h1 class="edittransactionheader">Edit transaction: {{ form.name }}</h1>
 
-    <form @submit.prevent="submit">
+    <form
+        @submit.prevent="submit"
+        style="min-height: 95%; background-color: #eee"
+    >
         <fieldset class="edittransactioncontainer">
             <div class="edittransaction">
                 <input type="hidden" input_id="id" v-model="form.id" />
@@ -62,23 +65,32 @@
                     </EthInput>
                 </div>
 
-                <div class="edittrans_parties">
+                <div class="edittrans_parties input_oneline">
                     <label :for="input_id">Parties to the Transaction</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
                         class="dropdownbutton"
                     >
-                        Select
+                        <span>Select</span>
+                        <span>⌄</span>
                     </button>
                     <p class="topborder">
                         <span
                             v-for="party in form.purchase_parties"
                             :key="party.id"
                             class="choiceelement"
+                            :title="party.description"
                         >
+                            <button
+                                @click.prevent="removeparty(party)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
                             {{ party.name }}
                         </span>
                     </p>
+
                     <div v-if="dropdown" class="dropdown-content">
                         <div v-if="all_purchase_parties.length > 12">
                             <label :for="search">Search:</label>
@@ -244,6 +256,12 @@ function changerole(id, value) {
     all_purchase_parties[index2].party_role = value;
 }
 
+function removeparty(choice) {
+    form.purchase_parties = form.purchase_parties.filter((obj) => {
+        return obj.id !== choice.id;
+    });
+}
+
 function submit() {
     submitted = true;
     form.post(`/purchase_update/${props.purchase.id}`);
@@ -260,6 +278,7 @@ function submit() {
 .edittransactioncontainer {
     display: flex;
     background-color: #eee;
+    border-style: none;
     margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
@@ -307,13 +326,14 @@ function submit() {
 }
 
 .dropdownbutton {
-    background-color: #6f726f;
-    color: white;
-    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    width: 10em;
     height: fit-content;
     border-radius: 10px;
     margin-top: 10px;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -327,20 +347,17 @@ function submit() {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 20px;
-    border-style: solid;
-    border-color: #999;
-    border: 4px;
     border-radius: 10px;
 }
 
 .choiceelement {
-    background-color: gray; /* Changing background color */
+    background-color: #fff; /* Changing background color */
     border-radius: 10px; /* Making border radius */
     width: auto; /* Making auto-sizable width */
     height: auto; /* Making auto-sizable height */
-    padding: 5px 10px 5px 10px; /* Making space around letters */
+    padding: 2px 10px 2px 10px; /* Making space around letters */
     margin: 2px;
-    font-size: 16px; /* Changing font size */
+    font-size: 12px; /* Changing font size */
 }
 
 .topborder {
@@ -355,5 +372,17 @@ function submit() {
     border-radius: 15px;
     align-self: center;
     margin: 20px;
+}
+
+.input_oneline {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.removebutton {
+    all: unset;
+    cursor: pointer;
 }
 </style>

@@ -1,9 +1,12 @@
 <template>
     <h1 class="newtransactionheader">Add Transaction</h1>
 
-    <form @submit.prevent="submit">
+    <form
+        @submit.prevent="submit"
+        style="min-height: 95%; background-color: #eee"
+    >
         <fieldset class="newtransactioncontainer">
-            <div class="newtransaction">
+            <div class="newtransactiongrid">
                 <input type="hidden" input_id="id" v-model="form.id" />
                 <div class="newtrans_year">
                     <EthInput
@@ -62,23 +65,30 @@
                     </EthInput>
                 </div>
 
-                <div class="newtrans_parties">
+                <div class="newtrans_parties input_oneline">
                     <label :for="input_id">Parties to the Transaction</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
                         class="dropdownbutton"
                     >
-                        Select
+                        <span>Select</span>
+                        <span>⌄</span>
                     </button>
-                    <p class="topborder">
+                    <div class="topborder">
                         <span
                             v-for="party in form.purchase_parties"
                             :key="party.id"
                             class="choiceelement"
                         >
+                            <button
+                                @click.prevent="removechoice(value)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
                             {{ party.name }}
                         </span>
-                    </p>
+                    </div>
                     <div v-if="dropdown" class="dropdown-content">
                         <div v-if="all_purchase_parties.length > 12">
                             <label :for="search">Search:</label>
@@ -243,6 +253,7 @@ function submit() {
 .newtransactioncontainer {
     display: flex;
     background-color: #eee;
+    border-style: none;
     margin-top: 4px;
     padding: 20px;
     font-family: sans-serif;
@@ -273,7 +284,7 @@ function submit() {
     grid-area: docs;
 }
 
-.newtransaction {
+.newtransactiongrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50%;
     grid-template-rows: auto;
@@ -290,13 +301,14 @@ function submit() {
 }
 
 .dropdownbutton {
-    background-color: #6f726f;
-    color: white;
-    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    width: 10em;
     height: fit-content;
     border-radius: 10px;
     margin-top: 10px;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -338,5 +350,16 @@ function submit() {
     border-radius: 15px;
     align-self: center;
     margin: 20px;
+}
+
+.input_oneline {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.removebutton {
+    all: unset;
+    cursor: pointer;
 }
 </style>

@@ -115,10 +115,6 @@ class Document extends Model
         return $this->belongsTo(StorageCondition::class);
     }
 
-    public function license()
-    {
-        return $this->belongsTo(License::class);
-    }
 
     public function genres()
     {
@@ -139,5 +135,4 @@ class Document extends Model
     {
         return $this->belongsToMany(Diacritic::class);
     }
-
 }

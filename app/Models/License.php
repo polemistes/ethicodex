@@ -9,7 +9,7 @@ class License extends Model
 {
     use HasFactory;
 
-    public function documents()
+    public function images()
     {
         return $this->hasMany(Document::class);
     }
