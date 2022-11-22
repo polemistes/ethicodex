@@ -12,11 +12,14 @@
 
         <div class="pagecontainer">
             <Link
-                class="pages"
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
                 v-html="link.label"
+                :class="{
+                    pageactive: this.pagenr == link.label,
+                    pages: this.pagenr != link.label,
+                }"
             />
         </div>
     </div>
@@ -91,7 +94,7 @@
         v-for="document in documents.data"
         :key="document.id"
     >
-        <div class="cod_first">
+        <div class="cod_first codexbuttons">
             <Link
                 as="button"
                 type="button"
@@ -128,7 +131,7 @@
                 onclick="return confirm('Are you sure you want to delete this codex?')"
                 :href="'/codex_delete/' + document.id"
                 method="post"
-                style="padding: 0.3em 0.5em"
+                style="margin-right: 1em; padding: 0.3em 0.5em"
             >
                 Delete
             </Link>
@@ -146,15 +149,33 @@
     <div class="pageline">
         <div class="pagecontainer">
             <Link
-                class="pages"
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
                 v-html="link.label"
+                :class="{
+                    pageactive: this.pagenr == link.label,
+                    pages: this.pagenr != link.label,
+                }"
             />
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    computed: {
+        pagenr() {
+            const urlParams = new URLSearchParams(this.$page.url);
+            let pagenr = urlParams.get("/codices?page");
+            for (const key of urlParams.keys()) console.log(key);
+            console.log(pagenr);
+
+            return pagenr > 0 ? pagenr : 1;
+        },
+    },
+};
+</script>
 
 <script setup>
 import { ref, watch, onMounted } from "vue";
@@ -205,12 +226,34 @@ function sendsearch() {
 .pageline div {
     align-self: center;
 }
-.pages {
-    padding: 1em;
-}
+
 .pagecontainer {
     margin-left: auto;
 }
+
+.pagecontainer a {
+    all: unset;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #aaa;
+    background-color: #999;
+    color: #fff;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.pagecontainer a:hover {
+    background-color: #666;
+}
+
+.pages {
+    padding: 1em;
+}
+.pageactive {
+    padding: 1em;
+    background-color: #444 !important;
+}
+
 .flex-container {
     display: flex;
     border-style: none;
@@ -221,14 +264,18 @@ function sendsearch() {
     width: 100%;
 }
 
+.codexbuttons {
+    display: flex;
+    flex-direction: column;
+}
 .cod_first {
-    flex: 0 0 10%;
+    flex: 0 0 5%;
     align-self: center;
     justify-self: end;
 }
 
 .cod_second {
-    flex: 0 0 12%;
+    flex: 0 0 18%;
     align-self: center;
     justify-self: end;
 }

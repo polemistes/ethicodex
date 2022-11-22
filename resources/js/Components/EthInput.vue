@@ -510,6 +510,20 @@ select {
     cursor: pointer;
 }
 
+.dropdownbutton {
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    width: 10em;
+    height: fit-content;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
 .dropdown-content {
     display: block;
     position: absolute;

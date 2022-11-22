@@ -1163,10 +1163,11 @@ button.selected {
 
 .submitbutton {
     font-size: 20px;
-    width: auto;
-    height: auto;
-    padding: 20px;
+    width: 250px;
+    height: 55px;
+    padding: 10px;
     border-radius: 15px;
+    justify-self: center;
     align-self: center;
     margin: 20px;
 }
