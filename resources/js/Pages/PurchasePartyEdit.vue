@@ -1,15 +1,10 @@
 <template>
-    <h1 class="edittransactionpartyheader">
-        Edit Transaction Party: {{ form.name }}
-    </h1>
+    <form @submit.prevent="submit" class="mainstyle">
+        <div class="maincontainer">
+            <fieldset class="party_partygrid">
+                <legend class="sectionheading">Edit Transaction Party</legend>
 
-    <form
-        @submit.prevent="submit"
-        style="min-height: 95%; background-color: #eee"
-    >
-        <fieldset class="edittransactionpartycontainer">
-            <div class="editparty_partygrid">
-                <div class="editparty_transparty">
+                <div class="party_transparty">
                     <EthInput
                         input_type="text"
                         input_id="name"
@@ -17,7 +12,7 @@
                         >Transaction Party</EthInput
                     >
                 </div>
-                <div class="editparty_partydesc">
+                <div class="party_partydesc">
                     <EthInput
                         input_type="textarea"
                         input_id="description"
@@ -26,7 +21,7 @@
                     >
                 </div>
 
-                <div class="editparty_institution">
+                <div class="party_institution">
                     <p>
                         <input
                             id="institution"
@@ -38,7 +33,7 @@
                     </p>
                 </div>
 
-                <div class="editparty_transactions">
+                <div class="party_transactions">
                     <label :for="input_id">Transactions</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
@@ -113,8 +108,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
-            <!--
+
+                <!--
       <EthInput input_type="multi_choice" 
                   input_id="purchases" 
                   :choices="purchases_all"
@@ -122,10 +117,11 @@
                   Transactions
       </EthInput>
 -->
+            </fieldset>
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
     </form>
 </template>
 
@@ -232,101 +228,4 @@ function submit() {
 }
 </script>
 
-<style>
-.edittransactionpartyheader {
-    font-size: larger;
-    font-weight: bold;
-    padding: 1em 1em 0em 1em;
-}
-
-.edittransactionpartycontainer {
-    display: flex;
-    background-color: #eee;
-    border-style: none;
-    margin-top: 4px;
-    padding: 20px;
-    font-family: sans-serif;
-    font-size: 14px;
-    flex-direction: column;
-    width: 100%;
-}
-
-.submitbutton {
-    font-size: 20px;
-    width: auto;
-    height: auto;
-    padding: 20px;
-    border-radius: 15px;
-    align-self: center;
-    margin: 20px;
-}
-
-.editparty_transparty {
-    grid-area: transparty;
-}
-.editparty_institution {
-    grid-area: institution;
-}
-.editparty_partydesc {
-    grid-area: partydesc;
-}
-.editparty_transactions {
-    grid-area: transactions;
-}
-
-.editparty_partygrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "transparty institution partydesc"
-        "transactions transactions partydesc";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.dropdownbutton {
-    display: flex;
-    justify-content: space-between;
-    background-color: #eee;
-    width: 10em;
-    height: fit-content;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 5px 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: block;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.choiceelement {
-    display: inline-block;
-    background-color: #fff; /* Changing background color */
-    border-radius: 10px; /* Making border radius */
-    width: auto; /* Making auto-sizable width */
-    height: auto; /* Making auto-sizable height */
-    padding: 2px 10px 2px 10px; /* Making space around letters */
-    margin: 2px;
-    font-size: 12px; /* Changing font size */
-}
-
-.removebutton {
-    all: unset;
-    cursor: pointer;
-}
-</style>
+<style></style>

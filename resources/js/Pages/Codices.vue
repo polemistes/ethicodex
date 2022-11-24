@@ -5,25 +5,25 @@
             class="pages"
             href="/codex_new"
             as="button"
-            style="margin-left: 1em; padding: 0.3em 0.5em"
         >
             Add Codex
         </Link>
 
-        <div class="pagecontainer">
+        <div class="codex_pagecontainer">
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
                 v-html="link.label"
                 :class="{
-                    pageactive: this.pagenr == link.label,
-                    pages: this.pagenr != link.label,
+                    codex_pageactive: this.pagenr == link.label,
+                    codex_pages: this.pagenr != link.label,
                 }"
             />
         </div>
     </div>
-    <div class="flex-container" style="background-color: #ccc">
+
+    <div class="cod_container">
         <div class="cod_first"></div>
         <div class="cod_second"><b>Standard Name</b></div>
         <div class="cod_third"><b>Shelfmark</b></div>
@@ -31,7 +31,7 @@
         <div class="cod_fifth"><b>Trismegistos ID</b></div>
         <div class="cod_sixth"><b>Date</b></div>
     </div>
-    <div class="flex-container" style="background-color: #bbb">
+    <div class="cod_container" style="background-color: #bbb">
         <div class="cod_first">Search:</div>
 
         <div class="cod_second">
@@ -90,11 +90,11 @@
     </div>
 
     <div
-        class="flex-container"
+        class="cod_container"
         v-for="document in documents.data"
         :key="document.id"
     >
-        <div class="cod_first codexbuttons">
+        <div class="cod_first cod_buttons">
             <Link
                 as="button"
                 type="button"
@@ -146,16 +146,16 @@
             v-text="document.start_year + '–' + document.end_year"
         ></div>
     </div>
-    <div class="pageline">
-        <div class="pagecontainer">
+    <div class="codex_pageline">
+        <div class="codex_pagecontainer">
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
                 v-html="link.label"
                 :class="{
-                    pageactive: this.pagenr == link.label,
-                    pages: this.pagenr != link.label,
+                    codex_pageactive: this.pagenr == link.label,
+                    codex_pages: this.pagenr != link.label,
                 }"
             />
         </div>
@@ -217,90 +217,4 @@ function sendsearch() {
 }
 </script>
 
-<style>
-.pageline {
-    display: flex;
-    flex-direction: row;
-}
-
-.pageline div {
-    align-self: center;
-}
-
-.pagecontainer {
-    margin-left: auto;
-}
-
-.pagecontainer a {
-    all: unset;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #aaa;
-    background-color: #999;
-    color: #fff;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.pagecontainer a:hover {
-    background-color: #666;
-}
-
-.pages {
-    padding: 1em;
-}
-.pageactive {
-    padding: 1em;
-    background-color: #444 !important;
-}
-
-.flex-container {
-    display: flex;
-    border-style: none;
-    padding: 1em;
-    margin: 0.5em 0em;
-    gap: 1em;
-    background-color: #eee;
-    width: 100%;
-}
-
-.codexbuttons {
-    display: flex;
-    flex-direction: column;
-}
-.cod_first {
-    flex: 0 0 5%;
-    align-self: center;
-    justify-self: end;
-}
-
-.cod_second {
-    flex: 0 0 18%;
-    align-self: center;
-    justify-self: end;
-}
-.cod_third {
-    flex: 0 0 26%;
-    align-self: center;
-    justify-self: end;
-}
-.cod_fourth {
-    flex: 0 0 26%;
-    align-self: center;
-    justify-self: end;
-}
-.cod_fifth {
-    flex: 0 0 10%;
-    align-self: center;
-    justify-self: end;
-}
-.cod_sixth {
-    flex: 0 0 10%;
-    align-self: center;
-    justify-self: end;
-}
-
-.searchfield {
-    width: 100%;
-}
-</style>
+<style></style>

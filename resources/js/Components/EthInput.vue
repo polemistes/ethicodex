@@ -1,6 +1,6 @@
 <template>
     <div v-if="input_type == 'number'">
-        <div class="input_oneline">
+        <div class="inputfield">
             <label :for="input_id"><slot /></label>
             <input
                 :id="input_id"
@@ -14,7 +14,7 @@
     </div>
 
     <div v-if="input_type == 'text'">
-        <div class="input_oneline">
+        <div class="inputfield">
             <label :for="input_id"><slot /></label>
             <input
                 :id="input_id"
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'password'" class="input_oneline">
+    <div v-if="input_type == 'password'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <input
             :id="input_id"
@@ -36,7 +36,7 @@
         />
     </div>
 
-    <div v-if="input_type == 'bool'" class="input_oneline">
+    <div v-if="input_type == 'bool'" class="inputfield">
         <input
             :id="input_id"
             type="checkbox"
@@ -47,7 +47,7 @@
         <label :for="input_id"><slot /></label>
     </div>
 
-    <div v-if="input_type == 'year'" class="input_oneline">
+    <div v-if="input_type == 'year'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <div class="input_ad_year">
             AD
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'textarea'" class="input_area">
+    <div v-if="input_type == 'textarea'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <textarea
             :id="input_id"
@@ -69,7 +69,7 @@
         />
     </div>
 
-    <div v-if="input_type == 'single_choice'" class="input_oneline">
+    <div v-if="input_type == 'single_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <select
             :id="input_id"
@@ -87,7 +87,7 @@
         </select>
     </div>
 
-    <div v-if="input_type == 'legal_choice'" class="input_oneline">
+    <div v-if="input_type == 'legal_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <select
             :id="input_id"
@@ -106,7 +106,7 @@
         </select>
     </div>
 
-    <div v-if="input_type == 'multi_choice'" class="input_oneline">
+    <div v-if="input_type == 'multi_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button
             :id="input_id"
@@ -117,7 +117,7 @@
             <span>⌄</span>
         </button>
         <div>
-            <div class="topborder">
+            <div class="choicelist">
                 <span
                     v-for="value in modelValue"
                     :key="value.id"
@@ -142,7 +142,7 @@
                     <label :for="search">Search:</label>
                     <input type="text" v-model="search" />
                 </div>
-                <div class="scrollwindow">
+                <div class="dropdown-scrollwindow">
                     <div v-for="choice in search_choices" :key="choice.id">
                         <input
                             type="checkbox"
@@ -158,7 +158,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'party_choice'" class="input_oneline">
+    <div v-if="input_type == 'party_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <p style="border-style: solid">
             <b>Selected:</b>
@@ -171,7 +171,7 @@
             <input type="text" v-model="search" />
         </div>
 
-        <div class="scrollwindow">
+        <div class="dropdown-scrollwindow">
             <div v-for="choice in search_choices" :key="choice.id">
                 <input
                     type="checkbox"
@@ -185,14 +185,14 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'multi_choice_scripts'" class="input_oneline">
+    <div v-if="input_type == 'multi_choice_scripts'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
             <span>Select</span>
             <span>⌄</span>
         </button>
         <div>
-            <p class="topborder">
+            <div class="choicelist">
                 <span
                     v-for="value in modelValue"
                     :key="value.id"
@@ -206,7 +206,7 @@
                     </button>
                     {{ value.name }}
                 </span>
-            </p>
+            </div>
             <div
                 v-if="dropdown"
                 class="dropdown-content"
@@ -243,14 +243,14 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'document_choice'" class="input_oneline">
+    <div v-if="input_type == 'document_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
             <span>Select</span>
             <span>⌄</span>
         </button>
         <div>
-            <p class="topborder">
+            <div class="choicelist">
                 <span
                     v-for="value in modelValue"
                     :key="value.id"
@@ -264,7 +264,7 @@
                     </button>
                     {{ value.standard_name }}</span
                 >
-            </p>
+            </div>
             <div
                 v-if="dropdown"
                 class="dropdown-content"
@@ -274,7 +274,7 @@
                     <label :for="search">Search:</label>
                     <input type="text" v-model="search" />
                 </div>
-                <div class="scrollwindow">
+                <div class="dropdown-scrollwindow">
                     <div v-for="choice in search_choices_doc" :key="choice.id">
                         <input
                             type="checkbox"
@@ -294,7 +294,7 @@
     </div>
 
     <!--
-    <div v-if="input_type == 'document_choice_taken'" class="input_oneline">
+    <div v-if="input_type == 'document_choice_taken'" class="inputfield">
       
       <label :for="input_id"><slot /></label>
       <p style="border-style: solid;">
@@ -309,7 +309,7 @@
         <input type="text" v-model="search">
       </div>
       
-      <div class="scrollwindow">
+      <div class="dropdown-scrollwindow">
         <div v-for="choice in search_choices_doc" :key="choice.id">
           <input type="checkbox"
               :id="choice.id"  
@@ -327,7 +327,7 @@
     </div>
 -->
 
-    <div v-if="input_type == 'document_choice_modern'" class="input_oneline">
+    <div v-if="input_type == 'document_choice_modern'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <p style="border-style: solid">
             <b>Selected:</b>
@@ -341,7 +341,7 @@
             <input type="text" v-model="search" />
         </div>
 
-        <div class="scrollwindow">
+        <div class="dropdown-scrollwindow">
             <div v-for="choice in search_choices_doc" :key="choice.id">
                 <input
                     type="checkbox"
@@ -373,7 +373,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'multi_choice_edit_delete'" class="input_oneline">
+    <div v-if="input_type == 'multi_choice_edit_delete'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <p style="border-style: solid">
             <b>Selected:</b
@@ -399,7 +399,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'bifolia'" class="input_oneline">
+    <div v-if="input_type == 'bifolia'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <div v-for="n in range(1, num)" :key="n">
             <p>
@@ -496,112 +496,4 @@ const search_choices_doc = computed(() => {
 });
 </script>
 
-<style>
-select {
-    background-color: #eee;
-    min-width: 10em;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 5px 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdownbutton {
-    display: flex;
-    justify-content: space-between;
-    background-color: #eee;
-    width: 10em;
-    height: fit-content;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 5px 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: block;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.choiceelement {
-    display: inline-block;
-    background-color: #fff; /* Changing background color */
-    border-radius: 10px; /* Making border radius */
-    width: auto; /* Making auto-sizable width */
-    height: auto; /* Making auto-sizable height */
-    padding: 2px 10px 2px 10px; /* Making space around letters */
-    margin: 2px;
-    font-size: 12px; /* Changing font size */
-}
-
-.topborder {
-    margin-top: 10px;
-}
-
-.scrollwindow {
-    max-height: 180px;
-    overflow: auto;
-}
-
-.input_oneline {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.input_oneline label {
-    padding-top: 15px;
-    padding-right: 15px;
-    font-weight: bold;
-}
-.input_oneline input {
-    padding: 8px;
-    margin: 4px;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.input_area {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.input_area textarea {
-    resize: none;
-    box-sizing: border-box;
-    height: 100%;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-}
-
-.input_ad_year {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-h3 {
-    padding-top: 1em;
-}
-
-.removebutton {
-    all: unset;
-    cursor: pointer;
-}
-</style>
+<style></style>

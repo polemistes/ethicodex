@@ -15,24 +15,4 @@ defineProps({
 });
 </script>
 
-<style>
-label {
-    font-weight: bold;
-}
-
-.ratio {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.ratio_string {
-    background-color: #ddd;
-    padding: 5px;
-    border-style: none;
-    border-radius: 5px;
-    min-height: 2em;
-    width: 10em;
-}
-</style>
+<style></style>

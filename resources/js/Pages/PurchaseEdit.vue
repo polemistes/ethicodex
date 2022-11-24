@@ -1,14 +1,10 @@
 <template>
-    <h1 class="edittransactionheader">Edit transaction: {{ form.name }}</h1>
-
-    <form
-        @submit.prevent="submit"
-        style="min-height: 95%; background-color: #eee"
-    >
-        <fieldset class="edittransactioncontainer">
-            <div class="edittransaction">
-                <input type="hidden" input_id="id" v-model="form.id" />
-                <div class="edittrans_year">
+    <form @submit.prevent="submit" class="mainstyle">
+        <input type="hidden" input_id="id" v-model="form.id" />
+        <div class="maincontainer">
+            <fieldset class="transaction_grid">
+                <legend class="sectionheading">Edit Transaction</legend>
+                <div class="trans_year">
                     <EthInput
                         input_type="number"
                         input_id="year"
@@ -16,7 +12,7 @@
                         >Year</EthInput
                     >
                 </div>
-                <div class="edittrans_month">
+                <div class="trans_month">
                     <EthInput
                         input_type="number"
                         input_id="month"
@@ -26,7 +22,7 @@
                         >Month</EthInput
                     >
                 </div>
-                <div class="edittrans_day">
+                <div class="trans_day">
                     <EthInput
                         input_type="number"
                         input_id="day"
@@ -37,7 +33,7 @@
                     >
                 </div>
 
-                <div class="edittrans_transaction">
+                <div class="trans_transaction">
                     <EthInput
                         input_type="text"
                         input_id="name"
@@ -45,7 +41,7 @@
                         >Transaction</EthInput
                     >
                 </div>
-                <div class="edittrans_transdesc">
+                <div class="trans_transdesc">
                     <EthInput
                         input_type="textarea"
                         input_id="description"
@@ -54,7 +50,7 @@
                     >
                 </div>
 
-                <div class="edittrans_docs">
+                <div class="trans_docs">
                     <EthInput
                         input_type="document_choice"
                         input_id="documents"
@@ -65,7 +61,7 @@
                     </EthInput>
                 </div>
 
-                <div class="edittrans_parties input_oneline">
+                <div class="trans_parties inputfield">
                     <label :for="input_id">Parties to the Transaction</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
@@ -74,7 +70,7 @@
                         <span>Select</span>
                         <span>⌄</span>
                     </button>
-                    <p class="topborder">
+                    <div class="choicelist">
                         <span
                             v-for="party in form.purchase_parties"
                             :key="party.id"
@@ -89,7 +85,7 @@
                             </button>
                             {{ party.name }}
                         </span>
-                    </p>
+                    </div>
 
                     <div v-if="dropdown" class="dropdown-content">
                         <div v-if="all_purchase_parties.length > 12">
@@ -142,7 +138,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </fieldset>
             <!--
         <EthInput input_type="party_choice" 
                   input_id="purchase_parties" 
@@ -156,7 +152,7 @@
             <button @click.prevent="submit" class="submitbutton">
                 Store All Changes
             </button>
-        </fieldset>
+        </div>
     </form>
 </template>
 
@@ -268,121 +264,4 @@ function submit() {
 }
 </script>
 
-<style>
-.edittransactionheader {
-    font-size: larger;
-    font-weight: bold;
-    padding: 1em 1em 0em 1em;
-}
-
-.edittransactioncontainer {
-    display: flex;
-    background-color: #eee;
-    border-style: none;
-    margin-top: 4px;
-    padding: 20px;
-    font-family: sans-serif;
-    font-size: 14px;
-    flex-direction: column;
-    width: 100%;
-}
-
-.edittrans_year {
-    grid-area: year;
-}
-.edittrans_month {
-    grid-area: month;
-}
-.edittrans_day {
-    grid-area: day;
-}
-.edittrans_transaction {
-    grid-area: transaction;
-}
-.edittrans_transdesc {
-    grid-area: transdesc;
-}
-.edittrans_parties {
-    grid-area: parties;
-}
-.edittrans_docs {
-    grid-area: docs;
-}
-
-.edittransaction {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 50%;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "transaction transaction transaction transaction transaction transaction transdesc"
-        "year year month month day day transdesc"
-        "parties parties parties docs docs docs transdesc";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.dropdownbutton {
-    display: flex;
-    justify-content: space-between;
-    background-color: #eee;
-    width: 10em;
-    height: fit-content;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 5px 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: block;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.choiceelement {
-    background-color: #fff; /* Changing background color */
-    border-radius: 10px; /* Making border radius */
-    width: auto; /* Making auto-sizable width */
-    height: auto; /* Making auto-sizable height */
-    padding: 2px 10px 2px 10px; /* Making space around letters */
-    margin: 2px;
-    font-size: 12px; /* Changing font size */
-}
-
-.topborder {
-    margin-top: 10px;
-}
-
-.submitbutton {
-    font-size: 20px;
-    width: auto;
-    height: auto;
-    padding: 20px;
-    border-radius: 15px;
-    align-self: center;
-    margin: 20px;
-}
-
-.input_oneline {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
-.removebutton {
-    all: unset;
-    cursor: pointer;
-}
-</style>
+<style></style>

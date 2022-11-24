@@ -1,5 +1,5 @@
 <template>
-    <div class="tab">
+    <div class="codexmenu">
         <button
             :class="activetab == 'general' ? 'selected' : 'unselected'"
             @click="activetab = 'general'"
@@ -32,12 +32,10 @@
         </button>
     </div>
 
-    <div style="min-height: 95%; background-color: #eee">
-        <div v-if="activetab == 'general'" class="showcodexcontainer">
+    <div class="mainstyle">
+        <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="showcodex_generalgrid">
-                <legend class="showcodex_sectionheading">
-                    Publication Info
-                </legend>
+                <legend class="sectionheading">Publication Info</legend>
                 <div
                     v-if="
                         props.auth == null
@@ -98,7 +96,7 @@
             </fieldset>
 
             <fieldset class="showcodex_contentgrid">
-                <legend class="showcodex_sectionheading">Content</legend>
+                <legend class="sectionheading">Content</legend>
                 <div class="show_title">
                     <label>Title of Work</label>
                     <div class="showcodex_string">{{ document.title }}</div>
@@ -159,7 +157,7 @@
             </fieldset>
 
             <fieldset class="showcodex_date">
-                <legend class="showcodex_sectionheading">Date</legend>
+                <legend class="sectionheading">Date</legend>
                 <div class="show_early">
                     <label>Earliest Date (AD)</label>
                     <div class="showcodex_string">
@@ -206,7 +204,7 @@
             </fieldset>
 
             <fieldset class="showcodex_comments">
-                <legend class="showcodex_sectionheading">Comments</legend>
+                <legend class="sectionheading">Comments</legend>
                 <div class="show_internal">
                     <label>Internal Comments</label>
                     <div
@@ -225,9 +223,9 @@
             </fieldset>
         </div>
 
-        <div v-if="activetab == 'codicology'" class="showcodexcontainer">
+        <div v-if="activetab == 'codicology'" class="maincontainer">
             <fieldset class="showcodex_materiality">
-                <legend class="showcodex_sectionheading">Materiality</legend>
+                <legend class="sectionheading">Materiality</legend>
                 <div class="show_material">
                     <label>Material</label>
                     <div class="showcodex_string_short">
@@ -341,7 +339,7 @@
             </fieldset>
 
             <fieldset class="showcodex_measurements">
-                <legend class="showcodex_sectionheading">Measurements</legend>
+                <legend class="sectionheading">Measurements</legend>
                 <template v-if="!document.page_dimensions_known">
                     <div class="show_pagewidth">
                         <label>Fragmen Width (cm)</label>
@@ -451,9 +449,7 @@
             </fieldset>
 
             <fieldset class="showcodex_textualfeatures">
-                <legend class="showcodex_sectionheading">
-                    Textual Features
-                </legend>
+                <legend class="sectionheading">Textual Features</legend>
                 <div class="show_scripts">
                     <div v-if="checklanguage(1)">
                         <label>Greek Script(s)</label>
@@ -608,9 +604,9 @@
             </fieldset>
         </div>
 
-        <div v-if="activetab == 'conservation'" class="showcodexcontainer">
+        <div v-if="activetab == 'conservation'" class="maincontainer">
             <fieldset class="showcodex_conservanalys">
-                <legend class="showcodex_sectionheading">
+                <legend class="sectionheading">
                     Conservation and Analysis
                 </legend>
                 <div class="show_storage">
@@ -651,9 +647,9 @@
             </fieldset>
         </div>
 
-        <div v-if="activetab == 'provenance'" class="showcodexcontainer">
+        <div v-if="activetab == 'provenance'" class="maincontainer">
             <fieldset class="showcodex_provenance">
-                <legend class="showcodex_sectionheading">Provenance</legend>
+                <legend class="sectionheading">Provenance</legend>
                 <div class="show_sciex">
                     <label :for="scientifically_excavated"
                         >Scientifically Excavated</label
@@ -796,17 +792,17 @@
             </fieldset>
         </div>
 
-        <div v-if="activetab == 'images'" class="showcodexcontainer">
+        <div v-if="activetab == 'images'" class="maincontainer">
             <fieldset class="showcodex_images">
-                <legend class="showcodex_sectionheading">Images</legend>
+                <legend class="sectionheading">Images</legend>
                 <div class="show_img">
                     <label>Image Information</label>
                     <div class="showcodex_text" v-html="document.images_info" />
                 </div>
 
-                <div class="images_rows">
+                <div class="codex_images_rows">
                     <div
-                        class="box"
+                        class="codex_imagebox"
                         v-for="(image, index) in images"
                         :key="image.id"
                     >
@@ -817,7 +813,7 @@
                             />
                         </a>
                         <label
-                            class="labelpadding"
+                            class="showcodex_labelpadding"
                             :for="'image_description_' + index"
                             >Description:
                         </label>
@@ -906,564 +902,4 @@ function range(start, end) {
 }
 </script>
 
-<style>
-.tab {
-    display: flex;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-    width: 100%;
-    justify-content: stretch;
-}
-
-.tab button {
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 5px;
-    font-size: 18px;
-    width: 100%;
-    transition: 50ms;
-}
-
-button.unselected {
-    background-color: rgb(225, 225, 228);
-}
-
-button.unselected:hover {
-    background-color: rgb(186, 189, 185);
-}
-
-button.selected:hover {
-    background-color: rgb(77, 87, 66);
-}
-
-button.selected {
-    background-color: rgb(119, 128, 111);
-}
-
-.showcodexcontainer {
-    display: flex;
-    background-color: #eee;
-    margin-top: 4px;
-    padding: 20px;
-    font-family: sans-serif;
-    font-size: 16px;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    justify-content: center;
-}
-
-.show_published {
-    grid-area: published;
-    justify-self: start;
-}
-
-.show_trismegistos {
-    grid-area: trismegistos;
-    justify-self: start;
-}
-.show_standard {
-    grid-area: standard;
-}
-.show_other {
-    grid-area: other;
-}
-.show_publ {
-    grid-area: publ;
-}
-.show_shelf {
-    grid-area: shelf;
-}
-.show_bibliography {
-    grid-area: biblio;
-}
-
-.showcodex_generalgrid {
-    display: grid;
-    grid-template-columns: 1fr 2fr 4fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "published . . ."
-        "trismegistos standard standard other"
-        "trismegistos standard standard other"
-        "publ publ publ other"
-        "publ publ publ biblio"
-        "shelf shelf shelf biblio"
-        "shelf shelf shelf biblio";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.show_title {
-    grid-area: title;
-}
-.show_author {
-    grid-area: author;
-}
-.show_contdesc {
-    grid-area: desc;
-}
-.show_language {
-    grid-area: language;
-    display: flex;
-    flex-direction: column;
-}
-.show_genre {
-    grid-area: genre;
-}
-.show_content {
-    grid-area: cont;
-    display: flex;
-    flex-direction: column;
-}
-
-.showcodex_contentgrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr auto;
-    grid-template-areas:
-        "title title title author author author desc desc desc"
-        "language language genre genre cont cont desc desc desc";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_early {
-    grid-area: early;
-}
-.show_late {
-    grid-area: late;
-}
-.show_datecomm {
-    grid-area: datecomm;
-}
-.show_basis {
-    grid-area: basis;
-    display: flex;
-    flex-direction: column;
-}
-.show_certainty {
-    grid-area: certainty;
-}
-
-.showcodex_date {
-    display: grid;
-    grid-template-columns: 1fr 1fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "early late datecomm"
-        "basis certainty datecomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_general {
-    grid-area: general;
-}
-.show_internal {
-    grid-area: internal;
-}
-
-.showcodex_comments {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "general internal"
-        "general published";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_material {
-    grid-area: material;
-}
-.show_ink {
-    grid-area: ink;
-}
-.show_cover {
-    grid-area: cover;
-}
-.show_structure {
-    grid-area: structure;
-}
-.show_numquire {
-    grid-area: numquire;
-}
-.show_quirenum {
-    grid-area: quirenum;
-    display: flex;
-    flex-direction: column;
-}
-.show_quirecomm {
-    grid-area: quirecomm;
-}
-.show_bindingdesc {
-    grid-area: bindingdesc;
-}
-
-.showcodex_materiality {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "material bindingdesc"
-        "ink bindingdesc"
-        "cover bindingdesc"
-        "structure quirecomm"
-        "numquire quirecomm"
-        "quirenum quirecomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_dimknown {
-    grid-area: dimknown;
-}
-.show_meascomm {
-    grid-area: meascomm;
-}
-.show_pagewidth {
-    grid-area: pagewidth;
-}
-.show_pageheight {
-    grid-area: pageheight;
-}
-.show_pratio {
-    grid-area: pratio;
-}
-.show_stable {
-    grid-area: stable;
-}
-.show_blockwidth {
-    grid-area: blockwidth;
-}
-.show_blockheight {
-    grid-area: blockheight;
-}
-.show_bratio {
-    grid-area: bratio;
-}
-.show_uppmarg {
-    grid-area: uppmarg;
-}
-.show_lowmarg {
-    grid-area: lowmarg;
-}
-.show_ulratio {
-    grid-area: ulratio;
-}
-.show_innmarg {
-    grid-area: innmarg;
-}
-.show_outmarg {
-    grid-area: outmarg;
-}
-.show_ioratio {
-    grid-area: ioratio;
-}
-
-.showcodex_measurements {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "dimknown . . meascomm"
-        "pagewidth pageheight pratio meascomm"
-        "stable . . meascomm"
-        "blockwidth blockheight bratio meascomm"
-        "uppmarg lowmarg ulratio meascomm"
-        "innmarg outmarg ioratio meascomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_numhands {
-    grid-area: numhands;
-}
-.show_scripts {
-    grid-area: scripts;
-    display: flex;
-    flex-direction: column;
-}
-.show_scriptdesc {
-    grid-area: scriptdesc;
-}
-.show_pagination {
-    grid-area: pagination;
-}
-.show_paratext {
-    grid-area: paratext;
-    display: flex;
-    flex-direction: column;
-}
-.show_paradesc {
-    grid-area: paradesc;
-}
-.show_punctuation {
-    grid-area: punctuation;
-    display: flex;
-    flex-direction: column;
-}
-.show_diacritics {
-    grid-area: diacritics;
-    display: flex;
-    flex-direction: column;
-}
-.show_diacritdesc {
-    grid-area: diacritdesc;
-}
-.show_critical {
-    grid-area: critical;
-    display: flex;
-    flex-direction: column;
-}
-.show_decorative {
-    grid-area: decorative;
-    display: flex;
-    flex-direction: column;
-}
-.show_decodesc {
-    grid-area: decodesc;
-}
-.show_quiresig {
-    grid-area: quiresig;
-}
-
-.showcodex_textualfeatures {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "scripts numhands diacritics diacritics"
-        "scriptdesc scriptdesc diacritdesc diacritdesc"
-        "paratext paratext decorative decorative"
-        "paradesc paradesc decodesc decodesc"
-        "punctuation critical pagination quiresig";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_storage {
-    grid-area: storage;
-}
-.show_scientific {
-    grid-area: scientific;
-}
-.show_conshist {
-    grid-area: conshist;
-}
-.show_analyscomm {
-    grid-area: analyscomm;
-}
-
-.showcodex_conservanalys {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "storage scientific"
-        "conshist analyscomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_sciex {
-    grid-area: sciex;
-}
-.show_excomm {
-    grid-area: excomm;
-}
-.show_anciprov {
-    grid-area: anciprov;
-}
-.show_ancicert {
-    grid-area: ancicert;
-}
-.show_ancicomm {
-    grid-area: ancicomm;
-}
-.show_transactions {
-    grid-area: transactions;
-}
-.show_legalclass {
-    grid-area: legalclass;
-}
-.show_legalcomm {
-    grid-area: legalcomm;
-}
-
-.show_transinfo {
-    grid-area: transinfo;
-}
-
-.showcodex_provenance {
-    display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "sciex anciprov ancicert"
-        "excomm ancicomm ancicomm"
-        "legalclass legalcomm legalcomm"
-        "transactions transinfo transinfo";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.show_img {
-    grid-area: img;
-}
-
-.showcodex_images {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: "img";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.box {
-    padding: 10px;
-    background-color: #bbb;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-}
-
-.images_rows {
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-.labelpadding {
-    padding-top: 15px;
-    padding-right: 15px;
-}
-
-.showcodex_sectionheading {
-    background-color: #fff;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 10px;
-    padding: 5px 15px;
-    font-size: 18px;
-}
-
-.showcodexcontainer label {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.showcodex_string {
-    background-color: #ddd;
-    padding: 5px;
-    border-style: none;
-    border-radius: 5px;
-    min-height: 2em;
-}
-
-.showcodex_string_short {
-    background-color: #ddd;
-    padding: 5px;
-    border-style: none;
-    border-radius: 5px;
-    min-height: 2em;
-    width: 10em;
-}
-
-.showcodex_text {
-    background-color: #ddd;
-    padding: 10px;
-    border-style: none;
-    border-radius: 5px;
-    min-height: 5em;
-}
-
-.showcodex_bool {
-    background-color: #ddd;
-    padding: 5px;
-    border-style: none;
-    border-radius: 5px;
-    min-height: 2em;
-    width: 5em;
-}
-
-.showcodex_multi {
-    display: inline-block;
-}
-
-.showcodex_multi_line {
-    display: inline-block;
-    background-color: #eee; /* Changing background color */
-    border-radius: 10px; /* Making border radius */
-    width: fit-content; /* Making auto-sizable width */
-    height: auto; /* Making auto-sizable height */
-    padding: 5px 10px 5px 10px; /* Making space around letters */
-    margin: 2px;
-    font-size: 16px; /* Changing font size */
-}
-
-.showcodex_multi_stack {
-    background-color: #eee; /* Changing background color */
-    border-radius: 10px; /* Making border radius */
-    width: auto; /* Making auto-sizable width */
-    height: auto; /* Making auto-sizable height */
-    padding: 5px 10px 5px 10px; /* Making space around letters */
-    margin: 2px;
-    font-size: 16px; /* Changing font size */
-}
-</style>
+<style></style>

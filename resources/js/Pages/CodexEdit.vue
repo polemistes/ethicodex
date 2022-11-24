@@ -1,5 +1,5 @@
 <template>
-    <div class="tab">
+    <div class="codexmenu">
         <button
             :class="activetab == 'general' ? 'selected' : 'unselected'"
             @click="activetab = 'general'"
@@ -32,17 +32,12 @@
         </button>
     </div>
 
-    <form
-        @submit.prevent="submit"
-        style="min-height: 95%; background-color: #eee"
-    >
-        <div v-if="activetab == 'general'" class="editcodexcontainer">
-            <input type="hidden" input_id="id" v-model="form.id" />
-
+    <form @submit.prevent="submit" class="mainstyle">
+        <input type="hidden" input_id="id" v-model="form.id" />
+        <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="editcodex_generalgrid">
-                <legend class="editcodex_sectionheading">
-                    Publication Info
-                </legend>
+                <legend class="sectionheading">Publication Info</legend>
+
                 <div class="edit_published">
                     <label :for="published">Published</label>
                     <input
@@ -110,7 +105,7 @@
             </fieldset>
 
             <fieldset class="editcodex_contentgrid">
-                <legend class="editcodex_sectionheading">Content</legend>
+                <legend class="sectionheading">Content</legend>
                 <div class="edit_title">
                     <EthInput
                         input_type="text"
@@ -173,7 +168,7 @@
             </fieldset>
 
             <fieldset class="editcodex_date">
-                <legend class="editcodex_sectionheading">Date</legend>
+                <legend class="sectionheading">Date</legend>
                 <div class="edit_early">
                     <EthInput
                         input_type="year"
@@ -225,7 +220,7 @@
             </fieldset>
 
             <fieldset class="editcodex_comments">
-                <legend class="editcodex_sectionheading">Comments</legend>
+                <legend class="sectionheading">Comments</legend>
                 <div class="edit_internal">
                     <EthInput
                         input_type="textarea"
@@ -250,9 +245,9 @@
             </button>
         </div>
 
-        <div v-if="activetab == 'codicology'" class="editcodexcontainer">
+        <div v-if="activetab == 'codicology'" class="maincontainer">
             <fieldset class="editcodex_materiality">
-                <legend class="editcodex_sectionheading">Materiality</legend>
+                <legend class="sectionheading">Materiality</legend>
                 <div class="edit_material">
                     <EthInput
                         input_type="single_choice"
@@ -385,7 +380,7 @@
             </fieldset>
 
             <fieldset class="editcodex_measurements">
-                <legend class="editcodex_sectionheading">Measurements</legend>
+                <legend class="sectionheading">Measurements</legend>
                 <div class="edit_dimknown">
                     <label :for="page_dimensions_known"
                         >Page Dimensions Known</label
@@ -437,7 +432,7 @@
                         <EthRatio
                             :dividend="form.full_page_width"
                             :divisor="form.full_page_height"
-                            >Full Page Width/Height Ratio</EthRatio
+                            >Ratio</EthRatio
                         >
                     </div>
 
@@ -475,7 +470,7 @@
                             <EthRatio
                                 :dividend="form.upper_margin"
                                 :divisor="form.lower_margin"
-                                >Upper/Lower Margin Ratio</EthRatio
+                                >Ratio</EthRatio
                             >
                         </div>
 
@@ -499,7 +494,7 @@
                             <EthRatio
                                 :dividend="form.inner_margin"
                                 :divisor="form.outer_margin"
-                                >Inner/Outer Margin Ratio</EthRatio
+                                >Ratio</EthRatio
                             >
                         </div>
 
@@ -523,7 +518,7 @@
                             <EthRatio
                                 :dividend="form.full_text_block_width"
                                 :divisor="form.full_text_block_height"
-                                >Full Text Block Width/Height Ratio</EthRatio
+                                >Ratio</EthRatio
                             >
                         </div>
                     </template>
@@ -540,9 +535,7 @@
             </fieldset>
 
             <fieldset class="editcodex_textualfeatures">
-                <legend class="editcodex_sectionheading">
-                    Textual Features
-                </legend>
+                <legend class="sectionheading">Textual Features</legend>
                 <div class="edit_scripts">
                     <EthInput
                         input_type="multi_choice_scripts"
@@ -675,9 +668,9 @@
             </button>
         </div>
 
-        <div v-if="activetab == 'conservation'" class="editcodexcontainer">
+        <div v-if="activetab == 'conservation'" class="maincontainer">
             <fieldset class="editcodex_conservanalys">
-                <legend class="editcodex_sectionheading">
+                <legend class="sectionheading">
                     Conservation and Analysis
                 </legend>
                 <div class="edit_storage">
@@ -723,9 +716,9 @@
             </button>
         </div>
 
-        <div v-if="activetab == 'provenance'" class="editcodexcontainer">
+        <div v-if="activetab == 'provenance'" class="maincontainer">
             <fieldset class="editcodex_provenance">
-                <legend class="editcodex_sectionheading">Provenance</legend>
+                <legend class="sectionheading">Provenance</legend>
                 <div class="edit_sciex">
                     <label :for="scientifically_excavated"
                         >Scientifically Excavated</label
@@ -825,9 +818,9 @@
             </button>
         </div>
 
-        <div v-if="activetab == 'images'" class="editcodexcontainer">
+        <div v-if="activetab == 'images'" class="maincontainer">
             <fieldset class="editcodex_images">
-                <legend class="editcodex_sectionheading">Images</legend>
+                <legend class="sectionheading">Images</legend>
                 <div class="edit_img">
                     <EthInput
                         input_type="textarea"
@@ -848,9 +841,9 @@
                     multiple
                     ref="loadImages"
                 />
-                <div class="images_rows">
+                <div class="codex_images_rows">
                     <div
-                        class="box"
+                        class="codex_imagebox"
                         v-for="(image, index) in form.images"
                         :key="image.id"
                     >
@@ -861,6 +854,8 @@
                             />
                         </a>
                         <button @click.prevent="delimage(image)">Delete</button>
+
+                        <!--
                         <label
                             class="labelpadding"
                             :for="'image_description_' + index"
@@ -870,6 +865,15 @@
                             :id="'image_description_' + index"
                             v-model="image.description"
                         />
+                        -->
+
+                        <EthInput
+                            input_type="textarea"
+                            :input_id="'image_description_' + index"
+                            v-model="image.description"
+                        >
+                            Description
+                        </EthInput>
 
                         <EthInput
                             input_type="text"
@@ -1124,482 +1128,4 @@ function submit() {
 }
 </script>
 
-<style>
-.tab {
-    display: flex;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-    width: 100%;
-    justify-content: stretch;
-}
-
-.tab button {
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 5px;
-    font-size: 18px;
-    width: 100%;
-    transition: 50ms;
-}
-
-button.unselected {
-    background-color: rgb(225, 225, 228);
-}
-
-button.unselected:hover {
-    background-color: rgb(186, 189, 185);
-}
-
-button.selected:hover {
-    background-color: rgb(77, 87, 66);
-}
-
-button.selected {
-    background-color: rgb(119, 128, 111);
-}
-
-.submitbutton {
-    font-size: 20px;
-    width: 250px;
-    height: 55px;
-    padding: 10px;
-    border-radius: 15px;
-    justify-self: center;
-    align-self: center;
-    margin: 20px;
-}
-
-.editcodexcontainer {
-    display: flex;
-    background-color: #eee;
-    margin-top: 4px;
-    padding: 20px;
-    font-family: sans-serif;
-    font-size: 16px;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-}
-
-.editcodex_sectionheading {
-    background-color: #fff;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 10px;
-    padding: 5px 15px;
-    font-size: 18px;
-}
-
-.edit_published {
-    grid-area: published;
-    align-self: center;
-}
-.edit_trismegistos {
-    grid-area: trismegistos;
-}
-.edit_standard {
-    grid-area: standard;
-}
-.edit_other {
-    grid-area: other;
-}
-.edit_publ {
-    grid-area: publ;
-}
-.edit_shelf {
-    grid-area: shelf;
-}
-.edit_bibliography {
-    grid-area: biblio;
-}
-
-.editcodex_generalgrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 4fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "published trismegistos standard other"
-        "published trismegistos standard other"
-        "publ publ publ other"
-        "publ publ publ biblio"
-        "shelf shelf shelf biblio"
-        "shelf shelf shelf biblio";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-}
-
-.edit_title {
-    grid-area: title;
-}
-.edit_author {
-    grid-area: author;
-}
-.edit_contdesc {
-    grid-area: desc;
-}
-.edit_language {
-    grid-area: language;
-}
-.edit_genre {
-    grid-area: genre;
-}
-.edit_content {
-    grid-area: cont;
-}
-
-.editcodex_contentgrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr auto;
-    grid-template-areas:
-        "title title title author author author desc desc desc"
-        "language language genre genre cont cont desc desc desc";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_early {
-    grid-area: early;
-}
-.edit_late {
-    grid-area: late;
-}
-.edit_datecomm {
-    grid-area: datecomm;
-}
-.edit_basis {
-    grid-area: basis;
-}
-.edit_certainty {
-    grid-area: certainty;
-}
-
-.editcodex_date {
-    display: grid;
-    grid-template-columns: 1fr 1fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "early late datecomm"
-        "basis certainty datecomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_general {
-    grid-area: general;
-}
-.edit_internal {
-    grid-area: internal;
-}
-
-.editcodex_comments {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: "general internal";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_material {
-    grid-area: material;
-}
-.edit_ink {
-    grid-area: ink;
-}
-.edit_cover {
-    grid-area: cover;
-}
-.edit_structure {
-    grid-area: structure;
-}
-.edit_numquire {
-    grid-area: numquire;
-}
-.edit_quirenum {
-    grid-area: quirenum;
-}
-.edit_quirecomm {
-    grid-area: quirecomm;
-}
-.edit_bindingdesc {
-    grid-area: bindingdesc;
-}
-
-.editcodex_materiality {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "material bindingdesc"
-        "ink bindingdesc"
-        "cover bindingdesc"
-        "structure quirecomm"
-        "numquire quirecomm"
-        "quirenum quirecomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_dimknown {
-    grid-area: dimknown;
-}
-.edit_meascomm {
-    grid-area: meascomm;
-}
-.edit_pagewidth {
-    grid-area: pagewidth;
-}
-.edit_pageheight {
-    grid-area: pageheight;
-}
-.edit_pratio {
-    grid-area: pratio;
-}
-.edit_stable {
-    grid-area: stable;
-}
-.edit_blockwidth {
-    grid-area: blockwidth;
-}
-.edit_blockheight {
-    grid-area: blockheight;
-}
-.edit_bratio {
-    grid-area: bratio;
-}
-.edit_uppmarg {
-    grid-area: uppmarg;
-}
-.edit_lowmarg {
-    grid-area: lowmarg;
-}
-.edit_ulratio {
-    grid-area: ulratio;
-}
-.edit_innmarg {
-    grid-area: innmarg;
-}
-.edit_outmarg {
-    grid-area: outmarg;
-}
-.edit_ioratio {
-    grid-area: ioratio;
-}
-
-.editcodex_measurements {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "dimknown . . meascomm"
-        "pagewidth pageheight pratio meascomm"
-        "stable . . meascomm"
-        "blockwidth blockheight bratio meascomm"
-        "uppmarg lowmarg ulratio meascomm"
-        "innmarg outmarg ioratio meascomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_numhands {
-    grid-area: numhands;
-}
-.edit_scripts {
-    grid-area: scripts;
-}
-.edit_scriptdesc {
-    grid-area: scriptdesc;
-}
-.edit_pagination {
-    grid-area: pagination;
-}
-.edit_paratext {
-    grid-area: paratext;
-}
-.edit_paradesc {
-    grid-area: paradesc;
-}
-.edit_punctuation {
-    grid-area: punctuation;
-}
-.edit_diacritics {
-    grid-area: diacritics;
-}
-.edit_diacritdesc {
-    grid-area: diacritdesc;
-}
-.edit_critical {
-    grid-area: critical;
-}
-.edit_decorative {
-    grid-area: decorative;
-}
-.edit_decodesc {
-    grid-area: decodesc;
-}
-.edit_quiresig {
-    grid-area: quiresig;
-}
-
-.editcodex_textualfeatures {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "scripts numhands diacritics diacritics"
-        "scriptdesc scriptdesc diacritdesc diacritdesc"
-        "paratext paratext decorative decorative"
-        "paradesc paradesc decodesc decodesc"
-        "punctuation critical pagination quiresig";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_storage {
-    grid-area: storage;
-}
-.edit_scientific {
-    grid-area: scientific;
-}
-.edit_conshist {
-    grid-area: conshist;
-}
-.edit_analyscomm {
-    grid-area: analyscomm;
-}
-
-.editcodex_conservanalys {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "storage scientific"
-        "conshist analyscomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_sciex {
-    grid-area: sciex;
-}
-.edit_excomm {
-    grid-area: excomm;
-}
-.edit_anciprov {
-    grid-area: anciprov;
-}
-.edit_ancicert {
-    grid-area: ancicert;
-}
-.edit_ancicomm {
-    grid-area: ancicomm;
-}
-.edit_transactions {
-    grid-area: transactions;
-}
-.edit_legalclass {
-    grid-area: legalclass;
-}
-.edit_legalcomm {
-    grid-area: legalcomm;
-}
-
-.editcodex_provenance {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "sciex anciprov ancicert"
-        "excomm ancicomm ancicomm"
-        "transactions legalclass legalclass"
-        "transactions legalcomm legalcomm";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.edit_img {
-    grid-area: img;
-}
-
-.editcodex_images {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: "img";
-    gap: 20px;
-    width: 99%;
-    align-self: center;
-    background-color: #ccc;
-    padding: 25px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.box {
-    padding: 10px;
-    background-color: #bbb;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-}
-
-.images_rows {
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.labelpadding {
-    padding-top: 15px;
-    padding-right: 15px;
-}
-</style>
+<style></style>
