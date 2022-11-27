@@ -254,6 +254,12 @@ body {
     width: 100%;
 }
 
+.addbutton {
+    margin-right: 1em;
+    padding: 0.3em 0.5em;
+    height: fit-content;
+    width: fit-content;
+}
 .ratio {
     display: flex;
     flex-direction: column;
@@ -473,15 +479,25 @@ body {
 .pageline {
     display: flex;
     flex-direction: row;
+    background-color: #eef;
+    align-items: center;
+    font-size: 10px;
 }
 
-.pageline div {
-    align-self: center;
+.pageline input {
+    width: 25em;
 }
 
 .pageline button {
     margin-left: 1em;
     padding: 0.3em 0.5em;
+}
+
+.codex_search_flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #999;
 }
 
 .codex_pagecontainer {

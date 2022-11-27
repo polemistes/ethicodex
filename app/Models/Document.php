@@ -40,6 +40,16 @@ class Document extends Model
         return $this->belongsToMany(Purchase::class);
     }
 
+    public function purchase_parties()
+    {
+        $purchases = $this->purchases()->with('purchase_parties')->get();
+        $purchases = Purchase::$purchase_parties = (array) null;
+        foreach ($purchases as $purchase) {
+            $purchase_parties = array_merge($purchase_parties, $purchase->relations->purchase_parties->items);
+        }
+        return $purchase_parties;
+    }
+
     public function ancient_provenance()
     {
         return $this->belongsTo(AncientProvenance::class);

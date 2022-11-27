@@ -784,7 +784,7 @@
 -->
                 <div class="edit_legalclass">
                     <EthInput
-                        input_type="legal_choice"
+                        input_type="single_choice"
                         input_id="legal_classification"
                         :choices="legal_classifications"
                         v-model="form.legal_classification_id"
@@ -1124,7 +1124,10 @@ function addimages(imagefiles) {
 
 function submit() {
     submitted = true;
-    form.post("/codex_update/" + props.document.id);
+    form.post("/codex_update/" + props.document.id, {
+        preserveState: true,
+        preserveScroll: true,
+    });
 }
 </script>
 
