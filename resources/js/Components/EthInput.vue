@@ -356,6 +356,61 @@
         </div>
     </div>
 
+    <div v-if="input_type == 'multi_choice_event_wide'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <button
+            :id="input_id"
+            @click.prevent="dropdown = !dropdown"
+            class="dropdownbutton-wide"
+        >
+            <span>Select</span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div v-if="choices.length > 20">
+                    <label :for="search">Search:</label>
+                    <input type="text" v-model="search" />
+                </div>
+                <div class="dropdown-scrollwindow">
+                    <div v-for="choice in search_choices" :key="choice.id">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="
+                                $emit('update:modelValue', checked);
+                                $emit('newChange');
+                            "
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="choicelist-stack">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement-wide"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
+                    >
+                        ✕
+                    </button>
+
+                    {{ value.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div v-if="input_type == 'multi_choice_search'" class="inputfield-search">
         <label :for="input_id"><slot /></label>
         <button

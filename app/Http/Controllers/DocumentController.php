@@ -150,7 +150,7 @@ class DocumentController extends Controller
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('standard_name', $search) ? $search['standard_name'] : null;
         $publication = array_key_exists('publication', $search) ? $search['publication'] : null;
-        $current_shelfmarks = array_key_exists('current_shelfmark', $search) ? $search['current_shelfmarks'] : null;
+        $current_shelfmarks = array_key_exists('current_shelfmarks', $search) ? $search['current_shelfmarks'] : null;
         $trismegistos_id = array_key_exists('trismegistos_id', $search) ? $search['trismegistos_id'] : null;
         $title = array_key_exists('title', $search) ? $search['title'] : null;
         $ancient_author = array_key_exists('ancient_author', $search) ? $search['ancient_author'] : null;
@@ -199,7 +199,7 @@ class DocumentController extends Controller
         $analyses = array_key_exists('analyses', $search) ? $search['analyses'] : null;
         $scientifically_excavated = array_key_exists('scientifically_excavated', $search) ? $search['scientifically_excavated'] : null;
         $ancient_provenances = array_key_exists('ancient_provenances', $search) ? $search['ancient_provenances'] : null;
-        $ancient_provenance_certainties = array_key_exists('ancient_provenance_certaities', $search) ? $search['ancient_provenance_certainties'] : null;
+        $ancient_provenance_certainties = array_key_exists('ancient_provenance_certainties', $search) ? $search['ancient_provenance_certainties'] : null;
         $transactions = array_key_exists('transactions', $search) ? $search['transactions'] : null;
         $transaction_parties = array_key_exists('transaction_parties', $search) ? $search['transaction_parties'] : null;
         $legal_classifications = array_key_exists('legal_classifications', $search) ? $search['legal_classifications'] : null;

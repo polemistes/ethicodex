@@ -399,6 +399,20 @@ body {
     cursor: pointer;
 }
 
+.dropdownbutton-wide {
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    width: 400px;
+    height: fit-content;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
 .closemenubutton {
     background-color: #eee;
     width: 10em;

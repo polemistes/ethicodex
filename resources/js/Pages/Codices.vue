@@ -526,7 +526,7 @@
             </EthInput>
 
             <EthInput
-                input_type="multi_choice_event"
+                input_type="multi_choice_event_wide"
                 input_id="analyses"
                 :choices="analyses"
                 v-model="form.analyses"
