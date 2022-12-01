@@ -1,37 +1,25 @@
 <template>
     <div class="pageline">
-        <div>
-            <Link
-                v-if="
-                    props.auth == null
-                        ? 0
-                        : props.auth.user.role.id >= 2
-                        ? 1
-                        : 0
-                "
-                style="
-                    margin-right: 1em;
-                    padding: 0.3em 0.5em;
-                    height: fit-content;
-                "
-                href="/codex_new"
-                as="button"
-            >
-                Add Codex
-            </Link>
-        </div>
-        <div style="display: flex; flex-direction: row; align-items: center">
-            <p style="font-size: 18px; padding-right: 10px">Search:</p>
+        <Link
+            v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
+            class="addbutton"
+            href="/codex_new"
+            as="button"
+        >
+            Add Codex
+        </Link>
+        <div class="pageline_search_field">
             <EthInput
                 input_type="textevent"
                 input_id="fulltext"
                 v-model="form.fulltext"
                 @key-pressed="sendsearch()"
             >
+                Full-Text Search
             </EthInput>
-            <p style="font-size: 18px; padding-right: 10px">
-                Search Alternatives:
-            </p>
+        </div>
+
+        <div class="pageline_search_alternatives">
             <EthInput
                 input_type="multi_choice_search"
                 input_id="showfields"
@@ -46,10 +34,11 @@
                 v-model:provenance="form.show_provenance"
                 @new-change="sendsearch()"
             >
+                Search Alternatives
             </EthInput>
         </div>
 
-        <div class="codex_pagecontainer">
+        <div class="codex_pagecontainer" style="margin-left: auto">
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
@@ -62,538 +51,555 @@
             />
         </div>
     </div>
-    <div v-if="form.show_publication" class="codex_search_flex">
-        <EthInput
-            input_type="textevent"
-            input_id="standard_name"
-            v-model="form.standard_name"
-            @key-pressed="sendsearch()"
-        >
-            Standard Name
-        </EthInput>
-        <EthInput
-            input_type="textevent"
-            input_id="publication"
-            v-model="form.publication"
-            @key-pressed="sendsearch()"
-        >
-            Publication
-        </EthInput>
-        <EthInput
-            input_type="textevent"
-            input_id="current_shelfmarks"
-            v-model="form.current_shelfmarks"
-            @key-pressed="sendsearch()"
-        >
-            Current Shelfmarks
-        </EthInput>
-        <EthInput
-            input_type="textevent"
-            input_id="trismegistos_id"
-            v-model="form.trismegistos_id"
-            @key-pressed="sendsearch()"
-        >
-            Trismegistos ID
-        </EthInput>
+    <div class="searchblockbackground">
+        <div v-if="form.show_publication" class="searchblock">
+            <div class="searchblocktitle">Publication Search</div>
+            <EthInput
+                input_type="textevent"
+                input_id="standard_name"
+                v-model="form.standard_name"
+                @key-pressed="sendsearch()"
+            >
+                Standard Name
+            </EthInput>
+            <EthInput
+                input_type="textevent"
+                input_id="current_shelfmarks"
+                v-model="form.current_shelfmarks"
+                @key-pressed="sendsearch()"
+            >
+                Current Shelfmarks
+            </EthInput>
+            <EthInput
+                input_type="textevent"
+                input_id="publication"
+                v-model="form.publication"
+                @key-pressed="sendsearch()"
+            >
+                Publication
+            </EthInput>
+            <EthInput
+                input_type="textevent"
+                input_id="trismegistos_id"
+                v-model="form.trismegistos_id"
+                @key-pressed="sendsearch()"
+            >
+                Trismegistos ID
+            </EthInput>
+        </div>
+
+        <div v-if="form.show_content" class="searchblock">
+            <div class="searchblocktitle">Content Search</div>
+            <EthInput
+                input_type="textevent"
+                input_id="title"
+                v-model="form.title"
+                @key-pressed="sendsearch()"
+            >
+                Title of Work
+            </EthInput>
+
+            <EthInput
+                input_type="textevent"
+                input_id="ancient_author"
+                v-model="form.ancient_author"
+                @key-pressed="sendsearch()"
+            >
+                Ancient Author
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="genres"
+                :choices="genres"
+                v-model="form.genres"
+                @new-change="sendsearch()"
+            >
+                Genres
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="tags"
+                :choices="tags"
+                v-model="form.tags"
+                @new-change="sendsearch()"
+            >
+                Content Tags
+            </EthInput>
+        </div>
+
+        <div v-if="form.show_dating" class="searchblock">
+            <div class="searchblocktitle">Date Search</div>
+            <div class="pushleft">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="earliest_date"
+                    v-model="form.earliest_date"
+                    @key-pressed="sendsearch()"
+                >
+                    Earliest Date
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="latest_date"
+                    v-model="form.latest_date"
+                    @key-pressed="sendsearch()"
+                >
+                    Latest Date
+                </EthInput>
+
+                <EthInput
+                    helptext="Restrict search to codices where the full date range falls within the min and max search parameters."
+                    input_type="boolevent"
+                    input_id="exclusive_date"
+                    v-model="form.exclusive_date"
+                    @new-change="sendsearch()"
+                >
+                    Strict Date
+                </EthInput>
+            </div>
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="dating_methods"
+                :choices="dating_methods"
+                v-model="form.dating_methods"
+                @new-change="sendsearch()"
+            >
+                Basis of Date
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="dating_certainties"
+                :choices="dating_certainties"
+                v-model="form.dating_certainties"
+                @new-change="sendsearch()"
+            >
+                Certainty of Date
+            </EthInput>
+        </div>
+
+        <div v-if="form.show_materiality" class="searchblock">
+            <div class="searchblocktitle">Materiality Search</div>
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="materials"
+                :choices="materials"
+                v-model="form.materials"
+                @new-change="sendsearch()"
+            >
+                Material
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="inks"
+                :choices="inks"
+                v-model="form.inks"
+                @new-change="sendsearch()"
+            >
+                Ink
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="covers"
+                :choices="covers"
+                v-model="form.covers"
+                @new-change="sendsearch()"
+            >
+                Cover
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="quire_structures"
+                :choices="quire_structures"
+                v-model="form.quire_structures"
+                @new-change="sendsearch()"
+            >
+                Quire Structure
+            </EthInput>
+
+            <EthInput
+                input_type="numberevent"
+                input_id="quirenum_min"
+                v-model="form.quirenum_min"
+                @key-pressed="sendsearch()"
+            >
+                Min Num of Quires
+            </EthInput>
+
+            <EthInput
+                input_type="numberevent"
+                input_id="quirenum_max"
+                v-model="form.quirenum_max"
+                @key-pressed="sendsearch()"
+            >
+                Max Num of Quires
+            </EthInput>
+
+            <EthInput
+                input_type="numberevent"
+                input_id="bifolianum_min"
+                v-model="form.bifolianum_min"
+                @key-pressed="sendsearch()"
+            >
+                Min Num of Bifolia
+            </EthInput>
+
+            <EthInput
+                input_type="numberevent"
+                input_id="bifolianum_max"
+                v-model="form.bifolianum_max"
+                @key-pressed="sendsearch()"
+            >
+                Max Num of Bifolia
+            </EthInput>
+        </div>
+
+        <div v-if="form.show_measurement" class="searchblock-outer">
+            <div class="searchblocktitle">Measurements Search</div>
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_width_min"
+                    v-model="form.full_page_width_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Page Width
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_width_max"
+                    v-model="form.full_page_width_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Page Width
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_height_min"
+                    v-model="form.full_page_height_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Page Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_height_max"
+                    v-model="form.full_page_height_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Page Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_width_min"
+                    v-model="form.full_text_block_width_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Block Width
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_width_max"
+                    v-model="form.full_text_block_width_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Block Width
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_height_min"
+                    v-model="form.full_text_block_height_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Block Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_height_max"
+                    v-model="form.full_text_block_height_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Block Height
+                </EthInput>
+            </div>
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="upper_margin_min"
+                    v-model="form.upper_margin_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Upper Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="upper_margin_max"
+                    v-model="form.upper_margin_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Upper Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="lower_margin_min"
+                    v-model="form.lower_margin_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Lower Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="lower_margin_max"
+                    v-model="form.lower_margin_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Lower Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inner_margin_min"
+                    v-model="form.inner_margin_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Inner Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inner_margin_max"
+                    v-model="form.inner_margin_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Inner Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="outer_margin_min"
+                    v-model="form.outer_margin_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Outer Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="outer_margin_max"
+                    v-model="form.outer_margin_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Outer Margin
+                </EthInput>
+            </div>
+        </div>
+
+        <div v-if="form.show_palaeography" class="searchblock-outer">
+            <div class="searchblocktitle">Palaeography Search</div>
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="hand_number_min"
+                    v-model="form.hand_number_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Num of Hands
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="hand_number_max"
+                    v-model="form.hand_number_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Num of Hands
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="scripts"
+                    :choices="scripts"
+                    v-model="form.scripts"
+                    @new-change="sendsearch()"
+                >
+                    Scripts
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="diacritics"
+                    :choices="diacritics"
+                    v-model="form.diacritics"
+                    @new-change="sendsearch()"
+                >
+                    Diacritics
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="punctuations"
+                    :choices="punctuations"
+                    v-model="form.punctuations"
+                    @new-change="sendsearch()"
+                >
+                    Punctuation
+                </EthInput>
+            </div>
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="paratexts"
+                    :choices="paratexts"
+                    v-model="form.paratexts"
+                    @new-change="sendsearch()"
+                >
+                    Paratexts
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="decorations"
+                    :choices="decorations"
+                    v-model="form.decorations"
+                    @new-change="sendsearch()"
+                >
+                    Decorative Symbols
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="critical_symbols"
+                    :choices="critical_symbols"
+                    v-model="form.critical_symbols"
+                    @new-change="sendsearch()"
+                >
+                    Critical Symbols
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="paginations"
+                    :choices="paginations"
+                    v-model="form.paginations"
+                    @new-change="sendsearch()"
+                >
+                    Pagination
+                </EthInput>
+
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="quire_signatures"
+                    :choices="quire_signatures"
+                    v-model="form.quire_signatures"
+                    @new-change="sendsearch()"
+                >
+                    Quire Signatures
+                </EthInput>
+            </div>
+        </div>
+        <div v-if="form.show_consanal" class="searchblock">
+            <div class="searchblocktitle">Conservation and Analysis Search</div>
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="storage_conditions"
+                :choices="storage_conditions"
+                v-model="form.storage_conditions"
+                @new-change="sendsearch()"
+            >
+                Storage Conditions
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="analyses"
+                :choices="analyses"
+                v-model="form.analyses"
+                @new-change="sendsearch()"
+            >
+                Scientific Analysis
+            </EthInput>
+        </div>
+
+        <div v-if="form.show_provenance" class="searchblock">
+            <div class="searchblocktitle">Provenance Search</div>
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="ancient_provenances"
+                :choices="ancient_provenances"
+                v-model="form.ancient_provenances"
+                @new-change="sendsearch()"
+            >
+                Ancient Provenance
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="ancient_provenance_certainties"
+                :choices="ancient_provenance_certainties"
+                v-model="form.ancient_provenance_certainties"
+                @new-change="sendsearch()"
+            >
+                Certainty of A. Provenance
+            </EthInput>
+
+            <EthInput
+                input_type="single_choice_event"
+                input_id="scientifically_excavated"
+                :choices="yesnomenu"
+                v-model="form.scientifically_excavated"
+                @new-change="sendsearch()"
+            >
+                Scientifically Excavated
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="transactions"
+                :choices="transactions"
+                v-model="form.transactions"
+                @new-change="sendsearch()"
+            >
+                Transactions
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="transaction_parties"
+                :choices="transaction_parties"
+                v-model="form.transaction_parties"
+                @new-change="sendsearch()"
+            >
+                Transaction Parties
+            </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="legal_classifications"
+                :choices="legal_classifications"
+                v-model="form.legal_classifications"
+                @new-change="sendsearch()"
+            >
+                Legal Classification
+            </EthInput>
+        </div>
     </div>
-
-    <div v-if="form.show_content" class="codex_search_flex">
-        <EthInput
-            input_type="textevent"
-            input_id="title"
-            v-model="form.title"
-            @key-pressed="sendsearch()"
-        >
-            Title of Work
-        </EthInput>
-
-        <EthInput
-            input_type="textevent"
-            input_id="ancient_author"
-            v-model="form.ancient_author"
-            @key-pressed="sendsearch()"
-        >
-            Ancient Author
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="genres"
-            :choices="genres"
-            v-model="form.genres"
-            @new-change="sendsearch()"
-        >
-            Genres
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="tags"
-            :choices="tags"
-            v-model="form.tags"
-            @new-change="sendsearch()"
-        >
-            Content Tags
-        </EthInput>
-    </div>
-
-    <div v-if="form.show_dating" class="codex_search_flex">
-        <EthInput
-            input_type="numberevent"
-            input_id="earliest_date"
-            v-model="form.earliest_date"
-            @key-pressed="sendsearch()"
-        >
-            Earliest Date
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="latest_date"
-            v-model="form.latest_date"
-            @key-pressed="sendsearch()"
-        >
-            Latest Date
-        </EthInput>
-
-        <EthInput
-            input_type="boolevent"
-            input_id="exclusive_date"
-            v-model="form.exclusive_date"
-            @new-change="sendsearch()"
-        >
-            Exclusive Date
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="dating_methods"
-            :choices="dating_methods"
-            v-model="form.dating_methods"
-            @new-change="sendsearch()"
-        >
-            Basis of Date
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="dating_certainties"
-            :choices="dating_certainties"
-            v-model="form.dating_certainties"
-            @new-change="sendsearch()"
-        >
-            Certainty of Date
-        </EthInput>
-    </div>
-
-    <div v-if="form.show_materiality" class="codex_search_flex">
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="materials"
-            :choices="materials"
-            v-model="form.materials"
-            @new-change="sendsearch()"
-        >
-            Material
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="inks"
-            :choices="inks"
-            v-model="form.inks"
-            @new-change="sendsearch()"
-        >
-            Ink
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="covers"
-            :choices="covers"
-            v-model="form.covers"
-            @new-change="sendsearch()"
-        >
-            Cover
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="quire_structures"
-            :choices="quire_structures"
-            v-model="form.quire_structures"
-            @new-change="sendsearch()"
-        >
-            Quire Structure
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="quirenum_min"
-            v-model="form.quirenum_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Num of Quires
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="quirenum_max"
-            v-model="form.quirenum_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Num of Quires
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="bifolianum_min"
-            v-model="form.bifolianum_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Num of Bifolia
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="bifolianum_max"
-            v-model="form.bifolianum_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Num of Bifolia
-        </EthInput>
-    </div>
-
-    <div v-if="form.show_measurement" class="codex_search_flex">
-        <EthInput
-            input_type="numberevent"
-            input_id="full_page_width_min"
-            v-model="form.full_page_width_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Page Width
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_page_width_max"
-            v-model="form.full_page_width_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Page Width
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_page_height_min"
-            v-model="form.full_page_height_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Page Height
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_page_height_max"
-            v-model="form.full_page_height_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Page Height
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_text_block_width_min"
-            v-model="form.full_text_block_width_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Block Width
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_text_block_width_max"
-            v-model="form.full_text_block_width_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Block Width
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_text_block_height_min"
-            v-model="form.full_text_block_height_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Block Height
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="full_text_block_height_max"
-            v-model="form.full_text_block_height_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Block Height
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="upper_margin_min"
-            v-model="form.upper_margin_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Upper Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="upper_margin_max"
-            v-model="form.upper_margin_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Upper Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="lower_margin_min"
-            v-model="form.lower_margin_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Lower Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="lower_margin_max"
-            v-model="form.lower_margin_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Lower Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="inner_margin_min"
-            v-model="form.inner_margin_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Inner Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="inner_margin_max"
-            v-model="form.inner_margin_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Inner Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="outer_margin_min"
-            v-model="form.outer_margin_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Outer Margin
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="outer_margin_max"
-            v-model="form.outer_margin_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Outer Margin
-        </EthInput>
-    </div>
-
-    <div v-if="form.show_palaeography" class="codex_search_flex">
-        <EthInput
-            input_type="numberevent"
-            input_id="hand_number_min"
-            v-model="form.hand_number_min"
-            @key-pressed="sendsearch()"
-        >
-            Min Num of Hands
-        </EthInput>
-
-        <EthInput
-            input_type="numberevent"
-            input_id="hand_number_max"
-            v-model="form.hand_number_max"
-            @key-pressed="sendsearch()"
-        >
-            Max Num of Hands
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="scripts"
-            :choices="scripts"
-            v-model="form.scripts"
-            @new-change="sendsearch()"
-        >
-            Scripts
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="diacritics"
-            :choices="diacritics"
-            v-model="form.diacritics"
-            @new-change="sendsearch()"
-        >
-            Diacritics
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="punctuations"
-            :choices="punctuations"
-            v-model="form.punctuations"
-            @new-change="sendsearch()"
-        >
-            Punctuation
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="paratexts"
-            :choices="paratexts"
-            v-model="form.paratexts"
-            @new-change="sendsearch()"
-        >
-            Paratexts
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="decorations"
-            :choices="decorations"
-            v-model="form.decorations"
-            @new-change="sendsearch()"
-        >
-            Decorative Symbols
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="critical_symbols"
-            :choices="critical_symbols"
-            v-model="form.critical_symbols"
-            @new-change="sendsearch()"
-        >
-            Critical Symbols
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="paginations"
-            :choices="paginations"
-            v-model="form.paginations"
-            @new-change="sendsearch()"
-        >
-            Pagination
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="quire_signatures"
-            :choices="quire_signatures"
-            v-model="form.quire_signatures"
-            @new-change="sendsearch()"
-        >
-            Quire Signatures
-        </EthInput>
-    </div>
-    <div v-if="form.show_consanal" class="codex_search_flex">
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="storage_conditions"
-            :choices="storage_conditions"
-            v-model="form.storage_conditions"
-            @new-change="sendsearch()"
-        >
-            Storage Conditions
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="analyses"
-            :choices="analyses"
-            v-model="form.analyses"
-            @new-change="sendsearch()"
-        >
-            Scientific Analysis
-        </EthInput>
-    </div>
-
-    <div v-if="form.show_provenance" class="codex_search_flex">
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="ancient_provenances"
-            :choices="ancient_provenances"
-            v-model="form.ancient_provenances"
-            @new-change="sendsearch()"
-        >
-            Ancient Provenance
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="ancient_provenance_certainties"
-            :choices="ancient_provenance_certainties"
-            v-model="form.ancient_provenance_certainties"
-            @new-change="sendsearch()"
-        >
-            Certainty of A. Provenance
-        </EthInput>
-
-        <EthInput
-            input_type="single_choice_event"
-            input_id="scientifically_excavated"
-            :choices="yesnomenu"
-            v-model="form.scientifically_excavated"
-            @new-change="sendsearch()"
-        >
-            Scientifically Excavated
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="transactions"
-            :choices="transactions"
-            v-model="form.transactions"
-            @new-change="sendsearch()"
-        >
-            Transactions
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="transaction_parties"
-            :choices="transaction_parties"
-            v-model="form.transaction_parties"
-            @new-change="sendsearch()"
-        >
-            Transaction Parties
-        </EthInput>
-
-        <EthInput
-            input_type="multi_choice_event"
-            input_id="legal_classifications"
-            :choices="legal_classifications"
-            v-model="form.legal_classifications"
-            @new-change="sendsearch()"
-        >
-            Legal Classification
-        </EthInput>
-    </div>
-
-    <div class="cod_container" style="background-color: #bbb">
+    <div class="cod_titles" style="padding-top: 15px; background-color: #bbb">
         <div class="cod_first"></div>
         <div class="cod_second"><b>Standard Name</b></div>
         <div class="cod_third"><b>Shelfmark</b></div>
@@ -659,8 +665,11 @@
             v-text="document.start_year + '–' + document.end_year"
         ></div>
     </div>
-    <div class="codex_pageline">
-        <div class="codex_pagecontainer">
+    <div class="pageline">
+        <div
+            class="codex_pagecontainer"
+            style="margin-left: auto; margin-top: 20px"
+        >
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
@@ -721,6 +730,8 @@ const props = defineProps({
     scripts: Array,
     storage_conditions: Array,
     tags: Array,
+    ancient_provenances: Array,
+    ancient_provenance_certainties: Array,
     transactions: Array,
     transaction_parties: Array,
 

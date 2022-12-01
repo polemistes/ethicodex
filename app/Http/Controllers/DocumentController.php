@@ -535,6 +535,9 @@ class DocumentController extends Controller
                 }
             )
 
+            ->orderBy('start_year')
+            ->orderBy('end_year')
+            ->orderBy('standard_name')
             ->paginate(10)->withQueryString();
 
         return Inertia::render('Codices', [
@@ -568,6 +571,8 @@ class DocumentController extends Controller
             'scripts' => Script::all(),
             'storage_conditions' => StorageCondition::all(),
             'tags' => Tag::all(),
+            'ancient_provenances' => AncientProvenance::all(),
+            'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
             'transactions' => Purchase::all(),
             'transaction_parties' => PurchaseParty::all(),
 

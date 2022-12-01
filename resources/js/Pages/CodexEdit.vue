@@ -43,6 +43,7 @@
                     <input
                         :id="published"
                         type="checkbox"
+                        style="margin-left: 5px"
                         v-model="form.published"
                     />
                 </div>
@@ -388,6 +389,7 @@
                     <input
                         :id="page_dimensions_known"
                         type="checkbox"
+                        style="margin-left: 5px"
                         v-model="form.page_dimensions_known"
                     />
                 </div>
@@ -444,6 +446,7 @@
                             <input
                                 :id="textbox_size_stable"
                                 type="checkbox"
+                                style="margin-left: 5px"
                                 v-model="form.textbox_size_stable"
                             />
                         </div>
@@ -693,7 +696,7 @@
                 </div>
                 <div class="edit_scientific">
                     <EthInput
-                        input_type="multi_choice"
+                        input_type="multi_choice_stack"
                         input_id="analyses"
                         :choices="analyses_all"
                         v-model="form.analyses"
@@ -726,6 +729,7 @@
                     <input
                         :id="scientifically_excavated"
                         type="checkbox"
+                        style="margin-left: 5px"
                         v-model="form.scientifically_excavated"
                     />
                 </div>
@@ -1058,6 +1062,22 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 });
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
+
+window.addEventListener(
+    "popstate",
+    (event) => {
+        if (form.isDirty) {
+            if (
+                !confirm(
+                    "You have unsaved data. Do you really want to leave the page?"
+                )
+            ) {
+                history.forward();
+            }
+        }
+    },
+    false
+);
 
 onMounted(() => {
     if (!form.bifolia) {

@@ -61,7 +61,7 @@
                     </EthInput>
                 </div>
 
-                <div class="trans_parties inputfield">
+                <div class="trans_parties">
                     <label :for="input_id">Parties to the Transaction</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
@@ -70,22 +70,6 @@
                         <span>Select</span>
                         <span>⌄</span>
                     </button>
-                    <div class="choicelist">
-                        <span
-                            v-for="party in form.purchase_parties"
-                            :key="party.id"
-                            class="choiceelement"
-                            :title="party.description"
-                        >
-                            <button
-                                @click.prevent="removeparty(party)"
-                                class="removebutton"
-                            >
-                                ✕
-                            </button>
-                            {{ party.name }}
-                        </span>
-                    </div>
 
                     <div v-if="dropdown" class="dropdown-content">
                         <div v-if="all_purchase_parties.length > 12">
@@ -103,6 +87,7 @@
                                     :id="choice.id"
                                     :value="choice"
                                     v-model="form.purchase_parties"
+                                    style="margin-right: 5px"
                                 />
                                 <label>{{ choice.name }}</label>
 
@@ -112,6 +97,7 @@
                                             (e) => e.id === choice.id
                                         )
                                     "
+                                    style="margin-left: 10px"
                                     v-model="choice.party_role"
                                     @change="
                                         changerole(
@@ -129,13 +115,29 @@
                                     </option>
                                 </select>
                             </div>
+                            <button
+                                @click.prevent="dropdown = false"
+                                class="closemenubutton"
+                            >
+                                Close
+                            </button>
                         </div>
-                        <button
-                            @click.prevent="dropdown = false"
-                            class="dropdownbutton"
+                    </div>
+                    <div class="choicelist">
+                        <span
+                            v-for="party in form.purchase_parties"
+                            :key="party.id"
+                            class="choiceelement"
+                            :title="party.description"
                         >
-                            Close
-                        </button>
+                            <button
+                                @click.prevent="removeparty(party)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
+                            {{ party.name }}
+                        </span>
                     </div>
                 </div>
             </fieldset>
@@ -214,8 +216,6 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         }
     }
 });
-
-window.onbeforeunload = (s) => (form.isDirty ? "" : null);
 
 const all_purchase_parties = reactive([]);
 

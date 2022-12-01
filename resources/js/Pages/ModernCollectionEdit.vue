@@ -117,6 +117,22 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
 
+window.addEventListener(
+    "popstate",
+    (event) => {
+        if (form.isDirty) {
+            if (
+                !confirm(
+                    "You have unsaved data. Do you really want to leave the page?"
+                )
+            ) {
+                history.forward();
+            }
+        }
+    },
+    false
+);
+
 function submit() {
     submitted = true;
     Inertia.post(

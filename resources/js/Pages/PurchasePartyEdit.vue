@@ -22,15 +22,24 @@
                 </div>
 
                 <div class="party_institution">
-                    <p>
-                        <input
-                            id="institution"
-                            type="checkbox"
-                            :value="form.institution"
-                            v-model="form.institution"
-                        />
-                        <label for="institution">Institution</label>
-                    </p>
+                    <label
+                        for="institution"
+                        style="font-size: 18px; font-weight: 'bold'"
+                        >Institution</label
+                    >
+
+                    <input
+                        id="institution"
+                        type="checkbox"
+                        style="
+                            margin-right: auto;
+                            margin-left: 35px;
+                            margin-top: 10px;
+                            transform: scale(1.5);
+                        "
+                        :value="form.institution"
+                        v-model="form.institution"
+                    />
                 </div>
 
                 <div class="party_transactions">
@@ -42,21 +51,7 @@
                         <span>Select</span>
                         <span>⌄</span>
                     </button>
-                    <p class="topborder">
-                        <span
-                            v-for="purchase in form.purchases"
-                            :key="purchase.id"
-                            class="choiceelement"
-                        >
-                            <button
-                                @click.prevent="removepurchase(purchase)"
-                                class="removebutton"
-                            >
-                                ✕
-                            </button>
-                            {{ purchase.name }}
-                        </span>
-                    </p>
+
                     <div v-if="dropdown" class="dropdown-content">
                         <div v-if="all_purchases.length > 12">
                             <label :for="search">Search:</label>
@@ -73,6 +68,7 @@
                                     :id="choice.id"
                                     :value="choice"
                                     v-model="form.purchases"
+                                    style="margin-right: 5px"
                                 />
                                 <label>{{ choice.name }}</label>
 
@@ -82,6 +78,7 @@
                                             (e) => e.id === choice.id
                                         )
                                     "
+                                    style="margin-left: 10px"
                                     v-model="choice.party_role"
                                     @change="
                                         changerole(
@@ -99,13 +96,28 @@
                                     </option>
                                 </select>
                             </div>
+                            <button
+                                @click.prevent="dropdown = false"
+                                class="closemenubutton"
+                            >
+                                Close
+                            </button>
                         </div>
-                        <button
-                            @click.prevent="dropdown = false"
-                            class="dropdownbutton"
+                    </div>
+                    <div class="choicelist-stack">
+                        <span
+                            v-for="purchase in form.purchases"
+                            :key="purchase.id"
+                            class="choiceelement"
                         >
-                            Close
-                        </button>
+                            <button
+                                @click.prevent="removepurchase(purchase)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
+                            {{ purchase.name }}
+                        </span>
                     </div>
                 </div>
 
@@ -180,6 +192,22 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 });
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
+
+window.addEventListener(
+    "popstate",
+    (event) => {
+        if (form.isDirty) {
+            if (
+                !confirm(
+                    "You have unsaved data. Do you really want to leave the page?"
+                )
+            ) {
+                history.forward();
+            }
+        }
+    },
+    false
+);
 
 const all_purchases = reactive([]);
 

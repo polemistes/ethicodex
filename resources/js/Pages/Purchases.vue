@@ -1,6 +1,6 @@
 <template>
     <div class="pageline">
-        <Link class="newpage" href="/purchase_new" method="post" as="button">
+        <Link class="addbutton" href="/purchase_new" method="post" as="button">
             Add Transaction
         </Link>
     </div>

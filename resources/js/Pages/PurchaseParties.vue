@@ -1,7 +1,7 @@
 <template>
     <div class="pageline">
         <Link
-            class="newpage"
+            class="addbutton"
             href="/purchase_party_new"
             method="post"
             as="button"
