@@ -33,6 +33,15 @@
     </div>
 
     <div class="mainstyle">
+        <Link
+            class="topbutton"
+            as="button"
+            type="button"
+            v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
+            :href="'/codex_edit/' + document.id"
+        >
+            Edit Codex
+        </Link>
         <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="showcodex_generalgrid">
                 <legend class="sectionheading">Publication Info</legend>

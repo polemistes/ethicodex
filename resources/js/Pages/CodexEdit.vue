@@ -33,6 +33,13 @@
     </div>
 
     <form @submit.prevent="submit" class="mainstyle">
+        <Link
+            class="topbutton"
+            as="button"
+            type="button"
+            :href="'/codex_show/' + document.id"
+            >Show Codex
+        </Link>
         <input type="hidden" input_id="id" v-model="form.id" />
         <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="editcodex_generalgrid">

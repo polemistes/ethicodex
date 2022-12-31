@@ -260,6 +260,11 @@ body {
     gap: 20px;
 }
 
+.topbutton {
+    float: right;
+    padding: 0.3em 0.5em;
+}
+
 .addbutton {
     padding: 2px 2px;
     margin-bottom: 20px;
