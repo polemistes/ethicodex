@@ -263,6 +263,7 @@ body {
 .topbutton {
     float: right;
     padding: 0.3em 0.5em;
+    margin-right: 10px;
 }
 
 .addbutton {
