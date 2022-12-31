@@ -144,16 +144,6 @@
                         </span>
                     </div>
                 </div>
-
-                <!--
-        <EthInput input_type="party_choice" 
-                  input_id="purchase_parties" 
-                  :choices="purchase_parties_all"
-                  :roles="party_roles"
-                  v-model="form.purchase_parties">
-                  Parties to the Transaction
-        </EthInput>
--->
             </fieldset>
 
             <button @click.prevent="submit" class="submitbutton">
@@ -178,7 +168,7 @@ const props = defineProps({
     auth: Object,
 });
 
-const form = useForm({
+const form = useForm("PurchaseNew", {
     year: "",
     month: "",
     day: "",
@@ -196,7 +186,9 @@ for (let p of props.purchase_parties_all) {
         name: p.name,
         description: p.description,
         institution: p.institution,
-        party_role: null,
+        party_role: form.purchase_parties.some((e) => e.id === p.id)
+            ? form.purchase_parties.find((item) => item.id === p.id).party_role
+            : null,
     });
 }
 
@@ -209,9 +201,11 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         ) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else if (submitted) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else {
             return false;
         }
@@ -219,6 +213,21 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 });
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
+
+window.onpopstate = function (event) {
+    removeStartEventListener();
+    window.onbeforeunload = null;
+    window.onpopstate = null;
+    if (form.isDirty) {
+        if (
+            !confirm(
+                "You have unsaved data. Do you really want to leave the page?"
+            )
+        ) {
+            window.history.go(1);
+        }
+    }
+};
 
 let search = ref("");
 let submitted = false;

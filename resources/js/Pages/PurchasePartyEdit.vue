@@ -120,15 +120,6 @@
                         </span>
                     </div>
                 </div>
-
-                <!--
-      <EthInput input_type="multi_choice" 
-                  input_id="purchases" 
-                  :choices="purchases_all"
-                  v-model="form.purchases">
-                  Transactions
-      </EthInput>
--->
             </fieldset>
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
@@ -166,7 +157,7 @@ for (let p of props.purchases) {
     });
 }
 
-const form = useForm({
+const form = useForm("PurcharsePartyEdit", {
     name: props.purchase_party.name,
     description: props.purchase_party.description,
     institution: props.purchase_party.institution == 1 ? true : false,
@@ -182,9 +173,11 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         ) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else if (submitted) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else {
             return false;
         }
@@ -193,21 +186,20 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
 
-window.addEventListener(
-    "popstate",
-    (event) => {
-        if (form.isDirty) {
-            if (
-                !confirm(
-                    "You have unsaved data. Do you really want to leave the page?"
-                )
-            ) {
-                history.forward();
-            }
+window.onpopstate = function (event) {
+    removeStartEventListener();
+    window.onbeforeunload = null;
+    window.onpopstate = null;
+    if (form.isDirty) {
+        if (
+            !confirm(
+                "You have unsaved data. Do you really want to leave the page?"
+            )
+        ) {
+            window.history.go(1);
         }
-    },
-    false
-);
+    }
+};
 
 const all_purchases = reactive([]);
 

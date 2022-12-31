@@ -966,7 +966,7 @@ const props = defineProps({
     tags_all: Array,
 });
 
-const form = useForm({
+const form = useForm("EditCodex", {
     id: props.document.id,
     published: props.document.published == 1 ? true : false,
     standard_name: props.document.standard_name,
@@ -1052,9 +1052,11 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         ) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else if (submitted) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else {
             return false;
         }
@@ -1063,21 +1065,20 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
 
-window.addEventListener(
-    "popstate",
-    (event) => {
-        if (form.isDirty) {
-            if (
-                !confirm(
-                    "You have unsaved data. Do you really want to leave the page?"
-                )
-            ) {
-                history.forward();
-            }
+window.onpopstate = function (event) {
+    removeStartEventListener();
+    window.onbeforeunload = null;
+    window.onpopstate = null;
+    if (form.isDirty) {
+        if (
+            !confirm(
+                "You have unsaved data. Do you really want to leave the page?"
+            )
+        ) {
+            window.history.go(1);
         }
-    },
-    false
-);
+    }
+};
 
 onMounted(() => {
     if (!form.bifolia) {

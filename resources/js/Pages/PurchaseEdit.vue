@@ -141,15 +141,6 @@
                     </div>
                 </div>
             </fieldset>
-            <!--
-        <EthInput input_type="party_choice" 
-                  input_id="purchase_parties" 
-                  :choices="purchase_parties_all"
-                  :roles="party_roles"
-                  v-model="form.purchase_parties">
-                  Parties to the Transaction
-        </EthInput>
--->
 
             <button @click.prevent="submit" class="submitbutton">
                 Store All Changes
@@ -189,7 +180,7 @@ for (let p of props.purchase_parties) {
     });
 }
 
-const form = useForm({
+const form = useForm("PurchaseEdit", {
     year: props.purchase.year,
     month: props.purchase.month,
     day: props.purchase.day,
@@ -208,14 +199,33 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         ) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else if (submitted) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else {
             return false;
         }
     }
 });
+
+window.onbeforeunload = (s) => (form.isDirty ? "" : null);
+
+window.onpopstate = function (event) {
+    removeStartEventListener();
+    window.onbeforeunload = null;
+    window.onpopstate = null;
+    if (form.isDirty) {
+        if (
+            !confirm(
+                "You have unsaved data. Do you really want to leave the page?"
+            )
+        ) {
+            window.history.go(1);
+        }
+    }
+};
 
 const all_purchase_parties = reactive([]);
 

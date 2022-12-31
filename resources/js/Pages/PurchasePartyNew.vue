@@ -119,15 +119,6 @@
                         </span>
                     </div>
                 </div>
-
-                <!--
-      <EthInput input_type="multi_choice" 
-                  input_id="purchases" 
-                  :choices="purchases_all"
-                  v-model="form.purchases">
-                  Transactions
-      </EthInput>
--->
             </fieldset>
             <button class="submitbutton" @click.prevent="submit">
                 Store All Changes
@@ -151,7 +142,7 @@ const props = defineProps({
     auth: Object,
 });
 
-const form = useForm({
+const form = useForm("PurchasePartyNew", {
     name: "",
     description: "",
     institution: false,
@@ -166,7 +157,9 @@ for (let p of props.purchases_all) {
         year: p.year,
         name: p.name,
         description: p.description,
-        party_role: null,
+        party_role: form.purchases.some((e) => e.id === p.id)
+            ? form.purchases.find((item) => item.id === p.id).party_role
+            : null,
     });
 }
 
@@ -179,9 +172,11 @@ let removeStartEventListener = Inertia.on("before", (event) => {
         ) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else if (submitted) {
             removeStartEventListener();
             window.onbeforeunload = null;
+            window.onpopstate = null;
         } else {
             return false;
         }
@@ -189,6 +184,21 @@ let removeStartEventListener = Inertia.on("before", (event) => {
 });
 
 window.onbeforeunload = (s) => (form.isDirty ? "" : null);
+
+window.onpopstate = function (event) {
+    removeStartEventListener();
+    window.onbeforeunload = null;
+    window.onpopstate = null;
+    if (form.isDirty) {
+        if (
+            !confirm(
+                "You have unsaved data. Do you really want to leave the page?"
+            )
+        ) {
+            window.history.go(1);
+        }
+    }
+};
 
 let search = ref("");
 
