@@ -361,6 +361,42 @@ body {
     margin: 20px;
 }
 
+.submitbutton_red {
+    font-size: 20px;
+    width: 250px;
+    height: 55px;
+    padding: 10px;
+    border-radius: 15px;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+    background-color: #f50;
+}
+
+.submitbutton_red:hover {
+    font-size: 20px;
+    width: 250px;
+    height: 55px;
+    padding: 10px;
+    border-radius: 15px;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+    background-color: #f30;
+}
+
+.submitbutton_red:active {
+    font-size: 20px;
+    width: 250px;
+    height: 55px;
+    padding: 10px;
+    border-radius: 15px;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+    background-color: #b00;
+}
+
 .codex_imagebox {
     padding: 10px;
     background-color: #bbb;

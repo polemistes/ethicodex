@@ -120,7 +120,10 @@
                     </div>
                 </div>
             </fieldset>
-            <button class="submitbutton" @click.prevent="submit">
+            <button
+                :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                @click.prevent="submit"
+            >
                 Store All Changes
             </button>
         </div>

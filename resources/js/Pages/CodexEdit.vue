@@ -248,7 +248,10 @@
                 </div>
             </fieldset>
 
-            <button class="submitbutton" @click.prevent="submit">
+            <button
+                :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                @click.prevent="submit"
+            >
                 Store All Changes
             </button>
         </div>
@@ -673,7 +676,10 @@
                 </div>
             </fieldset>
 
-            <button class="submitbutton" @click="submit">
+            <button
+                :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                @click.prevent="submit"
+            >
                 Store All Changes
             </button>
         </div>
@@ -721,7 +727,10 @@
                 </div>
             </fieldset>
 
-            <button class="submitbutton" @click.prevent="submit">
+            <button
+                :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                @click.prevent="submit"
+            >
                 Store All Changes
             </button>
         </div>
@@ -824,7 +833,10 @@
                     </EthInput>
                 </div>
             </fieldset>
-            <button class="submitbutton" @click.prevent="submit">
+            <button
+                :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                @click.prevent="submit"
+            >
                 Store All Changes
             </button>
         </div>
@@ -841,7 +853,10 @@
                     >
                 </div>
 
-                <button class="submitbutton" @click.prevent="submit">
+                <button
+                    :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
+                    @click.prevent="submit"
+                >
                     Store All Changes
                 </button>
 
