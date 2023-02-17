@@ -272,12 +272,12 @@
 
                 <div class="edit_ink">
                     <EthInput
-                        input_type="single_choice"
-                        input_id="ink"
-                        :choices="inks"
-                        v-model="form.ink_id"
+                        input_type="multi_choice"
+                        input_id="inks"
+                        :choices="inks_all"
+                        v-model="form.inks"
                     >
-                        Ink
+                        Inks
                     </EthInput>
                 </div>
 
@@ -955,7 +955,7 @@ const props = defineProps({
     genres: Array,
     genres_all: Array,
     images: Array,
-    ink: Object,
+    inks_all: Array,
     inks: Array,
     languages: Array,
     languages_all: Array,
@@ -1041,7 +1041,7 @@ const form = useForm("EditCodex", {
     decoration_description: props.document.decoration_description,
     pagination_id: props.document.pagination_id,
     cover_id: props.document.cover_id,
-    ink_id: props.document.ink_id,
+    inks: props.inks,
     quire_signature_id: props.document.quire_signature_id,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,

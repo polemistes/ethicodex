@@ -327,7 +327,9 @@ class DocumentController extends Controller
                         $query->whereIn('material_id', array_column($materials, 'id'));
                     })
                         ->when($inks, function ($query, $inks) {
-                            $query->whereIn('ink_id', array_column($inks, 'id'));
+                            $query->whereHas('inks', function ($query) use ($inks) {
+                                $query->whereIn('inks.id', array_column($inks, 'id'));
+                            });
                         })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
@@ -689,7 +691,7 @@ class DocumentController extends Controller
             'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'images' => $document->images()->with('license')->get(),
-            'ink' => $document->ink()->get(),
+            'inks' => $document->inks()->get()->makeHidden('pivot'),
             'languages' => $document->languages()->get()->makeHidden('pivot'),
             'legal_classification' => $document->legal_classification()->get(),
             'material' => $document->material()->get(),
@@ -733,8 +735,8 @@ class DocumentController extends Controller
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
             'images' => $document->images()->with('license')->get(),
-            'inks' => Ink::all(),
-            'ink' => $document->ink()->get(),
+            'inks' => $document->inks()->get()->makeHidden('pivot'),
+            'inks_all' => Ink::all(),
             'languages' => $document->languages()->get()->makeHidden('pivot'),
             'languages_all' => Language::all(),
             'legal_classifications' => LegalClassification::all(),
@@ -824,7 +826,7 @@ class DocumentController extends Controller
             'diacritics' => 'nullable',
             'diacritic_description' => 'nullable',
             'cover_id' => 'nullable',
-            'ink_id' => 'nullable',
+            'inks' => 'nullable',
             'quire_signature_id' => 'nullable',
             'quire_structure_id' => 'nullable',
             'quire_number' => 'nullable',
@@ -885,7 +887,6 @@ class DocumentController extends Controller
         $document->decoration_description = $fields['decoration_description'];
         $document->pagination_id = $fields['pagination_id'];
         $document->cover_id = $fields['cover_id'];
-        $document->ink_id = $fields['ink_id'];
         $document->quire_signature_id = $fields['quire_signature_id'];
         $document->quire_structure_id = $fields['quire_structure_id'];
         if ($fields['quire_structure_id'] == 1) {
@@ -928,6 +929,7 @@ class DocumentController extends Controller
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
+        $document->inks()->sync(array_column($fields['inks'], 'id'));
 
         $document->save();
 
@@ -970,6 +972,7 @@ class DocumentController extends Controller
         $document->decorations()->detach();
         $document->paratexts()->detach();
         $document->scripts()->detach();
+        $document->inks()->detach();
         $document->delete();
         return redirect()->back();
     }

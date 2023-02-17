@@ -75,9 +75,9 @@ class Document extends Model
         return $this->belongsToMany(DatingMethod::class);
     }
 
-    public function ink()
+    public function inks()
     {
-        return $this->belongsTo(Ink::class);
+        return $this->belongsToMany(Ink::class);
     }
 
     public function legal_classification()

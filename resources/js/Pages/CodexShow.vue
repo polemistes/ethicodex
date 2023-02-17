@@ -243,9 +243,15 @@
                 </div>
 
                 <div class="show_ink">
-                    <label>Ink</label>
-                    <div class="showcodex_string_short">
-                        {{ ink.length > 0 ? ink[0].name : "" }}
+                    <label>Inks</label>
+                    <div class="showcodex_multi">
+                        <div
+                            v-for="ink in inks"
+                            :key="ink.id"
+                            class="showcodex_multi_line"
+                        >
+                            {{ ink.name }}
+                        </div>
                     </div>
                 </div>
 
@@ -862,7 +868,7 @@ const props = defineProps({
     document: Object,
     genres: Array,
     images: Array,
-    ink: Array,
+    inks: Array,
     languages: Array,
     legal_classification: Array,
     material: Array,

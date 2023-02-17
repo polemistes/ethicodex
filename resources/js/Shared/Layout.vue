@@ -926,6 +926,8 @@ body {
 }
 .show_ink {
     grid-area: ink;
+    display: flex;
+    flex-direction: column;
 }
 .show_cover {
     grid-area: cover;
