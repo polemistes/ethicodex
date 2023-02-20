@@ -823,7 +823,7 @@
                                 <div v-html="seltrans.description"></div>
                             </span>
 
-                            <span v-if="seltrans.description">
+                            <span v-if="seltrans.bibliography">
                                 <h2>Bibliography:</h2>
                                 <div v-html="seltrans.bibliography"></div>
                             </span>
