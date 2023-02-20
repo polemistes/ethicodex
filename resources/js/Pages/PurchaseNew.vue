@@ -54,6 +54,15 @@
                     >
                 </div>
 
+                <div class="trans_transbiblio">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="bibliography"
+                        v-model="form.bibliography"
+                        >Bibliography</EthInput
+                    >
+                </div>
+
                 <div class="trans_docs">
                     <EthInput
                         input_type="document_choice"
@@ -177,6 +186,7 @@ const form = useForm("PurchaseNew", {
     day: "",
     name: "",
     description: "",
+    bibliography: "",
     documents: [],
     purchase_parties: [],
 });

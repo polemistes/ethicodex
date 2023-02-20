@@ -336,19 +336,35 @@
                     </div>
                 </div>
 
-                <div class="show_quirecomm">
-                    <label>Comments on Quire(s)</label>
-                    <div
-                        class="showcodex_text"
-                        v-html="document.quire_comment"
-                    />
-                </div>
-
                 <div class="show_bindingdesc">
                     <label>Description of Binding</label>
                     <div
                         class="showcodex_text"
                         v-html="document.binding_description"
+                    />
+                </div>
+
+                <div class="show_inksdesc">
+                    <label>Description of Inks</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.inks_description"
+                    />
+                </div>
+
+                <div class="show_coverdesc">
+                    <label>Description of Cover</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.cover_description"
+                    />
+                </div>
+
+                <div class="show_quirecomm">
+                    <label>Comments on Quire(s)</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.quire_comment"
                     />
                 </div>
             </fieldset>
@@ -546,6 +562,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="show_punctuationdesc">
+                    <label>Description of Punctuation</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.punctuation_description"
+                    />
+                </div>
+
                 <div class="show_diacritics">
                     <label>Diacritics</label>
                     <div class="showcodex_multi">
@@ -558,6 +582,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="show_diacritdesc">
                     <label>Description of Diacritics</label>
                     <div
@@ -576,6 +601,13 @@
                             {{ critical_symbol.name }}
                         </div>
                     </div>
+                </div>
+                <div class="show_criticaldesc">
+                    <label>Description of Critical Symbols</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.critical_symbols_description"
+                    />
                 </div>
 
                 <div class="show_decorative">
@@ -605,6 +637,13 @@
                         {{ pagination.length > 0 ? pagination[0].name : "" }}
                     </div>
                 </div>
+                <div class="show_paginationdesc">
+                    <label>Description of Pagination</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.pagination_description"
+                    />
+                </div>
 
                 <div class="show_quiresig">
                     <label>Quire Signatures</label>
@@ -615,6 +654,13 @@
                                 : ""
                         }}
                     </div>
+                </div>
+                <div class="show_quiresigdesc">
+                    <label>Description of Quire Signatures</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.quire_signatures_description"
+                    />
                 </div>
             </fieldset>
         </div>
@@ -760,8 +806,8 @@
                     <div class="showcodex_text">
                         <div v-if="Object.keys(seltrans).length !== 0">
                             <h1>{{ seltrans.name }}</h1>
+                            <h2>Date:</h2>
                             <p>
-                                Date:
                                 <span v-if="seltrans.year">{{
                                     seltrans.year
                                 }}</span>
@@ -773,8 +819,15 @@
                                 >
                             </p>
                             <span v-if="seltrans.description">
-                                <p>Description: {{ seltrans.description }}</p>
+                                <h2>Description:</h2>
+                                <div v-html="seltrans.description"></div>
                             </span>
+
+                            <span v-if="seltrans.description">
+                                <h2>Bibliography:</h2>
+                                <div v-html="seltrans.bibliography"></div>
+                            </span>
+
                             <h2>Codices in Transaction</h2>
                             <p
                                 v-for="codex in seltrans.documents"

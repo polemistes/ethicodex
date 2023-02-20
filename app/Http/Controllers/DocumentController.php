@@ -227,8 +227,14 @@ class DocumentController extends Controller
                         ->orWhere('decoration_description', 'like', "%{$fulltext}%")
                         ->orWhere('paratext_description', 'like', "%{$fulltext}%")
                         ->orWhere('diacritic_description', 'like', "%{$fulltext}%")
+                        ->orWhere('punctuation_description', 'like', "%{$fulltext}%")
+                        ->orWhere('critical_symbols_description', 'like', "%{$fulltext}%")
+                        ->orWhere('pagination_description', 'like', "%{$fulltext}%")
+                        ->orWhere('quire_signatures_description', 'like', "%{$fulltext}%")
                         ->orWhere('quire_comment', 'like', "%{$fulltext}%")
                         ->orWhere('binding_description', 'like', "%{$fulltext}%")
+                        ->orWhere('inks_description', 'like', "%{$fulltext}%")
+                        ->orWhere('cover_description', 'like', "%{$fulltext}%")
                         ->orWhere('conservation_history', 'like', "%{$fulltext}%")
                         ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
                         ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
@@ -825,6 +831,10 @@ class DocumentController extends Controller
             'pagination_id' => 'nullable',
             'diacritics' => 'nullable',
             'diacritic_description' => 'nullable',
+            'punctuation_description' => 'nullable',
+            'critical_symbols_description' => 'nullable',
+            'pagination_description' => 'nullable',
+            'quire_signatures_description' => 'nullable',
             'cover_id' => 'nullable',
             'inks' => 'nullable',
             'quire_signature_id' => 'nullable',
@@ -833,6 +843,8 @@ class DocumentController extends Controller
             'bifolia' => 'nullable',
             'quire_comment' => 'nullable',
             'binding_description' => 'nullable',
+            'inks_description' => 'nullable',
+            'cover_description' => 'nullable',
             'storage_condition_id' => 'nullable',
             'conservation_history' => 'nullable',
             'analyses' => 'nullable',
@@ -885,6 +897,12 @@ class DocumentController extends Controller
         $document->paratext_description = $fields['paratext_description'];
         $document->diacritic_description = $fields['diacritic_description'];
         $document->decoration_description = $fields['decoration_description'];
+        $document->inks_description = $fields['inks_description'];
+        $document->cover_description = $fields['cover_description'];
+        $document->punctuation_description = $fields['punctuation_description'];
+        $document->critical_symbols_description = $fields['critical_symbols_description'];
+        $document->pagination_description = $fields['pagination_description'];
+        $document->quire_signatures_description = $fields['quire_signatures_description'];
         $document->pagination_id = $fields['pagination_id'];
         $document->cover_id = $fields['cover_id'];
         $document->quire_signature_id = $fields['quire_signature_id'];

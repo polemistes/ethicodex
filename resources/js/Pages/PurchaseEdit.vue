@@ -49,6 +49,14 @@
                         >Description</EthInput
                     >
                 </div>
+                <div class="trans_transbiblio">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="bibliography"
+                        v-model="form.bibliography"
+                        >Bibliography</EthInput
+                    >
+                </div>
 
                 <div class="trans_docs">
                     <EthInput
@@ -189,6 +197,7 @@ const form = useForm("PurchaseEdit", {
     day: props.purchase.day,
     name: props.purchase.name,
     description: props.purchase.description,
+    bibliography: props.purchase.bibliography,
     documents: props.documents,
     purchase_parties: pparties,
 });

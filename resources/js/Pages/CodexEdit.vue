@@ -371,21 +371,36 @@
                     </div>
                 </div>
 
-                <div class="edit_quirecomm">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="quire_comment"
-                        v-model="form.quire_comment"
-                        >Comments on Quire(s)</EthInput
-                    >
-                </div>
-
                 <div class="edit_bindingdesc">
                     <EthInput
                         input_type="textarea"
                         input_id="binding_description"
                         v-model="form.binding_description"
                         >Binding Description</EthInput
+                    >
+                </div>
+                <div class="edit_inksdesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="inks_description"
+                        v-model="form.inks_description"
+                        >Inks Description</EthInput
+                    >
+                </div>
+                <div class="edit_coverdesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="cover_description"
+                        v-model="form.cover_description"
+                        >Cover Description</EthInput
+                    >
+                </div>
+                <div class="edit_quirecomm">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="quire_comment"
+                        v-model="form.quire_comment"
+                        >Comments on Quire(s)</EthInput
                     >
                 </div>
             </fieldset>
@@ -604,6 +619,14 @@
                         Punctuation
                     </EthInput>
                 </div>
+                <div class="edit_punctuationdesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="punctuation_description"
+                        v-model="form.punctuation_description"
+                        >Description of Punctuation</EthInput
+                    >
+                </div>
                 <div class="edit_diacritics">
                     <EthInput
                         input_type="multi_choice"
@@ -632,7 +655,14 @@
                         Critical Symbols
                     </EthInput>
                 </div>
-
+                <div class="edit_criticaldesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="critical_symbols_description"
+                        v-model="form.critical_symbols_description"
+                        >Description of Critical Symbols</EthInput
+                    >
+                </div>
                 <div class="edit_decorative">
                     <EthInput
                         input_type="multi_choice"
@@ -643,7 +673,6 @@
                         Decorative Symbols
                     </EthInput>
                 </div>
-
                 <div class="edit_decodesc">
                     <EthInput
                         input_type="textarea"
@@ -652,7 +681,6 @@
                         >Description of Decorative Symbols</EthInput
                     >
                 </div>
-
                 <div class="edit_pagination">
                     <EthInput
                         input_type="single_choice"
@@ -663,7 +691,14 @@
                         Pagination
                     </EthInput>
                 </div>
-
+                <div class="edit_paginationdesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="pagination_description"
+                        v-model="form.pagination_description"
+                        >Description of Pagination</EthInput
+                    >
+                </div>
                 <div class="edit_quiresig">
                     <EthInput
                         input_type="single_choice"
@@ -673,6 +708,14 @@
                     >
                         Quire Signatures
                     </EthInput>
+                </div>
+                <div class="edit_quiresigdesc">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="quire_signatures_description"
+                        v-model="form.quire_signatures_description"
+                        >Description of Quire Signatures</EthInput
+                    >
                 </div>
             </fieldset>
 
@@ -1034,15 +1077,21 @@ const form = useForm("EditCodex", {
     paratexts: props.paratexts,
     paratext_description: props.document.paratext_description,
     punctuations: props.punctuations,
+    punctuation_description: props.document.punctuation_description,
     diacritics: props.diacritics,
     diacritic_description: props.document.diacritic_description,
     critical_symbols: props.critical_symbols,
+    critical_symbols_description: props.document.critical_symbols_description,
     decorations: props.decorations,
     decoration_description: props.document.decoration_description,
     pagination_id: props.document.pagination_id,
+    pagination_description: props.document.pagination_description,
     cover_id: props.document.cover_id,
+    cover_description: props.document.cover_description,
     inks: props.inks,
+    inks_description: props.document.inks_description,
     quire_signature_id: props.document.quire_signature_id,
+    quire_signatures_description: props.document.quire_signatures_description,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,
     bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],

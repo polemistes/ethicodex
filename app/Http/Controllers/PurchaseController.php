@@ -60,6 +60,7 @@ class PurchaseController extends Controller
             'month' => 'nullable',
             'day' => 'nullable',
             'description' => 'nullable',
+            'bibliography' => 'nullable',
         ]));
         $purchase->save();
         $purchase->documents()->sync(array_column($request->validate(['documents' => 'nullable'])['documents'], 'id'));
@@ -122,6 +123,7 @@ class PurchaseController extends Controller
             'month' => 'nullable',
             'day' => 'nullable',
             'description' => 'nullable',
+            'bibliography' => 'nullable',
             'documents' => 'nullable',
             'purchase_parties' => 'nullable',
         ]);
@@ -131,6 +133,7 @@ class PurchaseController extends Controller
         $purchase->month = $fields['month'];
         $purchase->day = $fields['day'];
         $purchase->description = $fields['description'];
+        $purchase->bibliography = $fields['bibliography'];
         $purchase->save();
 
         $documents = $fields['documents'];

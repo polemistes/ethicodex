@@ -929,9 +929,16 @@ body {
     display: flex;
     flex-direction: column;
 }
+.show_inksdesc {
+    grid-area: inksdesc;
+}
 .show_cover {
     grid-area: cover;
 }
+.show_coverdesc {
+    grid-area: coverdesc;
+}
+
 .show_structure {
     grid-area: structure;
 }
@@ -956,8 +963,8 @@ body {
     grid-template-rows: auto;
     grid-template-areas:
         "material bindingdesc"
-        "ink bindingdesc"
-        "cover bindingdesc"
+        "ink inksdesc"
+        "cover coverdesc"
         "structure quirecomm"
         "numquire quirecomm"
         "quirenum quirecomm";
@@ -1053,6 +1060,9 @@ body {
 .show_pagination {
     grid-area: pagination;
 }
+.show_paginationdesc {
+    grid-area: paginationdesc;
+}
 .show_paratext {
     grid-area: paratext;
     display: flex;
@@ -1065,6 +1075,9 @@ body {
     grid-area: punctuation;
     display: flex;
     flex-direction: column;
+}
+.show_punctuationdesc {
+    grid-area: punctuationdesc;
 }
 .show_diacritics {
     grid-area: diacritics;
@@ -1079,6 +1092,11 @@ body {
     display: flex;
     flex-direction: column;
 }
+.show_criticaldesc {
+    grid-area: criticaldesc;
+    display: flex;
+    flex-direction: column;
+}
 .show_decorative {
     grid-area: decorative;
     display: flex;
@@ -1090,17 +1108,21 @@ body {
 .show_quiresig {
     grid-area: quiresig;
 }
+.show_quiresigdesc {
+    grid-area: quiresigdesc;
+}
 
 .showcodex_textualfeatures {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "scripts numhands diacritics diacritics"
-        "scriptdesc scriptdesc diacritdesc diacritdesc"
-        "paratext paratext decorative decorative"
-        "paradesc paradesc decodesc decodesc"
-        "punctuation critical pagination quiresig";
+        "scripts scripts scripts numhands diacritics diacritics"
+        "scriptdesc scriptdesc scriptdesc scriptdesc diacritdesc diacritdesc"
+        "punctuation punctuation critical critical paratext paratext"
+        "punctuationdesc punctuationdesc criticaldesc criticaldesc paradesc paradesc"
+        "decorative decorative pagination pagination quiresig quiresig"
+        "decodesc decodesc paginationdesc paginationdesc quiresigdesc quiresigdesc";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1234,6 +1256,23 @@ body {
     border-style: none;
     border-radius: 5px;
     min-height: 5em;
+}
+
+.showcodex_text ul {
+    list-style: none;
+    margin-left: 20px;
+    text-indent: -20px;
+}
+
+.showcodex_text h1 {
+    margin-top: 10px;
+    font-size: large;
+    font-weight: bold;
+}
+.showcodex_text h2 {
+    margin-top: 10px;
+    font-size: medium;
+    font-weight: bold;
 }
 
 .showcodex_bool {
@@ -1419,8 +1458,14 @@ body {
 .edit_ink {
     grid-area: ink;
 }
+.edit_inksdesc {
+    grid-area: inksdesc;
+}
 .edit_cover {
     grid-area: cover;
+}
+.edit_coverdesc {
+    grid-area: coverdesc;
 }
 .edit_structure {
     grid-area: structure;
@@ -1444,8 +1489,8 @@ body {
     grid-template-rows: auto;
     grid-template-areas:
         "material bindingdesc"
-        "ink bindingdesc"
-        "cover bindingdesc"
+        "ink inksdesc"
+        "cover coverdesc"
         "structure quirecomm"
         "numquire quirecomm"
         "quirenum quirecomm";
@@ -1536,6 +1581,9 @@ body {
 .edit_pagination {
     grid-area: pagination;
 }
+.edit_paginationdesc {
+    grid-area: paginationdesc;
+}
 .edit_paratext {
     grid-area: paratext;
 }
@@ -1544,6 +1592,9 @@ body {
 }
 .edit_punctuation {
     grid-area: punctuation;
+}
+.edit_punctuationdesc {
+    grid-area: punctuationdesc;
 }
 .edit_diacritics {
     grid-area: diacritics;
@@ -1554,6 +1605,9 @@ body {
 .edit_critical {
     grid-area: critical;
 }
+.edit_criticaldesc {
+    grid-area: criticaldesc;
+}
 .edit_decorative {
     grid-area: decorative;
 }
@@ -1563,17 +1617,21 @@ body {
 .edit_quiresig {
     grid-area: quiresig;
 }
+.edit_quiresigdesc {
+    grid-area: quiresigdesc;
+}
 
 .editcodex_textualfeatures {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "scripts numhands diacritics diacritics"
-        "scriptdesc scriptdesc diacritdesc diacritdesc"
-        "paratext paratext decorative decorative"
-        "paradesc paradesc decodesc decodesc"
-        "punctuation critical pagination quiresig";
+        "scripts scripts scripts numhands diacritics diacritics"
+        "scriptdesc scriptdesc scriptdesc scriptdesc diacritdesc diacritdesc"
+        "punctuation punctuation critical critical paratext paratext"
+        "punctuationdesc punctuationdesc criticaldesc criticaldesc paradesc paradesc"
+        "decorative decorative pagination pagination quiresig quiresig"
+        "decodesc decodesc paginationdesc paginationdesc quiresigdesc quiresigdesc";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1740,6 +1798,9 @@ body {
 .trans_transdesc {
     grid-area: transdesc;
 }
+.trans_transbiblio {
+    grid-area: transbiblio;
+}
 .trans_parties {
     grid-area: parties;
 }
@@ -1754,7 +1815,7 @@ body {
     grid-template-areas:
         "transaction transaction transaction transaction transaction transaction transdesc"
         "year year month month day day transdesc"
-        "parties parties parties docs docs docs transdesc";
+        "parties parties parties docs docs docs transbiblio";
     gap: 20px;
     width: 99%;
     align-self: center;
