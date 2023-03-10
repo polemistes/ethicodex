@@ -659,14 +659,7 @@
         <div class="cod_second" v-text="document.standard_name"></div>
         <div class="cod_third" v-text="document.current_shelfmarks"></div>
         <div class="cod_fourth" v-html="document.publication"></div>
-        <div
-            class="cod_fifth"
-            v-html="
-                '<a href=`https://www.trismegistos.org/text/`>' +
-                document.trismegistos_id +
-                '</a>'
-            "
-        ></div>
+        <div class="cod_fifth" v-text="document.trismegistos_id"></div>
         <div
             class="cod_sixth"
             v-text="document.start_year + '–' + document.end_year"
