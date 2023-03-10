@@ -1259,6 +1259,7 @@ body {
     border-style: none;
     border-radius: 5px;
     min-height: 5em;
+    overflow-wrap: break-word;
 }
 
 .showcodex_text ul {
