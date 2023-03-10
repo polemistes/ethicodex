@@ -477,6 +477,14 @@
                         v-html="document.measurement_comment"
                     />
                 </div>
+
+                <div class="show_textblockcomm">
+                    <label>Comments on Full Text Block</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.full_text_block_comment"
+                    />
+                </div>
             </fieldset>
 
             <fieldset class="showcodex_textualfeatures">

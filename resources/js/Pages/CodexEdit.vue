@@ -560,6 +560,15 @@
                         >Comments on Measurements</EthInput
                     >
                 </div>
+
+                <div class="edit_textblockcomm">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="full_text_block_comment"
+                        v-model="form.full_text_block_comment"
+                        >Comments on Full Text Block</EthInput
+                    >
+                </div>
             </fieldset>
 
             <fieldset class="editcodex_textualfeatures">
@@ -1070,6 +1079,7 @@ const form = useForm("EditCodex", {
     outer_margin: props.document.outer_margin,
     full_text_block_width: props.document.full_text_block_width,
     full_text_block_height: props.document.full_text_block_height,
+    full_text_block_comment: props.document.full_text_block_comment,
     measurement_comment: props.document.measurement_comment,
     scripts: props.scripts,
     hand_number: props.document.hand_number,

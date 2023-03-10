@@ -982,6 +982,9 @@ body {
 .show_meascomm {
     grid-area: meascomm;
 }
+.show_textblockcomm {
+    grid-area: textblockcomm;
+}
 .show_pagewidth {
     grid-area: pagewidth;
 }
@@ -1034,9 +1037,9 @@ body {
         "dimknown . . meascomm"
         "pagewidth pageheight pratio meascomm"
         "stable . . meascomm"
-        "blockwidth blockheight bratio meascomm"
         "uppmarg lowmarg ulratio meascomm"
-        "innmarg outmarg ioratio meascomm";
+        "innmarg outmarg ioratio meascomm"
+        "blockwidth blockheight bratio textblockcomm";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1508,6 +1511,9 @@ body {
 .edit_meascomm {
     grid-area: meascomm;
 }
+.edit_textblockcomm {
+    grid-area: textblockcomm;
+}
 .edit_pagewidth {
     grid-area: pagewidth;
 }
@@ -1556,9 +1562,9 @@ body {
         "dimknown . . meascomm"
         "pagewidth pageheight pratio meascomm"
         "stable . . meascomm"
-        "blockwidth blockheight bratio meascomm"
         "uppmarg lowmarg ulratio meascomm"
-        "innmarg outmarg ioratio meascomm";
+        "innmarg outmarg ioratio meascomm"
+        "blockwidth blockheight bratio textblockcomm";
     gap: 20px;
     width: 99%;
     align-self: center;

@@ -223,6 +223,7 @@ class DocumentController extends Controller
                         ->orWhere('dating_comment', 'like', "%{$fulltext}%")
                         ->orWhere('general_comment', 'like', "%{$fulltext}%")
                         ->orWhere('measurement_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('full_text_block_comment', 'like', "%{$fulltext}%")
                         ->orWhere('script_description', 'like', "%{$fulltext}%")
                         ->orWhere('decoration_description', 'like', "%{$fulltext}%")
                         ->orWhere('paratext_description', 'like', "%{$fulltext}%")
@@ -818,6 +819,7 @@ class DocumentController extends Controller
             'outer_margin' => 'nullable',
             'full_text_block_width' => 'nullable',
             'full_text_block_height' => 'nullable',
+            'full_text_block_comment' => 'nullable',
             'measurement_comment' => 'nullable',
             'scripts' => 'nullable',
             'hand_number' => 'nullable',
@@ -891,6 +893,7 @@ class DocumentController extends Controller
         $document->outer_margin = $fields['outer_margin'];
         $document->full_text_block_width = $fields['full_text_block_width'];
         $document->full_text_block_height = $fields['full_text_block_height'];
+        $document->full_text_block_comment = $fields['full_text_block_comment'];
         $document->measurement_comment = $fields['measurement_comment'];
         $document->hand_number = $fields['hand_number'];
         $document->script_description = $fields['script_description'];
