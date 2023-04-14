@@ -171,7 +171,7 @@ import { reactive, ref, computed, onMounted } from "vue";
 import EthInput from "../Components/EthInput.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
-let party_roles = ["Seller", "Buyer", "Broker"];
+let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient"];
 let dropdown = ref(false);
 
 const props = defineProps({
