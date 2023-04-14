@@ -860,7 +860,7 @@
                                 :key="party.id"
                                 :title="party.description"
                             >
-                                {{ party.name }}
+                                {{ party.name }} ({{ party.pivot.party_role }})
                             </p>
                         </div>
                     </div>
