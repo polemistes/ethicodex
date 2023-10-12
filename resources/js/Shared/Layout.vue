@@ -413,6 +413,12 @@ body {
     flex-wrap: wrap;
 }
 
+.micrograph_gallery {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .removebutton {
     all: unset;
     cursor: pointer;
@@ -1138,6 +1144,9 @@ body {
 .show_storage {
     grid-area: storage;
 }
+.show_micrograph {
+    grid-area: micrograph;
+}
 .show_scientific {
     grid-area: scientific;
 }
@@ -1153,8 +1162,9 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "storage scientific"
-        "conshist analyscomm";
+        "storage scientific" 
+        "conshist analyscomm"
+        "micrograph micrograph";
     gap: 20px;
     width: 99%;
     align-self: center;

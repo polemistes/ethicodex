@@ -964,6 +964,7 @@ class DocumentController extends Controller
         foreach ($img_fields['images'] as $image) {
             Image::create([
                 'description' => $image['description'],
+                'micrograph' => $image['micrograph'],
                 'filename' => $image['filename'],
                 'document_id' => $image['document_id'],
                 'license_id' => $image['license_id'],

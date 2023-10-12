@@ -688,6 +688,31 @@
                         }}
                     </div>
                 </div>
+                
+                <div class="show_micrograph" v-if="images.length > 0">
+                    <div>
+                    <label>Micrographs</label>
+                    </div>
+                    <template v-for="(image, index) in images" :key="image.id">
+                        <div class="micrograph_gallery">
+                        <div class="codex_imagebox" v-if="image.micrograph">
+                            <a :href="'/storage/' + image.filename" target="_blank">
+                                <img
+                                    :src="'/storage/' + image.filename"
+                                    height="160"
+                                    max-width="120"
+                                />
+                            </a>
+                            <div
+                                class="showcodex_text"
+                                v-html="image.description"
+                            />
+                         </div>
+                         </div>
+                    </template>
+                </div>
+ 
+
                 <div class="show_conshist">
                     <label>Conservation History</label>
                     <div
@@ -877,34 +902,33 @@
                 </div>
 
                 <div class="codex_images_rows">
-                    <div
-                        class="codex_imagebox"
-                        v-for="(image, index) in images"
-                        :key="image.id"
-                    >
-                        <a :href="'/storage/' + image.filename" target="_blank">
-                            <img
-                                :src="'/storage/' + image.filename"
-                                height="360"
+                    <template v-for="(image, index) in images" :key="image.id">
+                        <div class="codex_imagebox" v-if="!image.micrograph">
+                            <a :href="'/storage/' + image.filename" target="_blank">
+                                <img
+                                    :src="'/storage/' + image.filename"
+                                    height="360"
+                                    max-width="270"
+                                />
+                            </a>
+                            <label
+                                class="showcodex_labelpadding"
+                                :for="'image_description_' + index"
+                                >Description:
+                            </label>
+                            <div
+                                class="showcodex_text"
+                                v-html="image.description"
                             />
-                        </a>
-                        <label
-                            class="showcodex_labelpadding"
-                            :for="'image_description_' + index"
-                            >Description:
-                        </label>
-                        <div
-                            class="showcodex_text"
-                            v-html="image.description"
-                        />
-                        <label>Source</label>
-                        <div class="showcodex_string" v-html="image.source" />
+                            <label>Source</label>
+                            <div class="showcodex_string" v-html="image.source" />
 
-                        <label>License</label>
-                        <div class="showcodex_string">
-                            {{ image.license ? image.license.name : "" }}
+                            <label>License</label>
+                            <div class="showcodex_string">
+                                {{ image.license ? image.license.name : "" }}
+                            </div>
                         </div>
-                    </div>
+                    </template>
                 </div>
             </fieldset>
         </div>

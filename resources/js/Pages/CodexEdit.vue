@@ -933,17 +933,15 @@
                         </a>
                         <button @click.prevent="delimage(image)">Delete</button>
 
-                        <!--
-                        <label
-                            class="labelpadding"
-                            :for="'image_description_' + index"
-                            >Description:
-                        </label>
-                        <textarea
-                            :id="'image_description_' + index"
-                            v-model="image.description"
-                        />
-                        -->
+                        <div>
+                            <label :for="micrograph">Micrograph</label>
+                            <input
+                                :id="micrograph"
+                                type="checkbox"
+                                style="margin-left: 5px"
+                                v-model="image.micrograph"
+                            />
+                        </div>
 
                         <EthInput
                             input_type="textarea"
@@ -1165,6 +1163,9 @@ onMounted(() => {
     if (!form.bifolia) {
         form.bifolia[0] = 0;
     }
+    form.images.forEach((image, index) => {
+                        image.micrograph = image.micrograph == 1 ? true : false;
+                    });
 });
 
 const loadImages = ref(null);
