@@ -913,12 +913,21 @@
                 </button>
 
                 <label class="labelpadding" for="images">Upload Images</label>
+               
+               <div>
                 <input
+                    :disabled="form.isDirty"
                     type="file"
                     @change="addimages($event.target.files)"
                     multiple
                     ref="loadImages"
                 />
+
+                <span v-if="form.isDirty">
+                    (Please store all changes to upload images.)
+                </span>
+                </div>
+
                 <div class="codex_images_rows">
                     <div
                         class="codex_imagebox"
@@ -931,13 +940,15 @@
                                 height="360"
                             />
                         </a>
-                        <button @click.prevent="delimage(image)">Delete</button>
+                        <button v-if="!form.isDirty" @click.prevent="delimage(image)">Delete</button>
+                        <button v-if="form.isDirty" @click.prevent="delalert(image)">Delete</button>
 
                         <div>
-                            <label :for="micrograph">Micrograph</label>
+                            <label>Micrograph</label>
                             <input
-                                :id="micrograph"
                                 type="checkbox"
+                                true-value="1"
+                                false-value="0"
                                 style="margin-left: 5px"
                                 v-model="image.micrograph"
                             />
@@ -1163,9 +1174,12 @@ onMounted(() => {
     if (!form.bifolia) {
         form.bifolia[0] = 0;
     }
+/*
     form.images.forEach((image, index) => {
                         image.micrograph = image.micrograph == 1 ? true : false;
                     });
+*/
+
 });
 
 const loadImages = ref(null);
@@ -1181,6 +1195,20 @@ function range(start, end) {
     return foo;
 }
 
+function delalert(image) {
+    let image_id = image.id;
+    if (confirm("You may have unsaved changes that could be lost if you continue. Do you want to delete this image anyway?")) {
+        Inertia.post("/delimage/" + image_id, null, {
+            preserveState: true,
+            preserveScroll: true,
+            resetOnSuccess: false,
+            onSuccess: () => {
+                form.images = props.images.slice();
+            },
+        });
+    }
+}
+
 function delimage(image) {
     let image_id = image.id;
     if (confirm("Do you want to delete this image?")) {
@@ -1189,19 +1217,14 @@ function delimage(image) {
             preserveScroll: true,
             resetOnSuccess: false,
             onSuccess: () => {
-                let index = form.images.findIndex(function (o) {
-                    return o.id === image_id;
-                });
-                if (index !== -1) {
-                    form.images.splice(index, 1);
-                }
+                form.images = props.images.slice();
             },
         });
     }
 }
 
 function addimages(imagefiles) {
-    Inertia.post(
+     Inertia.post(
         "/addimages",
         { images: imagefiles, document_id: props.document.id },
         {
@@ -1209,16 +1232,7 @@ function addimages(imagefiles) {
             preserveScroll: true,
             resetOnSuccess: false,
             onSuccess: () => {
-                props.images.forEach((image, index) => {
-                    if (!form.images.findIndex((x) => x.id == image.id)) {
-                        form.images.push(image);
-                    }
-                });
-                if (form.images.length == 0) {
-                    props.images.forEach((image, index) => {
-                        form.images.push(image);
-                    });
-                }
+                form.images = props.images.slice();
             },
         }
     );

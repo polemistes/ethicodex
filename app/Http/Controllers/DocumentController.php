@@ -863,6 +863,11 @@ class DocumentController extends Controller
             'images' => 'nullable',
         ]);
 
+        $img_fields = $request->validate([
+            'images' => 'nullable',
+        ]);
+
+
         $document->published = $fields['published'];
         $document->standard_name = $fields['standard_name'];
         $document->other_names = $fields['other_names'];
@@ -953,23 +958,15 @@ class DocumentController extends Controller
 
         $document->save();
 
-        $img_fields = $request->validate([
-            'images' => 'nullable',
-        ]);
+        foreach ($img_fields['images'] as $fields) {
+ 
+            $image = Image::find($fields['id']);
 
-        foreach ($document->images as $image) {
-            $image->delete();
-        }
-
-        foreach ($img_fields['images'] as $image) {
-            Image::create([
-                'description' => $image['description'],
-                'micrograph' => $image['micrograph'],
-                'filename' => $image['filename'],
-                'document_id' => $image['document_id'],
-                'license_id' => $image['license_id'],
-                'source' => $image['source'],
-            ]);
+            $image->description = $fields['description'];
+            $image->micrograph = $fields['micrograph'];
+            $image->license_id = $fields['license_id'];
+            $image->source = $fields['source'];
+            $image->save();
         }
 
         return redirect()->back();

@@ -43,10 +43,8 @@ class ImageController extends Controller
         $request->validate([
             'images' => 'required|array',
             'document_id' => 'nullable',
-/*            'images.*' => 'required|mimes:jpg,jpeg,png,tif,tiff|max:2048', */
         ]);
 
-//        $document = Document::find($request->document_id);
         $document_id = $request->document_id;
 
         foreach($request->images as $image) {
@@ -59,9 +57,7 @@ class ImageController extends Controller
                 'document_id' => $document_id,
             ]);
         }
-        return redirect()->back();
-        //       return Redirect::route('CodexEdit', ['document' => $document]);
-       
+        return redirect()->back();    
     }
 
     /**
