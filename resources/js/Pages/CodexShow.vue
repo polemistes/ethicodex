@@ -689,26 +689,25 @@
                     </div>
                 </div>
                 
-                <div class="show_micrograph" v-if="images.length > 0">
+                <div class="show_micrograph" v-if="checkmicrograph(images)">
                     <div>
                     <label>Micrographs</label>
                     </div>
                     <template v-for="(image, index) in images" :key="image.id">
                         <div class="micrograph_gallery">
-                        <div class="codex_imagebox" v-if="image.micrograph">
-                            <a :href="'/storage/' + image.filename" target="_blank">
-                                <img
-                                    :src="'/storage/' + image.filename"
-                                    height="160"
-                                    max-width="120"
-                                />
-                            </a>
+                        <div class="micrograph_box" v-if="image.micrograph">
+
+                            <img
+                                :src="'/storage/' + image.filename"
+                                height="120"
+                                max-width="160"
+                            />
                             <div
-                                class="showcodex_text"
+                                class="showcodex_microdesc"
                                 v-html="image.description"
                             />
-                         </div>
-                         </div>
+                        </div>
+                        </div>
                     </template>
                 </div>
  
@@ -903,13 +902,13 @@
 
                 <div class="codex_images_rows">
                     <template v-for="(image, index) in images" :key="image.id">
-                        <div class="codex_imagebox" v-if="!image.micrograph">
+                        <div class="showcodex_imagebox" v-if="!image.micrograph">
                             <a :href="'/storage/' + image.filename" target="_blank">
+                                <div class="codex_image_container">
                                 <img
                                     :src="'/storage/' + image.filename"
-                                    height="360"
-                                    max-width="270"
                                 />
+                                </div>
                             </a>
                             <label
                                 class="showcodex_labelpadding"
@@ -917,11 +916,11 @@
                                 >Description:
                             </label>
                             <div
-                                class="showcodex_text"
+                                class="showcodex_imgtext"
                                 v-html="image.description"
                             />
                             <label>Source</label>
-                            <div class="showcodex_string" v-html="image.source" />
+                            <div class="showcodex_imgtext" v-html="image.source" />
 
                             <label>License</label>
                             <div class="showcodex_string">
@@ -982,6 +981,16 @@ const loadImages = ref(null);
 
 let activetab = ref("general");
 let seltrans = ref({});
+
+function checkmicrograph(images) {
+    let found = false
+    for (const image of images) {
+        if (image.micrograph) {
+            found = true
+        }
+    }
+    return found
+}
 
 function checklanguage(lang) {
     let found = false;

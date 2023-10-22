@@ -135,6 +135,17 @@
         />
     </div>
 
+    <div v-if="input_type == 'imagecom'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <textarea
+            :id="input_id"
+            :value="modelValue"
+            rows="4"
+            style="resize: none;"
+            @input="$emit('update:modelValue', $event.target.value)"
+        />
+    </div>
+
     <div v-if="input_type == 'single_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <select

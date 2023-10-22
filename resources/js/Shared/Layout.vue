@@ -397,26 +397,60 @@ body {
     background-color: #b00;
 }
 
-.codex_imagebox {
-    padding: 10px;
-    background-color: #bbb;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    max-width: 270px;
-}
-
 .codex_images_rows {
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
+.showcodex_imagebox {
+    display: flex;
+    flex-direction: column;
+
+    width: 470px;
+    height: 720px;
+    padding: 10px;
+    margin: 5px;
+
+    background-color: #bbb;
+}
+
+.editcodex_imagebox {
+    display: flex;
+    flex-direction: column;
+
+    width: 470px;
+    height: 840px;
+    padding: 10px;
+    margin: 5px;
+
+    background-color: #bbb;
+}
+
+.codex_image_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-bottom: 10px;
+
+    width: 450px;
+    height: 450px;
+}
+
+.codex_image_container img {
+    max-width: 100%; 
+    max-height: 100%;
+}
+
 .micrograph_gallery {
     display: inline-flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.micrograph_box {
+    padding: 5px;
 }
 
 .removebutton {
@@ -1262,6 +1296,28 @@ body {
     min-height: 2em;
     width: 10em;
 }
+
+.showcodex_imgtext {
+    background-color: #ddd;
+    padding: 10px;
+    border-style: none;
+    border-radius: 5px;
+    height: 5em;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}
+
+.showcodex_microdesc {
+    background-color: #ddd;
+    padding: 10px;
+    border-style: none;
+    border-radius: 5px;
+    height: 5em;
+    width: 160px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}
+
 
 .showcodex_text {
     background-color: #ddd;

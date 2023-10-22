@@ -930,16 +930,19 @@
 
                 <div class="codex_images_rows">
                     <div
-                        class="codex_imagebox"
+                        class="editcodex_imagebox"
                         v-for="(image, index) in form.images"
                         :key="image.id"
                     >
-                        <a :href="'/storage/' + image.filename" target="_blank">
-                            <img
+                            <a :href="'/storage/' + image.filename" target="_blank">
+
+                        <div class="codex_image_container">
+                                <img 
                                 :src="'/storage/' + image.filename"
-                                height="360"
-                            />
-                        </a>
+                                />
+                        </div>
+                            </a>
+                        
                         <button v-if="!form.isDirty" @click.prevent="delimage(image)">Delete</button>
                         <button v-if="form.isDirty" @click.prevent="delalert(image)">Delete</button>
 
@@ -955,7 +958,7 @@
                         </div>
 
                         <EthInput
-                            input_type="textarea"
+                            input_type="imagecom"
                             :input_id="'image_description_' + index"
                             v-model="image.description"
                         >
