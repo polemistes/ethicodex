@@ -40,6 +40,10 @@
             :href="'/codex_show/' + document.id"
             >Show Codex
         </Link>
+        <div class="nameheading">
+            {{document.standard_name}}
+        </div>
+
         <input type="hidden" input_id="id" v-model="form.id" />
         <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="editcodex_generalgrid">

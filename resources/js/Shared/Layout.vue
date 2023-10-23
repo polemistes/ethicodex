@@ -297,6 +297,15 @@ body {
     font-size: 16px;
 }
 
+.nameheading {
+    padding: 5px 20px;
+    margin-right: 50px;
+    background-color: #aaa;
+    border-radius: 5px;
+    border-style: none;
+    float: right;
+}
+
 .codexmenu {
     display: flex;
     overflow: hidden;

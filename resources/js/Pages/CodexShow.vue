@@ -33,6 +33,7 @@
     </div>
 
     <div class="mainstyle">
+
         <Link
             class="topbutton"
             as="button"
@@ -42,6 +43,10 @@
         >
             Edit Codex
         </Link>
+        <div class="nameheading">
+        {{document.standard_name}}
+        </div>
+
         <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="showcodex_generalgrid">
                 <legend class="sectionheading">Publication Info</legend>
