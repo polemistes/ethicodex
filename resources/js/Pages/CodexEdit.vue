@@ -466,7 +466,8 @@
                             >Ratio</EthRatio
                         >
                     </div>
-
+                    
+                    </template>
                     <div class="edit_stable">
                         <div>
                             <label :for="textbox_size_stable"
@@ -481,7 +482,6 @@
                         </div>
                     </div>
 
-                    <template v-if="form.textbox_size_stable">
                         <div class="edit_uppmarg">
                             <EthInput
                                 input_type="text"
@@ -553,8 +553,8 @@
                                 >Ratio</EthRatio
                             >
                         </div>
-                    </template>
-                </template>
+        
+               
 
                 <div class="edit_meascomm">
                     <EthInput

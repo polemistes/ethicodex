@@ -404,6 +404,7 @@
                             {{ document.full_page_height }}
                         </div>
                     </div>
+                </template>
                     <div class="show_pratio">
                         <EthRatio
                             :dividend="document.full_page_width"
@@ -412,7 +413,7 @@
                         >
                     </div>
 
-                    <template v-if="document.textbox_size_stable">
+            
                         <div class="show_uppmarg">
                             <label>Upper Margin (cm)</label>
                             <div class="showcodex_string_short">
@@ -472,8 +473,8 @@
                                 >Ratio</EthRatio
                             >
                         </div>
-                    </template>
-                </template>
+                    
+                
 
                 <div class="show_meascomm">
                     <label>Comments on Measurements</label>
