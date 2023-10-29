@@ -705,7 +705,12 @@ class DocumentController extends Controller
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
-            'purchases' => $document->purchases()->with('purchase_parties')->with('documents')->get()->makeHidden('pivot'),
+            'purchases' => $document->purchases()
+                                        ->with('purchase_parties')->with('documents')->get()
+                                        ->sortBy('year')
+                                        ->sortBy('month')
+                                        ->sortBy('day')                                
+                                        ->makeHidden('pivot'),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structure' => $document->quire_structure()->get(),
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
@@ -717,6 +722,8 @@ class DocumentController extends Controller
     public function edit(Document $document)
     {
         $this->authorize('update', $document);
+
+        $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
         return (Inertia::render('CodexEdit', [
             'document' => $document,
@@ -758,8 +765,12 @@ class DocumentController extends Controller
             'paratexts_all' => Paratext::all(),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'punctuations_all' => Punctuation::all(),
-            'purchases' => $document->purchases()->get()->makeHidden('pivot'),
-            'purchases_all' => Purchase::all(),
+            'purchases' => $document->purchases()
+                                            ->get()->makeHidden('pivot')
+                                            ->sortBy('year')
+                                            ->sortBy('month')
+                                            ->sortBy('day'),
+            'purchases_all' => $purchases_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structures' => QuireStructure::all(),

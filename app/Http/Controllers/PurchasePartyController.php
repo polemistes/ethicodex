@@ -22,7 +22,7 @@ class PurchasePartyController extends Controller
     {
         $this->authorize('viewAny', PurchaseParty::class);
 
-        $purchase_parties = PurchaseParty::with('purchases')->get();
+        $purchase_parties = PurchaseParty::with('purchases')->orderBy('name')->get();
 
         return (Inertia::render('PurchaseParties', [
             'purchase_parties' => $purchase_parties,

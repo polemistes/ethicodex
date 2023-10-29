@@ -835,7 +835,7 @@
                         class="showcodex_multi_stack"
                     >
                         <button @click="seltrans = purchase">Info</button>
-                        {{ purchase.name }}
+                        {{ purchase.name }} ({{purchase.year + (purchase.month ? '-' + purchase.month : '') + ((purchase.day ? '-' + purchase.day : ''))}})
                     </div>
                 </div>
 

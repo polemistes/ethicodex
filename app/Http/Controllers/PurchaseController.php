@@ -22,7 +22,7 @@ class PurchaseController extends Controller
     {
         $this->authorize('viewAny', Purchase::class);
 
-        $purchases = Purchase::with('purchase_parties', 'documents')->get()->sortBy('date');
+        $purchases = Purchase::with('purchase_parties', 'documents')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
         return (Inertia::render('Purchases', [
             'purchases' => $purchases,

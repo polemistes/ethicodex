@@ -880,7 +880,7 @@
 
                 <div class="edit_transactions">
                     <EthInput
-                        input_type="multi_choice"
+                        input_type="purchases_choice"
                         input_id="purchases"
                         :choices="purchases_all"
                         v-model="form.purchases"
