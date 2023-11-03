@@ -19,6 +19,9 @@
             </EthInput>
         </div>
 
+        <div class="pageline_total_found">
+            Codices found: {{ documents.total }}
+        </div>
         <div class="pageline_search_alternatives">
             <EthInput
                 input_type="multi_choice_search"

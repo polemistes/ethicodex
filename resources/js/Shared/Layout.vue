@@ -671,21 +671,28 @@ body {
     font-size: 14px;
 }
 
+.pageline button {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px 5px;
+}
+
+.pageline_total_found {
+    margin-bottom: 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 .pageline_search_alternatives {
     margin-bottom: 15px;
     margin-right: 20px;
     margin-left: auto;
 }
+
 .pageline_search_field {
     flex-basis: 25%;
     margin-left: auto;
     margin-bottom: 15px;
-}
-
-.pageline button {
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 5px 5px;
 }
 
 .searchblockbackground {
