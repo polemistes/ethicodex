@@ -687,7 +687,7 @@ class DocumentController extends Controller
         return (Inertia::render('CodexShow', [
             'document' => $document,
             'analyses' => $document->analyses()->get()->makeHidden('pivot'),
-            'ancient_provenance' => $document->ancient_provenance()->get(),
+            'ancient_provenance' => $document->ancient_provenance()->with('parentRecursive')->get(),
             'ancient_provenance_certainty' => $document->ancient_provenance_certainty()->get(),
             'critical_symbols' => $document->critical_symbols()->get()->makeHidden('pivot'),
             'cover' => $document->cover()->get(),

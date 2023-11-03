@@ -770,9 +770,7 @@
                     <label>Ancient Provenance</label>
                     <div class="showcodex_string">
                         {{
-                            ancient_provenance.length > 0
-                                ? ancient_provenance[0].name
-                                : ""
+                            ancient_provenance_full
                         }}
                     </div>
                 </div>
@@ -982,6 +980,18 @@ const bifolia = props.document.bifolia
 if (!bifolia) {
     bifolia[0] = 0;
 }
+
+let ancient_provenance_full = ""
+const prov = props.ancient_provenance
+if (prov ? prov.length > 0 : false) {
+    ancient_provenance_full = ancient_provenance_full.concat(prov[0].name)
+    let parent = prov[0].parent_recursive
+    while (parent) {
+        ancient_provenance_full = ancient_provenance_full.concat(", ", parent.name)
+        parent = parent.parent_recursive
+    }
+}
+
 
 const loadImages = ref(null);
 
