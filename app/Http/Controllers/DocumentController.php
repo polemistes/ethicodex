@@ -204,6 +204,27 @@ class DocumentController extends Controller
         $transaction_parties = array_key_exists('transaction_parties', $search) ? $search['transaction_parties'] : null;
         $legal_classifications = array_key_exists('legal_classifications', $search) ? $search['legal_classifications'] : null;
 
+
+        if($show_provenance AND $ancient_provenances) {
+            $children = [];
+
+            foreach($ancient_provenances as $ancient_provenance) {
+                $prov = AncientProvenance::find($ancient_provenance['id']);
+                $childrec = $prov->flatChildren();
+
+                foreach($childrec as $child) {
+                    $childarr = [
+                        "id" => $child->id,
+                        "name" => $child->name
+                    ];
+                    array_push($ancient_provenances, $childarr);
+                } 
+            }
+        }
+        else {
+            $provenances = [];
+        }
+
         $documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);

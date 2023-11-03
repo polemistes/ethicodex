@@ -66,7 +66,15 @@ class AncientProvenance extends Model
         return $this->children()->with('childrenRecursive');
     }
 
+    public function flatParents()
+    {
+        return collect(flat_ancestors($this));
+    }
 
+    public function flatChildren()
+    {
+        return collect(flat_descendants($this));
+    }
 
 
 }
