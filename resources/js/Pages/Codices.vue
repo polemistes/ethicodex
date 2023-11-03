@@ -825,7 +825,7 @@ const form = useForm({
     show_consanal: props.show_consanal,
     show_provenance: props.show_provenance,
     /* Search Fields */
-    fulltext: "",
+    fulltext: props.fulltext,
     /* Publication */
     standard_name: props.standard_name,
     publication: props.publication,
