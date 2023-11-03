@@ -1,35 +1,46 @@
 <template>
     <div class="codexmenu">
-        <button
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab = 'general'"
+            :href="'/codex_edit/general/' + document.id"
         >
             General Information
-        </button>
-        <button
+        </Link>
+
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab = 'codicology'"
+            :href="'/codex_edit/codicology/' + document.id"
         >
             Codicology
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab = 'conservation'"
+            :href="'/codex_edit/conservation/' + document.id"
         >
             Conservation and Analysis
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab = 'provenance'"
+            :href="'/codex_edit/provenance/' + document.id"
         >
             Provenance
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab = 'images'"
+            :href="'/codex_edit/images/' + document.id"
         >
             Images
-        </button>
+        </Link>
     </div>
 
     <form @submit.prevent="submit" class="mainstyle">
@@ -37,7 +48,7 @@
             class="topbutton"
             as="button"
             type="button"
-            :href="'/codex_show/' + document.id"
+            :href="'/codex_show/'+ activetab + '/' + document.id"
             >Show Codex
         </Link>
         <div class="nameheading">
@@ -1054,6 +1065,7 @@ const props = defineProps({
     storage_conditions: Array,
     tags: Array,
     tags_all: Array,
+    tab: String,
 });
 
 const form = useForm("EditCodex", {
@@ -1191,7 +1203,7 @@ onMounted(() => {
 
 const loadImages = ref(null);
 
-let activetab = ref("general");
+let activetab = props.tab;
 let submitted = false;
 
 function range(start, end) {

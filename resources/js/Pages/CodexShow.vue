@@ -1,35 +1,46 @@
 <template>
     <div class="codexmenu">
-        <button
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab = 'general'"
+            :href="'/codex_show/general/' + document.id"
         >
             General Information
-        </button>
-        <button
+        </Link>
+
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab = 'codicology'"
+            :href="'/codex_show/codicology/' + document.id"
         >
             Codicology
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab = 'conservation'"
+            :href="'/codex_show/conservation/' + document.id"
         >
             Conservation and Analysis
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab = 'provenance'"
+            :href="'/codex_show/provenance/' + document.id"
         >
             Provenance
-        </button>
-        <button
+        </Link>
+        <Link
+            as="button"
+            type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab = 'images'"
+            :href="'/codex_show/images/' + document.id"
         >
             Images
-        </button>
+        </Link>
     </div>
 
     <div class="mainstyle">
@@ -39,7 +50,7 @@
             as="button"
             type="button"
             v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
-            :href="'/codex_edit/' + document.id"
+            :href="'/codex_edit/' + activetab + '/' + document.id"
         >
             Edit Codex
         </Link>
@@ -971,6 +982,7 @@ const props = defineProps({
     scripts: Array,
     storage_condition: Array,
     tags: Array,
+    tab: String,
     auth: Object,
 });
 
@@ -995,7 +1007,8 @@ if (prov ? prov.length > 0 : false) {
 
 const loadImages = ref(null);
 
-let activetab = ref("general");
+let activetab = props.tab;
+
 let seltrans = ref({});
 
 function checkmicrograph(images) {

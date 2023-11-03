@@ -35,8 +35,8 @@ Route::get('/', function () { return (Inertia::render('Home')); })->name('Home')
 Route::get('/about', function () { return (Inertia::render('About')); });
 
 Route::get('/codices', [DocumentController::class, 'index'])->name('Codices');
-Route::get('/codex_show/{document}', [DocumentController::class, 'show']);
-Route::get('/codex_edit/{document}', [DocumentController::class, 'edit'])->name('CodexEdit');
+Route::get('/codex_show/{tab}/{document}', [DocumentController::class, 'show']);
+Route::get('/codex_edit/{tab}/{document}', [DocumentController::class, 'edit'])->name('CodexEdit');
 Route::post('/codex_update/{document}', [DocumentController::class, 'update']);
 Route::get('/codex_new', [DocumentController::class, 'create']);
 Route::post('/codex_store', [DocumentController::class, 'store']);

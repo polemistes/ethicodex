@@ -701,7 +701,7 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function show(Document  $document)
+    public function show($tab, Document  $document)
     {
         $this->authorize('view', $document);
 
@@ -737,10 +737,11 @@ class DocumentController extends Controller
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
+            'tab' => $tab,
         ]));
     }
 
-    public function edit(Document $document)
+    public function edit($tab, Document $document)
     {
         $this->authorize('update', $document);
 
@@ -802,6 +803,7 @@ class DocumentController extends Controller
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'tags_all' => Tag::all(),
+            'tab' => $tab,
         ]));
     }
 

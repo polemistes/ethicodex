@@ -620,7 +620,7 @@
             <Link
                 as="button"
                 type="button"
-                :href="'/codex_show/' + document.id"
+                :href="'/codex_show/general/' + document.id"
                 style="margin-right: 1em; padding: 0.3em 0.5em"
                 >Show
             </Link>
@@ -635,7 +635,7 @@
                         ? 1
                         : 0
                 "
-                :href="'/codex_edit/' + document.id"
+                :href="'/codex_edit/general/' + document.id"
                 style="margin-right: 1em; padding: 0.3em 0.5em"
             >
                 Edit
