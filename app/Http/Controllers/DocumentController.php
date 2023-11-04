@@ -205,6 +205,8 @@ class DocumentController extends Controller
         $legal_classifications = array_key_exists('legal_classifications', $search) ? $search['legal_classifications'] : null;
 
 
+        $ancient_provenances_original = $ancient_provenances;
+        
         if($show_provenance AND $ancient_provenances) {
             $children = [];
 
@@ -221,10 +223,7 @@ class DocumentController extends Controller
                 } 
             }
         }
-        else {
-            $provenances = [];
-        }
-
+ 
         $documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
@@ -569,6 +568,8 @@ class DocumentController extends Controller
             ->orderBy('end_year')
             ->orderBy('standard_name')
             ->paginate(10)->withQueryString();
+
+        $ancient_provenances = $ancient_provenances_original;
 
         return Inertia::render('Codices', [
             'show_publication' => $show_publication == "true" ? true : false,
