@@ -812,12 +812,12 @@ body {
     justify-self: end;
 }
 .cod_third {
-    flex: 0 0 26%;
+    flex: 0 0 15%;
     align-self: center;
     justify-self: end;
 }
 .cod_fourth {
-    flex: 0 0 26%;
+    flex: 0 0 15%;
     align-self: center;
     justify-self: end;
 }
@@ -827,7 +827,7 @@ body {
     justify-self: end;
 }
 .cod_sixth {
-    flex: 0 0 10%;
+    flex: 0 0 22%;
     align-self: center;
     justify-self: end;
 }

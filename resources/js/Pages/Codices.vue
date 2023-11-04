@@ -26,7 +26,6 @@
             <EthInput
                 input_type="multi_choice_search"
                 input_id="showfields"
-                :choices="allfields"
                 v-model:publication="form.show_publication"
                 v-model:content="form.show_content"
                 v-model:dating="form.show_dating"
@@ -605,10 +604,10 @@
     <div class="cod_titles" style="padding-top: 15px; background-color: #bbb">
         <div class="cod_first"></div>
         <div class="cod_second"><b>Standard Name</b></div>
-        <div class="cod_third"><b>Shelfmark</b></div>
-        <div class="cod_fourth"><b>Publication</b></div>
-        <div class="cod_fifth"><b>Trismegistos ID</b></div>
-        <div class="cod_sixth"><b>Date</b></div>
+        <div class="cod_third"><b>Author</b></div>
+        <div class="cod_fourth"><b>Title of Work</b></div>
+        <div class="cod_fifth"><b>Date</b></div>
+        <div class="cod_sixth"><b>Publication</b></div>
     </div>
 
     <div
@@ -660,13 +659,14 @@
         </div>
 
         <div class="cod_second" v-text="document.standard_name"></div>
-        <div class="cod_third" v-text="document.current_shelfmarks"></div>
-        <div class="cod_fourth" v-html="document.publication"></div>
-        <div class="cod_fifth" v-text="document.trismegistos_id"></div>
+        <div class="cod_third" v-text="document.ancient_author"></div>
+        <div class="cod_fourth" v-text="document.title"></div>
         <div
-            class="cod_sixth"
+            class="cod_fifth"
             v-text="document.start_year + '–' + document.end_year"
         ></div>
+
+        <div class="cod_sixth" v-html="document.publication"></div>
     </div>
     <div class="pageline">
         <div
