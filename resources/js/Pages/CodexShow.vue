@@ -5,6 +5,7 @@
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
             :href="'/codex_show/general/' + document.id"
+            replace
         >
             General Information
         </Link>
@@ -14,6 +15,7 @@
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
             :href="'/codex_show/codicology/' + document.id"
+            replace
         >
             Codicology
         </Link>
@@ -22,6 +24,7 @@
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
             :href="'/codex_show/conservation/' + document.id"
+            replace
         >
             Conservation and Analysis
         </Link>
@@ -30,6 +33,7 @@
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
             :href="'/codex_show/provenance/' + document.id"
+            replace
         >
             Provenance
         </Link>
@@ -38,6 +42,7 @@
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
             :href="'/codex_show/images/' + document.id"
+            replace
         >
             Images
         </Link>
@@ -51,6 +56,7 @@
             type="button"
             v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
             :href="'/codex_edit/' + activetab + '/' + document.id"
+            replace
         >
             Edit Codex
         </Link>
