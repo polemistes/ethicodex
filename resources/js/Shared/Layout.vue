@@ -1883,12 +1883,12 @@ body {
     justify-self: end;
 }
 .pur_fourth {
-    flex: 0 0 30%;
+    flex: 0 0 24%;
     align-self: center;
     justify-self: end;
 }
 .pur_fifth {
-    flex: 0 0 14%;
+    flex: 0 0 20%;
     align-self: center;
     justify-self: end;
 }

@@ -865,16 +865,6 @@
                     </EthInput>
                 </div>
 
-                <!--         
-            <EthInput
-                input_type="multi_choice"
-                input_id="modern_collection"
-                :choices="modern_collections_all"
-                v-model="form.modern_collections"
-            >
-                Modern Collections
-            </EthInput>
--->
                 <div class="edit_legalclass">
                     <EthInput
                         input_type="single_choice"

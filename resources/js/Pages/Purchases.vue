@@ -43,7 +43,10 @@
         <div class="pur_fourth">{{ purchase.description }}</div>
         <div class="pur_fifth">
             <span v-for="document in purchase.documents" :key="document.id">
-                {{ document.standard_name }}<br />
+                <Link :href="'/codex_show/general/' + document.id"> 
+                    {{ document.standard_name }}
+                </Link>
+                <br>
             </span>
         </div>
         <div class="pur_sixth">
