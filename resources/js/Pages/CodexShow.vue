@@ -804,18 +804,6 @@
                     />
                 </div>
 
-                <!--
-                        
-            <EthInput
-                input_type="multi_choice"
-                input_id="modern_collection"
-                :choices="modern_collections_all"
-                v-model="form.modern_collections"
-            >
-                Modern Collections
-            </EthInput>
--->
-
                 <div class="show_legalclass">
                     <label>Legal Classification</label>
                     <div class="showcodex_string">
@@ -886,7 +874,7 @@
                                 <Link
                                     as="button"
                                     type="button"
-                                    :href="'/codex_show/' + codex.id"
+                                    :href="'/codex_show/general/' + codex.id"
                                     style="
                                         margin-right: 5px;
                                         padding: 2px 3px
