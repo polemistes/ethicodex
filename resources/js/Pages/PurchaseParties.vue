@@ -45,23 +45,30 @@
             {{ purchase_party.institution ? "Institution" : "Person" }}
         </div>
         <div class="par_fifth">
-            <span
-                v-for="purchase in purchase_party.purchases"
-                :key="purchase.id"
-            >
-                {{ purchase.name }} ({{ purchase.pivot.party_role }})<br />
-            </span>
+            <ul>
+                <span
+                    v-for="purchase in purchase_party.purchases"
+                    :key="purchase.id"
+                >
+                    <li>
+                        {{ purchase.name }} ({{ purchase.pivot.party_role }})
+                    </li>
+                </span>
+            </ul>
         </div>
         <div class="par_sixth">
-            <span
-                v-for="document in documents[purchase_party.id]"
-                :key="document.id"
-            >
-                <Link :href="'/codex_show/general/' + document.id">
-                    {{ document.standard_name }}
-                </Link>
-                <br />
-            </span>
+            <ul>
+                <span
+                    v-for="document in documents[purchase_party.id]"
+                    :key="document.id"
+                >
+                    <li>
+                        <Link :href="'/codex_show/general/' + document.id">
+                            {{ document.standard_name }}
+                        </Link>
+                    </li>
+                </span>
+            </ul>
         </div>
     </div>
 </template>

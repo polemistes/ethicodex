@@ -42,20 +42,29 @@
         <div class="pur_third">{{ purchase.name }}</div>
         <div class="pur_fourth" v-html="purchase.description" />
         <div class="pur_fifth">
-            <span v-for="document in purchase.documents" :key="document.id">
-                <Link :href="'/codex_show/general/' + document.id"> 
-                    {{ document.standard_name }}
-                </Link>
-                <br>
-            </span>
+            <ul>
+                <span v-for="document in purchase.documents" :key="document.id">
+                    <li>
+                        <Link :href="'/codex_show/general/' + document.id">
+                            {{ document.standard_name }}
+                        </Link>
+                    </li>
+                </span>
+            </ul>
         </div>
         <div class="pur_sixth">
+            <ul>
             <span
                 v-for="purchase_party in purchase.purchase_parties"
                 :key="purchase_party.id"
             >
-                {{ purchase_party.name }} ({{ purchase_party.pivot.party_role }})<br />
+            <li>
+                {{ purchase_party.name }} ({{
+                    purchase_party.pivot.party_role
+                }})
+                </li>
             </span>
+            </ul>
         </div>
     </div>
 </template>

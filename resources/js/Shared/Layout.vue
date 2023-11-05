@@ -1857,6 +1857,7 @@ body {
     gap: 1em;
     background-color: #eee;
     width: 100%;
+    max-height: 160px;
 }
 
 .pur_first {
@@ -1874,21 +1875,37 @@ body {
     flex: 0 0 20%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
 }
 .pur_fourth {
     flex: 0 0 24%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
 }
 .pur_fifth {
     flex: 0 0 20%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
+    list-style-type: circle;
+    list-style-position: inside;
 }
 .pur_sixth {
     flex: 0 0 15%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
+    list-style-type: circle;
+    list-style-position: inside;
 }
 
 /* ============================ */
@@ -1960,11 +1977,17 @@ body {
     flex: 0 0 18%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
 }
 .par_third {
     flex: 0 0 20%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
 }
 .par_fourth {
     flex: 0 0 6%;
@@ -1975,12 +1998,22 @@ body {
     flex: 0 0 26%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
+    list-style-type: circle;
+    list-style-position: inside;
 }
 
 .par_sixth {
     flex: 0 0 18%;
     align-self: center;
     justify-self: end;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    max-height: 8em;
+    list-style-type: circle;
+    list-style-position: inside;
 }
 
 /* ============================ */
