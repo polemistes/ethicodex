@@ -40,7 +40,7 @@
             {{ purchase.day > 0 ? "/" : "" }} {{ purchase.day }}
         </div>
         <div class="pur_third">{{ purchase.name }}</div>
-        <div class="pur_fourth">{{ purchase.description }}</div>
+        <div class="pur_fourth" v-html="purchase.description" />
         <div class="pur_fifth">
             <span v-for="document in purchase.documents" :key="document.id">
                 <Link :href="'/codex_show/general/' + document.id"> 

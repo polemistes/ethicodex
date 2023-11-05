@@ -40,7 +40,7 @@
             >
         </div>
         <div class="par_second">{{ purchase_party.name }}</div>
-        <div class="par_third">{{ purchase_party.description }}</div>
+        <div class="par_third" v-html="purchase_party.description" />
         <div class="par_fourth">
             {{ purchase_party.institution ? "Institution" : "Person" }}
         </div>

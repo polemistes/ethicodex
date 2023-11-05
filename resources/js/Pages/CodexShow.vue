@@ -112,7 +112,9 @@
                 <div class="show_trismegistos">
                     <label>Trismegistos ID</label>
                     <div class="showcodex_string_short">
-                        {{ document.trismegistos_id }}
+                        <a :href="'https://www.trismegistos.org/text/' + document.trismegistos_id" target="_blank">
+                            {{ document.trismegistos_id }}
+                        </a>
                     </div>
                 </div>
 
