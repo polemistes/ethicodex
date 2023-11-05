@@ -46,14 +46,7 @@
                 >
                     <Link href="/purchase_parties">Transaction Parties</Link>
                 </li>
-                <!--        
-        <li 
-          v-if="editor" 
-          :class="{active: pagename.includes('modern')"
-        >
-          <Link href="/modern_collections">Modern Collections</Link>
-        </li>                 
--->
+
                 <li
                     v-if="!loggedin"
                     :class="{ lo_active: pagename == '/user_register' }"
@@ -90,7 +83,7 @@
         <footer class="layout-bottom">
             <p>
                 A New Methodology and Ethics for Manuscript Studies
-                (EthiCodex)<span style="float: right">v0.16</span>
+                (EthiCodex)<span style="float: right">v0.17</span>
             </p>
         </footer>
     </div>
