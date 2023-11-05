@@ -54,7 +54,7 @@
                 v-for="purchase_party in purchase.purchase_parties"
                 :key="purchase_party.id"
             >
-                {{ purchase_party.name }}<br />
+                {{ purchase_party.name }} ({{ purchase_party.pivot.party_role }})<br />
             </span>
         </div>
     </div>
