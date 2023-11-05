@@ -640,6 +640,9 @@ body {
     cursor: pointer;
 }
 
+
+
+
 .inputfield-search {
     display: flex;
     flex-direction: column;
@@ -652,6 +655,18 @@ body {
     border-radius: 5px;
 }
 
+.inputfield-search select {
+    background-color: #ccc;
+    min-width: 10em;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
 .input_ad_year {
     display: flex;
     flex-direction: row;
@@ -689,8 +704,23 @@ body {
     margin-left: auto;
 }
 
+.pageline_sortfield {
+    margin-bottom: 15px;
+    margin-right: 20px;
+    margin-left: auto;
+}
+
+.pageline_reverse {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+ /*   margin-right: 20px;
+    margin-left: auto; */
+    row-gap: 18px;
+}
+
 .pageline_search_field {
-    flex-basis: 25%;
+    flex-basis: 20%;
     margin-left: auto;
     margin-bottom: 15px;
 }

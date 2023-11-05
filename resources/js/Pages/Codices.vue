@@ -20,7 +20,7 @@
         </div>
 
         <div class="pageline_total_found">
-            Codices found: {{ documents.total }}
+            Found: {{ documents.total }}
         </div>
         <div class="pageline_search_alternatives">
             <EthInput
@@ -40,6 +40,31 @@
             </EthInput>
         </div>
 
+        <div class="pageline_sortfield">
+            <EthInput
+                input_type="single_choice_search"
+                input_id="sortfield"
+                :choices="sortfields"
+                v-model="form.sortfield"
+                @new-change="sendsearch()"
+            >
+                Sort Field
+            </EthInput>
+        </div>
+
+        <div class="pageline_reverse">
+                    <label :for="reverse">Reverse</label>
+                    <input
+                        :id="reverse"
+                        type="checkbox"
+                        true-value="1"
+                        false-value="0"
+                        style="margin-left: 5px"
+                        v-model="form.reverse"
+                        @change="sendsearch()"
+                    />
+                </div>
+
         <div class="codex_pagecontainer" style="margin-left: auto">
             <Link
                 v-for="link in documents.links"
@@ -47,8 +72,8 @@
                 :href="link.url"
                 v-html="link.label"
                 :class="{
-                    codex_pageactive: this.pagenr == link.label,
-                    codex_pages: this.pagenr != link.label,
+                    codex_pageactive: this.page == link.label,
+                    codex_pages: this.page != link.label,
                 }"
             />
         </div>
@@ -679,30 +704,13 @@
                 :href="link.url"
                 v-html="link.label"
                 :class="{
-                    codex_pageactive: this.pagenr == link.label,
-                    codex_pages: this.pagenr != link.label,
+                    codex_pageactive: this.page == link.label,
+                    codex_pages: this.page != link.label,
                 }"
             />
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    computed: {
-        pagenr() {
-            let url = new URL(window.location.href);
-            let pagenr = url.searchParams.get("page");
-            return pagenr > 0 ? pagenr : 1;
-            /*
-            const urlParams = new URLSearchParams(this.$page.url);
-            let pagenr = urlParams.get("?page");
-            return pagenr > 0 ? pagenr : 1;
-            */
-        },
-    },
-};
-</script>
 
 <script setup>
 import { ref, reactive, watch, onMounted } from "vue";
@@ -812,6 +820,9 @@ const props = defineProps({
     transaction_parties_search: Array,
     legal_classifications_search: Array,
 
+    sortfield: String,
+    reverse: Number,
+    page: Number,
     auth: Object,
 });
 
@@ -909,7 +920,20 @@ const form = useForm({
     legal_classifications: props.legal_classifications_search
         ? props.legal_classifications_search
         : [],
+    sortfield: props.sortfield ? props.sortfield : 4,
+    reverse: props.reverse,
+    resetpage: false,
 });
+
+const page = props.page;
+
+const sortfields = [
+    { id: 1, name: "Standard Name" },
+    { id: 2, name: "Author" },
+    { id: 3, name: "Title" },
+    { id: 4, name: "Earliest Date" },
+    { id: 5, name: "Latest Date" },
+];
 
 const yesnomenu = [
     { id: 1, name: "Yes" },
@@ -919,6 +943,7 @@ const yesnomenu = [
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 
 function sendsearch() {
+    form.resetpage = true;
     form.get("/codices", {
         queryStringArrayFormat: "indices",
         preserveState: true,

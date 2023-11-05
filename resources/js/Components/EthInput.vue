@@ -185,6 +185,28 @@
         </select>
     </div>
 
+    <div v-if="input_type == 'single_choice_search'" class="inputfield-search">
+        <label :for="input_id"><slot /></label>
+        <select
+            :id="input_id"
+            :value="modelValue"
+            @input="
+                $emit('update:modelValue', $event.target.value);
+                $emit('newChange');
+            "
+        >
+            <option
+                v-for="choice in choices"
+                :value="choice.id"
+                :key="choice.id"
+            >
+                {{ choice.name }}
+            </option>
+        </select>
+    </div>
+
+
+
     <div v-if="input_type == 'legal_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <select
@@ -420,7 +442,7 @@
             </div>
         </div>
     </div>
-
+    
     <div v-if="input_type == 'multi_choice_event_wide'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button

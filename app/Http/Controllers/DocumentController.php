@@ -118,7 +118,13 @@ class DocumentController extends Controller
             'transactions' => 'nullable',
             'transaction_parties' => 'nullable',
             'legal_classifications' => 'nullable',
+            'sortfield' => 'nullable',
+            'reverse' => 'nullable',
+            'resetpage' => 'nullable',
+            'page' => 'nullable',
         ]);
+
+        $page = array_key_exists('page', $search) ? $search['page'] : 1;
 
         $show_publication = $request->session()->get('show_publication');
         $show_content = $request->session()->get('show_content');
@@ -146,6 +152,35 @@ class DocumentController extends Controller
         $request->session()->put('show_palaeography', $show_palaeography);
         $request->session()->put('show_consanal', $show_consanal);
         $request->session()->put('show_provenance', $show_provenance);
+
+        $sortfield = $request->session()->get('sortfield');
+        $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
+        $request->session()->put('sortfield', $sortfield);
+        switch ($sortfield) {
+            case 1:
+                $sortby = "standard_name";
+                break;
+            case 2:
+                $sortby = "ancient_author";
+                break;
+            case 3:
+                $sortby = "title";
+                break;
+            case 4:
+                $sortby = "start_year";
+                break;
+            case 5:
+                $sortby = "end_year";
+                break;
+            default:
+                $sortby = "start_year";
+        }
+
+        $reverse = $request->session()->get('reverse');
+        $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
+        $request->session()->put('reverse', $reverse);
+
+        $direction = $reverse ? "desc" : "asc";
 
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('standard_name', $search) ? $search['standard_name'] : null;
@@ -564,9 +599,8 @@ class DocumentController extends Controller
                 }
             )
 
-            ->orderBy('start_year')
-            ->orderBy('end_year')
-            ->orderBy('standard_name')
+            ->orderBy($sortby, $direction)
+            ->orderBy('end_year', $direction)
             ->paginate(10)->withQueryString();
 
         $ancient_provenances = $ancient_provenances_original;
@@ -663,6 +697,9 @@ class DocumentController extends Controller
             'transactions_search' => $transactions,
             'transaction_parties_search' => $transaction_parties,
             'legal_classifications_search' => $legal_classifications,
+            'sortfield' => $sortfield,
+            'reverse' => $reverse,
+            'page' => $page,
         ]);
     }
 
