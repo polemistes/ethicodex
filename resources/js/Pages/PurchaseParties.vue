@@ -16,13 +16,14 @@
         <div class="par_third"><b>Description</b></div>
         <div class="par_fourth"><b>Type</b></div>
         <div class="par_fifth"><b>Transactions</b></div>
+        <div class="par_sixth"><b>Codices</b></div>
     </div>
     <div
         v-for="purchase_party in purchase_parties"
         :key="purchase_party.id"
         class="partycontainer"
     >
-        <div class="par_first cod_buttons">
+        <div class="par_first cod_buttons" v-if="edit">
             <Link
                 :href="'/purchase_party_edit/' + purchase_party.id"
                 as="button"
@@ -51,6 +52,17 @@
                 {{ purchase.name }}<br />
             </span>
         </div>
+        <div class="par_sixth">
+            <span 
+                v-for="document in documents[purchase_party.id]"
+                :key="document.id"
+            >
+            <Link :href="'/codex_show/general/' + document.id"> 
+                    {{ document.standard_name }}
+            </Link>
+            <br />
+            </span>
+        </div>
     </div>
 </template>
 
@@ -62,6 +74,21 @@ const props = defineProps({
     purchase_parties: Array,
     auth: Object,
 });
+
+let documents = [];
+for (const purchase_party of props.purchase_parties) {
+    documents[purchase_party.id] = [];
+    for (const purchase of purchase_party.purchases) {
+        for (const document of purchase.documents) {
+            if (documents[purchase_party.id].find(x => x.id === document.id) === undefined) {
+                documents[purchase_party.id].push(document)
+            }
+            
+            
+        }
+    }
+    console.log(documents)
+}
 
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 </script>

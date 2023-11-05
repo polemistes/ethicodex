@@ -12,6 +12,6 @@ class PurchaseParty extends Model
 
     public function purchases()
     {
-        return $this->belongsToMany(Purchase::class)->withPivot('party_role');
+        return $this->belongsToMany(Purchase::class)->withPivot('party_role')->with('documents');
     }
 }

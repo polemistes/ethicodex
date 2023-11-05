@@ -1969,17 +1969,23 @@ body {
     justify-self: end;
 }
 .par_third {
-    flex: 0 0 30%;
+    flex: 0 0 20%;
     align-self: center;
     justify-self: end;
 }
 .par_fourth {
-    flex: 0 0 15%;
+    flex: 0 0 6%;
     align-self: center;
     justify-self: end;
 }
 .par_fifth {
-    flex: 0 0 25%;
+    flex: 0 0 26%;
+    align-self: center;
+    justify-self: end;
+}
+
+.par_sixth {
+    flex: 0 0 18%;
     align-self: center;
     justify-self: end;
 }
