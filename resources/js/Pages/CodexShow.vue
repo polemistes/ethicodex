@@ -49,7 +49,6 @@
     </div>
 
     <div class="mainstyle">
-
         <Link
             class="topbutton"
             as="button"
@@ -61,7 +60,7 @@
             Edit Codex
         </Link>
         <div class="nameheading">
-        {{document.standard_name}}
+            {{ document.standard_name }}
         </div>
 
         <div v-if="activetab == 'general'" class="maincontainer">
@@ -422,76 +421,73 @@
                         </div>
                     </div>
                 </template>
-                    <div class="show_pratio">
-                        <EthRatio
-                            :dividend="document.full_page_width"
-                            :divisor="document.full_page_height"
-                            >Ratio</EthRatio
-                        >
+                <div class="show_pratio">
+                    <EthRatio
+                        :dividend="document.full_page_width"
+                        :divisor="document.full_page_height"
+                        >Ratio</EthRatio
+                    >
+                </div>
+
+                <div class="show_uppmarg">
+                    <label>Upper Margin (cm)</label>
+                    <div class="showcodex_string_short">
+                        {{ document.upper_margin }}
                     </div>
+                </div>
+                <div class="show_lowmarg">
+                    <label>Lower Margin (cm)</label>
+                    <div class="showcodex_string_short">
+                        {{ document.lower_margin }}
+                    </div>
+                </div>
+                <div class="show_ulratio">
+                    <EthRatio
+                        :dividend="document.upper_margin"
+                        :divisor="document.lower_margin"
+                        >Ratio</EthRatio
+                    >
+                </div>
 
-            
-                        <div class="show_uppmarg">
-                            <label>Upper Margin (cm)</label>
-                            <div class="showcodex_string_short">
-                                {{ document.upper_margin }}
-                            </div>
-                        </div>
-                        <div class="show_lowmarg">
-                            <label>Lower Margin (cm)</label>
-                            <div class="showcodex_string_short">
-                                {{ document.lower_margin }}
-                            </div>
-                        </div>
-                        <div class="show_ulratio">
-                            <EthRatio
-                                :dividend="document.upper_margin"
-                                :divisor="document.lower_margin"
-                                >Ratio</EthRatio
-                            >
-                        </div>
+                <div class="show_innmarg">
+                    <label>Inner Margin (cm)</label>
+                    <div class="showcodex_string_short">
+                        {{ document.inner_margin }}
+                    </div>
+                </div>
+                <div class="show_outmarg">
+                    <label>Outer Margin</label>
+                    <div class="showcodex_string_short">
+                        {{ document.outer_margin }}
+                    </div>
+                </div>
+                <div class="show_ioratio">
+                    <EthRatio
+                        :dividend="document.inner_margin"
+                        :divisor="document.outer_margin"
+                        >Ratio</EthRatio
+                    >
+                </div>
 
-                        <div class="show_innmarg">
-                            <label>Inner Margin (cm)</label>
-                            <div class="showcodex_string_short">
-                                {{ document.inner_margin }}
-                            </div>
-                        </div>
-                        <div class="show_outmarg">
-                            <label>Outer Margin</label>
-                            <div class="showcodex_string_short">
-                                {{ document.outer_margin }}
-                            </div>
-                        </div>
-                        <div class="show_ioratio">
-                            <EthRatio
-                                :dividend="document.inner_margin"
-                                :divisor="document.outer_margin"
-                                >Ratio</EthRatio
-                            >
-                        </div>
-
-                        <div class="show_blockwidth">
-                            <label>Full Text Block Width (cm)</label>
-                            <div class="showcodex_string_short">
-                                {{ document.full_text_block_width }}
-                            </div>
-                        </div>
-                        <div class="show_blockheight">
-                            <label>Full Text Block Height (cm)</label>
-                            <div class="showcodex_string_short">
-                                {{ document.full_text_block_height }}
-                            </div>
-                        </div>
-                        <div class="show_bratio">
-                            <EthRatio
-                                :dividend="document.full_text_block_width"
-                                :divisor="document.full_text_block_height"
-                                >Ratio</EthRatio
-                            >
-                        </div>
-                    
-                
+                <div class="show_blockwidth">
+                    <label>Full Text Block Width (cm)</label>
+                    <div class="showcodex_string_short">
+                        {{ document.full_text_block_width }}
+                    </div>
+                </div>
+                <div class="show_blockheight">
+                    <label>Full Text Block Height (cm)</label>
+                    <div class="showcodex_string_short">
+                        {{ document.full_text_block_height }}
+                    </div>
+                </div>
+                <div class="show_bratio">
+                    <EthRatio
+                        :dividend="document.full_text_block_width"
+                        :divisor="document.full_text_block_height"
+                        >Ratio</EthRatio
+                    >
+                </div>
 
                 <div class="show_meascomm">
                     <label>Comments on Measurements</label>
@@ -513,7 +509,7 @@
             <fieldset class="showcodex_textualfeatures">
                 <legend class="sectionheading">Textual Features</legend>
                 <div class="show_scripts">
-                    <div v-if="checklanguage(1)">
+                    <template v-if="checklanguage(1)">
                         <label>Greek Script(s)</label>
                         <div class="showcodex_multi">
                             <template
@@ -528,9 +524,9 @@
                                 </div>
                             </template>
                         </div>
-                    </div>
+                    </template>
 
-                    <div v-if="checklanguage(2)" style="padding-top: 10px">
+                    <template v-if="checklanguage(2)">
                         <label>Latin Script(s)</label>
                         <div class="showcodex_multi">
                             <template
@@ -545,8 +541,9 @@
                                 </div>
                             </template>
                         </div>
-                    </div>
+                    </template>
                 </div>
+
                 <div class="show_numhands">
                     <label>Number of Hands</label>
                     <div class="showcodex_string_short">
@@ -711,29 +708,27 @@
                         }}
                     </div>
                 </div>
-                
+
                 <div class="show_micrograph" v-if="checkmicrograph(images)">
                     <div>
-                    <label>Micrographs</label>
+                        <label>Micrographs</label>
                     </div>
                     <template v-for="(image, index) in images" :key="image.id">
                         <div class="micrograph_gallery">
-                        <div class="micrograph_box" v-if="image.micrograph">
-
-                            <img
-                                :src="'/storage/' + image.filename"
-                                height="120"
-                                max-width="160"
-                            />
-                            <div
-                                class="showcodex_microdesc"
-                                v-html="image.description"
-                            />
-                        </div>
+                            <div class="micrograph_box" v-if="image.micrograph">
+                                <img
+                                    :src="'/storage/' + image.filename"
+                                    height="120"
+                                    max-width="160"
+                                />
+                                <div
+                                    class="showcodex_microdesc"
+                                    v-html="image.description"
+                                />
+                            </div>
                         </div>
                     </template>
                 </div>
- 
 
                 <div class="show_conshist">
                     <label>Conservation History</label>
@@ -786,9 +781,7 @@
                 <div class="show_anciprov">
                     <label>Ancient Provenance</label>
                     <div class="showcodex_string">
-                        {{
-                            ancient_provenance_full
-                        }}
+                        {{ ancient_provenance_full }}
                     </div>
                 </div>
 
@@ -850,7 +843,11 @@
                         class="showcodex_multi_stack"
                     >
                         <button @click="seltrans = purchase">Info</button>
-                        {{ purchase.name }} ({{purchase.year + (purchase.month ? '-' + purchase.month : '') + ((purchase.day ? '-' + purchase.day : ''))}})
+                        {{ purchase.name }} ({{
+                            purchase.year +
+                            (purchase.month ? "-" + purchase.month : "") +
+                            (purchase.day ? "-" + purchase.day : "")
+                        }})
                     </div>
                 </div>
 
@@ -923,12 +920,16 @@
 
                 <div class="codex_images_rows">
                     <template v-for="(image, index) in images" :key="image.id">
-                        <div class="showcodex_imagebox" v-if="!image.micrograph">
-                            <a :href="'/storage/' + image.filename" target="_blank">
+                        <div
+                            class="showcodex_imagebox"
+                            v-if="!image.micrograph"
+                        >
+                            <a
+                                :href="'/storage/' + image.filename"
+                                target="_blank"
+                            >
                                 <div class="codex_image_container">
-                                <img
-                                    :src="'/storage/' + image.filename"
-                                />
+                                    <img :src="'/storage/' + image.filename" />
                                 </div>
                             </a>
                             <label
@@ -941,7 +942,10 @@
                                 v-html="image.description"
                             />
                             <label>Source</label>
-                            <div class="showcodex_imgtext" v-html="image.source" />
+                            <div
+                                class="showcodex_imgtext"
+                                v-html="image.source"
+                            />
 
                             <label>License</label>
                             <div class="showcodex_string">
@@ -999,17 +1003,19 @@ if (!bifolia) {
     bifolia[0] = 0;
 }
 
-let ancient_provenance_full = ""
-const prov = props.ancient_provenance
+let ancient_provenance_full = "";
+const prov = props.ancient_provenance;
 if (prov ? prov.length > 0 : false) {
-    ancient_provenance_full = ancient_provenance_full.concat(prov[0].name)
-    let parent = prov[0].parent_recursive
+    ancient_provenance_full = ancient_provenance_full.concat(prov[0].name);
+    let parent = prov[0].parent_recursive;
     while (parent) {
-        ancient_provenance_full = ancient_provenance_full.concat(", ", parent.name)
-        parent = parent.parent_recursive
+        ancient_provenance_full = ancient_provenance_full.concat(
+            ", ",
+            parent.name
+        );
+        parent = parent.parent_recursive;
     }
 }
-
 
 const loadImages = ref(null);
 
@@ -1018,13 +1024,13 @@ let activetab = props.tab;
 let seltrans = ref({});
 
 function checkmicrograph(images) {
-    let found = false
+    let found = false;
     for (const image of images) {
         if (image.micrograph) {
-            found = true
+            found = true;
         }
     }
-    return found
+    return found;
 }
 
 function checklanguage(lang) {
