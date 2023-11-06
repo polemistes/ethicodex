@@ -73,8 +73,6 @@
             Previous
         </button>
 
-
-
         <div class="nameheading">
             {{document.standard_name}}
         </div>

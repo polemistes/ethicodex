@@ -1469,7 +1469,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
 }
@@ -1503,7 +1503,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
     margin-top: 15px;
@@ -1535,7 +1535,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
     margin-top: 15px;
@@ -1556,7 +1556,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
     margin-top: 15px;
@@ -1607,7 +1607,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
 }
@@ -1675,7 +1675,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
     margin-top: 15px;
@@ -1748,7 +1748,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
     margin-top: 15px;
@@ -1777,7 +1777,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
 }
@@ -1819,7 +1819,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
 }
@@ -1836,7 +1836,7 @@ body {
     gap: 20px;
     width: 99%;
     align-self: center;
-    background-color: #ccc;
+    background-color: #aaa;
     padding: 25px;
     border-radius: 10px;
 }
