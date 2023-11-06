@@ -770,8 +770,9 @@ body {
     align-self: flex-end;
     float: right;
     font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     margin-right: 10px;
+    font-size: 14px;
 }
 
 .codex_pagecontainer a {
