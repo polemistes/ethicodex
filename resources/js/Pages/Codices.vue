@@ -19,9 +19,7 @@
             </EthInput>
         </div>
 
-        <div class="pageline_total_found">
-            Found: {{ documents.total }}
-        </div>
+        <div class="pageline_total_found">Found: {{ documents.total }}</div>
         <div class="pageline_search_alternatives">
             <EthInput
                 input_type="multi_choice_search"
@@ -53,17 +51,17 @@
         </div>
 
         <div class="pageline_reverse">
-                    <label :for="reverse">Reverse</label>
-                    <input
-                        :id="reverse"
-                        type="checkbox"
-                        true-value="1"
-                        false-value="0"
-                        style="margin-left: 5px"
-                        v-model="form.reverse"
-                        @change="sendsearch()"
-                    />
-                </div>
+            <label :for="reverse">Reverse</label>
+            <input
+                :id="reverse"
+                type="checkbox"
+                true-value="1"
+                false-value="0"
+                style="margin-left: 5px"
+                v-model="form.reverse"
+                @change="sendsearch()"
+            />
+        </div>
 
         <div class="codex_pagecontainer" style="margin-left: auto">
             <Link
@@ -84,7 +82,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="standard_name"
-                v-model="form.standard_name"
+                v-model="form.s_standard_name"
                 @key-pressed="sendsearch()"
             >
                 Standard Name
@@ -92,7 +90,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="current_shelfmarks"
-                v-model="form.current_shelfmarks"
+                v-model="form.s_current_shelfmarks"
                 @key-pressed="sendsearch()"
             >
                 Current Shelfmarks
@@ -100,7 +98,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="publication"
-                v-model="form.publication"
+                v-model="form.s_publication"
                 @key-pressed="sendsearch()"
             >
                 Publication
@@ -108,7 +106,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="trismegistos_id"
-                v-model="form.trismegistos_id"
+                v-model="form.s_trismegistos_id"
                 @key-pressed="sendsearch()"
             >
                 Trismegistos ID
@@ -120,7 +118,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="title"
-                v-model="form.title"
+                v-model="form.s_title"
                 @key-pressed="sendsearch()"
             >
                 Title of Work
@@ -129,7 +127,7 @@
             <EthInput
                 input_type="textevent"
                 input_id="ancient_author"
-                v-model="form.ancient_author"
+                v-model="form.s_ancient_author"
                 @key-pressed="sendsearch()"
             >
                 Ancient Author
@@ -139,7 +137,7 @@
                 input_type="multi_choice_event"
                 input_id="genres"
                 :choices="genres"
-                v-model="form.genres"
+                v-model="form.s_genres"
                 @new-change="sendsearch()"
             >
                 Genres
@@ -149,7 +147,7 @@
                 input_type="multi_choice_event"
                 input_id="tags"
                 :choices="tags"
-                v-model="form.tags"
+                v-model="form.s_tags"
                 @new-change="sendsearch()"
             >
                 Content Tags
@@ -162,7 +160,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="earliest_date"
-                    v-model="form.earliest_date"
+                    v-model="form.s_earliest_date"
                     @key-pressed="sendsearch()"
                 >
                     Earliest Date
@@ -171,7 +169,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="latest_date"
-                    v-model="form.latest_date"
+                    v-model="form.s_latest_date"
                     @key-pressed="sendsearch()"
                 >
                     Latest Date
@@ -181,7 +179,7 @@
                     helptext="Restrict search to codices where the full date range falls within the min and max search parameters."
                     input_type="boolevent"
                     input_id="exclusive_date"
-                    v-model="form.exclusive_date"
+                    v-model="form.s_exclusive_date"
                     @new-change="sendsearch()"
                 >
                     Strict Date
@@ -191,7 +189,7 @@
                 input_type="multi_choice_event"
                 input_id="dating_methods"
                 :choices="dating_methods"
-                v-model="form.dating_methods"
+                v-model="form.s_dating_methods"
                 @new-change="sendsearch()"
             >
                 Basis of Date
@@ -201,7 +199,7 @@
                 input_type="multi_choice_event"
                 input_id="dating_certainties"
                 :choices="dating_certainties"
-                v-model="form.dating_certainties"
+                v-model="form.s_dating_certainties"
                 @new-change="sendsearch()"
             >
                 Certainty of Date
@@ -214,7 +212,7 @@
                 input_type="multi_choice_event"
                 input_id="materials"
                 :choices="materials"
-                v-model="form.materials"
+                v-model="form.s_materials"
                 @new-change="sendsearch()"
             >
                 Material
@@ -224,7 +222,7 @@
                 input_type="multi_choice_event"
                 input_id="inks"
                 :choices="inks"
-                v-model="form.inks"
+                v-model="form.s_inks"
                 @new-change="sendsearch()"
             >
                 Ink
@@ -234,7 +232,7 @@
                 input_type="multi_choice_event"
                 input_id="covers"
                 :choices="covers"
-                v-model="form.covers"
+                v-model="form.s_covers"
                 @new-change="sendsearch()"
             >
                 Cover
@@ -244,7 +242,7 @@
                 input_type="multi_choice_event"
                 input_id="quire_structures"
                 :choices="quire_structures"
-                v-model="form.quire_structures"
+                v-model="form.s_quire_structures"
                 @new-change="sendsearch()"
             >
                 Quire Structure
@@ -253,7 +251,7 @@
             <EthInput
                 input_type="numberevent"
                 input_id="quirenum_min"
-                v-model="form.quirenum_min"
+                v-model="form.s_quirenum_min"
                 @key-pressed="sendsearch()"
             >
                 Min Num of Quires
@@ -262,7 +260,7 @@
             <EthInput
                 input_type="numberevent"
                 input_id="quirenum_max"
-                v-model="form.quirenum_max"
+                v-model="form.s_quirenum_max"
                 @key-pressed="sendsearch()"
             >
                 Max Num of Quires
@@ -271,7 +269,7 @@
             <EthInput
                 input_type="numberevent"
                 input_id="bifolianum_min"
-                v-model="form.bifolianum_min"
+                v-model="form.s_bifolianum_min"
                 @key-pressed="sendsearch()"
             >
                 Min Num of Bifolia
@@ -280,7 +278,7 @@
             <EthInput
                 input_type="numberevent"
                 input_id="bifolianum_max"
-                v-model="form.bifolianum_max"
+                v-model="form.s_bifolianum_max"
                 @key-pressed="sendsearch()"
             >
                 Max Num of Bifolia
@@ -293,7 +291,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_width_min"
-                    v-model="form.full_page_width_min"
+                    v-model="form.s_full_page_width_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Page Width
@@ -302,7 +300,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_width_max"
-                    v-model="form.full_page_width_max"
+                    v-model="form.s_full_page_width_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Page Width
@@ -311,7 +309,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_height_min"
-                    v-model="form.full_page_height_min"
+                    v-model="form.s_full_page_height_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Page Height
@@ -320,7 +318,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_height_max"
-                    v-model="form.full_page_height_max"
+                    v-model="form.s_full_page_height_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Page Height
@@ -329,7 +327,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_text_block_width_min"
-                    v-model="form.full_text_block_width_min"
+                    v-model="form.s_full_text_block_width_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Block Width
@@ -338,7 +336,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_text_block_width_max"
-                    v-model="form.full_text_block_width_max"
+                    v-model="form.s_full_text_block_width_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Block Width
@@ -347,7 +345,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_text_block_height_min"
-                    v-model="form.full_text_block_height_min"
+                    v-model="form.s_full_text_block_height_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Block Height
@@ -356,7 +354,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="full_text_block_height_max"
-                    v-model="form.full_text_block_height_max"
+                    v-model="form.s_full_text_block_height_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Block Height
@@ -366,7 +364,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="upper_margin_min"
-                    v-model="form.upper_margin_min"
+                    v-model="form.s_upper_margin_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Upper Margin
@@ -375,7 +373,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="upper_margin_max"
-                    v-model="form.upper_margin_max"
+                    v-model="form.s_upper_margin_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Upper Margin
@@ -384,7 +382,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="lower_margin_min"
-                    v-model="form.lower_margin_min"
+                    v-model="form.s_lower_margin_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Lower Margin
@@ -393,7 +391,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="lower_margin_max"
-                    v-model="form.lower_margin_max"
+                    v-model="form.s_lower_margin_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Lower Margin
@@ -402,7 +400,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="inner_margin_min"
-                    v-model="form.inner_margin_min"
+                    v-model="form.s_inner_margin_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Inner Margin
@@ -411,7 +409,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="inner_margin_max"
-                    v-model="form.inner_margin_max"
+                    v-model="form.s_inner_margin_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Inner Margin
@@ -420,7 +418,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="outer_margin_min"
-                    v-model="form.outer_margin_min"
+                    v-model="form.s_outer_margin_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Outer Margin
@@ -429,7 +427,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="outer_margin_max"
-                    v-model="form.outer_margin_max"
+                    v-model="form.s_outer_margin_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Outer Margin
@@ -443,7 +441,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="hand_number_min"
-                    v-model="form.hand_number_min"
+                    v-model="form.s_hand_number_min"
                     @key-pressed="sendsearch()"
                 >
                     Min Num of Hands
@@ -452,7 +450,7 @@
                 <EthInput
                     input_type="numberevent"
                     input_id="hand_number_max"
-                    v-model="form.hand_number_max"
+                    v-model="form.s_hand_number_max"
                     @key-pressed="sendsearch()"
                 >
                     Max Num of Hands
@@ -462,7 +460,7 @@
                     input_type="multi_choice_event"
                     input_id="scripts"
                     :choices="scripts"
-                    v-model="form.scripts"
+                    v-model="form.s_scripts"
                     @new-change="sendsearch()"
                 >
                     Scripts
@@ -472,7 +470,7 @@
                     input_type="multi_choice_event"
                     input_id="diacritics"
                     :choices="diacritics"
-                    v-model="form.diacritics"
+                    v-model="form.s_diacritics"
                     @new-change="sendsearch()"
                 >
                     Diacritics
@@ -482,7 +480,7 @@
                     input_type="multi_choice_event"
                     input_id="punctuations"
                     :choices="punctuations"
-                    v-model="form.punctuations"
+                    v-model="form.s_punctuations"
                     @new-change="sendsearch()"
                 >
                     Punctuation
@@ -493,7 +491,7 @@
                     input_type="multi_choice_event"
                     input_id="paratexts"
                     :choices="paratexts"
-                    v-model="form.paratexts"
+                    v-model="form.s_paratexts"
                     @new-change="sendsearch()"
                 >
                     Paratexts
@@ -503,7 +501,7 @@
                     input_type="multi_choice_event"
                     input_id="decorations"
                     :choices="decorations"
-                    v-model="form.decorations"
+                    v-model="form.s_decorations"
                     @new-change="sendsearch()"
                 >
                     Decorative Symbols
@@ -513,7 +511,7 @@
                     input_type="multi_choice_event"
                     input_id="critical_symbols"
                     :choices="critical_symbols"
-                    v-model="form.critical_symbols"
+                    v-model="form.s_critical_symbols"
                     @new-change="sendsearch()"
                 >
                     Critical Symbols
@@ -523,7 +521,7 @@
                     input_type="multi_choice_event"
                     input_id="paginations"
                     :choices="paginations"
-                    v-model="form.paginations"
+                    v-model="form.s_paginations"
                     @new-change="sendsearch()"
                 >
                     Pagination
@@ -533,7 +531,7 @@
                     input_type="multi_choice_event"
                     input_id="quire_signatures"
                     :choices="quire_signatures"
-                    v-model="form.quire_signatures"
+                    v-model="form.s_quire_signatures"
                     @new-change="sendsearch()"
                 >
                     Quire Signatures
@@ -546,7 +544,7 @@
                 input_type="multi_choice_event"
                 input_id="storage_conditions"
                 :choices="storage_conditions"
-                v-model="form.storage_conditions"
+                v-model="form.s_storage_conditions"
                 @new-change="sendsearch()"
             >
                 Storage Conditions
@@ -556,7 +554,7 @@
                 input_type="multi_choice_event_wide"
                 input_id="analyses"
                 :choices="analyses"
-                v-model="form.analyses"
+                v-model="form.s_analyses"
                 @new-change="sendsearch()"
             >
                 Scientific Analysis
@@ -569,7 +567,7 @@
                 input_type="multi_choice_event"
                 input_id="ancient_provenances"
                 :choices="ancient_provenances"
-                v-model="form.ancient_provenances"
+                v-model="form.s_ancient_provenances"
                 @new-change="sendsearch()"
             >
                 Ancient Provenance
@@ -579,7 +577,7 @@
                 input_type="multi_choice_event"
                 input_id="ancient_provenance_certainties"
                 :choices="ancient_provenance_certainties"
-                v-model="form.ancient_provenance_certainties"
+                v-model="form.s_ancient_provenance_certainties"
                 @new-change="sendsearch()"
             >
                 Certainty of A. Provenance
@@ -589,7 +587,7 @@
                 input_type="single_choice_event"
                 input_id="scientifically_excavated"
                 :choices="yesnomenu"
-                v-model="form.scientifically_excavated"
+                v-model="form.s_scientifically_excavated"
                 @new-change="sendsearch()"
             >
                 Scientifically Excavated
@@ -599,7 +597,7 @@
                 input_type="multi_choice_event"
                 input_id="transactions"
                 :choices="transactions"
-                v-model="form.transactions"
+                v-model="form.s_transactions"
                 @new-change="sendsearch()"
             >
                 Transactions
@@ -609,7 +607,7 @@
                 input_type="multi_choice_event"
                 input_id="transaction_parties"
                 :choices="transaction_parties"
-                v-model="form.transaction_parties"
+                v-model="form.s_transaction_parties"
                 @new-change="sendsearch()"
             >
                 Transaction Parties
@@ -619,7 +617,7 @@
                 input_type="multi_choice_event"
                 input_id="legal_classifications"
                 :choices="legal_classifications"
-                v-model="form.legal_classifications"
+                v-model="form.s_legal_classifications"
                 @new-change="sendsearch()"
             >
                 Legal Classification
@@ -641,17 +639,16 @@
         :key="document.id"
     >
         <div class="cod_first cod_buttons">
-            <Link
-                as="button"
-                type="button"
-                :href="'/codex_show/general/' + document.id"
+            <button
+                @click="show_codex(document.id)"
                 style="margin-right: 1em; padding: 0.3em 0.5em"
-                >Show
-            </Link>
+            >
+                Show
+            </button>
 
-            <Link
-                as="button"
-                type="button"
+            <button
+                @click="edit_codex(document.id)"
+                style="margin-right: 1em; padding: 0.3em 0.5em"
                 v-if="
                     props.auth == null
                         ? 0
@@ -659,11 +656,10 @@
                         ? 1
                         : 0
                 "
-                :href="'/codex_edit/general/' + document.id"
-                style="margin-right: 1em; padding: 0.3em 0.5em"
             >
                 Edit
-            </Link>
+            </button>
+
             <Link
                 as="button"
                 type="button"
@@ -838,86 +834,86 @@ const form = useForm({
     /* Search Fields */
     fulltext: props.fulltext,
     /* Publication */
-    standard_name: props.standard_name,
-    publication: props.publication,
-    current_shelfmarks: props.current_shelfmarks,
-    trismegistos_id: props.trismegistos_id,
+    s_standard_name: props.standard_name,
+    s_publication: props.publication,
+    s_current_shelfmarks: props.current_shelfmarks,
+    s_trismegistos_id: props.trismegistos_id,
     /* Content */
-    title: props.title,
-    ancient_author: props.ancient_author,
-    genres: props.genres_search ? props.genres_search : [],
-    tags: props.tags_search ? props.tags_search : [],
+    s_title: props.title,
+    s_ancient_author: props.ancient_author,
+    s_genres: props.genres_search ? props.genres_search : [],
+    s_tags: props.tags_search ? props.tags_search : [],
     /* Dating */
-    earliest_date: props.earliest_date,
-    latest_date: props.latest_date,
-    exclusive_date: props.exclusive_date,
-    dating_methods: props.dating_methods_search
+    s_earliest_date: props.earliest_date,
+    s_latest_date: props.latest_date,
+    s_exclusive_date: props.exclusive_date,
+    s_dating_methods: props.dating_methods_search
         ? props.dating_methods_search
         : [],
-    dating_certainties: props.dating_certainties_search
+    s_dating_certainties: props.dating_certainties_search
         ? props.dating_certainties_search
         : [],
     /* Materiality */
-    materials: props.materials_search ? props.materials_search : [],
-    inks: props.inks_search ? props.inks_search : [],
-    covers: props.covers_search ? props.covers_search : [],
-    quire_structures: props.quire_structures_search
+    s_materials: props.materials_search ? props.materials_search : [],
+    s_inks: props.inks_search ? props.inks_search : [],
+    s_covers: props.covers_search ? props.covers_search : [],
+    s_quire_structures: props.quire_structures_search
         ? props.quire_structures_search
         : [],
-    quirenum_min: props.quirenum_min,
-    quirenum_max: props.quirenum_max,
-    bifolianum_min: props.bifolianum_min,
-    bifolianum_max: props.bifolianum_max,
+    s_quirenum_min: props.quirenum_min,
+    s_quirenum_max: props.quirenum_max,
+    s_bifolianum_min: props.bifolianum_min,
+    s_bifolianum_max: props.bifolianum_max,
     /* Measurement */
-    full_page_width_min: props.full_page_width_min,
-    full_page_width_max: props.full_page_width_max,
-    full_page_height_min: props.full_page_height_min,
-    full_page_height_max: props.full_page_height_max,
-    full_text_block_width_min: props.full_text_block_width_min,
-    full_text_block_width_max: props.full_text_block_width_max,
-    full_text_block_height_min: props.full_text_block_height_min,
-    full_text_block_height_max: props.full_text_block_height_max,
-    upper_margin_min: props.upper_margin_min,
-    upper_margin_max: props.upper_margin_max,
-    lower_margin_min: props.lower_margin_min,
-    lower_margin_max: props.lower_margin_max,
-    inner_margin_min: props.inner_margin_min,
-    inner_margin_max: props.inner_margin_max,
-    outer_margin_min: props.outer_margin_min,
-    outer_margin_max: props.outer_margin_max,
+    s_full_page_width_min: props.full_page_width_min,
+    s_full_page_width_max: props.full_page_width_max,
+    s_full_page_height_min: props.full_page_height_min,
+    s_full_page_height_max: props.full_page_height_max,
+    s_full_text_block_width_min: props.full_text_block_width_min,
+    s_full_text_block_width_max: props.full_text_block_width_max,
+    s_full_text_block_height_min: props.full_text_block_height_min,
+    s_full_text_block_height_max: props.full_text_block_height_max,
+    s_upper_margin_min: props.upper_margin_min,
+    s_upper_margin_max: props.upper_margin_max,
+    s_lower_margin_min: props.lower_margin_min,
+    s_lower_margin_max: props.lower_margin_max,
+    s_inner_margin_min: props.inner_margin_min,
+    s_inner_margin_max: props.inner_margin_max,
+    s_outer_margin_min: props.outer_margin_min,
+    s_outer_margin_max: props.outer_margin_max,
     /* Palaeography */
-    hand_number_min: props.hand_number_min,
-    hand_number_max: props.hand_number_max,
-    scripts: props.scripts_search ? props.scripts_search : [],
-    diacritics: props.diacritics_search ? props.diacritics_search : [],
-    punctuations: props.punctuations_search ? props.punctuations_search : [],
-    paratexts: props.paratexts_search ? props.paratexts_search : [],
-    decorations: props.decorations_search ? props.decorations_search : [],
-    critical_symbols: props.critical_symbols_search
+    s_hand_number_min: props.hand_number_min,
+    s_hand_number_max: props.hand_number_max,
+    s_scripts: props.scripts_search ? props.scripts_search : [],
+    s_diacritics: props.diacritics_search ? props.diacritics_search : [],
+    s_punctuations: props.punctuations_search ? props.punctuations_search : [],
+    s_paratexts: props.paratexts_search ? props.paratexts_search : [],
+    s_decorations: props.decorations_search ? props.decorations_search : [],
+    s_critical_symbols: props.critical_symbols_search
         ? props.critical_symbols_search
         : [],
-    paginations: props.paginations_search ? props.paginations_search : [],
-    quire_signatures: props.quire_structures_search
+    s_paginations: props.paginations_search ? props.paginations_search : [],
+    s_quire_signatures: props.quire_structures_search
         ? props.quire_structures_search
         : [],
     /* Conservation and Analysis */
-    storage_conditions: props.storage_conditions_search
+    s_storage_conditions: props.storage_conditions_search
         ? props.storage_conditions_search
         : [],
-    analyses: props.analyses_search ? props.analyses_search : [],
+    s_analyses: props.analyses_search ? props.analyses_search : [],
     /* Provenance */
-    scientifically_excavated: props.scientifically_excavated,
-    ancient_provenances: props.ancient_provenances_search
+    s_scientifically_excavated: props.scientifically_excavated,
+    s_ancient_provenances: props.ancient_provenances_search
         ? props.ancient_provenances_search
         : [],
-    ancient_provenance_certainties: props.ancient_provenance_certainties_search
+    s_ancient_provenance_certainties: props.ancient_provenance_certainties_search
         ? props.ancient_provenance_certainties_search
         : [],
-    transactions: props.transactions_search ? props.transactions_search : [],
-    transaction_parties: props.transaction_parties_search
+    s_transactions: props.transactions_search ? props.transactions_search : [],
+    s_transaction_parties: props.transaction_parties_search
         ? props.transaction_parties_search
         : [],
-    legal_classifications: props.legal_classifications_search
+    s_legal_classifications: props.legal_classifications_search
         ? props.legal_classifications_search
         : [],
     sortfield: props.sortfield ? props.sortfield : 4,
@@ -950,6 +946,19 @@ function sendsearch() {
         preserveScroll: true,
     });
 }
+
+function show_codex($id) {
+    form.get("/codex_show/general/" + $id, {
+        queryStringArrayFormat: "indices",
+    });
+}
+
+function edit_codex($id) {
+    form.get("/codex_edit/general/" + $id, {
+        queryStringArrayFormat: "indices",
+    });
+}
+
 </script>
 
 <style></style>

@@ -1,62 +1,80 @@
 <template>
     <div class="codexmenu">
-        <Link
-            as="button"
+        <button
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            :href="'/codex_edit/general/' + document.id"
-            replace
+            @click="activetab='general'; edit_codex(document.id)"
         >
             General Information
-        </Link>
+        </button>
 
-        <Link
-            as="button"
+        <button
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            :href="'/codex_edit/codicology/' + document.id"
-            replace
+            @click="activetab='codicology'; edit_codex(document.id)"
         >
             Codicology
-        </Link>
-        <Link
-            as="button"
+        </button>
+
+        <button
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            :href="'/codex_edit/conservation/' + document.id"
-            replace
+            @click="activetab='conservation'; edit_codex(document.id)"
         >
-            Conservation and Analysis
-        </Link>
-        <Link
-            as="button"
+        Conservation and Analysis
+        </button>
+
+        <button
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            :href="'/codex_edit/provenance/' + document.id"
-            replace
+            @click="activetab='provenance'; edit_codex(document.id)"
         >
-            Provenance
-        </Link>
-        <Link
-            as="button"
+        Provenance
+        </button>
+
+        <button
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            :href="'/codex_edit/images/' + document.id"
-            replace
+            @click="activetab='images'; edit_codex(document.id)"
         >
-            Images
-        </Link>
+        Images
+        </button>
     </div>
 
     <form @submit.prevent="submit" class="mainstyle">
-        <Link
-            class="topbutton"
-            as="button"
+        <button
             type="button"
-            :href="'/codex_show/'+ activetab + '/' + document.id"
-            replace
-            >Show Codex
-        </Link>
+            class="topbutton"
+            v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
+            @click="show_codex(document.id)"
+        >
+            Show Codex
+        </button>
+
+        <div class="topbutton">
+            ({{ props.current }} of {{ props.total }})
+        </div>
+
+        <button
+            type="button"
+            :disabled="next === -1"
+            class="topbutton"
+            @click="edit_codex(props.next)"
+        >
+            Next
+        </button>
+
+        <button
+            type="button"
+            :disabled="prev === -1"
+            class="topbutton"
+            @click="edit_codex(props.prev)"
+        >
+            Previous
+        </button>
+
+
+
         <div class="nameheading">
             {{document.standard_name}}
         </div>
@@ -1061,7 +1079,91 @@ const props = defineProps({
     storage_conditions: Array,
     tags: Array,
     tags_all: Array,
+
+    show_publication: Boolean,
+    show_content: Boolean,
+    show_dating: Boolean,
+    show_materiality: Boolean,
+    show_measurement: Boolean,
+    show_palaeography: Boolean,
+    show_consanal: Boolean,
+    show_provenance: Boolean,
+
+    fulltext: String,
+    /* Publication */
+    standard_name: String,
+    publication: String,
+    current_shelfmarks: String,
+    trismegistos_id: String,
+    /* Content */
+    title: String,
+    ancient_author: String,
+    genres_search: Array,
+    tags_search: Array,
+    /* Dating */
+    earliest_date: Number,
+    latest_date: Number,
+    exclusive_date: Boolean,
+    dating_methods_search: Array,
+    dating_certainties_search: Array,
+    /* Materiality */
+    materials_search: Array,
+    inks_search: Array,
+    covers_search: Array,
+    quire_structures_search: Array,
+    quirenum_min: Number,
+    quirenum_max: Number,
+    bifolianum_min: Number,
+    bifolianum_max: Number,
+    /* Measurement */
+    full_page_width_min: Number,
+    full_page_width_max: Number,
+    full_page_height_min: Number,
+    full_page_height_max: Number,
+    full_text_block_width_min: Number,
+    full_text_block_width_max: Number,
+    full_text_block_height_min: Number,
+    full_text_block_height_max: Number,
+    upper_margin_min: Number,
+    upper_margin_max: Number,
+    lower_margin_min: Number,
+    lower_margin_max: Number,
+    inner_margin_min: Number,
+    inner_margin_max: Number,
+    outer_margin_min: Number,
+    outer_margin_max: Number,
+    /* Palaeography */
+    hand_number_min: Number,
+    hand_number_max: Number,
+    scripts_search: Array,
+    diacritics_search: Array,
+    punctuations_search: Array,
+    paratexts_search: Array,
+    decorations_search: Array,
+    critical_symbols_search: Array,
+    paginations_search: Array,
+    quire_signatures_search: Array,
+    /* Conservation and Analysis */
+    storage_conditions_search: Array,
+    analyses_search: Array,
+    /* Provenance */
+    scientifically_excavated: Number,
+    ancient_provenances_search: Array,
+    ancient_provenance_certainties_search: Array,
+    transactions_search: Array,
+    transaction_parties_search: Array,
+    legal_classifications_search: Array,
+
+    sortfield: String,
+    reverse: Number,
+
     tab: String,
+    prev: Number,
+    next: Number,
+    current: Number,
+    total: Number,
+
+    auth: Object,
 });
 
 const form = useForm("EditCodex", {
@@ -1146,6 +1248,103 @@ const form = useForm("EditCodex", {
     purchases: props.purchases,
     images_info: props.document.images_info,
     images: props.images,
+
+    show_publication: props.show_publication,
+    show_content: props.show_content,
+    show_dating: props.show_dating,
+    show_materiality: props.show_materiality,
+    show_measurement: props.show_measurement,
+    show_palaeography: props.show_palaeography,
+    show_consanal: props.show_consanal,
+    show_provenance: props.show_provenance,
+  
+    /* Search Fields */
+    fulltext: props.fulltext,
+    /* Publication */
+    s_standard_name: props.standard_name,
+    s_publication: props.publication,
+    s_current_shelfmarks: props.current_shelfmarks,
+    s_trismegistos_id: props.trismegistos_id,
+    /* Content */
+    s_title: props.title,
+    s_ancient_author: props.ancient_author,
+    s_genres: props.genres_search ? props.genres_search : [],
+    s_tags: props.tags_search ? props.tags_search : [],
+    /* Dating */
+    s_earliest_date: props.earliest_date,
+    s_latest_date: props.latest_date,
+    s_exclusive_date: props.exclusive_date,
+    s_dating_methods: props.dating_methods_search
+        ? props.dating_methods_search
+        : [],
+    s_dating_certainties: props.dating_certainties_search
+        ? props.dating_certainties_search
+        : [],
+    /* Materiality */
+    s_materials: props.materials_search ? props.materials_search : [],
+    s_inks: props.inks_search ? props.inks_search : [],
+    s_covers: props.covers_search ? props.covers_search : [],
+    s_quire_structures: props.quire_structures_search
+        ? props.quire_structures_search
+        : [],
+    s_quirenum_min: props.quirenum_min,
+    s_quirenum_max: props.quirenum_max,
+    s_bifolianum_min: props.bifolianum_min,
+    s_bifolianum_max: props.bifolianum_max,
+    /* Measurement */
+    s_full_page_width_min: props.full_page_width_min,
+    s_full_page_width_max: props.full_page_width_max,
+    s_full_page_height_min: props.full_page_height_min,
+    s_full_page_height_max: props.full_page_height_max,
+    s_full_text_block_width_min: props.full_text_block_width_min,
+    s_full_text_block_width_max: props.full_text_block_width_max,
+    s_full_text_block_height_min: props.full_text_block_height_min,
+    s_full_text_block_height_max: props.full_text_block_height_max,
+    s_upper_margin_min: props.upper_margin_min,
+    s_upper_margin_max: props.upper_margin_max,
+    s_lower_margin_min: props.lower_margin_min,
+    s_lower_margin_max: props.lower_margin_max,
+    s_inner_margin_min: props.inner_margin_min,
+    s_inner_margin_max: props.inner_margin_max,
+    s_outer_margin_min: props.outer_margin_min,
+    s_outer_margin_max: props.outer_margin_max,
+    /* Palaeography */
+    s_hand_number_min: props.hand_number_min,
+    s_hand_number_max: props.hand_number_max,
+    s_scripts: props.scripts_search ? props.scripts_search : [],
+    s_diacritics: props.diacritics_search ? props.diacritics_search : [],
+    s_punctuations: props.punctuations_search ? props.punctuations_search : [],
+    s_paratexts: props.paratexts_search ? props.paratexts_search : [],
+    s_decorations: props.decorations_search ? props.decorations_search : [],
+    s_critical_symbols: props.critical_symbols_search
+        ? props.critical_symbols_search
+        : [],
+    s_paginations: props.paginations_search ? props.paginations_search : [],
+    s_quire_signatures: props.quire_structures_search
+        ? props.quire_structures_search
+        : [],
+    /* Conservation and Analysis */
+    s_storage_conditions: props.storage_conditions_search
+        ? props.storage_conditions_search
+        : [],
+    s_analyses: props.analyses_search ? props.analyses_search : [],
+    /* Provenance */
+    s_scientifically_excavated: props.scientifically_excavated,
+    s_ancient_provenances: props.ancient_provenances_search
+        ? props.ancient_provenances_search
+        : [],
+    s_ancient_provenance_certainties: props.ancient_provenance_certainties_search
+        ? props.ancient_provenance_certainties_search
+        : [],
+    s_transactions: props.transactions_search ? props.transactions_search : [],
+    s_transaction_parties: props.transaction_parties_search
+        ? props.transaction_parties_search
+        : [],
+    s_legal_classifications: props.legal_classifications_search
+        ? props.legal_classifications_search
+        : [],
+    sortfield: props.sortfield ? props.sortfield : 4,
+    reverse: props.reverse,
 });
 
 let removeStartEventListener = Inertia.on("before", (event) => {
@@ -1253,6 +1452,21 @@ function addimages(imagefiles) {
     );
     this.loadImages.value = null;
 }
+
+function show_codex(id) {
+    form.get("/codex_show/" + activetab + "/" + id, {
+        queryStringArrayFormat: "indices",
+        replace: true,
+    });
+}
+
+function edit_codex(id) {
+    form.get("/codex_edit/" + activetab + "/" + id, {
+        queryStringArrayFormat: "indices",
+        replace: true,
+    });
+}
+
 
 function submit() {
     submitted = true;
