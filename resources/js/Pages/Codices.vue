@@ -19,7 +19,8 @@
             </EthInput>
         </div>
 
-        <div class="pageline_total_found">Found: {{ documents.total }}</div>
+        <div class="pageline_total_found"><div style="padding-bottom: 8px; font-weight: bold;">Found</div><div> {{ documents.total }}</div></div>
+
         <div class="pageline_search_alternatives">
             <EthInput
                 input_type="multi_choice_search"
@@ -63,12 +64,12 @@
             />
         </div>
 
-        <div class="codex_pagecontainer" style="margin-left: auto">
+        <div class="pageline_pages" style="margin-left: auto">
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
-                v-html="link.label"
+                v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
                     codex_pageactive: this.page == link.label,
                     codex_pages: this.page != link.label,
@@ -691,14 +692,14 @@
     </div>
     <div class="pageline">
         <div
-            class="codex_pagecontainer"
+            class="pageline_pages"
             style="margin-left: auto; margin-top: 20px"
         >
             <Link
                 v-for="link in documents.links"
                 :key="link.label"
                 :href="link.url"
-                v-html="link.label"
+                v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
                     codex_pageactive: this.page == link.label,
                     codex_pages: this.page != link.label,

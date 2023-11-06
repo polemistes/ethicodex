@@ -673,50 +673,91 @@ body {
 .pageline {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+ /*   justify-content: flex-start; */
     align-items: flex-end;
     background-color: #eef;
     font-size: 14px;
 }
 
 .pageline button {
+    flex-basis: 6%;
+    margin-right: 30px;
+    float: left;
     margin-left: 10px;
-    margin-right: 10px;
+/*    margin-right: 10px;*/
     padding: 5px 5px;
 }
 
 .pageline_total_found {
+    flex-basis: 4%;
+    float: left;
     margin-bottom: 30px;
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 20px;
 }
 
 .pageline_search_alternatives {
+    flex-basis: 10%;
+    float: left;
     margin-bottom: 15px;
     margin-right: 20px;
-    margin-left: auto;
 }
 
 .pageline_sortfield {
+    flex-basis: 10%;
     margin-bottom: 15px;
-    margin-right: 20px;
-    margin-left: auto;
+    float: left;
+    margin-right: 5px;
 }
 
 .pageline_reverse {
+    flex-basis: 4%;
+    float: left;
     display: flex;
     flex-direction: column;
     margin-bottom: 25px;
- /*   margin-right: 20px;
-    margin-left: auto; */
     row-gap: 18px;
 }
 
 .pageline_search_field {
-    flex-basis: 20%;
-    margin-left: auto;
+    float: left;
+    flex-basis: 15%;
     margin-bottom: 15px;
+    margin-right: 10px;
 }
+
+.pageline_pages {
+    align-self: flex-end;
+    float: right;
+    font-size: 20px;
+    margin-bottom: 22px;
+    margin-right: 10px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.pageline_pages a {
+    all: unset;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #aab;
+    background-color: #99b;
+    color: #fff;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.pageline_pages a:hover {
+    background-color: #669;
+}
+
+.codex_pages {
+    padding: 1em;
+}
+.codex_pageactive {
+    padding: 1em;
+    background-color: #444 !important;
+}
+
 
 .searchblockbackground {
     background-color: #ccc;
@@ -764,38 +805,6 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-}
-
-.codex_pagecontainer {
-    align-self: flex-end;
-    float: right;
-    font-size: 20px;
-    margin-bottom: 22px;
-    margin-right: 10px;
-    font-size: 14px;
-}
-
-.codex_pagecontainer a {
-    all: unset;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #aab;
-    background-color: #99b;
-    color: #fff;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.codex_pagecontainer a:hover {
-    background-color: #669;
-}
-
-.codex_pages {
-    padding: 1em;
-}
-.codex_pageactive {
-    padding: 1em;
-    background-color: #444 !important;
 }
 
 .cod_container {
