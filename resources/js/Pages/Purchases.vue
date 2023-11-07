@@ -54,16 +54,16 @@
         </div>
         <div class="pur_sixth">
             <ul>
-            <span
-                v-for="purchase_party in purchase.purchase_parties"
-                :key="purchase_party.id"
-            >
-            <li>
-                {{ purchase_party.name }} ({{
-                    purchase_party.pivot.party_role
-                }})
-                </li>
-            </span>
+                <span
+                    v-for="purchase_party in purchase.purchase_parties"
+                    :key="purchase_party.id"
+                >
+                    <li>
+                        {{ purchase_party.name }} ({{
+                            purchase_party.pivot.party_role
+                        }})
+                    </li>
+                </span>
             </ul>
         </div>
     </div>
