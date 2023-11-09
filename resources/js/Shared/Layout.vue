@@ -833,36 +833,34 @@ body {
     flex-direction: column;
     gap: 5px;
 }
+.cod_zeroth {
+    flex: 0 0 3%;
+    align-self: center;
+}
 .cod_first {
     flex: 0 0 5%;
     align-self: center;
-    justify-self: end;
 }
 
 .cod_second {
     flex: 0 0 18%;
     align-self: center;
-    justify-self: end;
 }
 .cod_third {
     flex: 0 0 15%;
     align-self: center;
-    justify-self: end;
 }
 .cod_fourth {
     flex: 0 0 15%;
     align-self: center;
-    justify-self: end;
 }
 .cod_fifth {
     flex: 0 0 10%;
     align-self: center;
-    justify-self: end;
 }
 .cod_sixth {
-    flex: 0 0 22%;
+    flex: 0 0 20%;
     align-self: center;
-    justify-self: end;
 }
 
 /* ================== */

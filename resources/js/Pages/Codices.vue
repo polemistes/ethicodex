@@ -626,6 +626,7 @@
         </div>
     </div>
     <div class="cod_titles" style="padding-top: 15px; background-color: #bbb">
+        <div class="cod_zeroth"></div>
         <div class="cod_first"></div>
         <div class="cod_second"><b>Standard Name</b></div>
         <div class="cod_third"><b>Author</b></div>
@@ -636,9 +637,13 @@
 
     <div
         class="cod_container"
-        v-for="document in documents.data"
+        v-for="(document, index) in documents.data"
         :key="document.id"
     >
+        <div class="cod_zeroth">
+            {{ documents.from + index }}
+        </div>
+
         <div class="cod_first cod_buttons">
             <button
                 @click="show_codex(document.id)"
