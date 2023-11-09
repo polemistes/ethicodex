@@ -712,7 +712,7 @@ class DocumentController extends Controller
         $this->authorize('create', Document::class);
 
         $document = Document::create();
-        return Redirect::route('CodexEdit', $document);
+        return Redirect::route('CodexEdit', (['tab' => 'general', 'document' => $document]));
     }
 
     /**
@@ -849,7 +849,6 @@ class DocumentController extends Controller
 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
-        $request->session()->put('reverse', $reverse);
 
         $direction = $reverse ? "desc" : "asc";
 
@@ -1280,6 +1279,7 @@ class DocumentController extends Controller
             foreach ($all_documents as $doc){
                 if($found) {
                     $next = $doc['id'];
+                    break;
                 }
 
                 $count++;
@@ -1386,11 +1386,13 @@ class DocumentController extends Controller
             'transaction_parties_search' => $transaction_parties,
             'legal_classifications_search' => $legal_classifications,
 
+            'sortfield' => $sortfield,
+            'reverse' => $reverse,
             'tab' => $tab,
             'prev' => $prev,
             'next' => $next,
             'current' => $current,
-            'total' => $total,
+            'total' => $total, 
         ]));
     }
 
@@ -2068,6 +2070,8 @@ class DocumentController extends Controller
             'transaction_parties_search' => $transaction_parties,
             'legal_classifications_search' => $legal_classifications,
 
+            'sortfield' => $sortfield,
+            'reverse' => $reverse,
             'tab' => $tab,
             'prev' => $prev,
             'next' => $next,
