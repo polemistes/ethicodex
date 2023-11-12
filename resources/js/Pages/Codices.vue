@@ -700,10 +700,10 @@
             class="pageline_pages"
             style="margin-left: auto; margin-top: 20px"
         >
-            <Link
+        <button
                 v-for="link in documents.links"
                 :key="link.label"
-                :href="link.url"
+                @click="gotopage(link.url)"
                 v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
                     codex_pageactive: this.page == link.label,
