@@ -1208,7 +1208,7 @@ if (prov ? prov.length > 0 : false) {
 
 const loadImages = ref(null);
 
-let activetab = props.tab;
+let activetab = ref(props.tab);
 
 let seltrans = ref({});
 
@@ -1241,15 +1241,14 @@ function range(start, end) {
 }
 
 function show_codex(id) {
-    form.get("/codex_show/" + activetab + "/" + id, {
+    form.post("/codex_show/" + activetab.value + "/" + id, {
         queryStringArrayFormat: "indices",
         replace: true,
     });
 }
 
-
 function edit_codex(id) {
-    form.get("/codex_edit/" + activetab + "/" + id, {
+    form.post("/codex_edit/" + activetab.value + "/" + id, {
         queryStringArrayFormat: "indices",
         replace: true,
     });

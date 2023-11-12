@@ -681,11 +681,10 @@ body {
 
 .pageline button {
     flex-basis: 6%;
-    margin-right: 30px;
+    margin-right: 0px;
     float: left;
-    margin-left: 10px;
-/*    margin-right: 10px;*/
-    padding: 5px 5px;
+    margin-left: 0px;
+    padding: 1px 1px;
 }
 
 .pageline_total_found {

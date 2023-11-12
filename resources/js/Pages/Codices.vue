@@ -65,10 +65,10 @@
         </div>
 
         <div class="pageline_pages" style="margin-left: auto">
-            <Link
+            <button
                 v-for="link in documents.links"
                 :key="link.label"
-                :href="link.url"
+                @click="gotopage(link.url)"
                 v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
                     codex_pageactive: this.page == link.label,
@@ -946,24 +946,36 @@ let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 
 function sendsearch() {
     form.resetpage = true;
-    form.get("/codices", {
+    form.post("/codices", {
         queryStringArrayFormat: "indices",
         preserveState: true,
         preserveScroll: true,
     });
 }
 
-function show_codex($id) {
-    form.get("/codex_show/general/" + $id, {
+function show_codex(id) {
+    form.post("/codex_show/general/" + id, {
         queryStringArrayFormat: "indices",
     });
 }
 
-function edit_codex($id) {
-    form.get("/codex_edit/general/" + $id, {
+function edit_codex(id) {
+    form.post("/codex_edit/general/" + id, {
         queryStringArrayFormat: "indices",
     });
 }
+
+function gotopage(link) {
+    
+    const page = link.substr(link.search("\\?"));
+    
+    form.post("/codices/" + page, {
+        queryStringArrayFormat: "indices",
+        preserveState: true,
+        preserveScroll: true,
+    });
+}
+
 
 </script>
 

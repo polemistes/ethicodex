@@ -2087,9 +2087,567 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Document $document)
+    public function update(Request $request, $tab, Document $document)
     {
         $this->authorize('update', $document);
+
+        $role_id = $request->user() ? $request->user()->role_id : 0;
+
+        $search = $request->validate([
+            'show_publication' => 'nullable',
+            'show_content' => 'nullable',
+            'show_dating' => 'nullable',
+            'show_materiality' => 'nullable',
+            'show_measurement' => 'nullable',
+            'show_palaeography' => 'nullable',
+            'show_consanal' => 'nullable',
+            'show_provenance' => 'nullable',
+
+            'fulltext' => 'nullable',
+            's_standard_name' => 'nullable',
+            's_publication' => 'nullable',
+            's_current_shelfmarks' => 'nullable',
+            's_trismegistos_id' => 'nullable',
+            's_title' => 'nullable',
+            's_ancient_author' => 'nullable',
+            's_genres' => 'nullable',
+            's_tags' => 'nullable',
+            's_earliest_date' => 'nullable',
+            's_latest_date' => 'nullable',
+            's_exclusive_date' => 'nullable',
+            's_dating_methods' => 'nullable',
+            's_dating_certainties' => 'nullable',
+            's_materials' => 'nullable',
+            's_inks' => 'nullable',
+            's_covers' => 'nullable',
+            's_quire_structures' => 'nullable',
+            's_quirenum_min' => 'nullable',
+            's_quirenum_max' => 'nullable',
+            's_bifolianum_min' => 'nullable',
+            's_bifolianum_max' => 'nullable',
+            's_full_page_width_min' => 'nullable',
+            's_full_page_width_max' => 'nullable',
+            's_full_page_height_min' => 'nullable',
+            's_full_page_height_max' => 'nullable',
+            's_full_text_block_width_min' => 'nullable',
+            's_full_text_block_width_max' => 'nullable',
+            's_full_text_block_height_min' => 'nullable',
+            's_full_text_block_height_max' => 'nullable',
+            's_upper_margin_min' => 'nullable',
+            's_upper_margin_max' => 'nullable',
+            's_lower_margin_min' => 'nullable',
+            's_lower_margin_max' => 'nullable',
+            's_inner_margin_min' => 'nullable',
+            's_inner_margin_max' => 'nullable',
+            's_outer_margin_min' => 'nullable',
+            's_outer_margin_max' => 'nullable',
+            's_hand_number_min' => 'nullable',
+            's_hand_number_max' => 'nullable',
+            's_scripts' => 'nullable',
+            's_diacritics' => 'nullable',
+            's_punctuations' => 'nullable',
+            's_paratexts' => 'nullable',
+            's_decorations' => 'nullable',
+            's_critical_symbols' => 'nullable',
+            's_paginations' => 'nullable',
+            's_quire_signatures' => 'nullable',
+            's_storage_conditions' => 'nullable',
+            's_analyses' => 'nullable',
+            's_scientifically_excavated' => 'nullable',
+            's_ancient_provenances' => 'nullable',
+            's_ancient_provenance_certainties' => 'nullable',
+            's_transactions' => 'nullable',
+            's_transaction_parties' => 'nullable',
+            's_legal_classifications' => 'nullable',
+            'sortfield' => 'nullable',
+            'reverse' => 'nullable',
+        ]);
+
+        $show_publication = $request->session()->get('show_publication');
+        $show_content = $request->session()->get('show_content');
+        $show_dating = $request->session()->get('show_dating');
+        $show_materiality = $request->session()->get('show_materiality');
+        $show_measurement = $request->session()->get('show_measurement');
+        $show_palaeography = $request->session()->get('show_palaeography');
+        $show_consanal = $request->session()->get('show_consanal');
+        $show_provenance = $request->session()->get('show_provenance');
+
+        $sortfield = $request->session()->get('sortfield');
+        $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
+  
+        $request->session()->put('sortfield', $sortfield);
+        switch ($sortfield) {
+            case 1:
+                $sortby = "standard_name";
+                break;
+            case 2:
+                $sortby = "ancient_author";
+                break;
+            case 3:
+                $sortby = "title";
+                break;
+            case 4:
+                $sortby = "start_year";
+                break;
+            case 5:
+                $sortby = "end_year";
+                break;
+            default:
+                $sortby = "start_year";
+        }
+
+        $reverse = $request->session()->get('reverse');
+        $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
+        $request->session()->put('reverse', $reverse);
+
+        $direction = $reverse ? "desc" : "asc";
+
+        $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
+        $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
+        $publication = array_key_exists('s_publication', $search) ? $search['s_publication'] : null;
+        $current_shelfmarks = array_key_exists('s_current_shelfmarks', $search) ? $search['s_current_shelfmarks'] : null;
+        $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
+        $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
+        $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
+        $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
+        $earliest_date = array_key_exists('s_earliest_date', $search) ? $search['s_earliest_date'] : null;
+        $latest_date = array_key_exists('s_latest_date', $search) ? $search['s_latest_date'] : null;
+        $exclusive_date = array_key_exists('s_exclusive_date', $search) ? $search['s_exclusive_date'] : false;
+        $dating_methods = array_key_exists('s_dating_methods', $search) ? $search['s_dating_methods'] : null;
+        $dating_certainties = array_key_exists('s_dating_certainties', $search) ? $search['s_dating_certainties'] : null;
+        $materials = array_key_exists('s_materials', $search) ? $search['s_materials'] : null;
+        $inks = array_key_exists('s_inks', $search) ? $search['s_inks'] : null;
+        $covers = array_key_exists('s_covers', $search) ? $search['s_covers'] : null;
+        $quire_structures = array_key_exists('s_quire_structures', $search) ? $search['s_quire_structures'] : null;
+        $quirenum_min = array_key_exists('s_quirenum_min', $search) ? $search['s_quirenum_min'] : null;
+        $quirenum_max = array_key_exists('s_quirenum_max', $search) ? $search['s_quirenum_max'] : null;
+        $bifolianum_min = array_key_exists('s_bifolianum_min', $search) ? $search['s_bifolianum_min'] : null;
+        $bifolianum_max = array_key_exists('s_bifolianum_max', $search) ? $search['s_bifolianum_max'] : null;
+        $full_page_width_min = array_key_exists('s_full_page_width_min', $search) ? $search['s_full_page_width_min'] : null;
+        $full_page_width_max = array_key_exists('s_full_page_width_max', $search) ? $search['s_full_page_width_max'] : null;
+        $full_page_height_min = array_key_exists('s_full_page_height_min', $search) ? $search['s_full_page_height_min'] : null;
+        $full_page_height_max = array_key_exists('s_full_page_height_max', $search) ? $search['s_full_page_height_max'] : null;
+        $full_text_block_width_min = array_key_exists('s_full_text_block_width_min', $search) ? $search['s_full_text_block_width_min'] : null;
+        $full_text_block_width_max = array_key_exists('s_full_text_block_width_max', $search) ? $search['s_full_text_block_width_max'] : null;
+        $full_text_block_height_min = array_key_exists('s_full_text_block_height_min', $search) ? $search['s_full_text_block_height_min'] : null;
+        $full_text_block_height_max = array_key_exists('s_full_text_block_height_max', $search) ? $search['s_full_text_block_height_max'] : null;
+        $upper_margin_min = array_key_exists('s_upper_margin_min', $search) ? $search['s_upper_margin_min'] : null;
+        $upper_margin_max = array_key_exists('s_upper_margin_max', $search) ? $search['s_upper_margin_max'] : null;
+        $lower_margin_min = array_key_exists('s_lower_margin_min', $search) ? $search['s_lower_margin_min'] : null;
+        $lower_margin_max = array_key_exists('s_lower_margin_max', $search) ? $search['s_lower_margin_max'] : null;
+        $inner_margin_min = array_key_exists('s_inner_margin_min', $search) ? $search['s_inner_margin_min'] : null;
+        $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
+        $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
+        $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+        $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
+        $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
+        $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
+        $diacritics = array_key_exists('s_diacritics', $search) ? $search['s_diacritics'] : null;
+        $punctuations = array_key_exists('s_punctuations', $search) ? $search['s_punctuations'] : null;
+        $paratexts = array_key_exists('s_paratexts', $search) ? $search['s_paratexts'] : null;
+        $decorations = array_key_exists('s_decorations', $search) ? $search['s_decorations'] : null;
+        $critical_symbols = array_key_exists('s_critical_symbols', $search) ? $search['s_critical_symbols'] : null;
+        $paginations = array_key_exists('s_pagination', $search) ? $search['s_paginations'] : null;
+        $quire_signatures = array_key_exists('s_quire_signatures', $search) ? $search['s_quire_signatures'] : null;
+        $storage_conditions = array_key_exists('s_storage_conditions', $search) ? $search['s_storage_conditions'] : null;
+        $analyses = array_key_exists('s_analyses', $search) ? $search['s_analyses'] : null;
+        $scientifically_excavated = array_key_exists('s_scientifically_excavated', $search) ? $search['s_scientifically_excavated'] : null;
+        $ancient_provenances = array_key_exists('s_ancient_provenances', $search) ? $search['s_ancient_provenances'] : null;
+        $ancient_provenance_certainties = array_key_exists('s_ancient_provenance_certainties', $search) ? $search['s_ancient_provenance_certainties'] : null;
+        $transactions = array_key_exists('s_transactions', $search) ? $search['s_transactions'] : null;
+        $transaction_parties = array_key_exists('s_transaction_parties', $search) ? $search['s_transaction_parties'] : null;
+        $legal_classifications = array_key_exists('s_legal_classifications', $search) ? $search['s_legal_classifications'] : null;
+        
+        if($show_provenance AND $ancient_provenances) {
+            $children = [];
+
+            foreach($ancient_provenances as $ancient_provenance) {
+                $prov = AncientProvenance::find($ancient_provenance['id']);
+                $childrec = $prov->flatChildren();
+
+                foreach($childrec as $child) {
+                    $childarr = [
+                        "id" => $child->id,
+                        "name" => $child->name
+                    ];
+                    array_push($ancient_provenances, $childarr);
+                } 
+            }
+        }
+ 
+        $all_documents = Document::query()
+            ->when($role_id < 2, function ($query) {
+                $query->where('published', '=', true);
+            })
+            ->when($fulltext, function ($query, $fulltext) {
+                $query->where(function ($query) use ($fulltext) {
+                    $query->where('standard_name', 'like', "%{$fulltext}%")
+                        ->orWhere('standard_name', 'like', "%{$fulltext}%")
+                        ->orWhere('other_names', 'like', "%{$fulltext}%")
+                        ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
+                        ->orWhere('publication', 'like', "%{$fulltext}%")
+                        ->orWhere('current_shelfmarks', 'like', "%{$fulltext}%")
+                        ->orWhere('title', 'like', "%{$fulltext}%")
+                        ->orWhere('ancient_author', 'like', "%{$fulltext}%")
+                        ->orWhere('content_description', 'like', "%{$fulltext}%")
+                        ->orWhere('language_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('dating_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('general_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('measurement_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('full_text_block_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('script_description', 'like', "%{$fulltext}%")
+                        ->orWhere('decoration_description', 'like', "%{$fulltext}%")
+                        ->orWhere('paratext_description', 'like', "%{$fulltext}%")
+                        ->orWhere('diacritic_description', 'like', "%{$fulltext}%")
+                        ->orWhere('punctuation_description', 'like', "%{$fulltext}%")
+                        ->orWhere('critical_symbols_description', 'like', "%{$fulltext}%")
+                        ->orWhere('pagination_description', 'like', "%{$fulltext}%")
+                        ->orWhere('quire_signatures_description', 'like', "%{$fulltext}%")
+                        ->orWhere('quire_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('binding_description', 'like', "%{$fulltext}%")
+                        ->orWhere('inks_description', 'like', "%{$fulltext}%")
+                        ->orWhere('cover_description', 'like', "%{$fulltext}%")
+                        ->orWhere('conservation_history', 'like', "%{$fulltext}%")
+                        ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('legal_classification_explanation', 'like', "%{$fulltext}%")
+                        ->orWhere('bibliography', 'like', "%{$fulltext}%")
+                        ->orWhere('images_info', 'like', "%{$fulltext}%")
+                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%");
+                });
+            })
+            ->when($show_publication == "true", function ($query) use (
+                $standard_name,
+                $publication,
+                $current_shelfmarks,
+                $trismegistos_id
+            ) {
+                $query->when($standard_name, function ($query, $standard_name) {
+                    $query->where('standard_name', 'like', "%{$standard_name}%");
+                })
+                    ->when($publication, function ($query, $publication) {
+                        $query->where('publication', 'like', "%{$publication}%");
+                    })
+                    ->when($current_shelfmarks, function ($query, $current_shelfmarks) {
+                        $query->where('current_shelfmarks', 'like', "%{$current_shelfmarks}%");
+                    })
+                    ->when($trismegistos_id, function ($query, $trismegistos_id) {
+                        $query->where('trismegistos_id', '=', $trismegistos_id);
+                    });
+            })
+            ->when($show_content == "true", function ($query) use (
+                $title,
+                $ancient_author,
+                $genres,
+                $tags
+            ) {
+                $query->when($title, function ($query, $title) {
+                    $query->where('title', 'like', "%{$title}%");
+                })
+                    ->when($ancient_author, function ($query, $ancient_author) {
+                        $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                    })
+                    ->when($genres, function ($query, $genres) {
+                        $query->whereHas('genres', function ($query) use ($genres) {
+                            $query->whereIn('genres.id', array_column($genres, 'id'));
+                        });
+                    })
+                    ->when($tags, function ($query, $tags) {
+                        $query->whereHas('tags', function ($query) use ($tags) {
+                            $query->whereIn('tags.id', array_column($tags, 'id'));
+                        });
+                    });
+            })
+            ->when($show_dating == "true", function ($query) use (
+                $earliest_date,
+                $latest_date,
+                $exclusive_date,
+                $dating_methods,
+                $dating_certainties
+            ) {
+                $query->when($exclusive_date == "true", function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
+                    $query->when($earliest_date, function ($query, $earliest_date) {
+                        $query->where('start_year', '>=', $earliest_date);
+                    })
+                        ->when($latest_date, function ($query, $latest_date) {
+                            $query->where('end_year', '<=', $latest_date);
+                        });
+                }, function ($query) use ($earliest_date, $latest_date) {
+                    $query->when($earliest_date, function ($query, $earliest_date) {
+                        $query->where('end_year', '>=', $earliest_date);
+                    })
+                        ->when($latest_date, function ($query, $latest_date) {
+                            $query->where('start_year', '<=', $latest_date);
+                        });
+                })
+                    ->when($dating_methods, function ($query, $dating_methods) {
+                        $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
+                            $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
+                        });
+                    })
+                    ->when($dating_certainties, function ($query, $dating_certainties) {
+                        $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
+                    });
+            })
+            ->when(
+                $show_materiality == "true",
+                function ($query) use (
+                    $materials,
+                    $inks,
+                    $covers,
+                    $quire_structures,
+                    $quirenum_min,
+                    $quirenum_max,
+                    $bifolianum_min,
+                    $bifolianum_max
+                ) {
+                    $query->when($materials, function ($query, $materials) {
+                        $query->whereIn('material_id', array_column($materials, 'id'));
+                    })
+                        ->when($inks, function ($query, $inks) {
+                            $query->whereHas('inks', function ($query) use ($inks) {
+                                $query->whereIn('inks.id', array_column($inks, 'id'));
+                            });
+                        })
+                        ->when($covers, function ($query, $covers) {
+                            $query->whereIn('cover_id', array_column($covers, 'id'));
+                        })
+                        ->when($quire_structures, function ($query, $quire_structures) {
+                            $query->whereIn('quire_structure_id', array_column($quire_structures, 'id'));
+                        })
+                        ->when($quirenum_min, function ($query, $quirenum_min) {
+                            $query->where('quire_number', '>=', $quirenum_min);
+                        })
+                        ->when($quirenum_max, function ($query, $quirenum_max) {
+                            $query->where('quire_number', '<=', $quirenum_max);
+                        })
+                        ->when($bifolianum_min, function ($query, $bifolianum_min) {
+                            $query->where('bifolia_number', '>=', $bifolianum_min);
+                        })
+                        ->when($bifolianum_max, function ($query, $bifolianum_max) {
+                            $query->where('bifolia_number', '<=', $bifolianum_max);
+                        });
+                }
+            )
+
+            ->when(
+                $show_measurement == "true",
+                function ($query) use (
+                    $full_page_width_min,
+                    $full_page_width_max,
+                    $full_page_height_min,
+                    $full_page_height_max,
+                    $full_text_block_width_min,
+                    $full_text_block_width_max,
+                    $full_text_block_height_min,
+                    $full_text_block_height_max,
+                    $upper_margin_min,
+                    $upper_margin_max,
+                    $lower_margin_min,
+                    $lower_margin_max,
+                    $inner_margin_min,
+                    $inner_margin_max,
+                    $outer_margin_min,
+                    $outer_margin_max
+                ) {
+                    $query->when($full_page_width_min, function ($query, $full_page_width_min) {
+                        $query->where('full_page_width', '>=', $full_page_width_min);
+                    })
+                        ->when($full_page_width_max, function ($query, $full_page_width_max) {
+                            $query->where('full_page_width', '<=', $full_page_width_max);
+                        })
+                        ->when($full_page_height_min, function ($query, $full_page_height_min) {
+                            $query->where('full_page_height', '>=', $full_page_height_min);
+                        })
+                        ->when($full_page_height_max, function ($query, $full_page_height_max) {
+                            $query->where('full_page_height', '<=', $full_page_height_max);
+                        })
+                        ->when($full_text_block_width_min, function ($query, $full_text_block_width_min) {
+                            $query->where('full_text_block_width', '>=', $full_text_block_width_min);
+                        })
+                        ->when($full_text_block_width_max, function ($query, $full_text_block_width_max) {
+                            $query->where('full_text_block_width', '<=', $full_text_block_width_max);
+                        })
+                        ->when($full_text_block_height_min, function ($query, $full_text_block_height_min) {
+                            $query->where('full_text_block_height', '>=', $full_text_block_height_min);
+                        })
+                        ->when($full_text_block_height_max, function ($query, $full_text_block_height_max) {
+                            $query->where('full_text_block_height', '<=', $full_text_block_height_max);
+                        })
+                        ->when($upper_margin_min, function ($query, $upper_margin_min) {
+                            $query->where('upper_margin', '>=', $upper_margin_min);
+                        })
+                        ->when($upper_margin_max, function ($query, $upper_margin_max) {
+                            $query->where('upper_margin', '<=', $upper_margin_max);
+                        })
+                        ->when($lower_margin_min, function ($query, $lower_margin_min) {
+                            $query->where('lower_margin', '>=', $lower_margin_min);
+                        })
+                        ->when($lower_margin_max, function ($query, $lower_margin_max) {
+                            $query->where('lower_margin', '<=', $lower_margin_max);
+                        })
+                        ->when($inner_margin_min, function ($query, $inner_margin_min) {
+                            $query->where('inner_margin', '>=', $inner_margin_min);
+                        })
+                        ->when($inner_margin_max, function ($query, $inner_margin_max) {
+                            $query->where('inner_margin', '<=', $inner_margin_max);
+                        })
+                        ->when($outer_margin_min, function ($query, $outer_margin_min) {
+                            $query->where('outer_margin', '>=', $outer_margin_min);
+                        })
+                        ->when($outer_margin_max, function ($query, $outer_margin_max) {
+                            $query->where('outer_margin', '<=', $outer_margin_max);
+                        });
+                }
+            )
+            ->when(
+                $show_palaeography == "true",
+                function ($query) use (
+                    $hand_number_min,
+                    $hand_number_max,
+                    $scripts,
+                    $diacritics,
+                    $punctuations,
+                    $paratexts,
+                    $decorations,
+                    $critical_symbols,
+                    $paginations,
+                    $quire_signatures
+                ) {
+                    $query->when($hand_number_min, function ($query, $hand_number_min) {
+                        $query->where('hand_number', '>=', $hand_number_min);
+                    })
+                        ->when($hand_number_max, function ($query, $hand_number_max) {
+                            $query->where('hand_number', '<=', $hand_number_max);
+                        })
+                        ->when($scripts, function ($query, $scripts) {
+                            $query->whereHas('scripts', function ($query) use ($scripts) {
+                                $query->whereIn('scripts.id', array_column($scripts, 'id'));
+                            });
+                        })
+                        ->when($diacritics, function ($query, $diacritics) {
+                            $query->whereHas('diacritics', function ($query) use ($diacritics) {
+                                $query->whereIn('diacritics.id', array_column($diacritics, 'id'));
+                            });
+                        })
+                        ->when($punctuations, function ($query, $punctuations) {
+                            $query->whereHas('punctuations', function ($query) use ($punctuations) {
+                                $query->whereIn('punctuations.id', array_column($punctuations, 'id'));
+                            });
+                        })
+                        ->when($paratexts, function ($query, $paratexts) {
+                            $query->whereHas('paratexts', function ($query) use ($paratexts) {
+                                $query->whereIn('paratexts.id', array_column($paratexts, 'id'));
+                            });
+                        })
+                        ->when($decorations, function ($query, $decorations) {
+                            $query->whereHas('decorations', function ($query) use ($decorations) {
+                                $query->whereIn('decorations.id', array_column($decorations, 'id'));
+                            });
+                        })
+                        ->when($critical_symbols, function ($query, $critical_symbols) {
+                            $query->whereHas('critical_symbols', function ($query) use ($critical_symbols) {
+                                $query->whereIn('critical_symbols.id', array_column($critical_symbols, 'id'));
+                            });
+                        })
+                        ->when($paginations, function ($query, $paginations) {
+                            $query->whereHas('paginations', function ($query) use ($paginations) {
+                                $query->whereIn('paginations.id', array_column($paginations, 'id'));
+                            });
+                        })
+                        ->when($quire_signatures, function ($query, $quire_signatures) {
+                            $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
+                        });
+                }
+            )
+            ->when(
+                $show_consanal == "true",
+                function ($query) use (
+                    $storage_conditions,
+                    $analyses
+                ) {
+                    $query->when($storage_conditions, function ($query, $storage_conditions) {
+                        $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
+                    })
+                        ->when($analyses, function ($query, $analyses) {
+                            $query->whereHas('analyses', function ($query) use ($analyses) {
+                                $query->whereIn('analyses.id', array_column($analyses, 'id'));
+                            });
+                        });
+                }
+            )
+            ->when(
+                $show_provenance == "true",
+                function ($query) use (
+                    $scientifically_excavated,
+                    $ancient_provenances,
+                    $ancient_provenance_certainties,
+                    $transactions,
+                    $transaction_parties,
+                    $legal_classifications
+                ) {
+                    $query->when($scientifically_excavated, function ($query, $scientifically_excavated) {
+                        $query->where('scientifically_excavated', '=', 1);
+                    })
+                        ->when($ancient_provenances, function ($query, $ancient_provenances) {
+                            $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
+                        })
+                        ->when($ancient_provenance_certainties, function ($query, $ancient_provenance_certainties) {
+                            $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
+                        })
+                        ->when($transactions, function ($query, $transactions) {
+                            $query->whereHas('purchases', function ($query) use ($transactions) {
+                                $query->whereIn('purchases.id', array_column($transactions, 'id'));
+                            });
+                        })
+                        ->when($transaction_parties, function ($query, $transaction_parties) {
+                            $tactions = Purchase::query()
+                                ->whereHas('purchase_parties', function ($query) use ($transaction_parties) {
+                                    $query->whereIn('purchase_parties.id', array_column($transaction_parties, 'id'));
+                                })->get()->all();
+                            $query->whereHas('purchases', function ($query) use ($tactions) {
+                                $query->whereIn('purchases.id', array_column($tactions, 'id'));
+                            });
+                        })
+                        ->when($legal_classifications, function ($query, $legal_classifications) {
+                            $query->whereIn('legal_classification_id', array_column($legal_classifications, 'id'));
+                        });
+                }
+            )
+
+            ->orderBy($sortby, $direction)
+            ->orderBy('end_year', $direction)->get();
+
+            $prev = -1;
+            $next = -1;
+            $current = -1;
+            $savedprev = -1;
+            $found = false;
+            $count = 0;
+            $total = $all_documents->count();
+
+            foreach ($all_documents as $doc){
+                if($found) {
+                    $next = $doc['id'];
+                }
+
+                $count++;
+
+                if($doc['id'] === $document['id']) {
+                    $found = true;
+                    $prev = $savedprev;
+                    $current = $count;
+                }
+                else {
+                    $found = false;
+                }
+                $savedprev = $doc['id'];
+            }
+
+        $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
+
+
         $fields = $request->validate([
             'id' => 'required',
             'published' => 'nullable',
@@ -2276,7 +2834,129 @@ class DocumentController extends Controller
             $image->save();
         }
 
-        return redirect()->back();
+        return (Inertia::render('CodexEdit', [
+            'document' => $document,
+            'analyses' => $document->analyses()->get()->makeHidden('pivot'),
+            'analyses_all' => Analysis::all(),
+            'ancient_provenances' => AncientProvenance::all(),
+            'ancient_provenance' => $document->ancient_provenance()->get(),
+            'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
+            'ancient_provenance_certainty' => $document->ancient_provenance_certainty()->get(),
+            'critical_symbols' => $document->critical_symbols()->get()->makeHidden('pivot'),
+            'critical_symbols_all' => CriticalSymbol::all(),
+            'covers' => Cover::all(),
+            'cover' => $document->cover()->get(),
+            'dating_certainties' => DatingCertainty::all(),
+            'dating_certainty' => $document->dating_certainty()->get(),
+            'dating_methods' => $document->dating_methods()->get()->makeHidden('pivot'),
+            'dating_methods_all' => DatingMethod::all(),
+            'decorations' => $document->decorations()->get()->makeHidden('pivot'),
+            'decorations_all' => Decoration::all(),
+            'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
+            'diacritics_all' => Diacritic::all(),
+            'genres' => $document->genres()->get()->makeHidden('pivot'),
+            'genres_all' => Genre::all(),
+            'images' => $document->images()->with('license')->get(),
+            'inks' => $document->inks()->get()->makeHidden('pivot'),
+            'inks_all' => Ink::all(),
+            'languages' => $document->languages()->get()->makeHidden('pivot'),
+            'languages_all' => Language::all(),
+            'legal_classifications' => LegalClassification::all(),
+            'legal_classification' => $document->legal_classification()->get(),
+            'licenses' => License::all(),
+            'materials' => Material::all(),
+            'material' => $document->material()->get(),
+            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'modern_collections_all' => ModernCollection::all(),
+            'paginations' => Pagination::all(),
+            'pagination' => $document->pagination()->get(),
+            'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
+            'paratexts_all' => Paratext::all(),
+            'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
+            'punctuations_all' => Punctuation::all(),
+            'purchases' => $document->purchases()
+                                            ->get()->makeHidden('pivot')
+                                            ->sortBy('year')
+                                            ->sortBy('month')
+                                            ->sortBy('day'),
+            'purchases_all' => $purchases_all,
+            'quire_signatures' => QuireSignature::all(),
+            'quire_signature' => $document->quire_signature()->get(),
+            'quire_structures' => QuireStructure::all(),
+            'quire_structure' => $document->quire_structure()->get(),
+            'scripts' => $document->scripts()->get()->makeHidden('pivot'),
+            'scripts_all' => Script::all(),
+            'storage_conditions' => StorageCondition::all(),
+            'storage_condition' => $document->storage_condition()->get(),
+            'tags' => $document->tags()->get()->makeHidden('pivot'),
+            'tags_all' => Tag::all(),
+
+            'fulltext' => $fulltext,
+            'standard_name' => $standard_name,
+            'publication' => $publication,
+            'current_shelfmarks' => $current_shelfmarks,
+            'trismegistos_id' => $trismegistos_id,
+            'title' => $title,
+            'ancient_author' => $ancient_author,
+            'genres_search' => $genres,
+            'tags_search' => $tags,
+            'earliest_date' => $earliest_date,
+            'latest_date' => $latest_date,
+            'exclusive_date' => $exclusive_date == "true" ? true : false,
+            'dating_methods_search' => $dating_methods,
+            'dating_certainties_search' => $dating_certainties,
+            'materials_search' => $materials,
+            'inks_search' => $inks,
+            'covers_search' => $covers,
+            'quire_structures_search' => $quire_structures,
+            'quirenum_min' => $quirenum_min,
+            'quirenum_max' => $quirenum_max,
+            'bifolianum_min' => $bifolianum_min,
+            'bifolianum_max' => $bifolianum_max,
+            'full_page_width_min' => $full_page_width_min,
+            'full_page_width_max' => $full_page_width_max,
+            'full_page_height_min' => $full_page_height_min,
+            'full_page_height_max' => $full_page_height_max,
+            'full_text_block_width_min' => $full_text_block_width_min,
+            'full_text_block_width_max' => $full_text_block_width_max,
+            'full_text_block_height_min' => $full_text_block_height_min,
+            'full_text_block_height_max' => $full_text_block_height_max,
+            'upper_margin_min' => $upper_margin_min,
+            'upper_margin_max' => $upper_margin_max,
+            'lower_margin_min' => $lower_margin_min,
+            'lower_margin_max' => $lower_margin_max,
+            'inner_margin_min' => $inner_margin_min,
+            'inner_margin_max' => $inner_margin_max,
+            'outer_margin_min' => $outer_margin_min,
+            'outer_margin_max' => $outer_margin_max,
+            'hand_number_min' => $hand_number_min,
+            'hand_number_max' => $hand_number_max,
+            'scripts_search' => $scripts,
+            'diacritics_search' => $diacritics,
+            'punctuations_search' => $punctuations,
+            'paratexts_search' => $paratexts,
+            'decorations_search' => $decorations,
+            'critical_symbols_search' => $critical_symbols,
+            'paginations_search' => $paginations,
+            'quire_signatures_search' => $quire_signatures,
+            'storage_conditions_search' => $storage_conditions,
+            'analyses_search' => $analyses,
+            'scientifically_excavated' => $scientifically_excavated,
+            'ancient_provenances_search' => $ancient_provenances,
+            'ancient_provenance_certainties_search' => $ancient_provenance_certainties,
+            'transactions_search' => $transactions,
+            'transaction_parties_search' => $transaction_parties,
+            'legal_classifications_search' => $legal_classifications,
+
+            'sortfield' => $sortfield,
+            'reverse' => $reverse,
+            'tab' => $tab,
+            'prev' => $prev,
+            'next' => $next,
+            'current' => $current,
+            'total' => $total,
+        ]));
+
     }
 
     /**

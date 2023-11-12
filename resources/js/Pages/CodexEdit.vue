@@ -1396,7 +1396,7 @@ onMounted(() => {
 
 const loadImages = ref(null);
 
-let activetab = props.tab;
+let activetab = ref(props.tab);
 let submitted = false;
 
 function range(start, end) {
@@ -1452,15 +1452,17 @@ function addimages(imagefiles) {
 }
 
 function show_codex(id) {
-    form.get("/codex_show/" + activetab + "/" + id, {
+    form.post("/codex_show/" + activetab.value + "/" + id, {
         queryStringArrayFormat: "indices",
+        preserveState: true,
         replace: true,
     });
 }
 
 function edit_codex(id) {
-    form.get("/codex_edit/" + activetab + "/" + id, {
+    form.post("/codex_edit/" + activetab.value + "/" + id, {
         queryStringArrayFormat: "indices",
+        preserveState: true,
         replace: true,
     });
 }
@@ -1468,7 +1470,7 @@ function edit_codex(id) {
 
 function submit() {
     submitted = true;
-    form.post("/codex_update/" + props.document.id, {
+    form.post("/codex_update/" + activetab.value + "/" + props.document.id, {
         preserveState: true,
         preserveScroll: true,
     });
