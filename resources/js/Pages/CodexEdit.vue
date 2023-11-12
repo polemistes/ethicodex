@@ -1473,6 +1473,7 @@ function submit() {
     form.post("/codex_update/" + activetab.value + "/" + props.document.id, {
         preserveState: true,
         preserveScroll: true,
+        replace: true,
     });
 }
 </script>
