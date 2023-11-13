@@ -3,7 +3,7 @@
         <button
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab='general'; show_codex(document.id)"
+            @click="activetab='general'"
         >
             General Information
         </button>
@@ -11,7 +11,7 @@
         <button
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab='codicology'; show_codex(document.id)"
+            @click="activetab='codicology'"
         >
             Codicology
         </button>
@@ -19,7 +19,7 @@
         <button
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab='conservation'; show_codex(document.id)"
+            @click="activetab='conservation'"
         >
         Conservation and Analysis
         </button>
@@ -27,7 +27,7 @@
         <button
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab='provenance'; show_codex(document.id)"
+            @click="activetab='provenance'"
         >
         Provenance
         </button>
@@ -35,7 +35,7 @@
         <button
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab='images'; show_codex(document.id)"
+            @click="activetab='images'"
         >
         Images
         </button>
@@ -1183,6 +1183,7 @@ const form = useForm({
         : [],
     sortfield: props.sortfield ? props.sortfield : 4,
     reverse: props.reverse,
+    tab: props.tab ? props.tab : "general",
 });
 
 const bifolia = props.document.bifolia
@@ -1241,14 +1242,16 @@ function range(start, end) {
 }
 
 function show_codex(id) {
-    form.post("/codex_show/" + activetab.value + "/" + id, {
+    form.tab = activetab.value;
+    form.post("/codex_show/" + id, {
         queryStringArrayFormat: "indices",
         replace: true,
     });
 }
 
 function edit_codex(id) {
-    form.post("/codex_edit/" + activetab.value + "/" + id, {
+    form.tab = activetab.value;
+    form.post("/codex_edit/" + id, {
         queryStringArrayFormat: "indices",
         replace: true,
     });

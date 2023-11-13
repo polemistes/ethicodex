@@ -925,6 +925,7 @@ const form = useForm({
     sortfield: props.sortfield ? props.sortfield : 4,
     reverse: props.reverse,
     resetpage: false,
+    tab: "general",
 });
 
 const page = props.page;
@@ -954,16 +955,23 @@ function sendsearch() {
 }
 
 function show_codex(id) {
-    form.post("/codex_show/general/" + id, {
+    form.post("/codex_show/" + id, {
         queryStringArrayFormat: "indices",
     });
 }
 
 function edit_codex(id) {
+    form.post("/codex_edit/" + id, {
+        queryStringArrayFormat: "indices",
+    });
+}
+/*
+function edit_codex(id) {
     form.post("/codex_edit/general/" + id, {
         queryStringArrayFormat: "indices",
     });
 }
+*/
 
 function gotopage(link) {
     

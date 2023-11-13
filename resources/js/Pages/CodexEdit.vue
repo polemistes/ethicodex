@@ -3,7 +3,7 @@
         <button
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab='general'; edit_codex(document.id)"
+            @click="activetab='general'"
         >
             General Information
         </button>
@@ -11,7 +11,7 @@
         <button
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab='codicology'; edit_codex(document.id)"
+            @click="activetab='codicology'"
         >
             Codicology
         </button>
@@ -19,7 +19,7 @@
         <button
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab='conservation'; edit_codex(document.id)"
+            @click="activetab='conservation'"
         >
         Conservation and Analysis
         </button>
@@ -27,7 +27,7 @@
         <button
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab='provenance'; edit_codex(document.id)"
+            @click="activetab='provenance'"
         >
         Provenance
         </button>
@@ -35,7 +35,7 @@
         <button
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab='images'; edit_codex(document.id)"
+            @click="activetab='images'"
         >
         Images
         </button>
@@ -1018,7 +1018,9 @@
 <script setup>
 import { Inertia } from "@inertiajs/inertia";
 import { reactive, ref, onMounted } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { createApp } from "vue";
+
+import { App, useForm } from "@inertiajs/inertia-vue3";
 
 import EthInput from "../Components/EthInput.vue";
 import EthRatio from "../Components/EthRatio.vue";
@@ -1343,6 +1345,7 @@ const form = useForm("EditCodex", {
         : [],
     sortfield: props.sortfield ? props.sortfield : 4,
     reverse: props.reverse,
+    tab: props.tab ? props.tab : "general",
 });
 
 let removeStartEventListener = Inertia.on("before", (event) => {
@@ -1386,18 +1389,13 @@ onMounted(() => {
     if (!form.bifolia) {
         form.bifolia[0] = 0;
     }
-/*
-    form.images.forEach((image, index) => {
-                        image.micrograph = image.micrograph == 1 ? true : false;
-                    });
-*/
 
 });
 
 const loadImages = ref(null);
 
-let activetab = ref(props.tab);
 let submitted = false;
+let activetab = ref(props.tab ? props.tab : "general");
 
 function range(start, end) {
     var foo = [];
@@ -1452,25 +1450,27 @@ function addimages(imagefiles) {
 }
 
 function show_codex(id) {
-    form.post("/codex_show/" + activetab.value + "/" + id, {
+    form.tab = activetab.value;
+    form.post("/codex_show/" + id, {
         queryStringArrayFormat: "indices",
-        preserveState: true,
         replace: true,
     });
 }
 
 function edit_codex(id) {
-    form.post("/codex_edit/" + activetab.value + "/" + id, {
+    const newform = form
+    newform.tab = activetab.value;
+    newform.post("/codex_edit/" + id, {
         queryStringArrayFormat: "indices",
-        preserveState: true,
+        preserveState: false,
         replace: true,
     });
 }
 
-
 function submit() {
     submitted = true;
-    form.post("/codex_update/" + activetab.value + "/" + props.document.id, {
+    form.tab = activetab.value;
+    form.post("/codex_update/" + props.document.id, {
         preserveState: true,
         preserveScroll: true,
         replace: true,

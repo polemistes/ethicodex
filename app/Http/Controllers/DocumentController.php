@@ -738,7 +738,7 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function show($tab, Document  $document, Request $request)
+    public function show(Document  $document, Request $request)
     {
         $this->authorize('view', $document);
 
@@ -812,6 +812,7 @@ class DocumentController extends Controller
             's_legal_classifications' => 'nullable',
             'sortfield' => 'nullable',
             'reverse' => 'nullable',
+            'tab' => 'nullable',
         ]);
 
         $show_publication = $request->session()->get('show_publication');
@@ -846,6 +847,8 @@ class DocumentController extends Controller
             default:
                 $sortby = "start_year";
         }
+
+        $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
@@ -1396,7 +1399,7 @@ class DocumentController extends Controller
         ]));
     }
 
-    public function edit($tab, Document $document, Request $request)
+    public function edit(Document $document, Request $request)
     {
         $this->authorize('update', $document);
 
@@ -1470,8 +1473,9 @@ class DocumentController extends Controller
             's_legal_classifications' => 'nullable',
             'sortfield' => 'nullable',
             'reverse' => 'nullable',
+            'tab' => 'nullable',
         ]);
-
+     
         $show_publication = $request->session()->get('show_publication');
         $show_content = $request->session()->get('show_content');
         $show_dating = $request->session()->get('show_dating');
@@ -1504,6 +1508,8 @@ class DocumentController extends Controller
             default:
                 $sortby = "start_year";
         }
+
+        $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
@@ -2087,7 +2093,7 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $tab, Document $document)
+    public function update(Request $request, Document $document)
     {
         $this->authorize('update', $document);
 
@@ -2161,6 +2167,7 @@ class DocumentController extends Controller
             's_legal_classifications' => 'nullable',
             'sortfield' => 'nullable',
             'reverse' => 'nullable',
+            'tab' => 'nullable',
         ]);
 
         $show_publication = $request->session()->get('show_publication');
@@ -2195,6 +2202,9 @@ class DocumentController extends Controller
             default:
                 $sortby = "start_year";
         }
+
+        $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
+
 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
