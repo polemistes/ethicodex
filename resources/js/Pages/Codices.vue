@@ -974,7 +974,7 @@ function gotopage(link) {
     
     const page = link.substr(link.search("\\?"));
     
-    form.post("/codices/" + page, {
+    form.post("/codices" + page, {
         queryStringArrayFormat: "indices",
         preserveState: true,
         preserveScroll: true,
