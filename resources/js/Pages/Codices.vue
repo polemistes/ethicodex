@@ -71,8 +71,8 @@
                 @click="gotopage(link.url)"
                 v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
-                    codex_pageactive: this.page == link.label,
-                    codex_pages: this.page != link.label,
+                    codex_pageactive: documents.current_page == link.label,
+                    codex_pages: documents.current_page != link.label,
                 }"
             />
         </div>
@@ -706,8 +706,8 @@
                 @click="gotopage(link.url)"
                 v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
                 :class="{
-                    codex_pageactive: this.page == link.label,
-                    codex_pages: this.page != link.label,
+                    codex_pageactive: documents.current_page == link.label,
+                    codex_pages: documents.current_page != link.label,
                 }"
             />
         </div>
@@ -824,7 +824,6 @@ const props = defineProps({
 
     sortfield: String,
     reverse: Number,
-    page: Number,
     auth: Object,
 });
 
@@ -927,8 +926,6 @@ const form = useForm({
     resetpage: false,
     tab: "general",
 });
-
-const page = props.page;
 
 const sortfields = [
     { id: 1, name: "Standard Name" },

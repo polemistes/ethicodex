@@ -120,10 +120,7 @@ class DocumentController extends Controller
             's_legal_classifications' => 'nullable',
             'sortfield' => 'nullable',
             'reverse' => 'nullable',
-            'page' => 'nullable',
         ]);
-
-        $page = array_key_exists('page', $search) ? $search['page'] : 1;
 
         $show_publication = $request->session()->get('show_publication');
         $show_content = $request->session()->get('show_content');
@@ -698,7 +695,6 @@ class DocumentController extends Controller
             'legal_classifications_search' => $legal_classifications,
             'sortfield' => $sortfield,
             'reverse' => $reverse,
-            'page' => $page,
         ]);
     }
 
