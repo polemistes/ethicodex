@@ -976,7 +976,7 @@ function gotopage(link) {
     
     form.post("/codices" + page, {
         queryStringArrayFormat: "indices",
-        preserveState: true,
+        preserveState: false,
         preserveScroll: true,
     });
 }
