@@ -967,9 +967,9 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 import { reactive, ref, onMounted } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from '@inertiajs/vue3'
 import EthRatio from "../Components/EthRatio.vue";
 
 const props = defineProps({

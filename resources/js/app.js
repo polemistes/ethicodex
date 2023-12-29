@@ -1,11 +1,16 @@
 require('./bootstrap');
 
 import { createApp, h } from 'vue'
-import { createInertiaApp, Link } from '@inertiajs/inertia-vue3'
-import { InertiaProgress } from '@inertiajs/progress'
+import { createInertiaApp, Link } from '@inertiajs/vue3'
 import Layout from "./Shared/Layout";
 
 createInertiaApp({
+  progress: {
+    delay: 80,
+    showSpinner: true,
+    color: '#660',
+    includeCSS: true,
+  },
   resolve: name => {
     let page = require(`./Pages/${name}`).default;
    
@@ -21,9 +26,3 @@ createInertiaApp({
   },
 })
 
-InertiaProgress.init({
-    delay: 80,
-    showSpinner: true,
-    color: '#660',
-    includeCSS: true,
-})

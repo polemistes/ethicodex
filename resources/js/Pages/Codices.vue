@@ -716,8 +716,8 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { router } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import EthInput from "../Components/EthInput.vue";
 
 const props = defineProps({

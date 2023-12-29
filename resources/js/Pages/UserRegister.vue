@@ -20,8 +20,8 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { router } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import { ref } from "vue";
 import EthInput from "../Components/EthInput.vue";
 

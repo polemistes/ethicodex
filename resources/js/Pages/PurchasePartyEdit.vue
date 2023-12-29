@@ -132,10 +132,10 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 import { reactive, ref, computed } from "vue";
 import EthInput from "../Components/EthInput.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from '@inertiajs/vue3'
 
 let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient"];
 let dropdown = ref(false);
@@ -167,7 +167,7 @@ const form = useForm("PurcharsePartyEdit", {
     purchases: purch,
 });
 
-let removeStartEventListener = Inertia.on("before", (event) => {
+let removeStartEventListener = router.on("before", (event) => {
     if (form.isDirty && !submitted) {
         if (
             confirm(

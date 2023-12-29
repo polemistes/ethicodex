@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 import { reactive, ref, watch, computed } from "vue";
 import EthInput from "../Components/EthInput.vue";
 
@@ -78,7 +78,7 @@ const search_documents = computed(() => {
         : props.documents_all;
 });
 
-let removeStartEventListener = Inertia.on("before", (event) => {
+let removeStartEventListener = router.on("before", (event) => {
     if (form.isDirty && !submitted) {
         if (
             confirm(
@@ -100,7 +100,7 @@ window.onbeforeunload = (s) => (form.isDirty ? "" : null);
 
 function submit() {
     submitted = true;
-    Inertia.post(`/modern_collection_store`, form);
+    router.post(`/modern_collection_store`, form);
 }
 </script>
 

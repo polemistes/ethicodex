@@ -1016,11 +1016,11 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 import { reactive, ref, onMounted } from "vue";
 import { createApp } from "vue";
 
-import { App, useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from '@inertiajs/vue3'
 
 import EthInput from "../Components/EthInput.vue";
 import EthRatio from "../Components/EthRatio.vue";
@@ -1348,7 +1348,7 @@ const form = useForm("EditCodex", {
     tab: props.tab ? props.tab : "general",
 });
 
-let removeStartEventListener = Inertia.on("before", (event) => {
+let removeStartEventListener = router.on("before", (event) => {
     if (form.isDirty && !submitted) {
         if (
             confirm(
@@ -1408,7 +1408,7 @@ function range(start, end) {
 function delalert(image) {
     let image_id = image.id;
     if (confirm("You may have unsaved changes that could be lost if you continue. Do you want to delete this image anyway?")) {
-        Inertia.post("/delimage/" + image_id, null, {
+        router.post("/delimage/" + image_id, null, {
             preserveState: true,
             preserveScroll: true,
             resetOnSuccess: false,
@@ -1422,7 +1422,7 @@ function delalert(image) {
 function delimage(image) {
     let image_id = image.id;
     if (confirm("Do you want to delete this image?")) {
-        Inertia.post("/delimage/" + image_id, null, {
+        router.post("/delimage/" + image_id, null, {
             preserveState: true,
             preserveScroll: true,
             resetOnSuccess: false,
@@ -1434,7 +1434,7 @@ function delimage(image) {
 }
 
 function addimages(imagefiles) {
-     Inertia.post(
+     router.post(
         "/addimages",
         { images: imagefiles, document_id: props.document.id },
         {

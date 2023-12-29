@@ -71,7 +71,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
     purchases: Array,

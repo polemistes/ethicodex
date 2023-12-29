@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3'
 import { reactive, ref, watch, computed } from "vue";
 import EthInput from "../Components/EthInput.vue";
 
@@ -73,18 +73,6 @@ const form = reactive({
 let submitted = false;
 let search = ref("");
 
-/*watch(search, (value) => {
-  Inertia.get(
-    "/modern_collection_edit",
-    {
-      search_string: search,
-    },
-    { preserveState: true,
-      preserveScroll: true, }
-  );
-});
-*/
-
 const search_documents = computed(() => {
     return search.value != ""
         ? props.documents_all.filter(function (el) {
@@ -97,7 +85,7 @@ const search_documents = computed(() => {
         : props.documents_all;
 });
 
-let removeStartEventListener = Inertia.on("before", (event) => {
+let removeStartEventListener = router.on("before", (event) => {
     if (form.isDirty && !submitted) {
         if (
             confirm(
@@ -135,7 +123,7 @@ window.addEventListener(
 
 function submit() {
     submitted = true;
-    Inertia.post(
+    router.post(
         `/modern_collection_update/${props.modern_collection.id}`,
         form
     );

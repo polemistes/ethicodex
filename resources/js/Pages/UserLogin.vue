@@ -22,7 +22,7 @@
 
 <script setup>
 import EthInput from "../Components/EthInput.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from '@inertiajs/vue3'
 
 let form = useForm({
     email: "",
