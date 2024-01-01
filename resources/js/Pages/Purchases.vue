@@ -45,7 +45,7 @@
             <ul>
                 <span v-for="document in purchase.documents" :key="document.id">
                     <li>
-                        <Link :href="'/codex_show/general/' + document.id">
+                        <Link :href="'/codex_show/' + document.id">
                             {{ document.standard_name }}
                         </Link>
                     </li>
