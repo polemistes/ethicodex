@@ -2653,7 +2653,6 @@ class DocumentController extends Controller
 
         $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
-
         $fields = $request->validate([
             'id' => 'required',
             'published' => 'nullable',
@@ -2840,7 +2839,7 @@ class DocumentController extends Controller
             $image->save();
         }
 
-        return (Inertia::render('CodexEdit', [
+        return Inertia::render('CodexEdit', [
             'document' => $document,
             'analyses' => $document->analyses()->get()->makeHidden('pivot'),
             'analyses_all' => Analysis::all(),
@@ -2961,8 +2960,7 @@ class DocumentController extends Controller
             'next' => $next,
             'current' => $current,
             'total' => $total,
-        ]));
-
+        ]);
     }
 
     /**

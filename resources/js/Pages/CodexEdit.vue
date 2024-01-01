@@ -1389,7 +1389,6 @@ onMounted(() => {
     if (!form.bifolia) {
         form.bifolia[0] = 0;
     }
-
 });
 
 const loadImages = ref(null);
@@ -1408,7 +1407,7 @@ function range(start, end) {
 function delalert(image) {
     let image_id = image.id;
     if (confirm("You may have unsaved changes that could be lost if you continue. Do you want to delete this image anyway?")) {
-        router.post("/delimage/" + image_id, null, {
+        router.post("/delimage/" + image_id, {document_id: props.document.id}, {
             preserveState: true,
             preserveScroll: true,
             resetOnSuccess: false,
@@ -1422,7 +1421,7 @@ function delalert(image) {
 function delimage(image) {
     let image_id = image.id;
     if (confirm("Do you want to delete this image?")) {
-        router.post("/delimage/" + image_id, null, {
+        router.post("/delimage/" + image_id, {document_id: props.document.id}, {
             preserveState: true,
             preserveScroll: true,
             resetOnSuccess: false,
@@ -1470,11 +1469,11 @@ function edit_codex(id) {
 function submit() {
     submitted = true;
     form.tab = activetab.value;
-    form.post("/codex_update/" + props.document.id, {
+    form.put("/codex_edit/" + props.document.id, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
-    });
+     });
 }
 </script>
 

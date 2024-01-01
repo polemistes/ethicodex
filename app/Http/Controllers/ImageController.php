@@ -8,6 +8,7 @@ use App\Models\Document;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -57,7 +58,7 @@ class ImageController extends Controller
                 'document_id' => $document_id,
             ]);
         }
-        return redirect()->back();    
+        return Redirect::route('CodexEdit', ['document' => $document_id]);    
     }
 
     /**
@@ -100,10 +101,13 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Image $image)
+    public function destroy(Request $request, Image $image)
     {
+        $document_id = $request->document_id;
+
         $this->authorize('delete', $image);
+        Storage::disk('public')->delete($image->filename);
         $image->delete();
-        return redirect()->back();
+        return Redirect::route('CodexEdit', ['document' => $document_id]);    
     }
 }

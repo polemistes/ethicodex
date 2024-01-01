@@ -38,9 +38,10 @@ Route::get('/codices', [DocumentController::class, 'index'])->name('Codices');
 Route::post('/codices', [DocumentController::class, 'index'])->name('Codices');
 
 Route::post('/codex_show/{document}', [DocumentController::class, 'show']);
+Route::get('/codex_show/{document}', [DocumentController::class, 'show']);
 Route::post('/codex_edit/{document}', [DocumentController::class, 'edit'])->name('CodexEdit');
 Route::get('/codex_edit/{document}', [DocumentController::class, 'edit'])->name('CodexEdit');
-Route::post('/codex_update/{document}', [DocumentController::class, 'update']);
+Route::put('/codex_edit/{document}', [DocumentController::class, 'update']);
 Route::get('/codex_new', [DocumentController::class, 'create']);
 Route::post('/codex_store', [DocumentController::class, 'store']);
 Route::post('/codex_delete/{document}', [DocumentController::class, 'destroy']);
