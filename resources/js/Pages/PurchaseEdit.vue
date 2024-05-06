@@ -166,7 +166,7 @@ import { reactive, ref, computed, onMounted } from "vue";
 import EthInput from "../Components/EthInput.vue";
 import { useForm } from '@inertiajs/vue3'
 
-let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient"];
+let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient", "Excavator"];
 let dropdown = ref(false);
 let submitted = false;
 
