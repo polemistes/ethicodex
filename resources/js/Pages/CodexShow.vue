@@ -893,7 +893,7 @@
                                 <Link
                                     as="button"
                                     type="button"
-                                    :href="'/codex_show/general/' + codex.id"
+                                    :href="'/codex_show/' + codex.id"
                                     style="
                                         margin-right: 5px;
                                         padding: 2px 3px
