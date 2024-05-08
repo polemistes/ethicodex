@@ -413,7 +413,7 @@
                 <legend class="sectionheading">Measurements</legend>
                 <template v-if="!document.page_dimensions_known">
                     <div class="show_pagewidth">
-                        <label>Fragmen Width (cm)</label>
+                        <label>Fragment Width (cm)</label>
                         <div class="showcodex_string_short">
                             {{ document.fragment_width }}
                         </div>
@@ -439,14 +439,14 @@
                             {{ document.full_page_height }}
                         </div>
                     </div>
+                    <div class="show_pratio">
+                        <EthRatio
+                            :dividend="document.full_page_width"
+                            :divisor="document.full_page_height"
+                            >Ratio</EthRatio
+                        >
+                    </div>
                 </template>
-                <div class="show_pratio">
-                    <EthRatio
-                        :dividend="document.full_page_width"
-                        :divisor="document.full_page_height"
-                        >Ratio</EthRatio
-                    >
-                </div>
 
                 <div class="show_uppmarg">
                     <label>Upper Margin (cm)</label>
