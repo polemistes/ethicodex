@@ -931,8 +931,8 @@ const sortfields = [
     { id: 1, name: "Standard Name" },
     { id: 2, name: "Author" },
     { id: 3, name: "Title" },
-    { id: 4, name: "Earliest Date" },
-    { id: 5, name: "Latest Date" },
+    { id: 4, name: "Date (Earliest Estimate)" },
+    { id: 5, name: "Date (Latest Estimate)" },
 ];
 
 const yesnomenu = [
