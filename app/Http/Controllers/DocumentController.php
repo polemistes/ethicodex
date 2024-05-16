@@ -254,13 +254,13 @@ class DocumentController extends Controller
                 } 
             }
         }
- 
+
         $all_documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
-            })
-            ->when($fulltext, function ($query, $fulltext) {
-                $query->where(function ($query) use ($fulltext) {
+            }) 
+            ->when($fulltext, function ($query) use ($fulltext, $role_id) {
+                $query->where(function ($query) use ($fulltext, $role_id) {
                     $query->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('other_names', 'like', "%{$fulltext}%")
@@ -293,7 +293,8 @@ class DocumentController extends Controller
                         ->orWhere('legal_classification_explanation', 'like', "%{$fulltext}%")
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
-                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%");
+                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : "notsomethinganyonewouldwrite");
                 });
             })
             ->when($show_publication == "true", function ($query) use (
@@ -963,7 +964,8 @@ class DocumentController extends Controller
                         ->orWhere('legal_classification_explanation', 'like', "%{$fulltext}%")
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
-                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%");
+                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('internal_comment', 'like', "%{$fulltext}%");
                 });
             })
             ->when($show_publication == "true", function ($query) use (
@@ -1625,7 +1627,8 @@ class DocumentController extends Controller
                         ->orWhere('legal_classification_explanation', 'like', "%{$fulltext}%")
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
-                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%");
+                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('internal_comment', 'like', "%{$fulltext}%");
                 });
             })
             ->when($show_publication == "true", function ($query) use (
@@ -2320,7 +2323,8 @@ class DocumentController extends Controller
                         ->orWhere('legal_classification_explanation', 'like', "%{$fulltext}%")
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
-                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%");
+                        ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
+                        ->orWhere('internal_comment', 'like', "%{$fulltext}%");
                 });
             })
             ->when($show_publication == "true", function ($query) use (
