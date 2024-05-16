@@ -851,7 +851,7 @@
 
                 <div class="edit_anciprov">
                     <EthInput
-                        input_type="single_choice"
+                        input_type="single_choice_hier"
                         input_id="ancient_provenance"
                         :choices="ancient_provenances"
                         v-model="form.ancient_provenance_id"

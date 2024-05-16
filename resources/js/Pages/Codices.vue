@@ -565,7 +565,7 @@
         <div v-if="form.show_provenance" class="searchblock">
             <div class="searchblocktitle">Provenance Search</div>
             <EthInput
-                input_type="multi_choice_event"
+                input_type="multi_choice_event_hier"
                 input_id="ancient_provenances"
                 :choices="ancient_provenances"
                 v-model="form.s_ancient_provenances"

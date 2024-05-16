@@ -247,6 +247,10 @@ body {
     width: 100%;
 }
 
+.hier-indent {
+    padding-left: 1em;
+    list-style-type: none;
+}
 .pushleft {
     display: flex;
     justify-content: flex-start;

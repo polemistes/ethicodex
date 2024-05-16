@@ -141,7 +141,7 @@
             :id="input_id"
             :value="modelValue"
             rows="4"
-            style="resize: none;"
+            style="resize: none"
             @input="$emit('update:modelValue', $event.target.value)"
         />
     </div>
@@ -161,6 +161,44 @@
             >
                 {{ choice.name }}
             </option>
+        </select>
+    </div>
+
+    <div v-if="input_type == 'single_choice_hier'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <select
+            :id="input_id"
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+        >
+            <option value="">Select</option>
+            <template v-for="choice in choices.sort(function (
+                                a,
+                                b
+                            ) {
+                                return a.name.localeCompare(b.name);
+                            })" :key="choice.id">
+                <template v-if="!choice.parent_id">
+                    <option :value="choice.id">
+                        {{ choice.name }}
+                    </option>
+                    <template v-for="choice2 in findchildren(choice)" :key="choice2.id">
+                        <option :value="choice2.id">
+                            &emsp;{{ choice2.name }}
+                        </option>
+                        <template v-for="choice3 in findchildren(choice2)" :key="choice3.id">
+                            <option :value="choice3.id">
+                                &emsp;&emsp;{{ choice3.name }}
+                            </option>
+                            <template v-for="choice4 in findchildren(choice3)" :key="choice4.id">
+                                <option :value="choice4.id">
+                                    &emsp;&emsp;&emsp;{{ choice4.name }}
+                                </option>
+                            </template>
+                        </template>
+                    </template>
+                </template>
+            </template>
         </select>
     </div>
 
@@ -204,8 +242,6 @@
             </option>
         </select>
     </div>
-
-
 
     <div v-if="input_type == 'legal_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
@@ -310,7 +346,13 @@
                                 v-model="checked"
                                 @change="$emit('update:modelValue', checked)"
                             />
-                            <label>{{ choice.name }} ({{ choice.year + (choice.month ? '-' + choice.month : '') + (choice.day ? '-' + choice.day : '')}})</label>
+                            <label
+                                >{{ choice.name }} ({{
+                                    choice.year +
+                                    (choice.month ? "-" + choice.month : "") +
+                                    (choice.day ? "-" + choice.day : "")
+                                }})</label
+                            >
                         </div>
                     </div>
                 </div>
@@ -328,7 +370,11 @@
                         ✕
                     </button>
 
-                    {{ value.name }} ({{ value.year + (value.month ? '-' + value.month : '') + (value.day ? '-' + value.day : '')}})
+                    {{ value.name }} ({{
+                        value.year +
+                        (value.month ? "-" + value.month : "") +
+                        (value.day ? "-" + value.day : "")
+                    }})
                 </span>
             </div>
         </div>
@@ -442,7 +488,158 @@
             </div>
         </div>
     </div>
-    
+
+    <div v-if="input_type == 'multi_choice_event_hier'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <button
+            :id="input_id"
+            @click.prevent="dropdown = !dropdown"
+            class="dropdownbutton"
+        >
+            <span>Select</span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div class="dropdown-scrollwindow">
+                    <ul>
+                        <div
+                            v-for="choice in props.choices.sort(function (
+                                a,
+                                b
+                            ) {
+                                return a.name.localeCompare(b.name);
+                            })"
+                            :key="choice.id"
+                        >
+                            <li v-if="!choice.parent_id">
+                                <input
+                                    type="checkbox"
+                                    :id="choice.id"
+                                    :value="choice"
+                                    v-model="checked"
+                                    @change="
+                                        $emit('update:modelValue', checked);
+                                        $emit('newChange');
+                                    "
+                                />
+                                <label>{{ choice.name }}</label>
+                                <ul>
+                                    <div class="hier-indent">
+                                        <li
+                                            v-for="choice2 in findchildren(
+                                                choice
+                                            )"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                :id="choice2.id"
+                                                :value="choice2"
+                                                v-model="checked"
+                                                @change="
+                                                    $emit(
+                                                        'update:modelValue',
+                                                        checked
+                                                    );
+                                                    $emit('newChange');
+                                                "
+                                            />
+                                            <label>{{ choice2.name }}</label>
+                                            <ul>
+                                                <div class="hier-indent">
+                                                    <li
+                                                        v-for="choice3 in findchildren(
+                                                            choice2
+                                                        )"
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            :id="choice3.id"
+                                                            :value="choice3"
+                                                            v-model="checked"
+                                                            @change="
+                                                                $emit(
+                                                                    'update:modelValue',
+                                                                    checked
+                                                                );
+                                                                $emit(
+                                                                    'newChange'
+                                                                );
+                                                            "
+                                                        />
+                                                        <label>{{
+                                                            choice3.name
+                                                        }}</label>
+                                                        <ul>
+                                                            <div
+                                                                class="hier-indent"
+                                                            >
+                                                                <li
+                                                                    v-for="choice4 in findchildren(
+                                                                        choice3
+                                                                    )"
+                                                                >
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        :id="
+                                                                            choice4.id
+                                                                        "
+                                                                        :value="
+                                                                            choice4
+                                                                        "
+                                                                        v-model="
+                                                                            checked
+                                                                        "
+                                                                        @change="
+                                                                            $emit(
+                                                                                'update:modelValue',
+                                                                                checked
+                                                                            );
+                                                                            $emit(
+                                                                                'newChange'
+                                                                            );
+                                                                        "
+                                                                    />
+                                                                    <label>{{
+                                                                        choice4.name
+                                                                    }}</label>
+                                                                </li>
+                                                            </div>
+                                                        </ul>
+                                                    </li>
+                                                </div>
+                                            </ul>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="choicelist-stack">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement-short"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
+                    >
+                        ✕
+                    </button>
+
+                    {{ value.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div v-if="input_type == 'multi_choice_event_wide'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button
@@ -969,6 +1166,12 @@ function range(start, end) {
 function bifolia_input(n, value) {
     bifolia.value[n - 1] = value;
     emit("update:modelValue", bifolia.value);
+}
+
+function findchildren(item) {
+    return props.choices.filter(function (el) {
+        return el.parent_id === item.id;
+    });
 }
 
 const search_choices = computed(() => {
