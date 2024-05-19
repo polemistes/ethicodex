@@ -1020,16 +1020,20 @@ const props = defineProps({
     title: String,
     ancient_author: String,
     genres_search: Array,
+    genres_incl: Boolean,
     tags_search: Array,
+    tags_incl: Boolean,
     /* Dating */
     earliest_date: Number,
     latest_date: Number,
     exclusive_date: Boolean,
     dating_methods_search: Array,
+    dating_methods_incl: Boolean,
     dating_certainties_search: Array,
     /* Materiality */
     materials_search: Array,
     inks_search: Array,
+    inks_incl: Boolean,
     covers_search: Array,
     quire_structures_search: Array,
     quirenum_min: Number,
@@ -1057,22 +1061,31 @@ const props = defineProps({
     hand_number_min: Number,
     hand_number_max: Number,
     scripts_search: Array,
+    scripts_incl: Boolean,
     diacritics_search: Array,
+    diacritics_incl: Boolean,
     punctuations_search: Array,
+    punctuations_incl: Boolean,
     paratexts_search: Array,
+    paratexts_incl: Boolean,
     decorations_search: Array,
+    decorations_incl: Boolean,
     critical_symbols_search: Array,
+    critical_symbols_incl: Boolean,
     paginations_search: Array,
     quire_signatures_search: Array,
     /* Conservation and Analysis */
     storage_conditions_search: Array,
     analyses_search: Array,
+    analyses_incl: Boolean,
     /* Provenance */
     scientifically_excavated: Number,
     ancient_provenances_search: Array,
     ancient_provenance_certainties_search: Array,
     transactions_search: Array,
+    transactions_incl: Boolean,
     transaction_parties_search: Array,
+    transaction_parties_incl: Boolean,
     legal_classifications_search: Array,
 
     sortfield: String,
@@ -1107,7 +1120,9 @@ const form = useForm({
     s_title: props.title,
     s_ancient_author: props.ancient_author,
     s_genres: props.genres_search ? props.genres_search : [],
+    s_genres_incl: props.genres_incl,
     s_tags: props.tags_search ? props.tags_search : [],
+    s_tags_incl: props.tags_incl,
     /* Dating */
     s_earliest_date: props.earliest_date,
     s_latest_date: props.latest_date,
@@ -1115,12 +1130,14 @@ const form = useForm({
     s_dating_methods: props.dating_methods_search
         ? props.dating_methods_search
         : [],
+    s_dating_methods_incl: props.dating_methods_incl,
     s_dating_certainties: props.dating_certainties_search
         ? props.dating_certainties_search
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
     s_inks: props.inks_search ? props.inks_search : [],
+    s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
     s_quire_structures: props.quire_structures_search
         ? props.quire_structures_search
@@ -1150,13 +1167,19 @@ const form = useForm({
     s_hand_number_min: props.hand_number_min,
     s_hand_number_max: props.hand_number_max,
     s_scripts: props.scripts_search ? props.scripts_search : [],
+    s_scripts_incl: props.scripts_incl,
     s_diacritics: props.diacritics_search ? props.diacritics_search : [],
+    s_diacritics_incl: props.diacritics_incl,
     s_punctuations: props.punctuations_search ? props.punctuations_search : [],
+    s_punctuations_incl: props.punctuations_incl,
     s_paratexts: props.paratexts_search ? props.paratexts_search : [],
+    s_paratexts_incl: props.paratexts_incl,
     s_decorations: props.decorations_search ? props.decorations_search : [],
+    s_decorations_incl: props.decorations_incl,
     s_critical_symbols: props.critical_symbols_search
         ? props.critical_symbols_search
         : [],
+    s_critical_symbols_incl: props.critical_symbols_incl,
     s_paginations: props.paginations_search ? props.paginations_search : [],
     s_quire_signatures: props.quire_structures_search
         ? props.quire_structures_search
@@ -1166,6 +1189,7 @@ const form = useForm({
         ? props.storage_conditions_search
         : [],
     s_analyses: props.analyses_search ? props.analyses_search : [],
+    s_analyses_incl: props.analyses_incl,
     /* Provenance */
     s_scientifically_excavated: props.scientifically_excavated,
     s_ancient_provenances: props.ancient_provenances_search
@@ -1175,9 +1199,11 @@ const form = useForm({
         ? props.ancient_provenance_certainties_search
         : [],
     s_transactions: props.transactions_search ? props.transactions_search : [],
+    s_transactions_incl: props.transaction_parties_incl,
     s_transaction_parties: props.transaction_parties_search
         ? props.transaction_parties_search
         : [],
+    s_transaction_parties_incl: props.transaction_parties_incl,
     s_legal_classifications: props.legal_classifications_search
         ? props.legal_classifications_search
         : [],

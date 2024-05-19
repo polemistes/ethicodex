@@ -133,7 +133,8 @@
             >
                 Ancient Author
             </EthInput>
-
+            
+            <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event"
                 input_id="genres"
@@ -143,7 +144,17 @@
             >
                 Genres
             </EthInput>
-
+            <EthInput
+                helptext="Check to search for codices that have all selected genres. Uncheck to search for codices with any of the selected genres."
+                input_type="boolevent"
+                input_id="genres_incl"
+                v-model="form.s_genres_incl"
+                @new-change="sendsearch()"
+            >
+                    All
+            </EthInput>
+        </div>
+        <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event"
                 input_id="tags"
@@ -153,7 +164,19 @@
             >
                 Content Tags
             </EthInput>
+
+            <EthInput
+                helptext="Check to search for codices that have all selected tags. Uncheck to search for codices with any of the selected tags."
+                input_type="boolevent"
+                input_id="tags_incl"
+                v-model="form.s_tags_incl"
+                @new-change="sendsearch()"
+            >
+                    All
+            </EthInput>
         </div>
+        </div>
+
 
         <div v-if="form.show_dating" class="searchblock">
             <div class="searchblocktitle">Date Search</div>
@@ -186,6 +209,8 @@
                     Strict Date
                 </EthInput>
             </div>
+
+            <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event"
                 input_id="dating_methods"
@@ -195,6 +220,17 @@
             >
                 Basis of Date
             </EthInput>
+
+            <EthInput
+                helptext="Check to search for codices where all selected basises of data have been employed. Uncheck to search for codices with where any of them have been employed."
+                input_type="boolevent"
+                input_id="dating_methods_incl"
+                v-model="form.s_dating_methods_incl"
+                @new-change="sendsearch()"
+            >
+                    All
+            </EthInput>
+            </div>
 
             <EthInput
                 input_type="multi_choice_event"
@@ -219,6 +255,7 @@
                 Material
             </EthInput>
 
+            <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event"
                 input_id="inks"
@@ -228,6 +265,16 @@
             >
                 Ink
             </EthInput>
+            <EthInput
+                helptext="Check to search for codices that have all selected inks. Uncheck to search for codices with any of the selected inks."
+                input_type="boolevent"
+                input_id="inks_incl"
+                v-model="form.s_inks_incl"
+                @new-change="sendsearch()"
+            >
+                    All
+            </EthInput>
+            </div>
 
             <EthInput
                 input_type="multi_choice_event"
@@ -457,6 +504,7 @@
                     Max Num of Hands
                 </EthInput>
 
+                <div class="close-check-box">
                 <EthInput
                     input_type="multi_choice_event"
                     input_id="scripts"
@@ -468,6 +516,18 @@
                 </EthInput>
 
                 <EthInput
+                    helptext="Check to search for codices that have all selected scripts. Uncheck to search for codices with any of the selected scripts."
+                    input_type="boolevent"
+                    input_id="scripts_incl"
+                    v-model="form.s_scripts_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
+
+                <div class="close-check-box">
+                <EthInput
                     input_type="multi_choice_event"
                     input_id="diacritics"
                     :choices="diacritics"
@@ -478,6 +538,18 @@
                 </EthInput>
 
                 <EthInput
+                    helptext="Check to search for codices that have all selected diacritics. Uncheck to search for codices with any of the selected diacritics."
+                    input_type="boolevent"
+                    input_id="diacritics_incl"
+                    v-model="form.s_diacritics_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
+
+                <div class="close-check-box">
+                <EthInput
                     input_type="multi_choice_event"
                     input_id="punctuations"
                     :choices="punctuations"
@@ -486,8 +558,19 @@
                 >
                     Punctuation
                 </EthInput>
+                <EthInput
+                    helptext="Check to search for codices that have all types of selected punctuation. Uncheck to search for codices with any of them."
+                    input_type="boolevent"
+                    input_id="punctuations_incl"
+                    v-model="form.s_punctuations_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
             </div>
             <div class="searchblock-inner">
+                <div class="close-check-box">
                 <EthInput
                     input_type="multi_choice_event"
                     input_id="paratexts"
@@ -499,6 +582,18 @@
                 </EthInput>
 
                 <EthInput
+                    helptext="Check to search for codices that have all selected types of paratexts. Uncheck to search for codices with any of them."
+                    input_type="boolevent"
+                    input_id="paratexts_incl"
+                    v-model="form.s_paratexts_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
+
+                <div class="close-check-box">
+                <EthInput
                     input_type="multi_choice_event"
                     input_id="decorations"
                     :choices="decorations"
@@ -509,6 +604,18 @@
                 </EthInput>
 
                 <EthInput
+                    helptext="Check to search for codices that have all selected types of decorative symbols. Uncheck to search for codices with any of them."
+                    input_type="boolevent"
+                    input_id="decorations_incl"
+                    v-model="form.s_decorations_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
+
+                <div class="close-check-box">
+                <EthInput
                     input_type="multi_choice_event"
                     input_id="critical_symbols"
                     :choices="critical_symbols"
@@ -517,6 +624,17 @@
                 >
                     Critical Symbols
                 </EthInput>
+
+                <EthInput
+                    helptext="Check to search for codices that have all selected types of critical symbols. Uncheck to search for codices with any of them."
+                    input_type="boolevent"
+                    input_id="critical_symbols_incl"
+                    v-model="form.s_critical_symbols_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+                </div>
 
                 <EthInput
                     input_type="multi_choice_event"
@@ -551,6 +669,7 @@
                 Storage Conditions
             </EthInput>
 
+            <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event_wide"
                 input_id="analyses"
@@ -560,6 +679,17 @@
             >
                 Scientific Analysis
             </EthInput>
+
+            <EthInput
+                    helptext="Check to search for codices on which all selected scientific analyses have been employed. Uncheck to search for codices on which any of the selected analyses have been employed."
+                    input_type="boolevent"
+                    input_id="analyses_incl"
+                    v-model="form.s_analyses_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+            </div>
         </div>
 
         <div v-if="form.show_provenance" class="searchblock">
@@ -594,6 +724,7 @@
                 Scientifically Excavated
             </EthInput>
 
+            <div class="close-check-box">
             <EthInput
                 input_type="multi_choice_event"
                 input_id="transactions"
@@ -605,6 +736,18 @@
             </EthInput>
 
             <EthInput
+                    helptext="Check to search for codices that are part of all selected transactions. Uncheck to search for codices that are part of any of the selected transactions."
+                    input_type="boolevent"
+                    input_id="transactions_incl"
+                    v-model="form.s_transactions_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+            </div>
+
+            <div class="close-check-box">
+            <EthInput
                 input_type="multi_choice_event"
                 input_id="transaction_parties"
                 :choices="transaction_parties"
@@ -614,6 +757,17 @@
                 Transaction Parties
             </EthInput>
 
+            <EthInput
+                    helptext="Check to search for codices for which all of the selected transaction parties have been involved in a transaction. Uncheck to search for codices for which any of the selected transaction parties have been involved in a transaction."
+                    input_type="boolevent"
+                    input_id="transaction_parties_incl"
+                    v-model="form.s_transaction_parties_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+            </EthInput>
+            </div>
+            
             <EthInput
                 input_type="multi_choice_event"
                 input_id="legal_classifications"
@@ -767,16 +921,20 @@ const props = defineProps({
     title: String,
     ancient_author: String,
     genres_search: Array,
+    genres_incl: Boolean,
     tags_search: Array,
+    tags_incl: Boolean,
     /* Dating */
     earliest_date: Number,
     latest_date: Number,
     exclusive_date: Boolean,
     dating_methods_search: Array,
+    dating_methods_incl: Boolean,
     dating_certainties_search: Array,
     /* Materiality */
     materials_search: Array,
     inks_search: Array,
+    inks_incl: Boolean,
     covers_search: Array,
     quire_structures_search: Array,
     quirenum_min: Number,
@@ -804,22 +962,31 @@ const props = defineProps({
     hand_number_min: Number,
     hand_number_max: Number,
     scripts_search: Array,
+    scripts_incl: Boolean,
     diacritics_search: Array,
+    diacritics_incl: Boolean,
     punctuations_search: Array,
+    punctuations_incl: Boolean,
     paratexts_search: Array,
+    paratexts_incl: Boolean,
     decorations_search: Array,
+    decorations_incl: Boolean,
     critical_symbols_search: Array,
+    critical_symbols_incl: Boolean,
     paginations_search: Array,
     quire_signatures_search: Array,
     /* Conservation and Analysis */
     storage_conditions_search: Array,
     analyses_search: Array,
+    analyses_incl: Boolean,
     /* Provenance */
     scientifically_excavated: Number,
     ancient_provenances_search: Array,
     ancient_provenance_certainties_search: Array,
     transactions_search: Array,
+    transactions_incl: Boolean,
     transaction_parties_search: Array,
+    transaction_parties_incl: Boolean,
     legal_classifications_search: Array,
 
     sortfield: String,
@@ -847,7 +1014,9 @@ const form = useForm({
     s_title: props.title,
     s_ancient_author: props.ancient_author,
     s_genres: props.genres_search ? props.genres_search : [],
+    s_genres_incl: props.genres_incl,
     s_tags: props.tags_search ? props.tags_search : [],
+    s_tags_incl: props.tags_incl,
     /* Dating */
     s_earliest_date: props.earliest_date,
     s_latest_date: props.latest_date,
@@ -855,12 +1024,14 @@ const form = useForm({
     s_dating_methods: props.dating_methods_search
         ? props.dating_methods_search
         : [],
+    s_dating_methods_incl: props.dating_methods_incl,
     s_dating_certainties: props.dating_certainties_search
         ? props.dating_certainties_search
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
     s_inks: props.inks_search ? props.inks_search : [],
+    s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
     s_quire_structures: props.quire_structures_search
         ? props.quire_structures_search
@@ -890,13 +1061,19 @@ const form = useForm({
     s_hand_number_min: props.hand_number_min,
     s_hand_number_max: props.hand_number_max,
     s_scripts: props.scripts_search ? props.scripts_search : [],
+    s_scripts_incl: props.scripts_incl,
     s_diacritics: props.diacritics_search ? props.diacritics_search : [],
+    s_diacritics_incl: props.diacritics_incl,
     s_punctuations: props.punctuations_search ? props.punctuations_search : [],
+    s_punctuations_incl: props.punctuations_incl,
     s_paratexts: props.paratexts_search ? props.paratexts_search : [],
+    s_paratexts_incl: props.paratexts_incl,
     s_decorations: props.decorations_search ? props.decorations_search : [],
+    s_decorations_incl: props.decorations_incl,
     s_critical_symbols: props.critical_symbols_search
         ? props.critical_symbols_search
         : [],
+    s_critical_symbols_incl: props.critical_symbols_incl,
     s_paginations: props.paginations_search ? props.paginations_search : [],
     s_quire_signatures: props.quire_structures_search
         ? props.quire_structures_search
@@ -906,6 +1083,7 @@ const form = useForm({
         ? props.storage_conditions_search
         : [],
     s_analyses: props.analyses_search ? props.analyses_search : [],
+    s_analyses_incl: props.analyses_incl,
     /* Provenance */
     s_scientifically_excavated: props.scientifically_excavated,
     s_ancient_provenances: props.ancient_provenances_search
@@ -915,9 +1093,11 @@ const form = useForm({
         ? props.ancient_provenance_certainties_search
         : [],
     s_transactions: props.transactions_search ? props.transactions_search : [],
+    s_transactions_incl: props.transaction_parties_incl,
     s_transaction_parties: props.transaction_parties_search
         ? props.transaction_parties_search
         : [],
+    s_transaction_parties_incl: props.transaction_parties_incl,
     s_legal_classifications: props.legal_classifications_search
         ? props.legal_classifications_search
         : [],

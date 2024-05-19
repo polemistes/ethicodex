@@ -1,6 +1,6 @@
 <template>
     <div class="fullpage-container">
-        <a class="layout-logo" href="/">
+        <a class="layout-logo" href="/" target="_self">
             <img src="images/ethicodex.jpg" alt="Ethicodex Logo" />
         </a>
         <div class="layout-header">
@@ -245,6 +245,11 @@ body {
     color: #fff;
     text-align: center;
     width: 100%;
+}
+
+.close-check-box {
+    display: flex; 
+    flex-direction: row;
 }
 
 .hier-indent {

@@ -89,12 +89,12 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'boolevent'" class="inputfield">
+    <div v-if="input_type == 'boolevent'" class="inputfield" style="align-self: start;">
         <div
             :title="helptext"
-            style="display: flex; flex-direction: column; align-items: center; justify-content; center"
+            style="display: flex; flex-direction: column;"
         >
-            <label :for="input_id"><slot /></label>
+            <label :for="input_id" style="margin-left: 20px;"><slot /></label>
 
             <input
                 :id="input_id"
@@ -103,7 +103,7 @@
                 style="
                     transform: scale(2);
                     margin-top: 15px;
-                    margin-right: 20px;
+                    margin-left: 10px;
                 "
                 @change="
                     $emit('update:modelValue', checked);
@@ -172,25 +172,34 @@
             @input="$emit('update:modelValue', $event.target.value)"
         >
             <option value="">Select</option>
-            <template v-for="choice in choices.sort(function (
-                                a,
-                                b
-                            ) {
-                                return a.name.localeCompare(b.name);
-                            })" :key="choice.id">
+            <template
+                v-for="choice in choices.sort(function (a, b) {
+                    return a.name.localeCompare(b.name);
+                })"
+                :key="choice.id"
+            >
                 <template v-if="!choice.parent_id">
                     <option :value="choice.id">
                         {{ choice.name }}
                     </option>
-                    <template v-for="choice2 in findchildren(choice)" :key="choice2.id">
+                    <template
+                        v-for="choice2 in findchildren(choice)"
+                        :key="choice2.id"
+                    >
                         <option :value="choice2.id">
                             &emsp;{{ choice2.name }}
                         </option>
-                        <template v-for="choice3 in findchildren(choice2)" :key="choice3.id">
+                        <template
+                            v-for="choice3 in findchildren(choice2)"
+                            :key="choice3.id"
+                        >
                             <option :value="choice3.id">
                                 &emsp;&emsp;{{ choice3.name }}
                             </option>
-                            <template v-for="choice4 in findchildren(choice3)" :key="choice4.id">
+                            <template
+                                v-for="choice4 in findchildren(choice3)"
+                                :key="choice4.id"
+                            >
                                 <option :value="choice4.id">
                                     &emsp;&emsp;&emsp;{{ choice4.name }}
                                 </option>
