@@ -849,7 +849,7 @@
                         :key="purchase.id"
                         class="showcodex_multi_stack"
                     >
-                        <button @click="seltrans = purchase">Info</button>
+                        <button @click="seltrans = (JSON.stringify(seltrans) === JSON.stringify(purchase)) ? {} : purchase">Info</button>
                         {{ purchase.name }} ({{
                             purchase.year +
                             (purchase.month ? "-" + purchase.month : "") +
@@ -1268,6 +1268,7 @@ function range(start, end) {
 }
 
 function show_codex(id) {
+    seltrans = ref({});
     form.tab = activetab.value;
     form.post("/codex_show/" + id, {
         queryStringArrayFormat: "indices",
