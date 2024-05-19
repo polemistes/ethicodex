@@ -104,6 +104,16 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
+
+            's_full_page_ratio_min' => 'nullable',
+            's_full_page_ratio_max' => 'nullable',
+            's_full_text_block_ratio_min' => 'nullable',
+            's_full_text_block_ratio_max' => 'nullable',
+            's_uplow_margins_ratio_min' => 'nullable',
+            's_uplow_margins_ratio_max' => 'nullable',
+            's_inout_margins_ratio_min' => 'nullable',
+            's_inout_margins_ratio_max' => 'nullable',
+
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -234,6 +244,16 @@ class DocumentController extends Controller
         $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
         $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
         $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+
+        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
+        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
+        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
+        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? $search['s_full_text_block_ratio_max'] : null;
+        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? $search['s_uplow_margins_ratio_min'] : null;
+        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? $search['s_uplow_margins_ratio_max'] : null;
+        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
+        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -487,7 +507,16 @@ class DocumentController extends Controller
                     $inner_margin_min,
                     $inner_margin_max,
                     $outer_margin_min,
-                    $outer_margin_max
+                    $outer_margin_max,
+
+                    $full_page_ratio_min,
+                    $full_page_ratio_max,
+                    $full_text_block_ratio_min,
+                    $full_text_block_ratio_max,
+                    $uplow_margins_ratio_min,
+                    $uplow_margins_ratio_max,
+                    $inout_margins_ratio_min,
+                    $inout_margins_ratio_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -536,7 +565,35 @@ class DocumentController extends Controller
                         })
                         ->when($outer_margin_max, function ($query, $outer_margin_max) {
                             $query->where('outer_margin', '<=', $outer_margin_max);
-                        });
+                        })
+
+
+                        ->when($full_page_ratio_min, function ($query, $full_page_ratio_min) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '>=', $full_page_ratio_min);
+                        })
+                        ->when($full_page_ratio_max, function ($query, $full_page_ratio_max) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '<=', $full_page_ratio_max);
+                        })
+                        ->when($full_text_block_ratio_min, function ($query, $full_text_block_ratio_min) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '>=', $full_text_block_ratio_min);
+                        })
+                        ->when($full_text_block_ratio_max, function ($query, $full_text_block_ratio_max) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '<=', $full_text_block_ratio_max);
+                        })
+                        ->when($uplow_margins_ratio_min, function ($query, $uplow_margins_ratio_min) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '>=', $uplow_margins_ratio_min);
+                        })
+                        ->when($uplow_margins_ratio_max, function ($query, $uplow_margins_ratio_max) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '<=', $uplow_margins_ratio_max);
+                        })
+                        ->when($inout_margins_ratio_min, function ($query, $inout_margins_ratio_min) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '>=', $inout_margins_ratio_min);
+                        })
+                        ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
+                        })
+                        
+                        ;
                 }
             )
             ->when(
@@ -814,6 +871,16 @@ class DocumentController extends Controller
             'inner_margin_max' => $inner_margin_max,
             'outer_margin_min' => $outer_margin_min,
             'outer_margin_max' => $outer_margin_max,
+
+            'full_page_ratio_min' => $full_page_ratio_min,
+            'full_page_ratio_max' => $full_page_ratio_max,
+            'full_text_block_ratio_min' => $full_text_block_ratio_min,
+            'full_text_block_ratio_max' => $full_text_block_ratio_max,
+            'uplow_margins_ratio_min' => $uplow_margins_ratio_min,
+            'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
+            'inout_margins_ratio_min' => $inout_margins_ratio_min,
+            'inout_margins_ratio_max' => $inout_margins_ratio_max,
+
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -940,6 +1007,16 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
+
+            's_full_page_ratio_min' => 'nullable',
+            's_full_page_ratio_max' => 'nullable',
+            's_full_text_block_ratio_min' => 'nullable',
+            's_full_text_block_ratio_max' => 'nullable',
+            's_uplow_margins_ratio_min' => 'nullable',
+            's_uplow_margins_ratio_max' => 'nullable',
+            's_inout_margins_ratio_min' => 'nullable',
+            's_inout_margins_ratio_max' => 'nullable',
+
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -1054,6 +1131,16 @@ class DocumentController extends Controller
         $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
         $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
         $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+
+        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
+        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
+        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
+        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? $search['s_full_text_block_ratio_max'] : null;
+        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? $search['s_uplow_margins_ratio_min'] : null;
+        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? $search['s_uplow_margins_ratio_max'] : null;
+        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
+        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -1305,7 +1392,16 @@ class DocumentController extends Controller
                     $inner_margin_min,
                     $inner_margin_max,
                     $outer_margin_min,
-                    $outer_margin_max
+                    $outer_margin_max,
+
+                    $full_page_ratio_min,
+                    $full_page_ratio_max,
+                    $full_text_block_ratio_min,
+                    $full_text_block_ratio_max,
+                    $uplow_margins_ratio_min,
+                    $uplow_margins_ratio_max,
+                    $inout_margins_ratio_min,
+                    $inout_margins_ratio_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -1354,6 +1450,30 @@ class DocumentController extends Controller
                         })
                         ->when($outer_margin_max, function ($query, $outer_margin_max) {
                             $query->where('outer_margin', '<=', $outer_margin_max);
+                        })
+                        ->when($full_page_ratio_min, function ($query, $full_page_ratio_min) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '>=', $full_page_ratio_min);
+                        })
+                        ->when($full_page_ratio_max, function ($query, $full_page_ratio_max) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '<=', $full_page_ratio_max);
+                        })
+                        ->when($full_text_block_ratio_min, function ($query, $full_text_block_ratio_min) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '>=', $full_text_block_ratio_min);
+                        })
+                        ->when($full_text_block_ratio_max, function ($query, $full_text_block_ratio_max) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '<=', $full_text_block_ratio_max);
+                        })
+                        ->when($uplow_margins_ratio_min, function ($query, $uplow_margins_ratio_min) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '>=', $uplow_margins_ratio_min);
+                        })
+                        ->when($uplow_margins_ratio_max, function ($query, $uplow_margins_ratio_max) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '<=', $uplow_margins_ratio_max);
+                        })
+                        ->when($inout_margins_ratio_min, function ($query, $inout_margins_ratio_min) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '>=', $inout_margins_ratio_min);
+                        })
+                        ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
                         });
                 }
             )
@@ -1654,6 +1774,14 @@ class DocumentController extends Controller
             'inner_margin_max' => $inner_margin_max,
             'outer_margin_min' => $outer_margin_min,
             'outer_margin_max' => $outer_margin_max,
+            'full_page_ratio_min' => $full_page_ratio_min,
+            'full_page_ratio_max' => $full_page_ratio_max,
+            'full_text_block_ratio_min' => $full_text_block_ratio_min,
+            'full_text_block_ratio_max' => $full_text_block_ratio_max,
+            'uplow_margins_ratio_min' => $uplow_margins_ratio_min,
+            'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
+            'inout_margins_ratio_min' => $inout_margins_ratio_min,
+            'inout_margins_ratio_max' => $inout_margins_ratio_max,
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -1750,6 +1878,16 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
+
+            's_full_page_ratio_min' => 'nullable',
+            's_full_page_ratio_max' => 'nullable',
+            's_full_text_block_ratio_min' => 'nullable',
+            's_full_text_block_ratio_max' => 'nullable',
+            's_uplow_margins_ratio_min' => 'nullable',
+            's_uplow_margins_ratio_max' => 'nullable',
+            's_inout_margins_ratio_min' => 'nullable',
+            's_inout_margins_ratio_max' => 'nullable',
+
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -1865,6 +2003,16 @@ class DocumentController extends Controller
         $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
         $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
         $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+
+        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
+        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
+        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
+        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? $search['s_full_text_block_ratio_max'] : null;
+        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? $search['s_uplow_margins_ratio_min'] : null;
+        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? $search['s_uplow_margins_ratio_max'] : null;
+        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
+        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -2116,7 +2264,16 @@ class DocumentController extends Controller
                     $inner_margin_min,
                     $inner_margin_max,
                     $outer_margin_min,
-                    $outer_margin_max
+                    $outer_margin_max,
+
+                    $full_page_ratio_min,
+                    $full_page_ratio_max,
+                    $full_text_block_ratio_min,
+                    $full_text_block_ratio_max,
+                    $uplow_margins_ratio_min,
+                    $uplow_margins_ratio_max,
+                    $inout_margins_ratio_min,
+                    $inout_margins_ratio_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -2165,6 +2322,30 @@ class DocumentController extends Controller
                         })
                         ->when($outer_margin_max, function ($query, $outer_margin_max) {
                             $query->where('outer_margin', '<=', $outer_margin_max);
+                        })
+                        ->when($full_page_ratio_min, function ($query, $full_page_ratio_min) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '>=', $full_page_ratio_min);
+                        })
+                        ->when($full_page_ratio_max, function ($query, $full_page_ratio_max) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '<=', $full_page_ratio_max);
+                        })
+                        ->when($full_text_block_ratio_min, function ($query, $full_text_block_ratio_min) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '>=', $full_text_block_ratio_min);
+                        })
+                        ->when($full_text_block_ratio_max, function ($query, $full_text_block_ratio_max) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '<=', $full_text_block_ratio_max);
+                        })
+                        ->when($uplow_margins_ratio_min, function ($query, $uplow_margins_ratio_min) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '>=', $uplow_margins_ratio_min);
+                        })
+                        ->when($uplow_margins_ratio_max, function ($query, $uplow_margins_ratio_max) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '<=', $uplow_margins_ratio_max);
+                        })
+                        ->when($inout_margins_ratio_min, function ($query, $inout_margins_ratio_min) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '>=', $inout_margins_ratio_min);
+                        })
+                        ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
                         });
                 }
             )
@@ -2488,6 +2669,14 @@ class DocumentController extends Controller
             'inner_margin_max' => $inner_margin_max,
             'outer_margin_min' => $outer_margin_min,
             'outer_margin_max' => $outer_margin_max,
+            'full_page_ratio_min' => $full_page_ratio_min,
+            'full_page_ratio_max' => $full_page_ratio_max,
+            'full_text_block_ratio_min' => $full_text_block_ratio_min,
+            'full_text_block_ratio_max' => $full_text_block_ratio_max,
+            'uplow_margins_ratio_min' => $uplow_margins_ratio_min,
+            'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
+            'inout_margins_ratio_min' => $inout_margins_ratio_min,
+            'inout_margins_ratio_max' => $inout_margins_ratio_max,
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -2591,6 +2780,16 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
+
+            's_full_page_ratio_min' => 'nullable',
+            's_full_page_ratio_max' => 'nullable',
+            's_full_text_block_ratio_min' => 'nullable',
+            's_full_text_block_ratio_max' => 'nullable',
+            's_uplow_margins_ratio_min' => 'nullable',
+            's_uplow_margins_ratio_max' => 'nullable',
+            's_inout_margins_ratio_min' => 'nullable',
+            's_inout_margins_ratio_max' => 'nullable',
+
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -2707,6 +2906,16 @@ class DocumentController extends Controller
         $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
         $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
         $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+
+        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
+        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
+        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
+        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? $search['s_full_text_block_ratio_max'] : null;
+        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? $search['s_uplow_margins_ratio_min'] : null;
+        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? $search['s_uplow_margins_ratio_max'] : null;
+        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
+        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -2958,7 +3167,16 @@ class DocumentController extends Controller
                     $inner_margin_min,
                     $inner_margin_max,
                     $outer_margin_min,
-                    $outer_margin_max
+                    $outer_margin_max,
+
+                    $full_page_ratio_min,
+                    $full_page_ratio_max,
+                    $full_text_block_ratio_min,
+                    $full_text_block_ratio_max,
+                    $uplow_margins_ratio_min,
+                    $uplow_margins_ratio_max,
+                    $inout_margins_ratio_min,
+                    $inout_margins_ratio_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -3007,6 +3225,30 @@ class DocumentController extends Controller
                         })
                         ->when($outer_margin_max, function ($query, $outer_margin_max) {
                             $query->where('outer_margin', '<=', $outer_margin_max);
+                        })
+                        ->when($full_page_ratio_min, function ($query, $full_page_ratio_min) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '>=', $full_page_ratio_min);
+                        })
+                        ->when($full_page_ratio_max, function ($query, $full_page_ratio_max) {
+                            $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '<=', $full_page_ratio_max);
+                        })
+                        ->when($full_text_block_ratio_min, function ($query, $full_text_block_ratio_min) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '>=', $full_text_block_ratio_min);
+                        })
+                        ->when($full_text_block_ratio_max, function ($query, $full_text_block_ratio_max) {
+                            $query->where(DB::raw('full_text_block_width / NULLIF(full_text_block_height, 0)'), '<=', $full_text_block_ratio_max);
+                        })
+                        ->when($uplow_margins_ratio_min, function ($query, $uplow_margins_ratio_min) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '>=', $uplow_margins_ratio_min);
+                        })
+                        ->when($uplow_margins_ratio_max, function ($query, $uplow_margins_ratio_max) {
+                            $query->where(DB::raw('upper_margin / NULLIF(lower_margin, 0)'), '<=', $uplow_margins_ratio_max);
+                        })
+                        ->when($inout_margins_ratio_min, function ($query, $inout_margins_ratio_min) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '>=', $inout_margins_ratio_min);
+                        })
+                        ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
+                            $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
                         });
                 }
             )
@@ -3517,6 +3759,14 @@ class DocumentController extends Controller
             'inner_margin_max' => $inner_margin_max,
             'outer_margin_min' => $outer_margin_min,
             'outer_margin_max' => $outer_margin_max,
+            'full_page_ratio_min' => $full_page_ratio_min,
+            'full_page_ratio_max' => $full_page_ratio_max,
+            'full_text_block_ratio_min' => $full_text_block_ratio_min,
+            'full_text_block_ratio_max' => $full_text_block_ratio_max,
+            'uplow_margins_ratio_min' => $uplow_margins_ratio_min,
+            'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
+            'inout_margins_ratio_min' => $inout_margins_ratio_min,
+            'inout_margins_ratio_max' => $inout_margins_ratio_max,
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,

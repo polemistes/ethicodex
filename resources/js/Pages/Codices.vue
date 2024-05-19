@@ -335,7 +335,9 @@
 
         <div v-if="form.show_measurement" class="searchblock-outer">
             <div class="searchblocktitle">Measurements Search</div>
-            <div class="searchblock-inner">
+
+            <!-- Page width, block width, upper margin, inner margin -->
+            <div class="searchblock-inner"> 
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_width_min"
@@ -352,24 +354,6 @@
                     @key-pressed="sendsearch()"
                 >
                     Max Page Width
-                </EthInput>
-
-                <EthInput
-                    input_type="numberevent"
-                    input_id="full_page_height_min"
-                    v-model="form.s_full_page_height_min"
-                    @key-pressed="sendsearch()"
-                >
-                    Min Page Height
-                </EthInput>
-
-                <EthInput
-                    input_type="numberevent"
-                    input_id="full_page_height_max"
-                    v-model="form.s_full_page_height_max"
-                    @key-pressed="sendsearch()"
-                >
-                    Max Page Height
                 </EthInput>
 
                 <EthInput
@@ -392,25 +376,6 @@
 
                 <EthInput
                     input_type="numberevent"
-                    input_id="full_text_block_height_min"
-                    v-model="form.s_full_text_block_height_min"
-                    @key-pressed="sendsearch()"
-                >
-                    Min Block Height
-                </EthInput>
-
-                <EthInput
-                    input_type="numberevent"
-                    input_id="full_text_block_height_max"
-                    v-model="form.s_full_text_block_height_max"
-                    @key-pressed="sendsearch()"
-                >
-                    Max Block Height
-                </EthInput>
-            </div>
-            <div class="searchblock-inner">
-                <EthInput
-                    input_type="numberevent"
                     input_id="upper_margin_min"
                     v-model="form.s_upper_margin_min"
                     @key-pressed="sendsearch()"
@@ -426,6 +391,64 @@
                 >
                     Max Upper Margin
                 </EthInput>
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inner_margin_min"
+                    v-model="form.s_inner_margin_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Inner Margin
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inner_margin_max"
+                    v-model="form.s_inner_margin_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Inner Margin
+                </EthInput>
+
+ 
+            </div>
+            <!-- Page height, Block height, Lower margin, Outer margin -->
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_height_min"
+                    v-model="form.s_full_page_height_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Page Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_height_max"
+                    v-model="form.s_full_page_height_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Page Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_height_min"
+                    v-model="form.s_full_text_block_height_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Block Height
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_height_max"
+                    v-model="form.s_full_text_block_height_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Block Height
+                </EthInput>
+
 
                 <EthInput
                     input_type="numberevent"
@@ -447,24 +470,6 @@
 
                 <EthInput
                     input_type="numberevent"
-                    input_id="inner_margin_min"
-                    v-model="form.s_inner_margin_min"
-                    @key-pressed="sendsearch()"
-                >
-                    Min Inner Margin
-                </EthInput>
-
-                <EthInput
-                    input_type="numberevent"
-                    input_id="inner_margin_max"
-                    v-model="form.s_inner_margin_max"
-                    @key-pressed="sendsearch()"
-                >
-                    Max Inner Margin
-                </EthInput>
-
-                <EthInput
-                    input_type="numberevent"
                     input_id="outer_margin_min"
                     v-model="form.s_outer_margin_min"
                     @key-pressed="sendsearch()"
@@ -481,6 +486,82 @@
                     Max Outer Margin
                 </EthInput>
             </div>
+
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_ratio_min"
+                    v-model="form.s_full_page_ratio_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min W/H Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_page_ratio_max"
+                    v-model="form.s_full_page_ratio_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max W/H Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_ratio_min"
+                    v-model="form.s_full_text_block_ratio_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min W/H Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="full_text_block_ratio_max"
+                    v-model="form.s_full_text_block_ratio_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max W/H Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="uplow_margins_ratio_min"
+                    v-model="form.s_uplow_margins_ratio_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Up/Low Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="uplow_margins_ratio_max"
+                    v-model="form.s_uplow_margins_ratio_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Up/Low Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inout_margins_ratio_min"
+                    v-model="form.s_inout_margins_ratio_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min In/Out Ratio
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="inout_margins_ratio_max"
+                    v-model="form.s_inout_margins_ratio_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max In/Out Ratio
+                </EthInput>
+            </div>
+
+
         </div>
 
         <div v-if="form.show_palaeography" class="searchblock-outer">
@@ -958,6 +1039,15 @@ const props = defineProps({
     inner_margin_max: Number,
     outer_margin_min: Number,
     outer_margin_max: Number,
+    full_page_ratio_min: Number,
+    full_page_ratio_max: Number,
+    full_text_block_ratio_min: Number,
+    full_text_block_ratio_max: Number,
+    uplow_margins_ratio_min: Number,
+    uplow_margins_ratio_max: Number,
+    inout_margins_ratio_min: Number,
+    inout_margins_ratio_max: Number,
+    
     /* Palaeography */
     hand_number_min: Number,
     hand_number_max: Number,
@@ -1057,6 +1147,15 @@ const form = useForm({
     s_inner_margin_max: props.inner_margin_max,
     s_outer_margin_min: props.outer_margin_min,
     s_outer_margin_max: props.outer_margin_max,
+    s_full_page_ratio_min: props.full_page_ratio_min,
+    s_full_page_ratio_max: props.full_page_ratio_max,
+    s_full_text_block_ratio_min: props.full_text_block_ratio_min,
+    s_full_text_block_ratio_max: props.full_text_block_ratio_max,
+    s_uplow_margins_ratio_min: props.uplow_margins_ratio_min,
+    s_uplow_margins_ratio_max: props.uplow_margins_ratio_max,
+    s_inout_margins_ratio_min: props.inout_margins_ratio_min,
+    s_inout_margins_ratio_max: props.inout_margins_ratio_max,
+
     /* Palaeography */
     s_hand_number_min: props.hand_number_min,
     s_hand_number_max: props.hand_number_max,
