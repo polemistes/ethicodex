@@ -3444,7 +3444,7 @@ class DocumentController extends Controller
                     })
 
             ->orderBy($sortby, $direction)
-            ->orderBy('end_year', $direction);
+            ->orderBy('end_year', $direction)->get();
 
             $prev = -1;
             $next = -1;
