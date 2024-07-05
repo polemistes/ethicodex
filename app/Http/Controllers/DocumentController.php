@@ -268,7 +268,7 @@ class DocumentController extends Controller
         $decorations_incl = array_key_exists('s_decorations_incl', $search) ? $search['s_decorations_incl'] : null;
         $critical_symbols = array_key_exists('s_critical_symbols', $search) ? $search['s_critical_symbols'] : null;
         $critical_symbols_incl = array_key_exists('s_critical_symbols_incl', $search) ? $search['s_critical_symbols_incl'] : null;
-        $paginations = array_key_exists('s_pagination', $search) ? $search['s_paginations'] : null;
+        $paginations = array_key_exists('s_paginations', $search) ? $search['s_paginations'] : null;
         $quire_signatures = array_key_exists('s_quire_signatures', $search) ? $search['s_quire_signatures'] : null;
         $storage_conditions = array_key_exists('s_storage_conditions', $search) ? $search['s_storage_conditions'] : null;
         $analyses = array_key_exists('s_analyses', $search) ? $search['s_analyses'] : null;
@@ -695,10 +695,8 @@ class DocumentController extends Controller
                             }
                         }) 
                         ->when($paginations, function ($query, $paginations) {
-                            $query->whereHas('paginations', function ($query) use ($paginations) {
-                                $query->whereIn('paginations.id', array_column($paginations, 'id'));
-                            });
-                        })
+                            $query->whereIn('pagination_id', array_column($paginations, 'id'));
+                      })
                         ->when($quire_signatures, function ($query, $quire_signatures) {
                             $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
                         });
@@ -1155,7 +1153,7 @@ class DocumentController extends Controller
         $decorations_incl = array_key_exists('s_decorations_incl', $search) ? $search['s_decorations_incl'] : null;
         $critical_symbols = array_key_exists('s_critical_symbols', $search) ? $search['s_critical_symbols'] : null;
         $critical_symbols_incl = array_key_exists('s_critical_symbols_incl', $search) ? $search['s_critical_symbols_incl'] : null;
-        $paginations = array_key_exists('s_pagination', $search) ? $search['s_paginations'] : null;
+        $paginations = array_key_exists('s_paginations', $search) ? $search['s_paginations'] : null;
         $quire_signatures = array_key_exists('s_quire_signatures', $search) ? $search['s_quire_signatures'] : null;
         $storage_conditions = array_key_exists('s_storage_conditions', $search) ? $search['s_storage_conditions'] : null;
         $analyses = array_key_exists('s_analyses', $search) ? $search['s_analyses'] : null;
@@ -1576,9 +1574,7 @@ class DocumentController extends Controller
                             }
                         }) 
                         ->when($paginations, function ($query, $paginations) {
-                            $query->whereHas('paginations', function ($query) use ($paginations) {
-                                $query->whereIn('paginations.id', array_column($paginations, 'id'));
-                            });
+                            $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
                         ->when($quire_signatures, function ($query, $quire_signatures) {
                             $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
@@ -2027,7 +2023,7 @@ class DocumentController extends Controller
         $decorations_incl = array_key_exists('s_decorations_incl', $search) ? $search['s_decorations_incl'] : null;
         $critical_symbols = array_key_exists('s_critical_symbols', $search) ? $search['s_critical_symbols'] : null;
         $critical_symbols_incl = array_key_exists('s_critical_symbols_incl', $search) ? $search['s_critical_symbols_incl'] : null;
-        $paginations = array_key_exists('s_pagination', $search) ? $search['s_paginations'] : null;
+        $paginations = array_key_exists('s_paginations', $search) ? $search['s_paginations'] : null;
         $quire_signatures = array_key_exists('s_quire_signatures', $search) ? $search['s_quire_signatures'] : null;
         $storage_conditions = array_key_exists('s_storage_conditions', $search) ? $search['s_storage_conditions'] : null;
         $analyses = array_key_exists('s_analyses', $search) ? $search['s_analyses'] : null;
@@ -2448,9 +2444,7 @@ class DocumentController extends Controller
                             }
                         }) 
                         ->when($paginations, function ($query, $paginations) {
-                            $query->whereHas('paginations', function ($query) use ($paginations) {
-                                $query->whereIn('paginations.id', array_column($paginations, 'id'));
-                            });
+                            $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
                         ->when($quire_signatures, function ($query, $quire_signatures) {
                             $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
@@ -2930,7 +2924,7 @@ class DocumentController extends Controller
         $decorations_incl = array_key_exists('s_decorations_incl', $search) ? $search['s_decorations_incl'] : null;
         $critical_symbols = array_key_exists('s_critical_symbols', $search) ? $search['s_critical_symbols'] : null;
         $critical_symbols_incl = array_key_exists('s_critical_symbols_incl', $search) ? $search['s_critical_symbols_incl'] : null;
-        $paginations = array_key_exists('s_pagination', $search) ? $search['s_paginations'] : null;
+        $paginations = array_key_exists('s_paginations', $search) ? $search['s_paginations'] : null;
         $quire_signatures = array_key_exists('s_quire_signatures', $search) ? $search['s_quire_signatures'] : null;
         $storage_conditions = array_key_exists('s_storage_conditions', $search) ? $search['s_storage_conditions'] : null;
         $analyses = array_key_exists('s_analyses', $search) ? $search['s_analyses'] : null;
@@ -3351,9 +3345,7 @@ class DocumentController extends Controller
                             }
                         }) 
                         ->when($paginations, function ($query, $paginations) {
-                            $query->whereHas('paginations', function ($query) use ($paginations) {
-                                $query->whereIn('paginations.id', array_column($paginations, 'id'));
-                            });
+                            $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
                         ->when($quire_signatures, function ($query, $quire_signatures) {
                             $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
