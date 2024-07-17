@@ -587,7 +587,7 @@
 
                 <div class="close-check-box">
                 <EthInput
-                    input_type="multi_choice_event"
+                    input_type="multi_choice_scripts_event"
                     input_id="scripts"
                     :choices="scripts"
                     v-model="form.s_scripts"

@@ -872,7 +872,7 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked)"
+                            @change="$emit('update:modelValue', checked);"
                         />
                         <label>{{ choice.name }}</label>
                     </div>
@@ -886,13 +886,73 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked)"
+                            @change="$emit('update:modelValue', checked);"
                         />
                         <label>{{ choice.name }}</label>
                     </div>
                 </div>
             </div>
             <div class="choicelist">
+                <span
+                    v-for="value in modelValue"
+                    :key="value.id"
+                    class="choiceelement"
+                >
+                    <button
+                        @click.prevent="removechoice(value)"
+                        class="removebutton"
+                    >
+                        ✕
+                    </button>
+                    {{ value.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="input_type == 'multi_choice_scripts_event'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <button @click.prevent="dropdown = !dropdown" class="dropdownbutton">
+            <span>Select</span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <h3>Greek Scripts:</h3>
+                <div v-for="choice in search_choices" :key="choice.id">
+                    <div v-if="choice.language_id == '1'">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked);
+                                     $emit('newChange');"
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
+                </div>
+
+                <h3>Latin Scripts:</h3>
+                <div v-for="choice in search_choices" :key="choice.id">
+                    <div v-if="choice.language_id == '2'">
+                        <input
+                            type="checkbox"
+                            :id="choice.id"
+                            :value="choice"
+                            v-model="checked"
+                            @change="$emit('update:modelValue', checked);
+                                     $emit('newChange');"
+                        />
+                        <label>{{ choice.name }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="choicelist-stack">
                 <span
                     v-for="value in modelValue"
                     :key="value.id"
