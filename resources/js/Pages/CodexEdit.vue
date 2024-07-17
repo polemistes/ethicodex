@@ -1017,7 +1017,7 @@
 
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, onUpdated } from "vue";
 import { createApp } from "vue";
 
 import { useForm } from '@inertiajs/vue3'
@@ -1433,10 +1433,21 @@ onMounted(() => {
     }
 });
 
+onUpdated(() => {
+    if (props.current == -1) {
+        if(!alreadygone) {
+            alert("The current codex longer matches the search criteria. Going back to the search results.");
+            window.history.go(-1);
+            alreadygone = true;
+        }
+    }
+});
+
 const loadImages = ref(null);
 
 let submitted = false;
 let activetab = ref(props.tab ? props.tab : "general");
+let alreadygone = false;
 
 function range(start, end) {
     var foo = [];

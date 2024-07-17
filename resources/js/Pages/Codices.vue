@@ -1206,6 +1206,10 @@ const form = useForm({
     tab: "general",
 });
 
+onMounted(() => {
+    sendsearch();
+})
+
 const sortfields = [
     { id: 1, name: "Standard Name" },
     { id: 2, name: "Author" },

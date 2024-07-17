@@ -2722,6 +2722,192 @@ class DocumentController extends Controller
 
         $role_id = $request->user() ? $request->user()->role_id : 0;
 
+        $fields = $request->validate([
+            'id' => 'required',
+            'published' => 'nullable',
+            'standard_name' => 'nullable',
+            'other_names' => 'nullable',
+            'publication' => 'nullable',
+            'current_shelfmarks' => 'nullable',
+            'trismegistos_id' => 'nullable',
+            'title' => 'nullable',
+            'genres' => 'nullable',
+            'ancient_author' => 'nullable',
+            'tags' => 'nullable',
+            'content_description' => 'nullable',
+            'start_year' => 'nullable',
+            'end_year' => 'nullable',
+            'languages' => 'nullable',
+            'dating_methods' => 'nullable',
+            'dating_certainty_id' => 'nullable',
+            'dating_comment' => 'nullable',
+            'bibliography' => 'nullable',
+            'internal_comment' => 'nullable',
+            'general_comment' => 'nullable',
+            'material_id' => 'nullable',
+            'page_dimensions_known' => 'nullable',
+            'fragment_width' => 'nullable',
+            'fragment_height' => 'nullable',
+            'textbox_size_stable' => 'nullable',
+            'full_page_width' => 'nullable',
+            'full_page_height' => 'nullable',
+            'upper_margin' => 'nullable',
+            'lower_margin' => 'nullable',
+            'inner_margin' => 'nullable',
+            'outer_margin' => 'nullable',
+            'full_text_block_width' => 'nullable',
+            'full_text_block_height' => 'nullable',
+            'full_text_block_comment' => 'nullable',
+            'measurement_comment' => 'nullable',
+            'scripts' => 'nullable',
+            'hand_number' => 'nullable',
+            'script_description' => 'nullable',
+            'paratexts' => 'nullable',
+            'paratext_description' => 'nullable',
+            'punctuations' => 'nullable',
+            'critical_symbols' => 'nullable',
+            'decorations' => 'nullable',
+            'decoration_description' => 'nullable',
+            'pagination_id' => 'nullable',
+            'diacritics' => 'nullable',
+            'diacritic_description' => 'nullable',
+            'punctuation_description' => 'nullable',
+            'critical_symbols_description' => 'nullable',
+            'pagination_description' => 'nullable',
+            'quire_signatures_description' => 'nullable',
+            'cover_id' => 'nullable',
+            'inks' => 'nullable',
+            'quire_signature_id' => 'nullable',
+            'quire_structure_id' => 'nullable',
+            'quire_number' => 'nullable',
+            'bifolia' => 'nullable',
+            'quire_comment' => 'nullable',
+            'binding_description' => 'nullable',
+            'inks_description' => 'nullable',
+            'cover_description' => 'nullable',
+            'storage_condition_id' => 'nullable',
+            'conservation_history' => 'nullable',
+            'analyses' => 'nullable',
+            'analyses_comment' => 'nullable',
+            'ancient_provenance_id' => 'nullable',
+            'ancient_provenance_certainty_id' => 'nullable',
+            'ancient_provenance_comment' => 'nullable',
+            'scientifically_excavated' => 'nullable',
+            'excavation_comment' => 'nullable',
+            'modern_collections' => 'nullable',
+            'legal_classification_id' => 'nullable',
+            'legal_classification_explanation' => 'nullable',
+            'purchases' => 'nullable',
+            'images_info' => 'nullable',
+            'images' => 'nullable',
+        ]);
+
+        $img_fields = $request->validate([
+            'images' => 'nullable',
+        ]);
+
+
+        $document->published = $fields['published'];
+        $document->standard_name = $fields['standard_name'];
+        $document->other_names = $fields['other_names'];
+        $document->publication = $fields['publication'];
+        $document->current_shelfmarks = $fields['current_shelfmarks'];
+        $document->trismegistos_id = $fields['trismegistos_id'];
+        $document->title = $fields['title'];
+        $document->ancient_author = $fields['ancient_author'];
+        $document->content_description = $fields['content_description'];
+        $document->start_year = $fields['start_year'];
+        $document->end_year = $fields['end_year'];
+        $document->dating_certainty_id = $fields['dating_certainty_id'];
+        $document->dating_comment = $fields['dating_comment'];
+        $document->bibliography = $fields['bibliography'];
+        $document->internal_comment = $fields['internal_comment'];
+        $document->general_comment = $fields['general_comment'];
+        $document->material_id = $fields['material_id'];
+        $document->page_dimensions_known = $fields['page_dimensions_known'];
+        $document->fragment_width = $fields['fragment_width'];
+        $document->fragment_height = $fields['fragment_height'];
+        $document->full_page_width = $fields['full_page_width'];
+        $document->full_page_height = $fields['full_page_height'];
+        $document->textbox_size_stable = $fields['textbox_size_stable'];
+        $document->upper_margin = $fields['upper_margin'];
+        $document->lower_margin = $fields['lower_margin'];
+        $document->inner_margin = $fields['inner_margin'];
+        $document->outer_margin = $fields['outer_margin'];
+        $document->full_text_block_width = $fields['full_text_block_width'];
+        $document->full_text_block_height = $fields['full_text_block_height'];
+        $document->full_text_block_comment = $fields['full_text_block_comment'];
+        $document->measurement_comment = $fields['measurement_comment'];
+        $document->hand_number = $fields['hand_number'];
+        $document->script_description = $fields['script_description'];
+        $document->paratext_description = $fields['paratext_description'];
+        $document->diacritic_description = $fields['diacritic_description'];
+        $document->decoration_description = $fields['decoration_description'];
+        $document->inks_description = $fields['inks_description'];
+        $document->cover_description = $fields['cover_description'];
+        $document->punctuation_description = $fields['punctuation_description'];
+        $document->critical_symbols_description = $fields['critical_symbols_description'];
+        $document->pagination_description = $fields['pagination_description'];
+        $document->quire_signatures_description = $fields['quire_signatures_description'];
+        $document->pagination_id = $fields['pagination_id'];
+        $document->cover_id = $fields['cover_id'];
+        $document->quire_signature_id = $fields['quire_signature_id'];
+        $document->quire_structure_id = $fields['quire_structure_id'];
+        if ($fields['quire_structure_id'] == 1) {
+            $fields['quire_number'] = 1;
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
+        } elseif ($fields['quire_structure_id'] == 2) {
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, $fields['quire_number']);
+        } elseif ($fields['quire_structure_id'] == 3) {
+            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
+        } else {
+            $fields['quire_number'] = null;
+            $fields['bifolia'] = ["1"];
+        }
+        $document->quire_number = $fields['quire_number'];
+        $document->bifolia = $fields['bifolia'];
+        $document->quire_comment = $fields['quire_comment'];
+        $document->binding_description = $fields['binding_description'];
+        $document->storage_condition_id = $fields['storage_condition_id'];
+        $document->conservation_history = $fields['conservation_history'];
+        $document->analyses_comment = $fields['analyses_comment'];
+        $document->ancient_provenance_id = $fields['ancient_provenance_id'];
+        $document->ancient_provenance_certainty_id = $fields['ancient_provenance_certainty_id'];
+        $document->ancient_provenance_comment = $fields['ancient_provenance_comment'];
+        $document->scientifically_excavated = $fields['scientifically_excavated'];
+        $document->excavation_comment = $fields['excavation_comment'];
+        $document->legal_classification_id = $fields['legal_classification_id'];
+        $document->legal_classification_explanation = $fields['legal_classification_explanation'];
+        $document->images_info = $fields['images_info'];
+
+        $document->languages()->sync(array_column($fields['languages'], 'id'));
+        $document->scripts()->sync(array_column($fields['scripts'], 'id'));
+        $document->paratexts()->sync(array_column($fields['paratexts'], 'id'));
+        $document->diacritics()->sync(array_column($fields['diacritics'], 'id'));
+        $document->punctuations()->sync(array_column($fields['punctuations'], 'id'));
+        $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
+        $document->decorations()->sync(array_column($fields['decorations'], 'id'));
+        $document->analyses()->sync(array_column($fields['analyses'], 'id'));
+        $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
+        $document->purchases()->sync(array_column($fields['purchases'], 'id'));
+        $document->tags()->sync(array_column($fields['tags'], 'id'));
+        $document->genres()->sync(array_column($fields['genres'], 'id'));
+        $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
+        $document->inks()->sync(array_column($fields['inks'], 'id'));
+
+        $document->save();
+
+        foreach ($img_fields['images'] as $fields) {
+ 
+            $image = Image::find($fields['id']);
+
+            $image->description = $fields['description'];
+            $image->micrograph = $fields['micrograph'];
+            $image->license_id = $fields['license_id'];
+            $image->source = $fields['source'];
+            $image->save();
+        }
+
         $search = $request->validate([
             'show_publication' => 'nullable',
             'show_content' => 'nullable',
@@ -3465,192 +3651,6 @@ class DocumentController extends Controller
             }
 
         $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
-
-        $fields = $request->validate([
-            'id' => 'required',
-            'published' => 'nullable',
-            'standard_name' => 'nullable',
-            'other_names' => 'nullable',
-            'publication' => 'nullable',
-            'current_shelfmarks' => 'nullable',
-            'trismegistos_id' => 'nullable',
-            'title' => 'nullable',
-            'genres' => 'nullable',
-            'ancient_author' => 'nullable',
-            'tags' => 'nullable',
-            'content_description' => 'nullable',
-            'start_year' => 'nullable',
-            'end_year' => 'nullable',
-            'languages' => 'nullable',
-            'dating_methods' => 'nullable',
-            'dating_certainty_id' => 'nullable',
-            'dating_comment' => 'nullable',
-            'bibliography' => 'nullable',
-            'internal_comment' => 'nullable',
-            'general_comment' => 'nullable',
-            'material_id' => 'nullable',
-            'page_dimensions_known' => 'nullable',
-            'fragment_width' => 'nullable',
-            'fragment_height' => 'nullable',
-            'textbox_size_stable' => 'nullable',
-            'full_page_width' => 'nullable',
-            'full_page_height' => 'nullable',
-            'upper_margin' => 'nullable',
-            'lower_margin' => 'nullable',
-            'inner_margin' => 'nullable',
-            'outer_margin' => 'nullable',
-            'full_text_block_width' => 'nullable',
-            'full_text_block_height' => 'nullable',
-            'full_text_block_comment' => 'nullable',
-            'measurement_comment' => 'nullable',
-            'scripts' => 'nullable',
-            'hand_number' => 'nullable',
-            'script_description' => 'nullable',
-            'paratexts' => 'nullable',
-            'paratext_description' => 'nullable',
-            'punctuations' => 'nullable',
-            'critical_symbols' => 'nullable',
-            'decorations' => 'nullable',
-            'decoration_description' => 'nullable',
-            'pagination_id' => 'nullable',
-            'diacritics' => 'nullable',
-            'diacritic_description' => 'nullable',
-            'punctuation_description' => 'nullable',
-            'critical_symbols_description' => 'nullable',
-            'pagination_description' => 'nullable',
-            'quire_signatures_description' => 'nullable',
-            'cover_id' => 'nullable',
-            'inks' => 'nullable',
-            'quire_signature_id' => 'nullable',
-            'quire_structure_id' => 'nullable',
-            'quire_number' => 'nullable',
-            'bifolia' => 'nullable',
-            'quire_comment' => 'nullable',
-            'binding_description' => 'nullable',
-            'inks_description' => 'nullable',
-            'cover_description' => 'nullable',
-            'storage_condition_id' => 'nullable',
-            'conservation_history' => 'nullable',
-            'analyses' => 'nullable',
-            'analyses_comment' => 'nullable',
-            'ancient_provenance_id' => 'nullable',
-            'ancient_provenance_certainty_id' => 'nullable',
-            'ancient_provenance_comment' => 'nullable',
-            'scientifically_excavated' => 'nullable',
-            'excavation_comment' => 'nullable',
-            'modern_collections' => 'nullable',
-            'legal_classification_id' => 'nullable',
-            'legal_classification_explanation' => 'nullable',
-            'purchases' => 'nullable',
-            'images_info' => 'nullable',
-            'images' => 'nullable',
-        ]);
-
-        $img_fields = $request->validate([
-            'images' => 'nullable',
-        ]);
-
-
-        $document->published = $fields['published'];
-        $document->standard_name = $fields['standard_name'];
-        $document->other_names = $fields['other_names'];
-        $document->publication = $fields['publication'];
-        $document->current_shelfmarks = $fields['current_shelfmarks'];
-        $document->trismegistos_id = $fields['trismegistos_id'];
-        $document->title = $fields['title'];
-        $document->ancient_author = $fields['ancient_author'];
-        $document->content_description = $fields['content_description'];
-        $document->start_year = $fields['start_year'];
-        $document->end_year = $fields['end_year'];
-        $document->dating_certainty_id = $fields['dating_certainty_id'];
-        $document->dating_comment = $fields['dating_comment'];
-        $document->bibliography = $fields['bibliography'];
-        $document->internal_comment = $fields['internal_comment'];
-        $document->general_comment = $fields['general_comment'];
-        $document->material_id = $fields['material_id'];
-        $document->page_dimensions_known = $fields['page_dimensions_known'];
-        $document->fragment_width = $fields['fragment_width'];
-        $document->fragment_height = $fields['fragment_height'];
-        $document->full_page_width = $fields['full_page_width'];
-        $document->full_page_height = $fields['full_page_height'];
-        $document->textbox_size_stable = $fields['textbox_size_stable'];
-        $document->upper_margin = $fields['upper_margin'];
-        $document->lower_margin = $fields['lower_margin'];
-        $document->inner_margin = $fields['inner_margin'];
-        $document->outer_margin = $fields['outer_margin'];
-        $document->full_text_block_width = $fields['full_text_block_width'];
-        $document->full_text_block_height = $fields['full_text_block_height'];
-        $document->full_text_block_comment = $fields['full_text_block_comment'];
-        $document->measurement_comment = $fields['measurement_comment'];
-        $document->hand_number = $fields['hand_number'];
-        $document->script_description = $fields['script_description'];
-        $document->paratext_description = $fields['paratext_description'];
-        $document->diacritic_description = $fields['diacritic_description'];
-        $document->decoration_description = $fields['decoration_description'];
-        $document->inks_description = $fields['inks_description'];
-        $document->cover_description = $fields['cover_description'];
-        $document->punctuation_description = $fields['punctuation_description'];
-        $document->critical_symbols_description = $fields['critical_symbols_description'];
-        $document->pagination_description = $fields['pagination_description'];
-        $document->quire_signatures_description = $fields['quire_signatures_description'];
-        $document->pagination_id = $fields['pagination_id'];
-        $document->cover_id = $fields['cover_id'];
-        $document->quire_signature_id = $fields['quire_signature_id'];
-        $document->quire_structure_id = $fields['quire_structure_id'];
-        if ($fields['quire_structure_id'] == 1) {
-            $fields['quire_number'] = 1;
-            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
-        } elseif ($fields['quire_structure_id'] == 2) {
-            $fields['bifolia'] = array_slice($fields['bifolia'], 0, $fields['quire_number']);
-        } elseif ($fields['quire_structure_id'] == 3) {
-            $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
-        } else {
-            $fields['quire_number'] = null;
-            $fields['bifolia'] = ["1"];
-        }
-        $document->quire_number = $fields['quire_number'];
-        $document->bifolia = $fields['bifolia'];
-        $document->quire_comment = $fields['quire_comment'];
-        $document->binding_description = $fields['binding_description'];
-        $document->storage_condition_id = $fields['storage_condition_id'];
-        $document->conservation_history = $fields['conservation_history'];
-        $document->analyses_comment = $fields['analyses_comment'];
-        $document->ancient_provenance_id = $fields['ancient_provenance_id'];
-        $document->ancient_provenance_certainty_id = $fields['ancient_provenance_certainty_id'];
-        $document->ancient_provenance_comment = $fields['ancient_provenance_comment'];
-        $document->scientifically_excavated = $fields['scientifically_excavated'];
-        $document->excavation_comment = $fields['excavation_comment'];
-        $document->legal_classification_id = $fields['legal_classification_id'];
-        $document->legal_classification_explanation = $fields['legal_classification_explanation'];
-        $document->images_info = $fields['images_info'];
-
-        $document->languages()->sync(array_column($fields['languages'], 'id'));
-        $document->scripts()->sync(array_column($fields['scripts'], 'id'));
-        $document->paratexts()->sync(array_column($fields['paratexts'], 'id'));
-        $document->diacritics()->sync(array_column($fields['diacritics'], 'id'));
-        $document->punctuations()->sync(array_column($fields['punctuations'], 'id'));
-        $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
-        $document->decorations()->sync(array_column($fields['decorations'], 'id'));
-        $document->analyses()->sync(array_column($fields['analyses'], 'id'));
-        $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
-        $document->purchases()->sync(array_column($fields['purchases'], 'id'));
-        $document->tags()->sync(array_column($fields['tags'], 'id'));
-        $document->genres()->sync(array_column($fields['genres'], 'id'));
-        $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
-        $document->inks()->sync(array_column($fields['inks'], 'id'));
-
-        $document->save();
-
-        foreach ($img_fields['images'] as $fields) {
- 
-            $image = Image::find($fields['id']);
-
-            $image->description = $fields['description'];
-            $image->micrograph = $fields['micrograph'];
-            $image->license_id = $fields['license_id'];
-            $image->source = $fields['source'];
-            $image->save();
-        }
 
         return Inertia::render('CodexEdit', [
             'document' => $document,
