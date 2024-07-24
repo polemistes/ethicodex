@@ -13,7 +13,7 @@ use App\Models\DatingMethod;
 use App\Models\AncientProvenance;
 use App\Models\AncientProvenanceCertainty;
 use App\Models\Cover;
-use App\Models\PurchaseParty;
+use App\Models\TransactionParty;
 use App\Models\Decoration;
 use App\Models\FirstProcurement;
 use App\Models\Genre;
@@ -24,7 +24,7 @@ use App\Models\Material;
 use App\Models\ModernCollection;
 use App\Models\Pagination;
 use App\Models\Paratext;
-use App\Models\Purchase;
+use App\Models\Transaction;
 use App\Models\QuireSignature;
 use App\Models\QuireStructure;
 use App\Models\Script;
@@ -748,34 +748,34 @@ class DocumentController extends Controller
                             $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
                         })
                         ->when($transactions && !$transactions_incl, function ($query) use ($transactions) {
-                            $query->whereHas('purchases', function ($query) use ($transactions) {
-                                $query->whereIn('purchases.id', array_column($transactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($transactions) {
+                                $query->whereIn('transactions.id', array_column($transactions, 'id'));
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
                             foreach($transactions as $transaction) {                                
-                                $query->whereHas('purchases', function($query) use ($transaction) {
-                                    $query->where('purchases.id', '=', $transaction['id']);
+                                $query->whereHas('transactions', function($query) use ($transaction) {
+                                    $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
                         }) 
 
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            $tactions = Purchase::query()
-                                ->whereHas('purchase_parties', function ($query) use ($transaction_parties) {
-                                    $query->whereIn('purchase_parties.id', array_column($transaction_parties, 'id'));
+                            $tactions = Transaction::query()
+                                ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
+                                    $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
                                 })->get()->all();
-                            $query->whereHas('purchases', function ($query) use ($tactions) {
-                                $query->whereIn('purchases.id', array_column($tactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($tactions) {
+                                $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
 
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
                             
-                            $query->whereHas('purchases', function ($query) use ($transaction_parties) {
+                            $query->whereHas('transactions', function ($query) use ($transaction_parties) {
                                 foreach($transaction_parties as $transaction_party) {
-                                    $query->whereHas('purchase_parties', function ($query) use ($transaction_party) {
-                                        $query->where('purchase_parties.id', '=', $transaction_party['id']);
+                                    $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
+                                        $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
                                 }
                             });
@@ -816,7 +816,7 @@ class DocumentController extends Controller
             'paginations' => Pagination::all(),
             'paratexts' => Paratext::all(),
             'punctuations' => Punctuation::all(),
-            'purchases' => Purchase::all(),
+            'transactions' => Transaction::all(),
             'quire_signatures' => QuireSignature::all(),
             'quire_structures' => QuireStructure::all(),
             'scripts' => Script::all(),
@@ -824,8 +824,8 @@ class DocumentController extends Controller
             'tags' => Tag::all(),
             'ancient_provenances' => AncientProvenance::all(),
             'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
-            'transactions' => Purchase::all(),
-            'transaction_parties' => PurchaseParty::all(),
+            'transactions' => Transaction::all(),
+            'transaction_parties' => TransactionParty::all(),
 
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
@@ -1627,34 +1627,34 @@ class DocumentController extends Controller
                             $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
                         })
                         ->when($transactions && !$transactions_incl, function ($query) use ($transactions) {
-                            $query->whereHas('purchases', function ($query) use ($transactions) {
-                                $query->whereIn('purchases.id', array_column($transactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($transactions) {
+                                $query->whereIn('transactions.id', array_column($transactions, 'id'));
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
                             foreach($transactions as $transaction) {                                
-                                $query->whereHas('purchases', function($query) use ($transaction) {
-                                    $query->where('purchases.id', '=', $transaction['id']);
+                                $query->whereHas('transactions', function($query) use ($transaction) {
+                                    $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
                         }) 
 
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            $tactions = Purchase::query()
-                                ->whereHas('purchase_parties', function ($query) use ($transaction_parties) {
-                                    $query->whereIn('purchase_parties.id', array_column($transaction_parties, 'id'));
+                            $tactions = Transaction::query()
+                                ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
+                                    $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
                                 })->get()->all();
-                            $query->whereHas('purchases', function ($query) use ($tactions) {
-                                $query->whereIn('purchases.id', array_column($tactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($tactions) {
+                                $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
 
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
                             
-                            $query->whereHas('purchases', function ($query) use ($transaction_parties) {
+                            $query->whereHas('transactions', function ($query) use ($transaction_parties) {
                                 foreach($transaction_parties as $transaction_party) {
-                                    $query->whereHas('purchase_parties', function ($query) use ($transaction_party) {
-                                        $query->where('purchase_parties.id', '=', $transaction_party['id']);
+                                    $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
+                                        $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
                                 }
                             });
@@ -1716,8 +1716,8 @@ class DocumentController extends Controller
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
-            'purchases' => $document->purchases()
-                                        ->with('purchase_parties')->with('documents')->get()
+            'transactions' => $document->transactions()
+                                        ->with('transaction_parties')->with('documents')->get()
                                         ->sortBy('year')
                                         ->sortBy('month')
                                         ->sortBy('day')                                
@@ -2497,34 +2497,34 @@ class DocumentController extends Controller
                             $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
                         })
                         ->when($transactions && !$transactions_incl, function ($query) use ($transactions) {
-                            $query->whereHas('purchases', function ($query) use ($transactions) {
-                                $query->whereIn('purchases.id', array_column($transactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($transactions) {
+                                $query->whereIn('transactions.id', array_column($transactions, 'id'));
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
                             foreach($transactions as $transaction) {                                
-                                $query->whereHas('purchases', function($query) use ($transaction) {
-                                    $query->where('purchases.id', '=', $transaction['id']);
+                                $query->whereHas('transactions', function($query) use ($transaction) {
+                                    $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
                         }) 
 
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            $tactions = Purchase::query()
-                                ->whereHas('purchase_parties', function ($query) use ($transaction_parties) {
-                                    $query->whereIn('purchase_parties.id', array_column($transaction_parties, 'id'));
+                            $tactions = Transaction::query()
+                                ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
+                                    $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
                                 })->get()->all();
-                            $query->whereHas('purchases', function ($query) use ($tactions) {
-                                $query->whereIn('purchases.id', array_column($tactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($tactions) {
+                                $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
 
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
                             
-                            $query->whereHas('purchases', function ($query) use ($transaction_parties) {
+                            $query->whereHas('transactions', function ($query) use ($transaction_parties) {
                                 foreach($transaction_parties as $transaction_party) {
-                                    $query->whereHas('purchase_parties', function ($query) use ($transaction_party) {
-                                        $query->where('purchase_parties.id', '=', $transaction_party['id']);
+                                    $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
+                                        $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
                                 }
                             });
@@ -2562,7 +2562,7 @@ class DocumentController extends Controller
                 $savedprev = $doc['id'];
             }
 
-        $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
+        $transactions_all = DB::table('transactions')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
         return (Inertia::render('CodexEdit', [
             'document' => $document,
@@ -2604,12 +2604,12 @@ class DocumentController extends Controller
             'paratexts_all' => Paratext::all(),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'punctuations_all' => Punctuation::all(),
-            'purchases' => $document->purchases()
+            'transactions' => $document->transactions()
                                             ->get()->makeHidden('pivot')
                                             ->sortBy('year')
                                             ->sortBy('month')
                                             ->sortBy('day'),
-            'purchases_all' => $purchases_all,
+            'transactions_all' => $transactions_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structures' => QuireStructure::all(),
@@ -2797,7 +2797,7 @@ class DocumentController extends Controller
             'modern_collections' => 'nullable',
             'legal_classification_id' => 'nullable',
             'legal_classification_explanation' => 'nullable',
-            'purchases' => 'nullable',
+            'transactions' => 'nullable',
             'images_info' => 'nullable',
             'images' => 'nullable',
         ]);
@@ -2889,7 +2889,7 @@ class DocumentController extends Controller
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));
         $document->analyses()->sync(array_column($fields['analyses'], 'id'));
         $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
-        $document->purchases()->sync(array_column($fields['purchases'], 'id'));
+        $document->transactions()->sync(array_column($fields['transactions'], 'id'));
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
@@ -3584,34 +3584,34 @@ class DocumentController extends Controller
                             $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
                         })
                         ->when($transactions && !$transactions_incl, function ($query) use ($transactions) {
-                            $query->whereHas('purchases', function ($query) use ($transactions) {
-                                $query->whereIn('purchases.id', array_column($transactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($transactions) {
+                                $query->whereIn('transactions.id', array_column($transactions, 'id'));
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
                             foreach($transactions as $transaction) {                                
-                                $query->whereHas('purchases', function($query) use ($transaction) {
-                                    $query->where('purchases.id', '=', $transaction['id']);
+                                $query->whereHas('transactions', function($query) use ($transaction) {
+                                    $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
                         }) 
 
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            $tactions = Purchase::query()
-                                ->whereHas('purchase_parties', function ($query) use ($transaction_parties) {
-                                    $query->whereIn('purchase_parties.id', array_column($transaction_parties, 'id'));
+                            $tactions = Transaction::query()
+                                ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
+                                    $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
                                 })->get()->all();
-                            $query->whereHas('purchases', function ($query) use ($tactions) {
-                                $query->whereIn('purchases.id', array_column($tactions, 'id'));
+                            $query->whereHas('transactions', function ($query) use ($tactions) {
+                                $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
 
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
                             
-                            $query->whereHas('purchases', function ($query) use ($transaction_parties) {
+                            $query->whereHas('transactions', function ($query) use ($transaction_parties) {
                                 foreach($transaction_parties as $transaction_party) {
-                                    $query->whereHas('purchase_parties', function ($query) use ($transaction_party) {
-                                        $query->where('purchase_parties.id', '=', $transaction_party['id']);
+                                    $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
+                                        $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
                                 }
                             });
@@ -3650,7 +3650,7 @@ class DocumentController extends Controller
                 $savedprev = $doc['id'];
             }
 
-        $purchases_all = DB::table('purchases')->orderBy('year')->orderBy('month')->orderBy('day')->get();
+        $transactions_all = DB::table('transactions')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
         return Inertia::render('CodexEdit', [
             'document' => $document,
@@ -3692,12 +3692,12 @@ class DocumentController extends Controller
             'paratexts_all' => Paratext::all(),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'punctuations_all' => Punctuation::all(),
-            'purchases' => $document->purchases()
+            'transactions' => $document->transactions()
                                             ->get()->makeHidden('pivot')
                                             ->sortBy('year')
                                             ->sortBy('month')
                                             ->sortBy('day'),
-            'purchases_all' => $purchases_all,
+            'transactions_all' => $transactions_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structures' => QuireStructure::all(),

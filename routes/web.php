@@ -6,8 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\PurchasePartyController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionPartyController;
 use App\Http\Controllers\ModernCollectionController;
 
 use App\Models\User;
@@ -46,19 +46,19 @@ Route::get('/codex_new', [DocumentController::class, 'create']);
 Route::post('/codex_store', [DocumentController::class, 'store']);
 Route::post('/codex_delete/{document}', [DocumentController::class, 'destroy']);
 
-Route::get('/purchases', [PurchaseController::class, 'index'])->name('Purchases');
-Route::get('/purchase_edit/{purchase}', [PurchaseController::class, 'edit'])->name('PurchaseEdit');
-Route::post('/purchase_update/{purchase}', [PurchaseController::class, 'update']);
-Route::post('/purchase_new', [PurchaseController::class, 'create']);
-Route::post('/purchase_store', [PurchaseController::class, 'store']);
-Route::post('/purchase_delete/{purchase}', [PurchaseController::class, 'destroy']);
+Route::get('/transactions', [TransactionController::class, 'index'])->name('Transactions');
+Route::get('/transaction_edit/{transaction}', [TransactionController::class, 'edit'])->name('TransactionEdit');
+Route::post('/transaction_update/{transaction}', [TransactionController::class, 'update']);
+Route::post('/transaction_new', [TransactionController::class, 'create']);
+Route::post('/transaction_store', [TransactionController::class, 'store']);
+Route::post('/transaction_delete/{transaction}', [TransactionController::class, 'destroy']);
 
-Route::get('/purchase_parties', [PurchasePartyController::class, 'index'])->name('PurchaseParties');
-Route::get('/purchase_party_edit/{purchaseParty}', [PurchasePartyController::class, 'edit'])->name('PurchasePartyEdit');
-Route::post('/purchase_party_update/{purchaseParty}', [PurchasePartyController::class, 'update']);
-Route::post('/purchase_party_new', [PurchasePartyController::class, 'create']);
-Route::post('/purchase_party_store', [PurchasePartyController::class, 'store']);
-Route::post('/purchase_party_delete/{purchaseParty}', [PurchasePartyController::class, 'destroy']);
+Route::get('/transaction_parties', [TransactionPartyController::class, 'index'])->name('TransactionParties');
+Route::get('/transaction_party_edit/{transactionParty}', [TransactionPartyController::class, 'edit'])->name('TransactionPartyEdit');
+Route::post('/transaction_party_update/{transactionParty}', [TransactionPartyController::class, 'update']);
+Route::post('/transaction_party_new', [TransactionPartyController::class, 'create']);
+Route::post('/transaction_party_store', [TransactionPartyController::class, 'store']);
+Route::post('/transaction_party_delete/{transactionParty}', [TransactionPartyController::class, 'destroy']);
 
 Route::get('/modern_collections', [ModernCollectionController::class, 'index'])->name('ModernCollections');
 Route::get('/modern_collection_edit/{modernCollection}', [ModernCollectionController::class, 'edit'])->name('ModernCollectionEdit');

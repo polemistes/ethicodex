@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\PurchaseParty;
+use App\Models\TransactionParty;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PurchasePartyPolicy
+class TransactionPartyPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class PurchasePartyPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\PurchaseParty  $purchaseParty
+     * @param  \App\Models\TransactionParty  $transactionParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, PurchaseParty $purchaseParty)
+    public function view(User $user, TransactionParty $transactionParty)
     {
         return $user->role->id >= 2;
     }
@@ -48,10 +48,10 @@ class PurchasePartyPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\PurchaseParty  $purchaseParty
+     * @param  \App\Models\TransactionParty  $transactionParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, PurchaseParty $purchaseParty)
+    public function update(User $user, TransactionParty $transactionParty)
     {
         return $user->role->id >= 2;
     }
@@ -60,10 +60,10 @@ class PurchasePartyPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\PurchaseParty  $purchaseParty
+     * @param  \App\Models\TransactionParty  $transactionParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, PurchaseParty $purchaseParty)
+    public function delete(User $user, TransactionParty $transactionParty)
     {
         return $user->role->id >= 2;
     }
@@ -72,10 +72,10 @@ class PurchasePartyPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\PurchaseParty  $purchaseParty
+     * @param  \App\Models\TransactionParty  $transactionParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, PurchaseParty $purchaseParty)
+    public function restore(User $user, TransactionParty $transactionParty)
     {
         return $user->role->id >= 2;
     }
@@ -84,10 +84,10 @@ class PurchasePartyPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\PurchaseParty  $purchaseParty
+     * @param  \App\Models\TransactionParty  $transactionParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, PurchaseParty $purchaseParty)
+    public function forceDelete(User $user, TransactionParty $transactionParty)
     {
         return $user->role->id >= 2;
     }

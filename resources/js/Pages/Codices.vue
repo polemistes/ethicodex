@@ -972,7 +972,7 @@ const props = defineProps({
     paginations: Array,
     paratexts: Array,
     punctuations: Array,
-    purchases: Array,
+    transactions: Array,
     quire_signatures: Array,
     quire_structures: Array,
     scripts: Array,

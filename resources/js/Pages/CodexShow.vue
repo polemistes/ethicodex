@@ -845,15 +845,15 @@
                 <div class="show_transactions">
                     <label>Transactions</label>
                     <div
-                        v-for="purchase in purchases"
-                        :key="purchase.id"
+                        v-for="transaction in transactions"
+                        :key="transaction.id"
                         class="showcodex_multi_stack"
                     >
-                        <button @click="seltrans = (JSON.stringify(seltrans) === JSON.stringify(purchase)) ? {} : purchase">Info</button>
-                        {{ purchase.name }} ({{
-                            purchase.year +
-                            (purchase.month ? "-" + purchase.month : "") +
-                            (purchase.day ? "-" + purchase.day : "")
+                        <button @click="seltrans = (JSON.stringify(seltrans) === JSON.stringify(transaction)) ? {} : transaction">Info</button>
+                        {{ transaction.name }} ({{
+                            transaction.year +
+                            (transaction.month ? "-" + transaction.month : "") +
+                            (transaction.day ? "-" + transaction.day : "")
                         }})
                     </div>
                 </div>
@@ -905,7 +905,7 @@
                             </p>
                             <h2>Parties to the Transaction</h2>
                             <p
-                                v-for="party in seltrans.purchase_parties"
+                                v-for="party in seltrans.transaction_parties"
                                 :key="party.id"
                                 :title="party.description"
                             >
@@ -994,7 +994,7 @@ const props = defineProps({
     pagination: Array,
     paratexts: Array,
     punctuations: Array,
-    purchases: Array,
+    transactions: Array,
     quire_signature: Array,
     quire_structure: Array,
     scripts: Array,

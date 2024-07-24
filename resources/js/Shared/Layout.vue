@@ -37,14 +37,14 @@
                             !pagename.includes('part'),
                     }"
                 >
-                    <Link href="/purchases">Transactions</Link>
+                    <Link href="/transactions">Transactions</Link>
                 </li>
 
                 <li
                     v-if="editor"
                     :class="{ lo_active: pagename.includes('part') }"
                 >
-                    <Link href="/purchase_parties">Transaction Parties</Link>
+                    <Link href="/transaction_parties">Transaction Parties</Link>
                 </li>
 
                 <li

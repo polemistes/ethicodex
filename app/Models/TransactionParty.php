@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseParty extends Model
+class TransactionParty extends Model
 {
     use HasFactory;
     protected $guarded = [];
 
-    public function purchases()
+    public function transactions()
     {
-        return $this->belongsToMany(Purchase::class)->withPivot('party_role')->with('documents');
+        return $this->belongsToMany(Transaction::class)->withPivot('party_role')->with('documents');
     }
 }

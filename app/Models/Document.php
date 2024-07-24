@@ -35,19 +35,19 @@ class Document extends Model
         return $this->belongsToMany(Analysis::class);
     }
 
-    public function purchases()
+    public function transactions()
     {
-        return $this->belongsToMany(Purchase::class);
+        return $this->belongsToMany(Transaction::class);
     }
 
-    public function purchase_parties()
+    public function transaction_parties()
     {
-        $purchases = $this->purchases()->with('purchase_parties')->get();
-        $purchases = Purchase::$purchase_parties = (array) null;
-        foreach ($purchases as $purchase) {
-            $purchase_parties = array_merge($purchase_parties, $purchase->relations->purchase_parties->items);
+        $transactions = $this->transactions()->with('transaction_parties')->get();
+  //      $transactions = Transaction::$transaction_parties = (array) null;
+        foreach ($transactions as $transaction) {
+            $transaction_parties = array_merge($transaction_parties, $transaction->relations->transaction_parties->items);
         }
-        return $purchase_parties;
+        return $transaction_parties;
     }
 
     public function ancient_provenance()

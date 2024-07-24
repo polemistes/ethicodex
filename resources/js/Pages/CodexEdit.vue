@@ -903,10 +903,10 @@
 
                 <div class="edit_transactions">
                     <EthInput
-                        input_type="purchases_choice"
-                        input_id="purchases"
-                        :choices="purchases_all"
-                        v-model="form.purchases"
+                        input_type="transactions_choice"
+                        input_id="transactions"
+                        :choices="transactions_all"
+                        v-model="form.transactions"
                     >
                         Transactions
                     </EthInput>
@@ -1067,8 +1067,8 @@ const props = defineProps({
     published: Boolean,
     punctuations: Array,
     punctuations_all: Array,
-    purchases: Array,
-    purchases_all: Array,
+    transactions: Array,
+    transactions_all: Array,
     quire_signature: Array,
     quire_signatures: Array,
     quire_structure: Object,
@@ -1266,7 +1266,7 @@ const form = useForm("EditCodex", {
     legal_classification_id: props.document.legal_classification_id,
     legal_classification_explanation:
         props.document.legal_classification_explanation,
-    purchases: props.purchases,
+    transactions: props.transactions,
     images_info: props.document.images_info,
     images: props.images,
 

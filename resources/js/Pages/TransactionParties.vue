@@ -2,7 +2,7 @@
     <div class="pageline">
         <Link
             class="addbutton"
-            href="/purchase_party_new"
+            href="/transaction_party_new"
             method="post"
             as="button"
         >
@@ -19,19 +19,19 @@
         <div class="par_sixth"><b>Codices</b></div>
     </div>
     <div
-        v-for="purchase_party in purchase_parties"
-        :key="purchase_party.id"
+        v-for="transaction_party in transaction_parties"
+        :key="transaction_party.id"
         class="partycontainer"
     >
         <div class="par_first cod_buttons" v-if="edit">
             <Link
-                :href="'/purchase_party_edit/' + purchase_party.id"
+                :href="'/transaction_party_edit/' + transaction_party.id"
                 as="button"
                 style="margin-right: 1em; padding: 0.3em 0.5em"
                 >Edit
             </Link>
             <Link
-                :href="'/purchase_party_delete/' + purchase_party.id"
+                :href="'/transaction_party_delete/' + transaction_party.id"
                 as="button"
                 style="margin-right: 1em; padding: 0.3em 0.5em"
                 onclick="return confirm('Are you sure you want to delete this Transaction Party?')"
@@ -39,19 +39,19 @@
                 >Delete</Link
             >
         </div>
-        <div class="par_second">{{ purchase_party.name }}</div>
-        <div class="par_third" v-html="purchase_party.description" />
+        <div class="par_second">{{ transaction_party.name }}</div>
+        <div class="par_third" v-html="transaction_party.description" />
         <div class="par_fourth">
-            {{ purchase_party.institution ? "Institution" : "Person" }}
+            {{ transaction_party.institution ? "Institution" : "Person" }}
         </div>
         <div class="par_fifth">
             <ul>
                 <span
-                    v-for="purchase in purchase_party.purchases"
-                    :key="purchase.id"
+                    v-for="transaction in transaction_party.transactions"
+                    :key="transaction.id"
                 >
                     <li>
-                        {{ purchase.name }} ({{ purchase.pivot.party_role }})
+                        {{ transaction.name }} ({{ transaction.pivot.party_role }})
                     </li>
                 </span>
             </ul>
@@ -59,7 +59,7 @@
         <div class="par_sixth">
             <ul>
                 <span
-                    v-for="document in documents[purchase_party.id]"
+                    v-for="document in documents[transaction_party.id]"
                     :key="document.id"
                 >
                     <li>
@@ -78,21 +78,21 @@ import { ref, watch } from "vue";
 import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
-    purchase_parties: Array,
+    transaction_parties: Array,
     auth: Object,
 });
 
 let documents = [];
-for (const purchase_party of props.purchase_parties) {
-    documents[purchase_party.id] = [];
-    for (const purchase of purchase_party.purchases) {
-        for (const document of purchase.documents) {
+for (const transaction_party of props.transaction_parties) {
+    documents[transaction_party.id] = [];
+    for (const transaction of transaction_party.transactions) {
+        for (const document of transaction.documents) {
             if (
-                documents[purchase_party.id].find(
+                documents[transaction_party.id].find(
                     (x) => x.id === document.id
                 ) === undefined
             ) {
-                documents[purchase_party.id].push(document);
+                documents[transaction_party.id].push(document);
             }
         }
     }

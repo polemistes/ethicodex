@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Purchase extends Model
+class Transaction extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -15,9 +15,9 @@ class Purchase extends Model
         return $this->belongsToMany(Document::class);
     }
 
-    public function purchase_parties()
+    public function transaction_parties()
     {
-        return $this->belongsToMany(PurchaseParty::class)->withPivot('party_role');
+        return $this->belongsToMany(TransactionParty::class)->withPivot('party_role');
     }
 
 }

@@ -325,7 +325,7 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'purchases_choice'" class="inputfield">
+    <div v-if="input_type == 'transactions_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
         <button
             :id="input_id"

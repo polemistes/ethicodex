@@ -1,81 +1,49 @@
 <template>
     <form @submit.prevent="submit" class="mainstyle">
-        <input type="hidden" input_id="id" v-model="form.id" />
         <div class="maincontainer">
-            <fieldset class="transaction_grid">
-                <legend class="sectionheading">Add Transaction</legend>
+            <fieldset class="party_partygrid">
+                <legend class="sectionheading">Edit Transaction Party</legend>
 
-                <div class="trans_year">
-                    <EthInput
-                        input_type="number"
-                        input_id="year"
-                        v-model="form.year"
-                        >Year</EthInput
-                    >
-                </div>
-
-                <div class="trans_month">
-                    <EthInput
-                        input_type="number"
-                        input_id="month"
-                        minimum="1"
-                        maximum="12"
-                        v-model="form.month"
-                        >Month</EthInput
-                    >
-                </div>
-
-                <div class="trans_day">
-                    <EthInput
-                        input_type="number"
-                        input_id="day"
-                        minumum="1"
-                        maximum="12"
-                        v-model="form.day"
-                        >Day</EthInput
-                    >
-                </div>
-
-                <div class="trans_transaction">
+                <div class="party_transparty">
                     <EthInput
                         input_type="text"
                         input_id="name"
                         v-model="form.name"
-                        >Transaction</EthInput
+                        >Transaction Party</EthInput
                     >
                 </div>
-
-                <div class="trans_transdesc">
+                <div class="party_partydesc">
                     <EthInput
                         input_type="textarea"
                         input_id="description"
                         v-model="form.description"
-                        >Description</EthInput
+                        >Description of Transaction Party</EthInput
                     >
                 </div>
 
-                <div class="trans_transbiblio">
-                    <EthInput
-                        input_type="textarea"
-                        input_id="bibliography"
-                        v-model="form.bibliography"
-                        >Bibliography</EthInput
+                <div class="party_institution">
+                    <label
+                        for="institution"
+                        style="font-size: 18px; font-weight: 'bold'"
+                        >Institution</label
                     >
+
+                    <input
+                        id="institution"
+                        type="checkbox"
+                        style="
+                            margin-right: auto;
+                            margin-left: 35px;
+                            margin-top: 10px;
+                            transform: scale(1.5);
+                        "
+                        :value="form.institution"
+                        v-model="form.institution"
+                    />
                 </div>
 
-                <div class="trans_docs">
-                    <EthInput
-                        input_type="document_choice"
-                        input_id="documents"
-                        :choices="documents_all"
-                        v-model="form.documents"
-                    >
-                        Documents in Transaction
-                    </EthInput>
-                </div>
-
-                <div class="trans_parties">
-                    <label :for="input_id">Parties to the Transaction</label>
+                <div class="party_transactions">
+                    <label :for="input_id">Transactions</label>
                     <button
                         @click.prevent="dropdown = !dropdown"
                         class="dropdownbutton"
@@ -85,7 +53,7 @@
                     </button>
 
                     <div v-if="dropdown" class="dropdown-content">
-                        <div v-if="all_purchase_parties.length > 12">
+                        <div v-if="all_transactions.length > 12">
                             <label :for="search">Search:</label>
                             <input type="text" v-model="search" />
                         </div>
@@ -99,14 +67,14 @@
                                     type="checkbox"
                                     :id="choice.id"
                                     :value="choice"
-                                    v-model="form.purchase_parties"
+                                    v-model="form.transactions"
                                     style="margin-right: 5px"
                                 />
                                 <label>{{ choice.name }}</label>
 
                                 <select
                                     v-if="
-                                        form.purchase_parties.some(
+                                        form.transactions.some(
                                             (e) => e.id === choice.id
                                         )
                                     "
@@ -130,31 +98,29 @@
                             </div>
                             <button
                                 @click.prevent="dropdown = false"
-                                class="dropdownbutton"
+                                class="closemenubutton"
                             >
                                 Close
                             </button>
                         </div>
                     </div>
-                    <div class="choicelist">
+                    <div class="choicelist-stack">
                         <span
-                            v-for="party in form.purchase_parties"
-                            :key="party.id"
+                            v-for="transaction in form.transactions"
+                            :key="transaction.id"
                             class="choiceelement"
-                            :title="party.description"
                         >
                             <button
-                                @click.prevent="removeparty(party)"
+                                @click.prevent="removetransaction(transaction)"
                                 class="removebutton"
                             >
                                 ✕
                             </button>
-                            {{ party.name }}
+                            {{ transaction.name }}
                         </span>
                     </div>
                 </div>
             </fieldset>
-
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
@@ -167,43 +133,39 @@
 
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed } from "vue";
 import EthInput from "../Components/EthInput.vue";
 import { useForm } from '@inertiajs/vue3'
 
-let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient", "Excavator"];
+let party_roles = ["Seller", "Buyer", "Broker", "Donor", "Recipient"];
 let dropdown = ref(false);
+let submitted = false;
 
 const props = defineProps({
-    documents_all: Array,
-    purchase_parties_all: Array,
+    transaction_party: Object,
+    transactions: Array,
+    transactions_all: Array,
     auth: Object,
 });
 
-const form = useForm("PurchaseNew", {
-    year: "",
-    month: "",
-    day: "",
-    name: "",
-    description: "",
-    bibliography: "",
-    documents: [],
-    purchase_parties: [],
-});
+const purch = [];
 
-const all_purchase_parties = reactive([]);
-
-for (let p of props.purchase_parties_all) {
-    all_purchase_parties.push({
+for (let p of props.transactions) {
+    purch.push({
         id: p.id,
+        year: p.year,
         name: p.name,
         description: p.description,
-        institution: p.institution,
-        party_role: form.purchase_parties.some((e) => e.id === p.id)
-            ? form.purchase_parties.find((item) => item.id === p.id).party_role
-            : null,
+        party_role: p.pivot.party_role,
     });
 }
+
+const form = useForm("PurcharsePartyEdit", {
+    name: props.transaction_party.name,
+    description: props.transaction_party.description,
+    institution: props.transaction_party.institution == 1 ? true : false,
+    transactions: purch,
+});
 
 let removeStartEventListener = router.on("before", (event) => {
     if (form.isDirty && !submitted) {
@@ -242,37 +204,50 @@ window.onpopstate = function (event) {
     }
 };
 
+const all_transactions = reactive([]);
+
+for (let p of props.transactions_all) {
+    all_transactions.push({
+        id: p.id,
+        year: p.year,
+        name: p.name,
+        description: p.description,
+        party_role: form.transactions.some((e) => e.id === p.id)
+            ? form.transactions.find((item) => item.id === p.id).party_role
+            : null,
+    });
+}
+
 let search = ref("");
-let submitted = false;
 
 const search_choices = computed(() => {
     return search.value != ""
-        ? all_purchase_parties.filter(function (el) {
+        ? all_transactions.filter(function (el) {
               return el.name != null ? el.name.includes(search.value) : null;
           })
-        : all_purchase_parties;
+        : all_transactions;
 });
 
 function changerole(id, value) {
-    const index1 = form.purchase_parties.findIndex((obj) => {
+    const index1 = form.transactions.findIndex((obj) => {
         return obj.id === id;
     });
-    const index2 = all_purchase_parties.findIndex((obj) => {
+    const index2 = all_transactions.findIndex((obj) => {
         return obj.id === id;
     });
-    form.purchase_parties[index1].party_role = value;
-    all_purchase_parties[index2].party_role = value;
+    form.transactions[index1].party_role = value;
+    all_transactions[index2].party_role = value;
 }
 
-function removeparty(choice) {
-    form.purchase_parties = form.purchase_parties.filter((obj) => {
+function removetransaction(choice) {
+    form.transactions = form.transactions.filter((obj) => {
         return obj.id !== choice.id;
     });
 }
 
 function submit() {
     submitted = true;
-    form.post(`/purchase_store`);
+    form.post(`/transaction_party_update/${props.transaction_party.id}`);
 }
 </script>
 
