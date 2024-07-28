@@ -1,8 +1,23 @@
 <template>
     <div class="pageline">
-        <Link class="addbutton" href="/transaction_new" method="post" as="button">
+        <Link
+            class="addbutton"
+            href="/transaction_new"
+            method="post"
+            as="button"
+        >
             Add Transaction
         </Link>
+        <div class="pageline_search_field">
+            <EthInput input_type="text" input_id="search" v-model="search">
+                Full-Text Search
+            </EthInput>
+        </div>
+
+        <div class="pageline_total_found">
+            <div style="padding-bottom: 8px; font-weight: bold">Found</div>
+            <div>{{ search_results.length }}</div>
+        </div>
     </div>
 
     <div class="transactioncontainer" style="background-color: #ccc">
@@ -14,7 +29,7 @@
         <div class="pur_sixth"><b>Parties</b></div>
     </div>
     <div
-        v-for="transaction in transactions"
+        v-for="transaction in search_results"
         :key="transaction.id"
         class="transactioncontainer"
     >
@@ -43,7 +58,10 @@
         <div class="pur_fourth" v-html="transaction.description" />
         <div class="pur_fifth">
             <ul>
-                <span v-for="document in transaction.documents" :key="document.id">
+                <span
+                    v-for="document in transaction.documents"
+                    :key="document.id"
+                >
                     <li>
                         <Link :href="'/codex_show/' + document.id">
                             {{ document.standard_name }}
@@ -70,12 +88,28 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { router } from '@inertiajs/vue3'
+import { ref, computed } from "vue";
+import { router } from "@inertiajs/vue3";
+import EthInput from "../Components/EthInput.vue";
+
+let search = ref("");
 
 const props = defineProps({
     transactions: Array,
     auth: Object,
+});
+
+const search_results = computed(() => {
+    return search.value != ""
+        ? props.transactions.filter(function (el) {
+              return (
+                  (el.name != null ? el.name.includes(search.value) : null) ||
+                  (el.description != null
+                      ? el.description.includes(search.value)
+                      : null)
+              );
+          })
+        : props.transactions;
 });
 
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);

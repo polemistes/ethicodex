@@ -195,7 +195,7 @@ class DocumentController extends Controller
             default:
                 $sortby = "start_year";
         }
-
+ 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
         $request->session()->put('reverse', $reverse);
@@ -792,6 +792,8 @@ class DocumentController extends Controller
         $ancient_provenances = $ancient_provenances_original;
 
         return Inertia::render('Codices', [
+            'documents' => $documents,
+
             'show_publication' => $show_publication == "true" ? true : false,
             'show_content' => $show_content == "true" ? true : false,
             'show_dating' => $show_dating == "true" ? true : false,
@@ -800,32 +802,6 @@ class DocumentController extends Controller
             'show_palaeography' => $show_palaeography == "true" ? true : false,
             'show_consanal' => $show_consanal == "true" ? true : false,
             'show_provenance' => $show_provenance == "true" ? true : false,
-            'documents' => $documents,
-            'analyses' => Analysis::all(),
-            'critical_symbols' => CriticalSymbol::all(),
-            'covers' => Cover::all(),
-            'dating_certainties' => DatingCertainty::all(),
-            'dating_methods' => DatingMethod::all(),
-            'decorations' => Decoration::all(),
-            'diacritics' => Diacritic::all(),
-            'genres' => Genre::all(),
-            'inks' => Ink::all(),
-            'languages' => Language::all(),
-            'legal_classifications' => LegalClassification::all(),
-            'materials' => Material::all(),
-            'paginations' => Pagination::all(),
-            'paratexts' => Paratext::all(),
-            'punctuations' => Punctuation::all(),
-            'transactions' => Transaction::all(),
-            'quire_signatures' => QuireSignature::all(),
-            'quire_structures' => QuireStructure::all(),
-            'scripts' => Script::all(),
-            'storage_conditions' => StorageCondition::all(),
-            'tags' => Tag::all(),
-            'ancient_provenances' => AncientProvenance::all(),
-            'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
-            'transactions' => Transaction::all(),
-            'transaction_parties' => TransactionParty::all(),
 
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
@@ -908,6 +884,32 @@ class DocumentController extends Controller
             'legal_classifications_search' => $legal_classifications,
             'sortfield' => $sortfield,
             'reverse' => $reverse,
+
+            'analyses' => Analysis::all(),
+            'critical_symbols' => CriticalSymbol::all(),
+            'covers' => Cover::all(),
+            'dating_certainties' => DatingCertainty::all(),
+            'dating_methods' => DatingMethod::all(),
+            'decorations' => Decoration::all(),
+            'diacritics' => Diacritic::all(),
+            'genres' => Genre::all(),
+            'inks' => Ink::all(),
+            'languages' => Language::all(),
+            'legal_classifications' => LegalClassification::all(),
+            'materials' => Material::all(),
+            'paginations' => Pagination::all(),
+            'paratexts' => Paratext::all(),
+            'punctuations' => Punctuation::all(),
+            'transactions' => Transaction::all(),
+            'quire_signatures' => QuireSignature::all(),
+            'quire_structures' => QuireStructure::all(),
+            'scripts' => Script::all(),
+            'storage_conditions' => StorageCondition::all(),
+            'tags' => Tag::all(),
+            'ancient_provenances' => AncientProvenance::all(),
+            'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
+            'transactions' => Transaction::all(),
+            'transaction_parties' => TransactionParty::all(),
         ]);
     }
 

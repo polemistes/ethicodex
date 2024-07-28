@@ -8,6 +8,16 @@
         >
             Add Transaction Party
         </Link>
+        <div class="pageline_search_field">
+            <EthInput input_type="text" input_id="search" v-model="search">
+                Full-Text Search
+            </EthInput>
+        </div>
+
+        <div class="pageline_total_found">
+            <div style="padding-bottom: 8px; font-weight: bold">Found</div>
+            <div>{{ search_results.length }}</div>
+        </div>
     </div>
 
     <div class="partycontainer" style="background-color: #ccc">
@@ -19,7 +29,7 @@
         <div class="par_sixth"><b>Codices</b></div>
     </div>
     <div
-        v-for="transaction_party in transaction_parties"
+        v-for="transaction_party in search_results"
         :key="transaction_party.id"
         class="partycontainer"
     >
@@ -51,7 +61,9 @@
                     :key="transaction.id"
                 >
                     <li>
-                        {{ transaction.name }} ({{ transaction.pivot.party_role }})
+                        {{ transaction.name }} ({{
+                            transaction.pivot.party_role
+                        }})
                     </li>
                 </span>
             </ul>
@@ -74,15 +86,18 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { router } from '@inertiajs/vue3'
+import { ref, computed } from "vue";
+import { router } from "@inertiajs/vue3";
+import EthInput from "../Components/EthInput.vue";
 
 const props = defineProps({
     transaction_parties: Array,
     auth: Object,
 });
 
+let search = ref("");
 let documents = [];
+
 for (const transaction_party of props.transaction_parties) {
     documents[transaction_party.id] = [];
     for (const transaction of transaction_party.transactions) {
@@ -97,6 +112,19 @@ for (const transaction_party of props.transaction_parties) {
         }
     }
 }
+
+const search_results = computed(() => {
+    return search.value != ""
+        ? props.transaction_parties.filter(function (el) {
+              return (
+                  (el.name != null ? el.name.includes(search.value) : null) ||
+                  (el.description != null
+                      ? el.description.includes(search.value)
+                      : null)
+              );
+          })
+        : props.transaction_parties;
+});
 
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 </script>

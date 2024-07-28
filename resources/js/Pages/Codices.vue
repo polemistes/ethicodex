@@ -956,6 +956,7 @@ import { useForm } from '@inertiajs/vue3'
 import EthInput from "../Components/EthInput.vue";
 
 const props = defineProps({
+    // The documents 
     documents: Object,
     analyses: Array,
     critical_symbols: Array,
@@ -991,7 +992,7 @@ const props = defineProps({
     show_palaeography: Boolean,
     show_consanal: Boolean,
     show_provenance: Boolean,
-
+ 
     fulltext: String,
     /* Publication */
     standard_name: String,
@@ -1259,7 +1260,7 @@ function gotopage(link) {
     
     form.post("/codices" + page, {
         queryStringArrayFormat: "indices",
-        preserveState: false,
+        preserveState: true,
         preserveScroll: true,
     });
 }
