@@ -302,7 +302,7 @@
                 v-model="form.s_quirenum_min"
                 @key-pressed="sendsearch()"
             >
-                Min Num of Quires
+                Min Quires
             </EthInput>
 
             <EthInput
@@ -311,7 +311,7 @@
                 v-model="form.s_quirenum_max"
                 @key-pressed="sendsearch()"
             >
-                Max Num of Quires
+                Max Quires
             </EthInput>
 
             <EthInput
@@ -320,7 +320,7 @@
                 v-model="form.s_bifolianum_min"
                 @key-pressed="sendsearch()"
             >
-                Min Num of Bifolia
+                Min Bifolia
             </EthInput>
 
             <EthInput
@@ -329,8 +329,19 @@
                 v-model="form.s_bifolianum_max"
                 @key-pressed="sendsearch()"
             >
-                Max Num of Bifolia
+                Max Bifolia
             </EthInput>
+
+            <EthInput
+                input_type="multi_choice_event"
+                input_id="gregorys_rules"
+                :choices="gregorys_rules"
+                v-model="form.s_gregorys_rules"
+                @new-change="sendsearch()"
+            >
+                Gregory's Rule
+            </EthInput>
+
         </div>
 
         <div v-if="form.show_measurement" class="searchblock-outer">
@@ -558,6 +569,46 @@
                     @key-pressed="sendsearch()"
                 >
                     Max In/Out Ratio
+                </EthInput>
+            </div>
+            <div style="padding-top: 20px;">
+                <hr/>
+            </div>
+            <div class="searchblock-inner">
+                <EthInput
+                    input_type="numberevent"
+                    input_id="columns_min"
+                    v-model="form.s_columns_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Columns
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="columns_max"
+                    v-model="form.s_columns_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Columns
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="columnlines_min"
+                    v-model="form.s_columnlines_min"
+                    @key-pressed="sendsearch()"
+                >
+                    Min Lines per Column
+                </EthInput>
+
+                <EthInput
+                    input_type="numberevent"
+                    input_id="columnlines_max"
+                    v-model="form.s_columnlines_max"
+                    @key-pressed="sendsearch()"
+                >
+                    Max Lines per Column
                 </EthInput>
             </div>
 
@@ -970,6 +1021,7 @@ const props = defineProps({
     languages: Array,
     legal_classifications: Array,
     materials: Array,
+    gregorys_rules: Array,
     paginations: Array,
     paratexts: Array,
     punctuations: Array,
@@ -1015,6 +1067,7 @@ const props = defineProps({
     dating_certainties_search: Array,
     /* Materiality */
     materials_search: Array,
+    gregorys_rules_search: Array,
     inks_search: Array,
     inks_incl: Boolean,
     covers_search: Array,
@@ -1048,6 +1101,10 @@ const props = defineProps({
     uplow_margins_ratio_max: Number,
     inout_margins_ratio_min: Number,
     inout_margins_ratio_max: Number,
+    columns_min: Number,
+    columns_max: Number,
+    columnlines_min: Number,
+    columnlines_max: Number,
     
     /* Palaeography */
     hand_number_min: Number,
@@ -1121,6 +1178,7 @@ const form = useForm({
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
+    s_gregorys_rules: props.gregorys_rules_search ? props.gregorys_rules_search : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
@@ -1156,6 +1214,10 @@ const form = useForm({
     s_uplow_margins_ratio_max: props.uplow_margins_ratio_max,
     s_inout_margins_ratio_min: props.inout_margins_ratio_min,
     s_inout_margins_ratio_max: props.inout_margins_ratio_max,
+    s_columns_min: props.columns_min,
+    s_columns_max: props.columns_max,
+    s_columnlines_min: props.columnlines_min,
+    s_columnlines_max: props.columnlines_max,
 
     /* Palaeography */
     s_hand_number_min: props.hand_number_min,

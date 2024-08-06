@@ -376,6 +376,13 @@
                     </div>
                 </div>
 
+                <div class="show_gregory">
+                    <label>Gregory's Rule</label>
+                    <div class="showcodex_string_short">
+                        {{ gregorys_rule.length > 0 ? gregorys_rule[0].name : "" }}
+                    </div>
+                </div>
+
                 <div class="show_bindingdesc">
                     <label>Description of Binding</label>
                     <div
@@ -405,6 +412,14 @@
                     <div
                         class="showcodex_text"
                         v-html="document.quire_comment"
+                    />
+                </div>
+
+                <div class="show_gregorycomm">
+                    <label>Comments on Gregory's Rule</label>
+                    <div
+                        class="showcodex_text"
+                        v-html="document.gregorys_rule_comment"
                     />
                 </div>
             </fieldset>
@@ -506,6 +521,20 @@
                         :divisor="document.full_text_block_height"
                         >Ratio</EthRatio
                     >
+                </div>
+
+                <div class="show_columns">
+                    <label>Number of Columns</label>
+                    <div class="showcodex_string_short">
+                        {{ document.columns }}
+                    </div>
+                </div>
+
+                <div class="show_columnlines">
+                    <label>Lines per Column</label>
+                    <div class="showcodex_string_short">
+                        {{ document.columnlines }}
+                    </div>
                 </div>
 
                 <div class="show_meascomm">
@@ -984,6 +1013,7 @@ const props = defineProps({
     diacritics: Array,
     document: Object,
     genres: Array,
+    gregorys_rule: Array,
     images: Array,
     inks: Array,
     languages: Array,
@@ -1032,6 +1062,7 @@ const props = defineProps({
     dating_certainties_search: Array,
     /* Materiality */
     materials_search: Array,
+    gregorys_rules_search: Array,
     inks_search: Array,
     inks_incl: Boolean,
     covers_search: Array,
@@ -1065,6 +1096,11 @@ const props = defineProps({
     uplow_margins_ratio_max: Number,
     inout_margins_ratio_min: Number,
     inout_margins_ratio_max: Number,
+    columns_min: Number,
+    columns_max: Number,
+    columnlines_min: Number,
+    columnlines_max: Number,
+
     /* Palaeography */
     hand_number_min: Number,
     hand_number_max: Number,
@@ -1144,6 +1180,7 @@ const form = useForm({
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
+    s_gregorys_rules: props.gregorys_rules_search ? props.gregorys_rules_search : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
@@ -1179,6 +1216,11 @@ const form = useForm({
     s_uplow_margins_ratio_max: props.uplow_margins_ratio_max,
     s_inout_margins_ratio_min: props.inout_margins_ratio_min,
     s_inout_margins_ratio_max: props.inout_margins_ratio_max,
+    s_columns_min: props.columns_min,
+    s_columns_max: props.columns_max,
+    s_columnlines_min: props.columnlines_min,
+    s_columnlines_max: props.columnlines_max,
+
     /* Palaeography */
     s_hand_number_min: props.hand_number_min,
     s_hand_number_max: props.hand_number_max,

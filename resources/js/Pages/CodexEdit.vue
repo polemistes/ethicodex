@@ -3,7 +3,7 @@
         <button
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab='general'"
+            @click="activetab = 'general'"
         >
             General Information
         </button>
@@ -11,7 +11,7 @@
         <button
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab='codicology'"
+            @click="activetab = 'codicology'"
         >
             Codicology
         </button>
@@ -19,25 +19,25 @@
         <button
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab='conservation'"
+            @click="activetab = 'conservation'"
         >
-        Conservation and Analysis
+            Conservation and Analysis
         </button>
 
         <button
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab='provenance'"
+            @click="activetab = 'provenance'"
         >
-        Provenance
+            Provenance
         </button>
 
         <button
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab='images'"
+            @click="activetab = 'images'"
         >
-        Images
+            Images
         </button>
     </div>
 
@@ -51,9 +51,7 @@
             Show Codex
         </button>
 
-        <div class="topbutton">
-            ({{ props.current }} of {{ props.total }})
-        </div>
+        <div class="topbutton">({{ props.current }} of {{ props.total }})</div>
 
         <button
             type="button"
@@ -74,7 +72,7 @@
         </button>
 
         <div class="nameheading">
-            {{document.standard_name}}
+            {{ document.standard_name }}
         </div>
 
         <input type="hidden" input_id="id" v-model="form.id" />
@@ -408,6 +406,17 @@
                     </div>
                 </div>
 
+                <div class="edit_gregory">
+                    <EthInput
+                        input_type="single_choice"
+                        input_id="gregorys_rule"
+                        :choices="gregorys_rules"
+                        v-model="form.gregorys_rule_id"
+                    >
+                        Gegory's Rule
+                    </EthInput>
+                </div>
+
                 <div class="edit_bindingdesc">
                     <EthInput
                         input_type="textarea"
@@ -438,6 +447,15 @@
                         input_id="quire_comment"
                         v-model="form.quire_comment"
                         >Comments on Quire(s)</EthInput
+                    >
+                </div>
+
+                <div class="edit_gregorycomm">
+                    <EthInput
+                        input_type="textarea"
+                        input_id="gregorys_rule_comment"
+                        v-model="form.gregorys_rule_comment"
+                        >Comments on Gregory's Rule</EthInput
                     >
                 </div>
             </fieldset>
@@ -499,95 +517,108 @@
                             >Ratio</EthRatio
                         >
                     </div>
-                    
-                    </template>
-                    <div class="edit_stable">
-                        <div>
-                            <label :for="textbox_size_stable"
-                                >Size of Textbox is Stable</label
-                            >
-                            <input
-                                :id="textbox_size_stable"
-                                type="checkbox"
-                                style="margin-left: 5px"
-                                v-model="form.textbox_size_stable"
-                            />
-                        </div>
+                </template>
+                <div class="edit_stable">
+                    <div>
+                        <label :for="textbox_size_stable"
+                            >Size of Textbox is Stable</label
+                        >
+                        <input
+                            :id="textbox_size_stable"
+                            type="checkbox"
+                            style="margin-left: 5px"
+                            v-model="form.textbox_size_stable"
+                        />
                     </div>
+                </div>
 
-                        <div class="edit_uppmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="upper_margin"
-                                v-model="form.upper_margin"
-                                >Upper Margin (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_lowmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="lower_margin"
-                                v-model="form.lower_margin"
-                                >Lower Margin (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_ulratio">
-                            <EthRatio
-                                :dividend="form.upper_margin"
-                                :divisor="form.lower_margin"
-                                >Ratio</EthRatio
-                            >
-                        </div>
+                <div class="edit_uppmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="upper_margin"
+                        v-model="form.upper_margin"
+                        >Upper Margin (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_lowmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="lower_margin"
+                        v-model="form.lower_margin"
+                        >Lower Margin (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_ulratio">
+                    <EthRatio
+                        :dividend="form.upper_margin"
+                        :divisor="form.lower_margin"
+                        >Ratio</EthRatio
+                    >
+                </div>
 
-                        <div class="edit_innmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="inner_margin"
-                                v-model="form.inner_margin"
-                                >Inner Margin (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_outmarg">
-                            <EthInput
-                                input_type="text"
-                                input_id="outer_margin"
-                                v-model="form.outer_margin"
-                                >Outer Margin (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_ioratio">
-                            <EthRatio
-                                :dividend="form.inner_margin"
-                                :divisor="form.outer_margin"
-                                >Ratio</EthRatio
-                            >
-                        </div>
+                <div class="edit_innmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="inner_margin"
+                        v-model="form.inner_margin"
+                        >Inner Margin (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_outmarg">
+                    <EthInput
+                        input_type="text"
+                        input_id="outer_margin"
+                        v-model="form.outer_margin"
+                        >Outer Margin (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_ioratio">
+                    <EthRatio
+                        :dividend="form.inner_margin"
+                        :divisor="form.outer_margin"
+                        >Ratio</EthRatio
+                    >
+                </div>
 
-                        <div class="edit_blockwidth">
-                            <EthInput
-                                input_type="text"
-                                input_id="full_text_block_width"
-                                v-model="form.full_text_block_width"
-                                >Full Text Block Width (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_blockheight">
-                            <EthInput
-                                input_type="text"
-                                input_id="full_text_block_height"
-                                v-model="form.full_text_block_height"
-                                >Full Text Block Height (cm)</EthInput
-                            >
-                        </div>
-                        <div class="edit_bratio">
-                            <EthRatio
-                                :dividend="form.full_text_block_width"
-                                :divisor="form.full_text_block_height"
-                                >Ratio</EthRatio
-                            >
-                        </div>
-        
-               
+                <div class="edit_blockwidth">
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_width"
+                        v-model="form.full_text_block_width"
+                        >Full Text Block Width (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_blockheight">
+                    <EthInput
+                        input_type="text"
+                        input_id="full_text_block_height"
+                        v-model="form.full_text_block_height"
+                        >Full Text Block Height (cm)</EthInput
+                    >
+                </div>
+                <div class="edit_bratio">
+                    <EthRatio
+                        :dividend="form.full_text_block_width"
+                        :divisor="form.full_text_block_height"
+                        >Ratio</EthRatio
+                    >
+                </div>
+                <div class="edit_columns">
+                    <EthInput
+                        input_type="text"
+                        input_id="columns"
+                        v-model="form.columns"
+                        >Number of Columns</EthInput
+                    >
+                </div>
+                <div class="edit_columnlines">
+                    <EthInput
+                        input_type="text"
+                        input_id="columnlines"
+                        v-model="form.columnlines"
+                        >Lines per Column</EthInput
+                    >
+                </div>
 
                 <div class="edit_meascomm">
                     <EthInput
@@ -940,19 +971,19 @@
                 </button>
 
                 <label class="labelpadding" for="images">Upload Images</label>
-               
-               <div>
-                <input
-                    :disabled="form.isDirty"
-                    type="file"
-                    @change="addimages($event.target.files)"
-                    multiple
-                    ref="loadImages"
-                />
 
-                <span v-if="form.isDirty">
-                    (Please store all changes to upload images.)
-                </span>
+                <div>
+                    <input
+                        :disabled="form.isDirty"
+                        type="file"
+                        @change="addimages($event.target.files)"
+                        multiple
+                        ref="loadImages"
+                    />
+
+                    <span v-if="form.isDirty">
+                        (Please store all changes to upload images.)
+                    </span>
                 </div>
 
                 <div class="codex_images_rows">
@@ -961,17 +992,24 @@
                         v-for="(image, index) in form.images"
                         :key="image.id"
                     >
-                            <a :href="'/storage/' + image.filename" target="_blank">
+                        <a :href="'/storage/' + image.filename" target="_blank">
+                            <div class="codex_image_container">
+                                <img :src="'/storage/' + image.filename" />
+                            </div>
+                        </a>
 
-                        <div class="codex_image_container">
-                                <img 
-                                :src="'/storage/' + image.filename"
-                                />
-                        </div>
-                            </a>
-                        
-                        <button v-if="!form.isDirty" @click.prevent="delimage(image)">Delete</button>
-                        <button v-if="form.isDirty" @click.prevent="delalert(image)">Delete</button>
+                        <button
+                            v-if="!form.isDirty"
+                            @click.prevent="delimage(image)"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            v-if="form.isDirty"
+                            @click.prevent="delalert(image)"
+                        >
+                            Delete
+                        </button>
 
                         <div>
                             <label>Micrograph</label>
@@ -1016,11 +1054,11 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3'
+import { router } from "@inertiajs/vue3";
 import { reactive, ref, onMounted, onUpdated } from "vue";
 import { createApp } from "vue";
 
-import { useForm } from '@inertiajs/vue3'
+import { useForm } from "@inertiajs/vue3";
 
 import EthInput from "../Components/EthInput.vue";
 import EthRatio from "../Components/EthRatio.vue";
@@ -1047,6 +1085,8 @@ const props = defineProps({
     document: Object,
     genres: Array,
     genres_all: Array,
+    gregorys_rule: Object,
+    gregorys_rules: Array,
     images: Array,
     inks_all: Array,
     inks: Array,
@@ -1111,6 +1151,7 @@ const props = defineProps({
     dating_certainties_search: Array,
     /* Materiality */
     materials_search: Array,
+    gregorys_rules_search: Array,
     inks_search: Array,
     inks_incl: Boolean,
     covers_search: Array,
@@ -1144,6 +1185,11 @@ const props = defineProps({
     uplow_margins_ratio_max: Number,
     inout_margins_ratio_min: Number,
     inout_margins_ratio_max: Number,
+    columns_min: Number,
+    columns_max: Number,
+    columnlines_min: Number,
+    columnlines_max: Number,
+
     /* Palaeography */
     hand_number_min: Number,
     hand_number_max: Number,
@@ -1227,6 +1273,8 @@ const form = useForm("EditCodex", {
     full_text_block_width: props.document.full_text_block_width,
     full_text_block_height: props.document.full_text_block_height,
     full_text_block_comment: props.document.full_text_block_comment,
+    columns: props.document.columns,
+    columnlines: props.document.columnlines,
     measurement_comment: props.document.measurement_comment,
     scripts: props.scripts,
     hand_number: props.document.hand_number,
@@ -1254,6 +1302,8 @@ const form = useForm("EditCodex", {
     bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],
     quire_comment: props.document.quire_comment,
     binding_description: props.document.binding_description,
+    gregorys_rule_id: props.document.gregorys_rule_id,
+    gregorys_rule_comment: props.document.gregorys_rule_comment,
     storage_condition_id: props.document.storage_condition_id,
     conservation_history: props.document.conservation_history,
     analyses: props.analyses,
@@ -1278,7 +1328,7 @@ const form = useForm("EditCodex", {
     show_palaeography: props.show_palaeography,
     show_consanal: props.show_consanal,
     show_provenance: props.show_provenance,
-  
+
     /* Search Fields */
     fulltext: props.fulltext,
     /* Publication */
@@ -1306,6 +1356,9 @@ const form = useForm("EditCodex", {
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
+    s_gregorys_rules: props.gregorys_rules_search
+        ? props.gregorys_rules_search
+        : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
@@ -1341,6 +1394,11 @@ const form = useForm("EditCodex", {
     s_uplow_margins_ratio_max: props.uplow_margins_ratio_max,
     s_inout_margins_ratio_min: props.inout_margins_ratio_min,
     s_inout_margins_ratio_max: props.inout_margins_ratio_max,
+    s_columns_min: props.columns_min,
+    s_columns_max: props.columns_max,
+    s_columnlines_min: props.columnlines_min,
+    s_columnlines_max: props.columnlines_max,
+
     /* Palaeography */
     s_hand_number_min: props.hand_number_min,
     s_hand_number_max: props.hand_number_max,
@@ -1373,9 +1431,10 @@ const form = useForm("EditCodex", {
     s_ancient_provenances: props.ancient_provenances_search
         ? props.ancient_provenances_search
         : [],
-    s_ancient_provenance_certainties: props.ancient_provenance_certainties_search
-        ? props.ancient_provenance_certainties_search
-        : [],
+    s_ancient_provenance_certainties:
+        props.ancient_provenance_certainties_search
+            ? props.ancient_provenance_certainties_search
+            : [],
     s_transactions: props.transactions_search ? props.transactions_search : [],
     s_transactions_incl: props.transaction_parties_incl,
     s_transaction_parties: props.transaction_parties_search
@@ -1435,8 +1494,10 @@ onMounted(() => {
 
 onUpdated(() => {
     if (props.current == -1) {
-        if(!alreadygone) {
-            alert("The current codex longer matches the search criteria. Going back to the search results.");
+        if (!alreadygone) {
+            alert(
+                "The current codex longer matches the search criteria. Going back to the search results."
+            );
             window.history.go(-1);
             alreadygone = true;
         }
@@ -1459,34 +1520,46 @@ function range(start, end) {
 
 function delalert(image) {
     let image_id = image.id;
-    if (confirm("You may have unsaved changes that could be lost if you continue. Do you want to delete this image anyway?")) {
-        router.post("/delimage/" + image_id, {document_id: props.document.id}, {
-            preserveState: true,
-            preserveScroll: true,
-            resetOnSuccess: false,
-            onSuccess: () => {
-                form.images = props.images.slice();
-            },
-        });
+    if (
+        confirm(
+            "You may have unsaved changes that could be lost if you continue. Do you want to delete this image anyway?"
+        )
+    ) {
+        router.post(
+            "/delimage/" + image_id,
+            { document_id: props.document.id },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                resetOnSuccess: false,
+                onSuccess: () => {
+                    form.images = props.images.slice();
+                },
+            }
+        );
     }
 }
 
 function delimage(image) {
     let image_id = image.id;
     if (confirm("Do you want to delete this image?")) {
-        router.post("/delimage/" + image_id, {document_id: props.document.id}, {
-            preserveState: true,
-            preserveScroll: true,
-            resetOnSuccess: false,
-            onSuccess: () => {
-                form.images = props.images.slice();
-            },
-        });
+        router.post(
+            "/delimage/" + image_id,
+            { document_id: props.document.id },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                resetOnSuccess: false,
+                onSuccess: () => {
+                    form.images = props.images.slice();
+                },
+            }
+        );
     }
 }
 
 function addimages(imagefiles) {
-     router.post(
+    router.post(
         "/addimages",
         { images: imagefiles, document_id: props.document.id },
         {
@@ -1510,7 +1583,7 @@ function show_codex(id) {
 }
 
 function edit_codex(id) {
-    const newform = form
+    const newform = form;
     newform.tab = activetab.value;
     newform.post("/codex_edit/" + id, {
         queryStringArrayFormat: "indices",
@@ -1526,7 +1599,7 @@ function submit() {
         preserveState: true,
         preserveScroll: true,
         replace: true,
-     });
+    });
 }
 </script>
 

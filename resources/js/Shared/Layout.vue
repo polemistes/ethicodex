@@ -1045,11 +1045,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+.show_gregory {
+    grid-area: gregory;
+}
 .show_quirecomm {
     grid-area: quirecomm;
 }
 .show_bindingdesc {
     grid-area: bindingdesc;
+}
+.show_gregorycomm {
+    grid-area: gregorycomm;
 }
 
 .showcodex_materiality {
@@ -1062,7 +1068,8 @@ body {
         "cover coverdesc"
         "structure quirecomm"
         "numquire quirecomm"
-        "quirenum quirecomm";
+        "quirenum quirecomm"
+        "gregory gregorycomm";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1123,6 +1130,12 @@ body {
     grid-area: ioratio;
     margin-top: -18px;
 }
+.show_columns {
+    grid-area: columns;
+}
+.show_columnlines {
+    grid-area: columnlines;
+}
 
 .showcodex_measurements {
     display: grid;
@@ -1134,7 +1147,8 @@ body {
         "stable . . meascomm"
         "uppmarg lowmarg ulratio meascomm"
         "innmarg outmarg ioratio meascomm"
-        "blockwidth blockheight bratio textblockcomm";
+        "blockwidth blockheight bratio textblockcomm"
+        "columns columnlines . textblockcomm";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1601,13 +1615,18 @@ body {
 .edit_quirenum {
     grid-area: quirenum;
 }
+.edit_gregory {
+    grid-area: gregory;
+}
 .edit_quirecomm {
     grid-area: quirecomm;
 }
 .edit_bindingdesc {
     grid-area: bindingdesc;
 }
-
+.edit_gregorycomm {
+    grid-area: gregorycomm;
+}
 .editcodex_materiality {
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -1618,7 +1637,8 @@ body {
         "cover coverdesc"
         "structure quirecomm"
         "numquire quirecomm"
-        "quirenum quirecomm";
+        "quirenum quirecomm"
+        "gregory gregorycomm";
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -1675,6 +1695,12 @@ body {
 .edit_ioratio {
     grid-area: ioratio;
 }
+.edit_columns {
+    grid-area: columns;
+}
+.edit_columnlines {
+    grid-area: columnlines;
+}
 
 .editcodex_measurements {
     display: grid;
@@ -1686,7 +1712,8 @@ body {
         "stable . . meascomm"
         "uppmarg lowmarg ulratio meascomm"
         "innmarg outmarg ioratio meascomm"
-        "blockwidth blockheight bratio textblockcomm";
+        "blockwidth blockheight bratio textblockcomm"
+        "columns columnlines . textblockcomm";
     gap: 20px;
     width: 99%;
     align-self: center;

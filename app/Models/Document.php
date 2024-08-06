@@ -110,6 +110,11 @@ class Document extends Model
         return $this->belongsTo(QuireStructure::class);
     }
 
+    public function gregorys_rule()
+    {
+        return $this->belongsTo(GregorysRule::class);
+    }
+
     public function images()
     {
         return $this->hasMany(Image::class);

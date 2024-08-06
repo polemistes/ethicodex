@@ -34,6 +34,7 @@ use App\Models\License;
 use App\Models\CriticalSymbol;
 use App\Models\Punctuation;
 use App\Models\Diacritic;
+use App\Models\GregorysRule;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -113,6 +114,12 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
+
+            's_gregorys_rules' => 'nullable',
+            's_columns_min' => 'nullable',
+            's_columns_max'=> 'nullable',
+            's_columnlines_min'=> 'nullable',
+            's_columnlines_max'=> 'nullable',
 
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
@@ -254,6 +261,12 @@ class DocumentController extends Controller
         $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
         $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
 
+        $gregorys_rules = array_key_exists('s_gregorys_rules', $search) ? $search['s_gregorys_rules'] : null;
+        $columns_min = array_key_exists('s_columns_min', $search) ? $search['s_columns_min'] : null;
+        $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
+        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
+        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
+        
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -333,6 +346,7 @@ class DocumentController extends Controller
                         ->orWhere('binding_description', 'like', "%{$fulltext}%")
                         ->orWhere('inks_description', 'like', "%{$fulltext}%")
                         ->orWhere('cover_description', 'like', "%{$fulltext}%")
+                        ->orWhere('gregorys_rule_comment', 'like', "%{$fulltext}%")
                         ->orWhere('conservation_history', 'like', "%{$fulltext}%")
                         ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
                         ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
@@ -444,6 +458,7 @@ class DocumentController extends Controller
                 $show_materiality == "true",
                 function ($query) use (
                     $materials,
+                    $gregorys_rules,
                     $inks,
                     $inks_incl,
                     $covers,
@@ -455,6 +470,9 @@ class DocumentController extends Controller
                 ) {
                         $query->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
+                        })
+                        ->when($gregorys_rules, function ($query, $gregorys_rules) {
+                            $query->whereIn('gregorys_rule_id', array_column($gregorys_rules, 'id'));
                         })
                         ->when(($inks && !$inks_incl), function ($query) use ($inks) {
                             $query->whereHas('inks', function ($query) use ($inks) {
@@ -517,6 +535,11 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
+
+                    $columns_min,
+                    $columns_max,
+                    $columnlines_min,
+                    $columnlines_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -592,8 +615,19 @@ class DocumentController extends Controller
                         ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
                             $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
                         })
-                        
-                        ;
+
+                        ->when($columns_min, function ($query, $columns_min) {
+                            $query->where('columns', '>=', $columns_min);
+                        })
+                        ->when($columns_max, function ($query, $columns_max) {
+                            $query->where('columns', '>=', $columns_max);
+                        })
+                        ->when($columnlines_min, function ($query, $columnlines_min) {
+                            $query->where('columnlines', '>=', $columnlines_min);
+                        })
+                        ->when($columnlines_max, function ($query, $columnlines_max) {
+                            $query->where('columnlines', '>=', $columnlines_max);
+                        });
                 }
             )
             ->when(
@@ -855,6 +889,12 @@ class DocumentController extends Controller
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
 
+            'gregorys_rules_search' => $gregorys_rules,
+            'columns_min' => $columns_min,
+            'columns_max' => $columns_max,
+            'columnlines_min' => $columnlines_min,
+            'columnlines_max' => $columnlines_max,
+        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -893,6 +933,7 @@ class DocumentController extends Controller
             'decorations' => Decoration::all(),
             'diacritics' => Diacritic::all(),
             'genres' => Genre::all(),
+            'gregorys_rules' => GregorysRule::all(),
             'inks' => Ink::all(),
             'languages' => Language::all(),
             'legal_classifications' => LegalClassification::all(),
@@ -908,7 +949,6 @@ class DocumentController extends Controller
             'tags' => Tag::all(),
             'ancient_provenances' => AncientProvenance::all(),
             'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
-            'transactions' => Transaction::all(),
             'transaction_parties' => TransactionParty::all(),
         ]);
     }
@@ -1016,6 +1056,12 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
+
+            's_gregorys_rules' => 'nullable',
+            's_columns_min' => 'nullable',
+            's_columns_max'=> 'nullable',
+            's_columnlines_min'=> 'nullable',
+            's_columnlines_max'=> 'nullable',
 
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
@@ -1141,6 +1187,12 @@ class DocumentController extends Controller
         $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
         $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
 
+        $gregorys_rules = array_key_exists('s_gregorys_rules', $search) ? $search['s_gregorys_rules'] : null;
+        $columns_min = array_key_exists('s_columns_min', $search) ? $search['s_columns_min'] : null;
+        $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
+        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
+        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -1218,6 +1270,7 @@ class DocumentController extends Controller
                         ->orWhere('binding_description', 'like', "%{$fulltext}%")
                         ->orWhere('inks_description', 'like', "%{$fulltext}%")
                         ->orWhere('cover_description', 'like', "%{$fulltext}%")
+                        ->orWhere('gregorys_rule_comment', 'like', "%{$fulltext}%")
                         ->orWhere('conservation_history', 'like', "%{$fulltext}%")
                         ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
                         ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
@@ -1329,6 +1382,7 @@ class DocumentController extends Controller
                 $show_materiality == "true",
                 function ($query) use (
                     $materials,
+                    $gregorys_rules,
                     $inks,
                     $inks_incl,
                     $covers,
@@ -1340,6 +1394,9 @@ class DocumentController extends Controller
                 ) {
                         $query->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
+                        })
+                        ->when($gregorys_rules, function ($query, $gregorys_rules) {
+                            $query->whereIn('gregorys_rule_id', array_column($gregorys_rules, 'id'));
                         })
                         ->when(($inks && !$inks_incl), function ($query) use ($inks) {
                             $query->whereHas('inks', function ($query) use ($inks) {
@@ -1402,6 +1459,11 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
+
+                    $columns_min,
+                    $columns_max,
+                    $columnlines_min,
+                    $columnlines_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -1474,6 +1536,18 @@ class DocumentController extends Controller
                         })
                         ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
                             $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
+                        })
+                        ->when($columns_min, function ($query, $columns_min) {
+                            $query->where('columns', '>=', $columns_min);
+                        })
+                        ->when($columns_max, function ($query, $columns_max) {
+                            $query->where('columns', '>=', $columns_max);
+                        })
+                        ->when($columnlines_min, function ($query, $columnlines_min) {
+                            $query->where('columnlines', '>=', $columnlines_min);
+                        })
+                        ->when($columnlines_max, function ($query, $columnlines_max) {
+                            $query->where('columnlines', '>=', $columnlines_max);
                         });
                 }
             )
@@ -1714,6 +1788,7 @@ class DocumentController extends Controller
             'languages' => $document->languages()->get()->makeHidden('pivot'),
             'legal_classification' => $document->legal_classification()->get(),
             'material' => $document->material()->get(),
+            'gregorys_rule' => $document->gregorys_rule()->get(),
             'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -1781,6 +1856,13 @@ class DocumentController extends Controller
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
             'hand_number_min' => $hand_number_min,
+
+            'gregorys_rules_search' => $gregorys_rules,
+            'columns_min' => $columns_min,
+            'columns_max' => $columns_max,
+            'columnlines_min' => $columnlines_min,
+            'columnlines_max' => $columnlines_max,
+        
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
             'scripts_incl' => $scripts_incl,
@@ -1885,6 +1967,12 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
+
+            's_gregorys_rules' => 'nullable',
+            's_columns_min' => 'nullable',
+            's_columns_max'=> 'nullable',
+            's_columnlines_min'=> 'nullable',
+            's_columnlines_max'=> 'nullable',
 
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
@@ -2011,6 +2099,12 @@ class DocumentController extends Controller
         $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
         $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
 
+        $gregorys_rules = array_key_exists('s_gregorys_rules', $search) ? $search['s_gregorys_rules'] : null;
+        $columns_min = array_key_exists('s_columns_min', $search) ? $search['s_columns_min'] : null;
+        $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
+        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
+        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -2088,6 +2182,7 @@ class DocumentController extends Controller
                         ->orWhere('binding_description', 'like', "%{$fulltext}%")
                         ->orWhere('inks_description', 'like', "%{$fulltext}%")
                         ->orWhere('cover_description', 'like', "%{$fulltext}%")
+                        ->orWhere('gregorys_rule_comment', 'like', "%{$fulltext}%")
                         ->orWhere('conservation_history', 'like', "%{$fulltext}%")
                         ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
                         ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
@@ -2199,6 +2294,7 @@ class DocumentController extends Controller
                 $show_materiality == "true",
                 function ($query) use (
                     $materials,
+                    $gregorys_rules,
                     $inks,
                     $inks_incl,
                     $covers,
@@ -2210,6 +2306,9 @@ class DocumentController extends Controller
                 ) {
                         $query->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
+                        })
+                        ->when($gregorys_rules, function ($query, $gregorys_rules) {
+                            $query->whereIn('gregorys_rule_id', array_column($gregorys_rules, 'id'));
                         })
                         ->when(($inks && !$inks_incl), function ($query) use ($inks) {
                             $query->whereHas('inks', function ($query) use ($inks) {
@@ -2272,6 +2371,11 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
+
+                    $columns_min,
+                    $columns_max,
+                    $columnlines_min,
+                    $columnlines_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -2344,6 +2448,18 @@ class DocumentController extends Controller
                         })
                         ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
                             $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
+                        })
+                        ->when($columns_min, function ($query, $columns_min) {
+                            $query->where('columns', '>=', $columns_min);
+                        })
+                        ->when($columns_max, function ($query, $columns_max) {
+                            $query->where('columns', '>=', $columns_max);
+                        })
+                        ->when($columnlines_min, function ($query, $columnlines_min) {
+                            $query->where('columnlines', '>=', $columnlines_min);
+                        })
+                        ->when($columnlines_max, function ($query, $columnlines_max) {
+                            $query->where('columnlines', '>=', $columnlines_max);
                         });
                 }
             )
@@ -2588,6 +2704,8 @@ class DocumentController extends Controller
             'diacritics_all' => Diacritic::all(),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
             'genres_all' => Genre::all(),
+            'gregorys_rules' => GregorysRule::all(),
+            'gregorys_rule' => $document->gregorys_rule()->get(),
             'images' => $document->images()->with('license')->get(),
             'inks' => $document->inks()->get()->makeHidden('pivot'),
             'inks_all' => Ink::all(),
@@ -2673,6 +2791,13 @@ class DocumentController extends Controller
             'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
+
+            'gregorys_rules_search' => $gregorys_rules,
+            'columns_min' => $columns_min,
+            'columns_max' => $columns_max,
+            'columnlines_min' => $columnlines_min,
+            'columnlines_max' => $columnlines_max,
+        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -2761,6 +2886,10 @@ class DocumentController extends Controller
             'full_text_block_height' => 'nullable',
             'full_text_block_comment' => 'nullable',
             'measurement_comment' => 'nullable',
+            'gregorys_rule_id' => 'nullable',
+            'gregorys_rule_comment' => 'nullable',
+            'columns' => 'nullable',
+            'columnlines' => 'nullable',
             'scripts' => 'nullable',
             'hand_number' => 'nullable',
             'script_description' => 'nullable',
@@ -2840,6 +2969,10 @@ class DocumentController extends Controller
         $document->full_text_block_height = $fields['full_text_block_height'];
         $document->full_text_block_comment = $fields['full_text_block_comment'];
         $document->measurement_comment = $fields['measurement_comment'];
+        $document->gregorys_rule_id = $fields['gregorys_rule_id'];
+        $document->gregorys_rule_comment = $fields['gregorys_rule_comment'];
+        $document->columns = $fields['columns'];
+        $document->columnlines = $fields['columnlines'];
         $document->hand_number = $fields['hand_number'];
         $document->script_description = $fields['script_description'];
         $document->paratext_description = $fields['paratext_description'];
@@ -2972,6 +3105,12 @@ class DocumentController extends Controller
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
 
+            's_gregorys_rules' => 'nullable',
+            's_columns_min' => 'nullable',
+            's_columns_max'=> 'nullable',
+            's_columnlines_min'=> 'nullable',
+            's_columnlines_max'=> 'nullable',
+
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -3089,6 +3228,12 @@ class DocumentController extends Controller
         $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
         $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
 
+        $gregorys_rules = array_key_exists('s_gregorys_rules', $search) ? $search['s_gregorys_rules'] : null;
+        $columns_min = array_key_exists('s_columns_min', $search) ? $search['s_columns_min'] : null;
+        $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
+        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
+        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
+
         $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
         $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
         $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
@@ -3175,6 +3320,7 @@ class DocumentController extends Controller
                         ->orWhere('binding_description', 'like', "%{$fulltext}%")
                         ->orWhere('inks_description', 'like', "%{$fulltext}%")
                         ->orWhere('cover_description', 'like', "%{$fulltext}%")
+                        ->orWhere('gregorys_rule_comment', 'like', "%{$fulltext}%")
                         ->orWhere('conservation_history', 'like', "%{$fulltext}%")
                         ->orWhere('analyses_comment', 'like', "%{$fulltext}%")
                         ->orWhere('ancient_provenance_comment', 'like', "%{$fulltext}%")
@@ -3286,6 +3432,7 @@ class DocumentController extends Controller
                 $show_materiality == "true",
                 function ($query) use (
                     $materials,
+                    $gregorys_rules,
                     $inks,
                     $inks_incl,
                     $covers,
@@ -3297,6 +3444,9 @@ class DocumentController extends Controller
                 ) {
                         $query->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
+                        })
+                        ->when($gregorys_rules, function ($query, $gregorys_rules) {
+                            $query->whereIn('gregorys_rule_id', array_column($gregorys_rules, 'id'));
                         })
                         ->when(($inks && !$inks_incl), function ($query) use ($inks) {
                             $query->whereHas('inks', function ($query) use ($inks) {
@@ -3359,6 +3509,11 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
+                    
+                    $columns_min,
+                    $columns_max,
+                    $columnlines_min,
+                    $columnlines_max,
                 ) {
                     $query->when($full_page_width_min, function ($query, $full_page_width_min) {
                         $query->where('full_page_width', '>=', $full_page_width_min);
@@ -3431,6 +3586,18 @@ class DocumentController extends Controller
                         })
                         ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
                             $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
+                        })
+                        ->when($columns_min, function ($query, $columns_min) {
+                            $query->where('columns', '>=', $columns_min);
+                        })
+                        ->when($columns_max, function ($query, $columns_max) {
+                            $query->where('columns', '>=', $columns_max);
+                        })
+                        ->when($columnlines_min, function ($query, $columnlines_min) {
+                            $query->where('columnlines', '>=', $columnlines_min);
+                        })
+                        ->when($columnlines_max, function ($query, $columnlines_max) {
+                            $query->where('columnlines', '>=', $columnlines_max);
                         });
                 }
             )
@@ -3704,6 +3871,8 @@ class DocumentController extends Controller
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structures' => QuireStructure::all(),
             'quire_structure' => $document->quire_structure()->get(),
+            'gregorys_rules' => GregorysRule::all(),
+            'gregorys_rule' => $document->gregorys_rule()->get(),
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'scripts_all' => Script::all(),
             'storage_conditions' => StorageCondition::all(),
@@ -3761,6 +3930,13 @@ class DocumentController extends Controller
             'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
+
+            'gregorys_rules_search' => $gregorys_rules,
+            'columns_min' => $columns_min,
+            'columns_max' => $columns_max,
+            'columnlines_min' => $columnlines_min,
+            'columnlines_max' => $columnlines_max,
+        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
