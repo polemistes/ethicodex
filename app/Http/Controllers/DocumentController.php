@@ -620,13 +620,13 @@ class DocumentController extends Controller
                             $query->where('columns', '>=', $columns_min);
                         })
                         ->when($columns_max, function ($query, $columns_max) {
-                            $query->where('columns', '>=', $columns_max);
+                            $query->where('columns', '<=', $columns_max);
                         })
                         ->when($columnlines_min, function ($query, $columnlines_min) {
                             $query->where('columnlines', '>=', $columnlines_min);
                         })
                         ->when($columnlines_max, function ($query, $columnlines_max) {
-                            $query->where('columnlines', '>=', $columnlines_max);
+                            $query->where('columnlines', '<=', $columnlines_max);
                         });
                 }
             )
