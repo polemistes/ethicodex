@@ -413,7 +413,7 @@
                         :choices="gregorys_rules"
                         v-model="form.gregorys_rule_id"
                     >
-                        Gegory's Rule
+                        Gregory's Rule
                     </EthInput>
                 </div>
 
