@@ -925,7 +925,7 @@
                                     :href="'/codex_show/' + codex.id"
                                     style="
                                         margin-right: 5px;
-                                        padding: 2px 3px
+                                        padding: 2px 3px;
                                         font-size: 12px;
                                     "
                                     >Show
@@ -1049,6 +1049,8 @@ const props = defineProps({
     /* Content */
     title: String,
     ancient_author: String,
+    languages_search: Array,
+    languages_incl: Boolean,
     genres_search: Array,
     genres_incl: Boolean,
     tags_search: Array,
@@ -1163,6 +1165,8 @@ const form = useForm({
     /* Content */
     s_title: props.title,
     s_ancient_author: props.ancient_author,
+    s_languages: props.languages_search ? props.languages_search : [],
+    s_languages_incl: props.languages_incl,
     s_genres: props.genres_search ? props.genres_search : [],
     s_genres_incl: props.genres_incl,
     s_tags: props.tags_search ? props.tags_search : [],

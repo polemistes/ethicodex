@@ -19,7 +19,10 @@
             </EthInput>
         </div>
 
-        <div class="pageline_total_found"><div style="padding-bottom: 8px; font-weight: bold;">Found</div><div> {{ documents.total }}</div></div>
+        <div class="pageline_total_found">
+            <div style="padding-bottom: 8px; font-weight: bold">Found</div>
+            <div>{{ documents.total }}</div>
+        </div>
 
         <div class="pageline_search_alternatives">
             <EthInput
@@ -69,7 +72,13 @@
                 v-for="link in documents.links"
                 :key="link.label"
                 @click="gotopage(link.url)"
-                v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
+                v-html="
+                    link.label.includes('Previous')
+                        ? '<'
+                        : link.label.includes('Next')
+                        ? '>'
+                        : link.label
+                "
                 :class="{
                     codex_pageactive: documents.current_page == link.label,
                     codex_pages: documents.current_page != link.label,
@@ -133,50 +142,70 @@
             >
                 Ancient Author
             </EthInput>
-            
+
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="genres"
-                :choices="genres"
-                v-model="form.s_genres"
-                @new-change="sendsearch()"
-            >
-                Genres
-            </EthInput>
-            <EthInput
-                helptext="Check to search for codices that have all selected genres. Uncheck to search for codices with any of the selected genres."
-                input_type="boolevent"
-                input_id="genres_incl"
-                v-model="form.s_genres_incl"
-                @new-change="sendsearch()"
-            >
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="languages"
+                    :choices="languages"
+                    v-model="form.s_languages"
+                    @new-change="sendsearch()"
+                >
+                    Languages
+                </EthInput>
+                <EthInput
+                    helptext="Check to search for codices that have all selected languages. Uncheck to search for codices with any of the selected languages."
+                    input_type="boolevent"
+                    input_id="languages_incl"
+                    v-model="form.s_languages_incl"
+                    @new-change="sendsearch()"
+                >
                     All
-            </EthInput>
-        </div>
-        <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="tags"
-                :choices="tags"
-                v-model="form.s_tags"
-                @new-change="sendsearch()"
-            >
-                Content Tags
-            </EthInput>
+                </EthInput>
+            </div>
 
-            <EthInput
-                helptext="Check to search for codices that have all selected tags. Uncheck to search for codices with any of the selected tags."
-                input_type="boolevent"
-                input_id="tags_incl"
-                v-model="form.s_tags_incl"
-                @new-change="sendsearch()"
-            >
+            <div class="close-check-box">
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="genres"
+                    :choices="genres"
+                    v-model="form.s_genres"
+                    @new-change="sendsearch()"
+                >
+                    Genres
+                </EthInput>
+                <EthInput
+                    helptext="Check to search for codices that have all selected genres. Uncheck to search for codices with any of the selected genres."
+                    input_type="boolevent"
+                    input_id="genres_incl"
+                    v-model="form.s_genres_incl"
+                    @new-change="sendsearch()"
+                >
                     All
-            </EthInput>
-        </div>
-        </div>
+                </EthInput>
+            </div>
+            <div class="close-check-box">
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="tags"
+                    :choices="tags"
+                    v-model="form.s_tags"
+                    @new-change="sendsearch()"
+                >
+                    Content Tags
+                </EthInput>
 
+                <EthInput
+                    helptext="Check to search for codices that have all selected tags. Uncheck to search for codices with any of the selected tags."
+                    input_type="boolevent"
+                    input_id="tags_incl"
+                    v-model="form.s_tags_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+            </div>
+        </div>
 
         <div v-if="form.show_dating" class="searchblock">
             <div class="searchblocktitle">Date Search</div>
@@ -211,25 +240,25 @@
             </div>
 
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="dating_methods"
-                :choices="dating_methods"
-                v-model="form.s_dating_methods"
-                @new-change="sendsearch()"
-            >
-                Basis of Date
-            </EthInput>
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="dating_methods"
+                    :choices="dating_methods"
+                    v-model="form.s_dating_methods"
+                    @new-change="sendsearch()"
+                >
+                    Basis of Date
+                </EthInput>
 
-            <EthInput
-                helptext="Check to search for codices where all selected basises of data have been employed. Uncheck to search for codices with where any of them have been employed."
-                input_type="boolevent"
-                input_id="dating_methods_incl"
-                v-model="form.s_dating_methods_incl"
-                @new-change="sendsearch()"
-            >
+                <EthInput
+                    helptext="Check to search for codices where all selected basises of data have been employed. Uncheck to search for codices with where any of them have been employed."
+                    input_type="boolevent"
+                    input_id="dating_methods_incl"
+                    v-model="form.s_dating_methods_incl"
+                    @new-change="sendsearch()"
+                >
                     All
-            </EthInput>
+                </EthInput>
             </div>
 
             <EthInput
@@ -256,24 +285,24 @@
             </EthInput>
 
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="inks"
-                :choices="inks"
-                v-model="form.s_inks"
-                @new-change="sendsearch()"
-            >
-                Ink
-            </EthInput>
-            <EthInput
-                helptext="Check to search for codices that have all selected inks. Uncheck to search for codices with any of the selected inks."
-                input_type="boolevent"
-                input_id="inks_incl"
-                v-model="form.s_inks_incl"
-                @new-change="sendsearch()"
-            >
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="inks"
+                    :choices="inks"
+                    v-model="form.s_inks"
+                    @new-change="sendsearch()"
+                >
+                    Ink
+                </EthInput>
+                <EthInput
+                    helptext="Check to search for codices that have all selected inks. Uncheck to search for codices with any of the selected inks."
+                    input_type="boolevent"
+                    input_id="inks_incl"
+                    v-model="form.s_inks_incl"
+                    @new-change="sendsearch()"
+                >
                     All
-            </EthInput>
+                </EthInput>
             </div>
 
             <EthInput
@@ -341,14 +370,13 @@
             >
                 Gregory's Rule
             </EthInput>
-
         </div>
 
         <div v-if="form.show_measurement" class="searchblock-outer">
             <div class="searchblocktitle">Measurements Search</div>
 
             <!-- Page width, block width, upper margin, inner margin -->
-            <div class="searchblock-inner"> 
+            <div class="searchblock-inner">
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_width_min"
@@ -419,8 +447,6 @@
                 >
                     Max Inner Margin
                 </EthInput>
-
- 
             </div>
             <!-- Page height, Block height, Lower margin, Outer margin -->
             <div class="searchblock-inner">
@@ -459,7 +485,6 @@
                 >
                     Max Block Height
                 </EthInput>
-
 
                 <EthInput
                     input_type="numberevent"
@@ -571,8 +596,8 @@
                     Max In/Out Ratio
                 </EthInput>
             </div>
-            <div style="padding-top: 20px;">
-                <hr/>
+            <div style="padding-top: 20px">
+                <hr />
             </div>
             <div class="searchblock-inner">
                 <EthInput
@@ -611,8 +636,6 @@
                     Max Lines per Column
                 </EthInput>
             </div>
-
-
         </div>
 
         <div v-if="form.show_palaeography" class="searchblock-outer">
@@ -637,135 +660,135 @@
                 </EthInput>
 
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_scripts_event"
-                    input_id="scripts"
-                    :choices="scripts"
-                    v-model="form.s_scripts"
-                    @new-change="sendsearch()"
-                >
-                    Scripts
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_scripts_event"
+                        input_id="scripts"
+                        :choices="scripts"
+                        v-model="form.s_scripts"
+                        @new-change="sendsearch()"
+                    >
+                        Scripts
+                    </EthInput>
 
-                <EthInput
-                    helptext="Check to search for codices that have all selected scripts. Uncheck to search for codices with any of the selected scripts."
-                    input_type="boolevent"
-                    input_id="scripts_incl"
-                    v-model="form.s_scripts_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all selected scripts. Uncheck to search for codices with any of the selected scripts."
+                        input_type="boolevent"
+                        input_id="scripts_incl"
+                        v-model="form.s_scripts_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
 
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_event"
-                    input_id="diacritics"
-                    :choices="diacritics"
-                    v-model="form.s_diacritics"
-                    @new-change="sendsearch()"
-                >
-                    Diacritics
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_event"
+                        input_id="diacritics"
+                        :choices="diacritics"
+                        v-model="form.s_diacritics"
+                        @new-change="sendsearch()"
+                    >
+                        Diacritics
+                    </EthInput>
 
-                <EthInput
-                    helptext="Check to search for codices that have all selected diacritics. Uncheck to search for codices with any of the selected diacritics."
-                    input_type="boolevent"
-                    input_id="diacritics_incl"
-                    v-model="form.s_diacritics_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all selected diacritics. Uncheck to search for codices with any of the selected diacritics."
+                        input_type="boolevent"
+                        input_id="diacritics_incl"
+                        v-model="form.s_diacritics_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
 
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_event"
-                    input_id="punctuations"
-                    :choices="punctuations"
-                    v-model="form.s_punctuations"
-                    @new-change="sendsearch()"
-                >
-                    Punctuation
-                </EthInput>
-                <EthInput
-                    helptext="Check to search for codices that have all types of selected punctuation. Uncheck to search for codices with any of them."
-                    input_type="boolevent"
-                    input_id="punctuations_incl"
-                    v-model="form.s_punctuations_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_event"
+                        input_id="punctuations"
+                        :choices="punctuations"
+                        v-model="form.s_punctuations"
+                        @new-change="sendsearch()"
+                    >
+                        Punctuation
+                    </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all types of selected punctuation. Uncheck to search for codices with any of them."
+                        input_type="boolevent"
+                        input_id="punctuations_incl"
+                        v-model="form.s_punctuations_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
             </div>
             <div class="searchblock-inner">
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_event"
-                    input_id="paratexts"
-                    :choices="paratexts"
-                    v-model="form.s_paratexts"
-                    @new-change="sendsearch()"
-                >
-                    Paratexts
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_event"
+                        input_id="paratexts"
+                        :choices="paratexts"
+                        v-model="form.s_paratexts"
+                        @new-change="sendsearch()"
+                    >
+                        Paratexts
+                    </EthInput>
 
-                <EthInput
-                    helptext="Check to search for codices that have all selected types of paratexts. Uncheck to search for codices with any of them."
-                    input_type="boolevent"
-                    input_id="paratexts_incl"
-                    v-model="form.s_paratexts_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all selected types of paratexts. Uncheck to search for codices with any of them."
+                        input_type="boolevent"
+                        input_id="paratexts_incl"
+                        v-model="form.s_paratexts_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
 
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_event"
-                    input_id="decorations"
-                    :choices="decorations"
-                    v-model="form.s_decorations"
-                    @new-change="sendsearch()"
-                >
-                    Decorative Symbols
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_event"
+                        input_id="decorations"
+                        :choices="decorations"
+                        v-model="form.s_decorations"
+                        @new-change="sendsearch()"
+                    >
+                        Decorative Symbols
+                    </EthInput>
 
-                <EthInput
-                    helptext="Check to search for codices that have all selected types of decorative symbols. Uncheck to search for codices with any of them."
-                    input_type="boolevent"
-                    input_id="decorations_incl"
-                    v-model="form.s_decorations_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all selected types of decorative symbols. Uncheck to search for codices with any of them."
+                        input_type="boolevent"
+                        input_id="decorations_incl"
+                        v-model="form.s_decorations_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
 
                 <div class="close-check-box">
-                <EthInput
-                    input_type="multi_choice_event"
-                    input_id="critical_symbols"
-                    :choices="critical_symbols"
-                    v-model="form.s_critical_symbols"
-                    @new-change="sendsearch()"
-                >
-                    Critical Symbols
-                </EthInput>
+                    <EthInput
+                        input_type="multi_choice_event"
+                        input_id="critical_symbols"
+                        :choices="critical_symbols"
+                        v-model="form.s_critical_symbols"
+                        @new-change="sendsearch()"
+                    >
+                        Critical Symbols
+                    </EthInput>
 
-                <EthInput
-                    helptext="Check to search for codices that have all selected types of critical symbols. Uncheck to search for codices with any of them."
-                    input_type="boolevent"
-                    input_id="critical_symbols_incl"
-                    v-model="form.s_critical_symbols_incl"
-                    @new-change="sendsearch()"
-                >
-                    All
-                </EthInput>
+                    <EthInput
+                        helptext="Check to search for codices that have all selected types of critical symbols. Uncheck to search for codices with any of them."
+                        input_type="boolevent"
+                        input_id="critical_symbols_incl"
+                        v-model="form.s_critical_symbols_incl"
+                        @new-change="sendsearch()"
+                    >
+                        All
+                    </EthInput>
                 </div>
 
                 <EthInput
@@ -802,17 +825,17 @@
             </EthInput>
 
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event_wide"
-                input_id="analyses"
-                :choices="analyses"
-                v-model="form.s_analyses"
-                @new-change="sendsearch()"
-            >
-                Scientific Analysis
-            </EthInput>
+                <EthInput
+                    input_type="multi_choice_event_wide"
+                    input_id="analyses"
+                    :choices="analyses"
+                    v-model="form.s_analyses"
+                    @new-change="sendsearch()"
+                >
+                    Scientific Analysis
+                </EthInput>
 
-            <EthInput
+                <EthInput
                     helptext="Check to search for codices on which all selected scientific analyses have been employed. Uncheck to search for codices on which any of the selected analyses have been employed."
                     input_type="boolevent"
                     input_id="analyses_incl"
@@ -857,17 +880,17 @@
             </EthInput>
 
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="transactions"
-                :choices="transactions"
-                v-model="form.s_transactions"
-                @new-change="sendsearch()"
-            >
-                Transactions
-            </EthInput>
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="transactions"
+                    :choices="transactions"
+                    v-model="form.s_transactions"
+                    @new-change="sendsearch()"
+                >
+                    Transactions
+                </EthInput>
 
-            <EthInput
+                <EthInput
                     helptext="Check to search for codices that are part of all selected transactions. Uncheck to search for codices that are part of any of the selected transactions."
                     input_type="boolevent"
                     input_id="transactions_incl"
@@ -879,17 +902,17 @@
             </div>
 
             <div class="close-check-box">
-            <EthInput
-                input_type="multi_choice_event"
-                input_id="transaction_parties"
-                :choices="transaction_parties"
-                v-model="form.s_transaction_parties"
-                @new-change="sendsearch()"
-            >
-                Transaction Parties
-            </EthInput>
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="transaction_parties"
+                    :choices="transaction_parties"
+                    v-model="form.s_transaction_parties"
+                    @new-change="sendsearch()"
+                >
+                    Transaction Parties
+                </EthInput>
 
-            <EthInput
+                <EthInput
                     helptext="Check to search for codices for which all of the selected transaction parties have been involved in a transaction. Uncheck to search for codices for which any of the selected transaction parties have been involved in a transaction."
                     input_type="boolevent"
                     input_id="transaction_parties_incl"
@@ -897,9 +920,9 @@
                     @new-change="sendsearch()"
                 >
                     All
-            </EthInput>
+                </EthInput>
             </div>
-            
+
             <EthInput
                 input_type="multi_choice_event"
                 input_id="legal_classifications"
@@ -982,15 +1005,18 @@
         <div class="cod_sixth" v-html="document.publication"></div>
     </div>
     <div class="pageline">
-        <div
-            class="pageline_pages"
-            style="margin-left: auto; margin-top: 20px"
-        >
-        <button
+        <div class="pageline_pages" style="margin-left: auto; margin-top: 20px">
+            <button
                 v-for="link in documents.links"
                 :key="link.label"
                 @click="gotopage(link.url)"
-                v-html="link.label.includes('Previous') ? '<' : link.label.includes('Next') ? '>' : link.label"
+                v-html="
+                    link.label.includes('Previous')
+                        ? '<'
+                        : link.label.includes('Next')
+                        ? '>'
+                        : link.label
+                "
                 :class="{
                     codex_pageactive: documents.current_page == link.label,
                     codex_pages: documents.current_page != link.label,
@@ -1002,12 +1028,12 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted } from "vue";
-import { router } from '@inertiajs/vue3'
-import { useForm } from '@inertiajs/vue3'
+import { router } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import EthInput from "../Components/EthInput.vue";
 
 const props = defineProps({
-    // The documents 
+    // The documents
     documents: Object,
     analyses: Array,
     critical_symbols: Array,
@@ -1044,7 +1070,7 @@ const props = defineProps({
     show_palaeography: Boolean,
     show_consanal: Boolean,
     show_provenance: Boolean,
- 
+
     fulltext: String,
     /* Publication */
     standard_name: String,
@@ -1054,6 +1080,8 @@ const props = defineProps({
     /* Content */
     title: String,
     ancient_author: String,
+    languages_search: Array,
+    languages_incl: Boolean,
     genres_search: Array,
     genres_incl: Boolean,
     tags_search: Array,
@@ -1105,7 +1133,7 @@ const props = defineProps({
     columns_max: Number,
     columnlines_min: Number,
     columnlines_max: Number,
-    
+
     /* Palaeography */
     hand_number_min: Number,
     hand_number_max: Number,
@@ -1161,6 +1189,8 @@ const form = useForm({
     /* Content */
     s_title: props.title,
     s_ancient_author: props.ancient_author,
+    s_languages: props.languages_search ? props.languages_search : [],
+    s_languages_incl: props.languages_incl,
     s_genres: props.genres_search ? props.genres_search : [],
     s_genres_incl: props.genres_incl,
     s_tags: props.tags_search ? props.tags_search : [],
@@ -1178,7 +1208,9 @@ const form = useForm({
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
-    s_gregorys_rules: props.gregorys_rules_search ? props.gregorys_rules_search : [],
+    s_gregorys_rules: props.gregorys_rules_search
+        ? props.gregorys_rules_search
+        : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
@@ -1251,9 +1283,10 @@ const form = useForm({
     s_ancient_provenances: props.ancient_provenances_search
         ? props.ancient_provenances_search
         : [],
-    s_ancient_provenance_certainties: props.ancient_provenance_certainties_search
-        ? props.ancient_provenance_certainties_search
-        : [],
+    s_ancient_provenance_certainties:
+        props.ancient_provenance_certainties_search
+            ? props.ancient_provenance_certainties_search
+            : [],
     s_transactions: props.transactions_search ? props.transactions_search : [],
     s_transactions_incl: props.transaction_parties_incl,
     s_transaction_parties: props.transaction_parties_search
@@ -1271,7 +1304,7 @@ const form = useForm({
 
 onMounted(() => {
     sendsearch();
-})
+});
 
 const sortfields = [
     { id: 1, name: "Standard Name" },
@@ -1308,26 +1341,16 @@ function edit_codex(id) {
         queryStringArrayFormat: "indices",
     });
 }
-/*
-function edit_codex(id) {
-    form.post("/codex_edit/general/" + id, {
-        queryStringArrayFormat: "indices",
-    });
-}
-*/
 
 function gotopage(link) {
-    
     const page = link.substr(link.search("\\?"));
-    
+
     form.post("/codices" + page, {
         queryStringArrayFormat: "indices",
         preserveState: true,
         preserveScroll: true,
     });
 }
-
-
 </script>
 
 <style></style>

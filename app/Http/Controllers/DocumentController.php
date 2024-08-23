@@ -15,7 +15,6 @@ use App\Models\AncientProvenanceCertainty;
 use App\Models\Cover;
 use App\Models\TransactionParty;
 use App\Models\Decoration;
-use App\Models\FirstProcurement;
 use App\Models\Genre;
 use App\Models\Ink;
 use App\Models\Image;
@@ -70,6 +69,8 @@ class DocumentController extends Controller
             's_trismegistos_id' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
+            's_languages' => 'nullable',
+            's_languages_incl' => 'nullable',
             's_genres' => 'nullable',
             's_genres_incl' => 'nullable',
             's_tags' => 'nullable',
@@ -216,6 +217,8 @@ class DocumentController extends Controller
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
+        $languages_incl = array_key_exists('s_languages_incl', $search) ? $search['s_languages_incl'] : null;
         $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
         $genres_incl = array_key_exists('s_genres_incl', $search) ? $search['s_genres_incl'] : null;
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
@@ -379,6 +382,8 @@ class DocumentController extends Controller
             ->when($show_content == "true", function ($query) use (
                 $title,
                 $ancient_author,
+                $languages,
+                $languages_incl,
                 $genres,
                 $genres_incl,
                 $tags,
@@ -390,6 +395,18 @@ class DocumentController extends Controller
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+                    ->when($languages && !$languages_incl, function ($query) use ($languages) {
+                        $query->whereHas('languages', function ($query) use ($languages) {
+                            $query->whereIn('languages.id', array_column($languages, 'id'));
+                        });
+                    })
+                    ->when($languages && $languages_incl, function ($query) use ($languages) {
+                        foreach($languages as $language) {                                
+                            $query->whereHas('languages', function($query) use ($language) {
+                                $query->where('languages.id', '=', $language['id']);
+                            });
+                        }
+                    }) 
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
@@ -402,6 +419,7 @@ class DocumentController extends Controller
                             });
                         }
                     }) 
+
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
                         $query->whereHas('tags', function ($query) use ($tags) {
                             $query->whereIn('tags.id', array_column($tags, 'id'));
@@ -844,6 +862,8 @@ class DocumentController extends Controller
             'trismegistos_id' => $trismegistos_id,
             'title' => $title,
             'ancient_author' => $ancient_author,
+            'languages_search' => $languages,
+            'languages_incl' => $languages_incl,
             'genres_search' => $genres,
             'genres_incl' => $genres_incl,
             'tags_search' => $tags,
@@ -1012,6 +1032,8 @@ class DocumentController extends Controller
             's_trismegistos_id' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
+            's_languages' => 'nullable',
+            's_languages_incl' => 'nullable',
             's_genres' => 'nullable',
             's_genres_incl' => 'nullable',
             's_tags' => 'nullable',
@@ -1142,6 +1164,8 @@ class DocumentController extends Controller
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
+        $languages_incl = array_key_exists('s_languages_incl', $search) ? $search['s_languages_incl'] : null;
         $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
         $genres_incl = array_key_exists('s_genres_incl', $search) ? $search['s_genres_incl'] : null;
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
@@ -1303,6 +1327,8 @@ class DocumentController extends Controller
             ->when($show_content == "true", function ($query) use (
                 $title,
                 $ancient_author,
+                $languages,
+                $languages_incl,
                 $genres,
                 $genres_incl,
                 $tags,
@@ -1314,6 +1340,18 @@ class DocumentController extends Controller
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+                    ->when($languages && !$languages_incl, function ($query) use ($languages) {
+                        $query->whereHas('languages', function ($query) use ($languages) {
+                            $query->whereIn('languages.id', array_column($languages, 'id'));
+                        });
+                    })
+                    ->when($languages && $languages_incl, function ($query) use ($languages) {
+                        foreach($languages as $language) {                                
+                            $query->whereHas('languages', function($query) use ($language) {
+                                $query->where('languages.id', '=', $language['id']);
+                            });
+                        }
+                    }) 
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
@@ -1812,6 +1850,8 @@ class DocumentController extends Controller
             'trismegistos_id' => $trismegistos_id,
             'title' => $title,
             'ancient_author' => $ancient_author,
+            'languages_search' => $languages,
+            'languages_incl' => $languages_incl,
             'genres_search' => $genres,
             'genres_incl' => $genres_incl,
             'tags_search' => $tags,
@@ -1923,6 +1963,8 @@ class DocumentController extends Controller
             's_trismegistos_id' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
+            's_languages' => 'nullable',
+            's_languages_incl' => 'nullable',
             's_genres' => 'nullable',
             's_genres_incl' => 'nullable',
             's_tags' => 'nullable',
@@ -2054,6 +2096,8 @@ class DocumentController extends Controller
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
+        $languages_incl = array_key_exists('s_languages_incl', $search) ? $search['s_languages_incl'] : null;
         $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
         $genres_incl = array_key_exists('s_genres_incl', $search) ? $search['s_genres_incl'] : null;
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
@@ -2215,6 +2259,8 @@ class DocumentController extends Controller
             ->when($show_content == "true", function ($query) use (
                 $title,
                 $ancient_author,
+                $languages,
+                $languages_incl,
                 $genres,
                 $genres_incl,
                 $tags,
@@ -2226,6 +2272,18 @@ class DocumentController extends Controller
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+                    ->when($languages && !$languages_incl, function ($query) use ($languages) {
+                        $query->whereHas('languages', function ($query) use ($languages) {
+                            $query->whereIn('languages.id', array_column($languages, 'id'));
+                        });
+                    })
+                    ->when($languages && $languages_incl, function ($query) use ($languages) {
+                        foreach($languages as $language) {                                
+                            $query->whereHas('languages', function($query) use ($language) {
+                                $query->where('languages.id', '=', $language['id']);
+                            });
+                        }
+                    }) 
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
@@ -2748,6 +2806,8 @@ class DocumentController extends Controller
             'trismegistos_id' => $trismegistos_id,
             'title' => $title,
             'ancient_author' => $ancient_author,
+            'languages_search' => $languages,
+            'languages_incl' => $languages_incl,
             'genres_search' => $genres,
             'genres_incl' => $genres_incl,
             'tags_search' => $tags,
@@ -3060,6 +3120,8 @@ class DocumentController extends Controller
             's_trismegistos_id' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
+            's_languages' => 'nullable',
+            's_languages_incl' => 'nullable',
             's_genres' => 'nullable',
             's_genres_incl' => 'nullable',
             's_tags' => 'nullable',
@@ -3192,6 +3254,8 @@ class DocumentController extends Controller
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
+        $languages_incl = array_key_exists('s_languages_incl', $search) ? $search['s_languages_incl'] : null;
         $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
         $genres_incl = array_key_exists('s_genres_incl', $search) ? $search['s_genres_incl'] : null;
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
@@ -3353,6 +3417,8 @@ class DocumentController extends Controller
             ->when($show_content == "true", function ($query) use (
                 $title,
                 $ancient_author,
+                $languages,
+                $languages_incl,
                 $genres,
                 $genres_incl,
                 $tags,
@@ -3364,6 +3430,18 @@ class DocumentController extends Controller
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+                    ->when($languages && !$languages_incl, function ($query) use ($languages) {
+                        $query->whereHas('languages', function ($query) use ($languages) {
+                            $query->whereIn('languages.id', array_column($languages, 'id'));
+                        });
+                    })
+                    ->when($languages && $languages_incl, function ($query) use ($languages) {
+                        foreach($languages as $language) {                                
+                            $query->whereHas('languages', function($query) use ($language) {
+                                $query->where('languages.id', '=', $language['id']);
+                            });
+                        }
+                    }) 
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
@@ -3887,6 +3965,8 @@ class DocumentController extends Controller
             'trismegistos_id' => $trismegistos_id,
             'title' => $title,
             'ancient_author' => $ancient_author,
+            'languages_search' => $languages,
+            'languages_incl' => $languages_incl,
             'genres_search' => $genres,
             'genres_incl' => $genres_incl,
             'tags_search' => $tags,
