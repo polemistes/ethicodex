@@ -1500,7 +1500,7 @@ onUpdated(() => {
     if (props.current == -1) {
         if (!alreadygone) {
             alert(
-                "The current codex longer matches the search criteria. Going back to the search results."
+                "The current codex no longer matches the search criteria. Going back to the search results."
             );
             window.history.go(-1);
             alreadygone = true;
