@@ -633,6 +633,7 @@ body {
     background-color: #eee;
     min-width: 10em;
     width: fit-content;
+    max-width: 100%;
     height: fit-content;
     border-radius: 10px;
     margin-top: 10px;
