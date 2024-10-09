@@ -1,7 +1,7 @@
 <template>
     <div class="fullpage-container">
         <a class="layout-logo" href="/" target="_self">
-            <img src="images/ethicodex.jpg" alt="Ethicodex Logo" />
+            <img src="/storage/ethicodex.jpg" alt="Ethicodex Logo" />
         </a>
         <div class="layout-header">
             <h1>The Early History of the Codex</h1>
