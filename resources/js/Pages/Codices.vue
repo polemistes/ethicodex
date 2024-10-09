@@ -1,13 +1,6 @@
 <template>
     <div class="pageline">
-        <Link
-            v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
-            class="addbutton"
-            href="/codex_new"
-            as="button"
-        >
-            Add Codex
-        </Link>
+
         <div class="pageline_search_field">
             <EthInput
                 input_type="textevent"
@@ -1005,6 +998,14 @@
         <div class="cod_sixth" v-html="document.publication"></div>
     </div>
     <div class="pageline">
+        <Link
+            v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
+            class="addbutton"
+            href="/codex_new"
+            as="button"
+        >
+            Add Codex
+        </Link>
         <div class="pageline_pages" style="margin-left: auto; margin-top: 20px">
             <button
                 v-for="link in documents.links"

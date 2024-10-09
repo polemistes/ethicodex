@@ -687,6 +687,7 @@ body {
     align-items: flex-end;
     background-color: #eef;
     font-size: 14px;
+    padding-left: 15px;
 }
 
 .pageline button {
