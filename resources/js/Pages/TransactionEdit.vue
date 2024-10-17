@@ -153,6 +153,7 @@
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
+                :disabled="form.processing"
             >
                 Store All Changes
             </button>

@@ -47,6 +47,7 @@
             class="topbutton"
             v-if="props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0"
             @click="show_codex(document.id)"
+            :disabled="form.processing"
         >
             Show Codex
         </button>
@@ -55,7 +56,7 @@
 
         <button
             type="button"
-            :disabled="next === -1"
+            :disabled="(next === -1) || form.processing"
             class="topbutton"
             @click="edit_codex(props.next)"
         >
@@ -64,7 +65,7 @@
 
         <button
             type="button"
-            :disabled="prev === -1"
+            :disabled="(prev === -1) || form.processing"
             class="topbutton"
             @click="edit_codex(props.prev)"
         >
@@ -286,6 +287,7 @@
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
+                :disabled="form.processing"
             >
                 Store All Changes
             </button>
@@ -799,6 +801,7 @@
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
+                :disabled="form.processing"
             >
                 Store All Changes
             </button>
@@ -850,6 +853,7 @@
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
+                :disabled="form.processing"
             >
                 Store All Changes
             </button>
@@ -946,6 +950,7 @@
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                 @click.prevent="submit"
+                :disabled="form.processing"
             >
                 Store All Changes
             </button>
@@ -966,6 +971,7 @@
                 <button
                     :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
                     @click.prevent="submit"
+                    :disabled="form.processing"
                 >
                     Store All Changes
                 </button>
