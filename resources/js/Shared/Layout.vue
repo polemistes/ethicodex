@@ -455,15 +455,32 @@ body {
 }
 
 .micrograph_gallery {
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.micrograph_gallery>* {
+    flex: 0 0 33.3333%;
 }
 
 .micrograph_box {
+    display: flex;
+    flex-direction: column;
     padding: 5px;
 }
 
+
+.micrograph_image {
+    width: 100%;
+}
+
+.micrograph_description {
+    width: 100%;
+    height: 4em;
+    background-color: #eee;
+    overflow-y:auto;
+}
 .removebutton {
     all: unset;
     cursor: pointer;
@@ -1384,7 +1401,6 @@ body {
     border-style: none;
     border-radius: 5px;
     height: 5em;
-    width: 160px;
     overflow-y: auto;
     overflow-wrap: break-word;
 }

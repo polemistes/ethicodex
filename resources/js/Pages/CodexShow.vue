@@ -3,7 +3,7 @@
         <button
             type="button"
             :class="activetab == 'general' ? 'selected' : 'unselected'"
-            @click="activetab='general'"
+            @click="activetab = 'general'"
         >
             General Information
         </button>
@@ -11,7 +11,7 @@
         <button
             type="button"
             :class="activetab == 'codicology' ? 'selected' : 'unselected'"
-            @click="activetab='codicology'"
+            @click="activetab = 'codicology'"
         >
             Codicology
         </button>
@@ -19,25 +19,25 @@
         <button
             type="button"
             :class="activetab == 'conservation' ? 'selected' : 'unselected'"
-            @click="activetab='conservation'"
+            @click="activetab = 'conservation'"
         >
-        Conservation and Analysis
+            Conservation and Analysis
         </button>
 
         <button
             type="button"
             :class="activetab == 'provenance' ? 'selected' : 'unselected'"
-            @click="activetab='provenance'"
+            @click="activetab = 'provenance'"
         >
-        Provenance
+            Provenance
         </button>
 
         <button
             type="button"
             :class="activetab == 'images' ? 'selected' : 'unselected'"
-            @click="activetab='images'"
+            @click="activetab = 'images'"
         >
-        Images
+            Images
         </button>
     </div>
 
@@ -50,9 +50,7 @@
             Edit Codex
         </button>
 
-        <div class="topbutton">
-            ({{ props.current }} of {{ props.total }})
-        </div>
+        <div class="topbutton">({{ props.current }} of {{ props.total }})</div>
 
         <button
             :disabled="next === -1"
@@ -379,7 +377,11 @@
                 <div class="show_gregory">
                     <label>Gregory's Rule</label>
                     <div class="showcodex_string_short">
-                        {{ gregorys_rule.length > 0 ? gregorys_rule[0].name : "" }}
+                        {{
+                            gregorys_rule.length > 0
+                                ? gregorys_rule[0].name
+                                : ""
+                        }}
                     </div>
                 </div>
 
@@ -757,27 +759,32 @@
                     </div>
                 </div>
 
-                <div class="show_micrograph" v-if="checkmicrograph(images)">
-                    <div>
+                <div class="show_micrograph">
+                    <template v-if="checkmicrograph(images)">
                         <label>Micrographs</label>
-                    </div>
-                    <template v-for="(image, index) in images" :key="image.id">
                         <div class="micrograph_gallery">
-                            <div class="micrograph_box" v-if="image.micrograph">
-                                <img
-                                    :src="'/storage/' + image.filename"
-                                    height="120"
-                                    max-width="160"
-                                />
+                            <template
+                                v-for="(image, index) in images"
+                                :key="image.id"
+                            >
                                 <div
-                                    class="showcodex_microdesc"
-                                    v-html="image.description"
-                                />
-                            </div>
+                                    v-if="image.micrograph"
+                                    class="micrograph_box"
+                                >
+                                
+                                        <img class="micrograph_image"
+                                            :src="'/storage/' + image.filename"
+                                        />
+                                    
+                                    <div
+                                        class="micrograph_description"
+                                        v-html="image.description"
+                                    />
+                        </div>
+                    </template>
                         </div>
                     </template>
                 </div>
-
                 <div class="show_conshist">
                     <label>Conservation History</label>
                     <div
@@ -878,7 +885,17 @@
                         :key="transaction.id"
                         class="showcodex_multi_stack"
                     >
-                        <button @click="seltrans = (JSON.stringify(seltrans) === JSON.stringify(transaction)) ? {} : transaction">Info</button>
+                        <button
+                            @click="
+                                seltrans =
+                                    JSON.stringify(seltrans) ===
+                                    JSON.stringify(transaction)
+                                        ? {}
+                                        : transaction
+                            "
+                        >
+                            Info
+                        </button>
                         {{ transaction.name }} ({{
                             transaction.year +
                             (transaction.month ? "-" + transaction.month : "") +
@@ -996,9 +1013,9 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3'
+import { router } from "@inertiajs/vue3";
 import { reactive, ref, onMounted } from "vue";
-import { useForm } from '@inertiajs/vue3'
+import { useForm } from "@inertiajs/vue3";
 import EthRatio from "../Components/EthRatio.vue";
 
 const props = defineProps({
@@ -1184,7 +1201,9 @@ const form = useForm({
         : [],
     /* Materiality */
     s_materials: props.materials_search ? props.materials_search : [],
-    s_gregorys_rules: props.gregorys_rules_search ? props.gregorys_rules_search : [],
+    s_gregorys_rules: props.gregorys_rules_search
+        ? props.gregorys_rules_search
+        : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
     s_covers: props.covers_search ? props.covers_search : [],
@@ -1257,9 +1276,10 @@ const form = useForm({
     s_ancient_provenances: props.ancient_provenances_search
         ? props.ancient_provenances_search
         : [],
-    s_ancient_provenance_certainties: props.ancient_provenance_certainties_search
-        ? props.ancient_provenance_certainties_search
-        : [],
+    s_ancient_provenance_certainties:
+        props.ancient_provenance_certainties_search
+            ? props.ancient_provenance_certainties_search
+            : [],
     s_transactions: props.transactions_search ? props.transactions_search : [],
     s_transactions_incl: props.transaction_parties_incl,
     s_transaction_parties: props.transaction_parties_search
@@ -1345,7 +1365,6 @@ function edit_codex(id) {
         replace: true,
     });
 }
-
 </script>
 
 <style></style>
