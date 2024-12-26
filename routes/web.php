@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionPartyController;
 use App\Http\Controllers\ModernCollectionController;
+use App\Http\Controllers\WorkController;
+use App\Http\Controllers\AuthorController;
 
 use App\Models\User;
 
@@ -59,6 +61,15 @@ Route::post('/transaction_party_update/{transactionParty}', [TransactionPartyCon
 Route::post('/transaction_party_new', [TransactionPartyController::class, 'create']);
 Route::post('/transaction_party_store', [TransactionPartyController::class, 'store']);
 Route::post('/transaction_party_delete/{transactionParty}', [TransactionPartyController::class, 'destroy']);
+
+Route::get('/works', [WorkController::class, 'index'])->name('Works');
+Route::get('/works/create', [WorkController::class, 'create']);
+Route::post('/works', [WorkController::class, 'store']);
+Route::get('/works/{work}/edit', [WorkController::class, 'edit']);
+Route::put('/works/{work}', [WorkController::class, 'update']);
+Route::delete('/works/{work}', [WorkController::class, 'destroy']); 
+
+Route::post('/authors', [AuthorController::class, 'store']);
 
 Route::get('/modern_collections', [ModernCollectionController::class, 'index'])->name('ModernCollections');
 Route::get('/modern_collection_edit/{modernCollection}', [ModernCollectionController::class, 'edit'])->name('ModernCollectionEdit');

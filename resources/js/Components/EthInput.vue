@@ -89,22 +89,19 @@
         </div>
     </div>
 
-    <div v-if="input_type == 'boolevent'" class="inputfield" style="align-self: start;">
-        <div
-            :title="helptext"
-            style="display: flex; flex-direction: column;"
-        >
-            <label :for="input_id" style="margin-left: 20px;"><slot /></label>
+    <div
+        v-if="input_type == 'boolevent'"
+        class="inputfield"
+        style="align-self: start"
+    >
+        <div :title="helptext" style="display: flex; flex-direction: column">
+            <label :for="input_id" style="margin-left: 20px"><slot /></label>
 
             <input
                 :id="input_id"
                 type="checkbox"
                 v-model="checked"
-                style="
-                    transform: scale(2);
-                    margin-top: 15px;
-                    margin-left: 10px;
-                "
+                style="transform: scale(2); margin-top: 15px; margin-left: 10px"
                 @change="
                     $emit('update:modelValue', checked);
                     $emit('newChange');
@@ -232,25 +229,78 @@
         </select>
     </div>
 
+    <div v-if="input_type == 'single_choice_search'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <button
+            :id="input_id"
+            @click.prevent="dropdown = !dropdown"
+            class="dropdownbutton"
+        >
+        <span v-if="checked == null">Select</span>
+        <span v-else v-for="choice in choices" :key="choice.id">
+            <span v-if="choice.id == checked">
+                {{ choice.name }}
+            </span>
+        </span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div>
+                    <div v-if="choices.length > 3">
+                        <label :for="search">Search:</label>
+                        <input type="text" v-model="search" />
+                    </div>
+                    <div class="dropdown-scrollwindow">
+                        <div v-for="choice in search_choices" :key="choice.id">
+                            <input
+                                type="radio"
+                                name="radio"
+                                :id="choice.id"
+                                :value="choice.id"
+                                v-model="checked"
+                                @change="$emit('update:modelValue', choice.id)"
+                            />
+                            <label>{{ choice.name }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--
     <div v-if="input_type == 'single_choice_search'" class="inputfield-search">
         <label :for="input_id"><slot /></label>
-        <select
-            :id="input_id"
-            :value="modelValue"
-            @input="
-                $emit('update:modelValue', $event.target.value);
-                $emit('newChange');
-            "
-        >
-            <option
-                v-for="choice in choices"
-                :value="choice.id"
-                :key="choice.id"
+        <div v-if="choices.length > 3">
+            <label :for="search">Search:</label>
+            <input type="text" v-model="search" />
+        </div>
+        <div class="dropdown-scrollwindow">
+            <select
+                :id="input_id"
+                :value="modelValue"
+                @input="
+                    $emit('update:modelValue', $event.target.value);
+                    $emit('newChange');
+                "
             >
-                {{ choice.name }}
-            </option>
-        </select>
+                <option
+                    v-for="choice in search_choices"
+                    :key="choice.id"
+                    :value="choice.id"
+                >
+                    {{ choice.name }}
+                </option>
+            </select>
+        </div>
     </div>
+-->
 
     <div v-if="input_type == 'legal_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
@@ -872,7 +922,7 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked);"
+                            @change="$emit('update:modelValue', checked)"
                         />
                         <label>{{ choice.name }}</label>
                     </div>
@@ -886,7 +936,7 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked);"
+                            @change="$emit('update:modelValue', checked)"
                         />
                         <label>{{ choice.name }}</label>
                     </div>
@@ -930,8 +980,10 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked);
-                                     $emit('newChange');"
+                            @change="
+                                $emit('update:modelValue', checked);
+                                $emit('newChange');
+                            "
                         />
                         <label>{{ choice.name }}</label>
                     </div>
@@ -945,8 +997,10 @@
                             :id="choice.id"
                             :value="choice"
                             v-model="checked"
-                            @change="$emit('update:modelValue', checked);
-                                     $emit('newChange');"
+                            @change="
+                                $emit('update:modelValue', checked);
+                                $emit('newChange');
+                            "
                         />
                         <label>{{ choice.name }}</label>
                     </div>

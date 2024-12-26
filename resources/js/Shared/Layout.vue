@@ -24,28 +24,57 @@
                 >
                     <Link href="/">Home</Link>
                 </li>
+                <template v-if="loggedin">
+                    <li :class="{ lo_active: pagename.includes('cod') }">
+                        <Link href="/codices">Codices</Link>
+                    </li>
 
-                <li :class="{ lo_active: pagename.includes('cod') }">
-                    <Link href="/codices">Codices</Link>
-                </li>
+                    <li
+                        :class="{
+                            lo_active:
+                                pagename.includes('transactions') &&
+                                !pagename.includes('part'),
+                        }"
+                    >
+                        <Link href="/transactions">Transactions</Link>
+                    </li>
 
-                <li
-                    v-if="editor"
-                    :class="{
-                        lo_active:
-                            pagename.includes('purch') &&
-                            !pagename.includes('part'),
-                    }"
-                >
-                    <Link href="/transactions">Transactions</Link>
-                </li>
+                    <li :class="{ lo_active: pagename.includes('part') }">
+                        <Link href="/transaction_parties"
+                            >Transaction Parties</Link
+                        >
+                    </li>
 
-                <li
-                    v-if="editor"
-                    :class="{ lo_active: pagename.includes('part') }"
-                >
-                    <Link href="/transaction_parties">Transaction Parties</Link>
-                </li>
+                    <li
+                        v-if="
+                            props.auth == null
+                                ? 0
+                                : props.auth.user.role.id >= 3
+                                ? 1
+                                : 0
+                        "
+                        :class="{ lo_active: pagename.includes('works') }"
+                    >
+                        <Link href="/works"
+                            >Works</Link
+                        >
+                    </li>
+
+                    <li
+                        v-if="
+                            props.auth == null
+                                ? 0
+                                : props.auth.user.role.id >= 3
+                                ? 1
+                                : 0
+                        "
+                        :class="{ lo_active: pagename.includes('authors') }"
+                    >
+                        <Link href="/authors"
+                            >Authors</Link
+                        >
+                    </li>
+                </template>
 
                 <li
                     v-if="!loggedin"
@@ -248,7 +277,7 @@ body {
 }
 
 .close-check-box {
-    display: flex; 
+    display: flex;
     flex-direction: row;
 }
 
@@ -450,17 +479,17 @@ body {
 }
 
 .codex_image_container img {
-    max-width: 100%; 
+    max-width: 100%;
     max-height: 100%;
 }
 
 .micrograph_gallery {
     width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.micrograph_gallery>* {
+.micrograph_gallery > * {
     flex: 0 0 33.3333%;
 }
 
@@ -470,7 +499,6 @@ body {
     padding: 5px;
 }
 
-
 .micrograph_image {
     width: 100%;
 }
@@ -479,7 +507,7 @@ body {
     width: 100%;
     height: 4em;
     background-color: #eee;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 .removebutton {
     all: unset;
@@ -660,9 +688,6 @@ body {
     cursor: pointer;
 }
 
-
-
-
 .inputfield-search {
     display: flex;
     flex-direction: column;
@@ -700,7 +725,7 @@ body {
 .pageline {
     display: flex;
     flex-direction: row;
- /*   justify-content: flex-start; */
+    /*   justify-content: flex-start; */
     align-items: flex-end;
     background-color: #eef;
     font-size: 14px;
@@ -784,7 +809,6 @@ body {
     padding: 1em;
     background-color: #444 !important;
 }
-
 
 .searchblockbackground {
     background-color: #ccc;
@@ -889,6 +913,105 @@ body {
     flex: 0 0 20%;
     align-self: center;
 }
+
+
+/* ========================= */
+/* Works and Authors Styling */
+/* ========================= */
+
+.work_container {
+    display: flex;
+    border-style: none;
+    padding: 1em;
+    margin: 0.5em 0em;
+    gap: 1em;
+    background-color: #eee;
+    width: 100%;
+}
+
+/*
+.work_titles {
+    display: flex;
+    align-content: center;
+    border-style: none;
+    padding-bottom: 1em;
+    margin-bottom: 0.5em;
+    gap: 1em;
+    background-color: #bbb;
+    width: 100%;
+}
+
+
+
+*/
+
+.work_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+
+.work_first {
+    flex: 0 0 5%;
+    align-self: center;
+}
+
+.work_second {
+    flex: 0 0 15%;
+    align-self: center;
+}
+.work_third {
+    flex: 0 0 25%;
+    align-self: center;
+}
+.work_fourth {
+    flex: 0 0 20%;
+    align-self: center;
+}
+.work_fifth {
+    flex: 0 0 30%;
+    align-self: center;
+}
+
+.author_container {
+    display: flex;
+    border-style: none;
+    padding: 1em;
+    margin: 0.5em 0em;
+    gap: 1em;
+    background-color: #eee;
+    width: 100%;
+    margin: auto;
+}
+
+.author_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+
+.author_first {
+    flex: 0 0 5%;
+    align-self: center;
+}
+
+.author_second {
+    flex: 0 0 15%;
+    align-self: center;
+}
+.author_third {
+    flex: 0 0 25%;
+    align-self: center;
+}
+.author_fourth {
+    flex: 0 0 50%;
+    align-self: center;
+}
+
+
+
 
 /* ================== */
 /* Show Codex Styling */
@@ -1284,7 +1407,7 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "storage scientific" 
+        "storage scientific"
         "conshist analyscomm"
         "micrograph micrograph";
     gap: 20px;
@@ -1404,7 +1527,6 @@ body {
     overflow-y: auto;
     overflow-wrap: break-word;
 }
-
 
 .showcodex_text {
     background-color: #ddd;

@@ -771,17 +771,17 @@
                                     v-if="image.micrograph"
                                     class="micrograph_box"
                                 >
-                                
-                                        <img class="micrograph_image"
-                                            :src="'/storage/' + image.filename"
-                                        />
-                                    
+                                    <img
+                                        class="micrograph_image"
+                                        :src="'/storage/' + image.filename"
+                                    />
+
                                     <div
                                         class="micrograph_description"
                                         v-html="image.description"
                                     />
-                        </div>
-                    </template>
+                                </div>
+                            </template>
                         </div>
                     </template>
                 </div>

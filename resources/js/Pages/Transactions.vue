@@ -10,7 +10,7 @@
         </Link>
         <div class="pageline_search_field">
             <EthInput input_type="text" input_id="search" v-model="search">
-                Full-Text Search
+                Search
             </EthInput>
         </div>
 

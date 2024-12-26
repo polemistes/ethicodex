@@ -43,8 +43,7 @@ class Document extends Model
     public function transaction_parties()
     {
         $transactions = $this->transactions()->with('transaction_parties')->get();
-  //      $transactions = Transaction::$transaction_parties = (array) null;
-        foreach ($transactions as $transaction) {
+         foreach ($transactions as $transaction) {
             $transaction_parties = array_merge($transaction_parties, $transaction->relations->transaction_parties->items);
         }
         return $transaction_parties;
@@ -150,4 +149,19 @@ class Document extends Model
     {
         return $this->belongsToMany(Diacritic::class);
     }
+
+    public function works()
+    {
+        return $this->belongsToMany(Work::class);
+    }
+
+    public function authors()
+    {
+        $works = $this->works()->with('authors')->get();
+         foreach ($works as $work) {
+            $authors = array_merge($authors, $work->relations->authors->items);
+        }
+        return $authors;
+    }
+
 }
