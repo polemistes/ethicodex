@@ -69,7 +69,10 @@ Route::get('/works/{work}/edit', [WorkController::class, 'edit']);
 Route::put('/works/{work}', [WorkController::class, 'update']);
 Route::delete('/works/{work}', [WorkController::class, 'destroy']); 
 
+Route::get('/authors', [AuthorController::class, 'index'])->name('Authors');
 Route::post('/authors', [AuthorController::class, 'store']);
+Route::put('/authors/{author}', [AuthorController::class, 'update']);
+Route::delete('/authors/{author}', [AuthorController::class, 'destroy']); 
 
 Route::get('/modern_collections', [ModernCollectionController::class, 'index'])->name('ModernCollections');
 Route::get('/modern_collection_edit/{modernCollection}', [ModernCollectionController::class, 'edit'])->name('ModernCollectionEdit');

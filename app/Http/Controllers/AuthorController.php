@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class AuthorController extends Controller
 {
@@ -15,13 +16,11 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Transaction::class);
-
-        $transactions = Transaction::with('transaction_parties', 'documents')->orderBy('year')->orderBy('month')->orderBy('day')->get();
-
-        return (Inertia::render('Transactions', [
-            'transactions' => $transactions,
-        ]));
+        $this->authorize('viewAny', Author::class);
+        $authors = Author::orderBy('name')->get();
+        return Inertia::render('Authors', [
+            'authors' => $authors,
+        ]);
     }
 
     /**
@@ -44,14 +43,14 @@ class AuthorController extends Controller
     {
         $this->authorize('create', Author::class);
 
-        $work = Author::create($request->validate([
+        $author = Author::create($request->validate([
             'name' => 'nullable',
             'altnames' => 'nullable',
             'description' => 'nullable',
         ]));
-        $work->save();
+        $author->save();
 
-        return Redirect::route('Works');
+        return Redirect::route('Authors');
     }
 
     /**
@@ -85,7 +84,20 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+        $this->authorize('update', $author);
+
+        $fields =  $request->validate([
+            'name' => '',
+            'altnames' => 'nullable',
+            'description' => 'nullable',
+        ]);
+
+        $author->name = $fields['name'];
+        $author->altnames = $fields['altnames'];
+        $author->description = $fields['description'];
+        $author->save();
+
+        return Redirect::route('Authors');
     }
 
     /**
@@ -96,6 +108,6 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
     }
 }
