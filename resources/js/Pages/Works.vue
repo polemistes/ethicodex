@@ -197,6 +197,7 @@ let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 
 function work_submit() {
     form.post("/works", {
+        preserveState: false,
         onSuccess: () => {
             form.reset();
         },
