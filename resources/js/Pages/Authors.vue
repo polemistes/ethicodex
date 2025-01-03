@@ -153,10 +153,10 @@ const search_results = computed(() => {
     return search.value != ""
         ? props.authors.filter(function (el) {
               return (
-                  (el.name != null ? el.name.includes(search.value) : null) ||
-                  (el.altnames != null ? el.altnames.includes(search.value) : null) ||
+                  (el.name != null ? el.name.toLowerCase().includes(search.value.toLowerCase()) : null) ||
+                  (el.altnames != null ? el.altnames.toLowerCase().includes(search.value.toLowerCase()) : null) ||
                   (el.description != null
-                      ? el.description.includes(search.value)
+                      ? el.description.toLowerCase().includes(search.value.toLowerCase())
                       : null)
               );
           })

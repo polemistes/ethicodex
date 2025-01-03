@@ -71,9 +71,7 @@
                 <button
                     v-if="work.id == edit_id"
                     type="button"
-                    @click="
-                        edit_id = null;
-                    "
+                    @click="edit_id = null"
                 >
                     Cancel
                 </button>
@@ -89,7 +87,10 @@
                 <button
                     v-if="work.id == edit_id"
                     type="button"
-                    @click="edit_id = null; updatework(work.id)"
+                    @click="
+                        edit_id = null;
+                        updatework(work.id);
+                    "
                 >
                     Update
                 </button>
@@ -177,11 +178,16 @@ const search_results = computed(() => {
     return search.value != ""
         ? props.works.filter(function (el) {
               return (
-                  (el.name != null ? el.name.includes(search.value) : null) ||
-                  (el.altnames != null ? el.altnames.includes(search.value) : null) ||
+                  (el.name != null ? el.name.toLowerCase().includes(search.value.toLowerCase()) : null) ||
+                  (el.altnames != null
+                      ? el.altnames.toLowerCase().includes(search.value.toLowerCase())
+                      : null) ||
                   (el.description != null
-                      ? el.description.includes(search.value)
-                      : null) 
+                      ? el.description.toLowerCase().includes(search.value.toLowerCase())
+                      : null) ||
+                  (el.author != null
+                      ? el.author.name.toLowerCase().includes(search.value.toLowerCase())
+                      : null)
               );
           })
         : props.works;
