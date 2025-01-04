@@ -1068,6 +1068,10 @@ body {
 .show_author {
     grid-area: author;
 }
+.show_works {
+    grid-area: works;
+
+}
 .show_contdesc {
     grid-area: desc;
 }
@@ -1090,6 +1094,7 @@ body {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr auto;
     grid-template-areas:
+        "works works works works works works desc desc desc"
         "title title title author author author desc desc desc"
         "language language genre genre cont cont desc desc desc";
     gap: 20px;
@@ -1643,11 +1648,15 @@ body {
     border-radius: 10px;
 }
 
+
 .edit_title {
     grid-area: title;
 }
 .edit_author {
     grid-area: author;
+}
+.edit_work {
+    grid-area: work;
 }
 .edit_contdesc {
     grid-area: desc;
@@ -1668,6 +1677,7 @@ body {
     grid-template-rows: 1fr auto;
     grid-template-areas:
         "title title title author author author desc desc desc"
+        "work work work work work work desc desc desc"
         "language language genre genre cont cont desc desc desc";
     gap: 20px;
     width: 99%;

@@ -56,7 +56,7 @@
 
         <button
             type="button"
-            :disabled="(next === -1) || form.processing"
+            :disabled="next === -1 || form.processing"
             class="topbutton"
             @click="edit_codex(props.next)"
         >
@@ -65,7 +65,7 @@
 
         <button
             type="button"
-            :disabled="(prev === -1) || form.processing"
+            :disabled="prev === -1 || form.processing"
             class="topbutton"
             @click="edit_codex(props.prev)"
         >
@@ -150,6 +150,8 @@
 
             <fieldset class="editcodex_contentgrid">
                 <legend class="sectionheading">Content</legend>
+
+
                 <div class="edit_title">
                     <EthInput
                         input_type="text"
@@ -168,6 +170,17 @@
                     >
                 </div>
 
+                <div class="edit_work">
+                    <EthInput
+                        input_type="work_choice"
+                        input_id="works"
+                        :choices="works_all"
+                        v-model="form.works"
+                    >
+                        Works
+                    </EthInput>
+                </div>
+                
                 <div class="edit_genre">
                     <EthInput
                         input_type="multi_choice"
@@ -1125,6 +1138,8 @@ const props = defineProps({
     storage_conditions: Array,
     tags: Array,
     tags_all: Array,
+    works: Array,
+    works_all: Array,
 
     show_publication: Boolean,
     show_content: Boolean,
@@ -1249,6 +1264,7 @@ const form = useForm("EditCodex", {
     publication: props.document.publication,
     current_shelfmarks: props.document.current_shelfmarks,
     trismegistos_id: props.document.trismegistos_id,
+    works: props.works,
     title: props.document.title,
     genres: props.genres,
     scientifically_excavated:

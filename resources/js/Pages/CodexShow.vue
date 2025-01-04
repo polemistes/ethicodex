@@ -144,6 +144,7 @@
 
             <fieldset class="showcodex_contentgrid">
                 <legend class="sectionheading">Content</legend>
+
                 <div class="show_title">
                     <label>Title of Work</label>
                     <div class="showcodex_string">{{ document.title }}</div>
@@ -155,6 +156,19 @@
                         {{ document.ancient_author }}
                     </div>
                 </div>
+
+                <div class="show_works">
+                    <label>Works</label>
+                    <div
+                        v-for="work in works"
+                        :key="work.id"
+                        class="showcodex_multi_stack"
+                    >
+                        {{ work.name + " (" + (work.author != null ? work.author.name : "No Author") + ")"  }}
+                    </div>
+                </div>
+
+
 
                 <div class="show_genre">
                     <label>Genre</label>
@@ -1047,6 +1061,7 @@ const props = defineProps({
     scripts: Array,
     storage_condition: Array,
     tags: Array,
+    works: Array,
 
     show_publication: Boolean,
     show_content: Boolean,

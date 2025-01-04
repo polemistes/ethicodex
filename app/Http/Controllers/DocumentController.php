@@ -34,6 +34,7 @@ use App\Models\CriticalSymbol;
 use App\Models\Punctuation;
 use App\Models\Diacritic;
 use App\Models\GregorysRule;
+use App\Models\Work;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -1808,7 +1809,6 @@ class DocumentController extends Controller
                 $savedprev = $doc['id'];
             }
 
-
         return (Inertia::render('CodexShow', [
             'document' => $document,
             'analyses' => $document->analyses()->get()->makeHidden('pivot'),
@@ -1842,6 +1842,7 @@ class DocumentController extends Controller
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
+            'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
 
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
@@ -2798,6 +2799,8 @@ class DocumentController extends Controller
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'tags_all' => Tag::all(),
+            'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
+            'works_all' => Work::with('author')->orderBy('name')->get(),
 
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
@@ -2920,6 +2923,7 @@ class DocumentController extends Controller
             'title' => 'nullable',
             'genres' => 'nullable',
             'ancient_author' => 'nullable',
+            'works' => 'nullable',
             'tags' => 'nullable',
             'content_description' => 'nullable',
             'start_year' => 'nullable',
@@ -3089,6 +3093,7 @@ class DocumentController extends Controller
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
         $document->inks()->sync(array_column($fields['inks'], 'id'));
+        $document->works()->sync(array_column($fields['works'], 'id'));
 
         $document->save();
 
@@ -3957,6 +3962,8 @@ class DocumentController extends Controller
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'tags_all' => Tag::all(),
+            'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
+            'works_all' => Work::with('author')->orderBy('name')->get(),
 
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
