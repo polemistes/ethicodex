@@ -157,9 +157,11 @@ class Document extends Model
 
     public function authors()
     {
-        $works = $this->works()->with('authors')->get();
+        $works = $this->works()->with('author')->get();
+        $authors = [];
+
          foreach ($works as $work) {
-            $authors = array_merge($authors, $work->relations->authors->items);
+            array_push($authors, $work->author);
         }
         return $authors;
     }

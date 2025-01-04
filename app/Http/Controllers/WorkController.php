@@ -116,6 +116,7 @@ class WorkController extends Controller
      */
     public function destroy(Work $work)
     {
+        $work->documents()->detach();
         $work->delete();
     }
 }

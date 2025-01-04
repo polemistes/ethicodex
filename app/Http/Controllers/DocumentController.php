@@ -2,43 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\DB;
-
-use App\Models\Document;
 use App\Models\Analysis;
-use App\Models\Language;
-use App\Models\DatingCertainty;
-use App\Models\DatingMethod;
 use App\Models\AncientProvenance;
 use App\Models\AncientProvenanceCertainty;
 use App\Models\Cover;
-use App\Models\TransactionParty;
+use App\Models\CriticalSymbol;
+use App\Models\DatingCertainty;
+use App\Models\DatingMethod;
 use App\Models\Decoration;
+use App\Models\Diacritic;
+use App\Models\Document;
 use App\Models\Genre;
-use App\Models\Ink;
+use App\Models\GregorysRule;
 use App\Models\Image;
+use App\Models\Ink;
+use App\Models\Language;
 use App\Models\LegalClassification;
+use App\Models\License;
 use App\Models\Material;
 use App\Models\ModernCollection;
 use App\Models\Pagination;
 use App\Models\Paratext;
-use App\Models\Transaction;
+use App\Models\Punctuation;
 use App\Models\QuireSignature;
 use App\Models\QuireStructure;
 use App\Models\Script;
 use App\Models\StorageCondition;
 use App\Models\Tag;
-use App\Models\License;
-use App\Models\CriticalSymbol;
-use App\Models\Punctuation;
-use App\Models\Diacritic;
-use App\Models\GregorysRule;
+use App\Models\Transaction;
+use App\Models\TransactionParty;
 use App\Models\Work;
+use App\Models\Author;
 
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class DocumentController extends Controller
 {
@@ -62,7 +62,6 @@ class DocumentController extends Controller
             'show_palaeography' => 'nullable',
             'show_consanal' => 'nullable',
             'show_provenance' => 'nullable',
-
             'fulltext' => 'nullable',
             's_standard_name' => 'nullable',
             's_publication' => 'nullable',
@@ -107,7 +106,6 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
-
             's_full_page_ratio_min' => 'nullable',
             's_full_page_ratio_max' => 'nullable',
             's_full_text_block_ratio_min' => 'nullable',
@@ -116,13 +114,11 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
-
             's_gregorys_rules' => 'nullable',
             's_columns_min' => 'nullable',
-            's_columns_max'=> 'nullable',
-            's_columnlines_min'=> 'nullable',
-            's_columnlines_max'=> 'nullable',
-
+            's_columns_max' => 'nullable',
+            's_columnlines_min' => 'nullable',
+            's_columnlines_max' => 'nullable',
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -183,33 +179,33 @@ class DocumentController extends Controller
 
         $sortfield = $request->session()->get('sortfield');
         $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
-  
+
         $request->session()->put('sortfield', $sortfield);
         switch ($sortfield) {
             case 1:
-                $sortby = "standard_name";
+                $sortby = 'standard_name';
                 break;
             case 2:
-                $sortby = "ancient_author";
+                $sortby = 'ancient_author';
                 break;
             case 3:
-                $sortby = "title";
+                $sortby = 'title';
                 break;
             case 4:
-                $sortby = "start_year";
+                $sortby = 'start_year';
                 break;
             case 5:
-                $sortby = "end_year";
+                $sortby = 'end_year';
                 break;
             default:
-                $sortby = "start_year";
+                $sortby = 'start_year';
         }
- 
+
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
         $request->session()->put('reverse', $reverse);
 
-        $direction = $reverse ? "desc" : "asc";
+        $direction = $reverse ? 'desc' : 'asc';
 
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
@@ -270,7 +266,7 @@ class DocumentController extends Controller
         $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
         $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
         $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
-        
+
         $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
         $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
@@ -300,31 +296,32 @@ class DocumentController extends Controller
         $legal_classifications = array_key_exists('s_legal_classifications', $search) ? $search['s_legal_classifications'] : null;
 
         $ancient_provenances_original = $ancient_provenances;
-        
-        if($show_provenance AND $ancient_provenances) {
+
+        if ($show_provenance AND $ancient_provenances) {
             $children = [];
 
-            foreach($ancient_provenances as $ancient_provenance) {
+            foreach ($ancient_provenances as $ancient_provenance) {
                 $prov = AncientProvenance::find($ancient_provenance['id']);
                 $childrec = $prov->flatChildren();
 
-                foreach($childrec as $child) {
+                foreach ($childrec as $child) {
                     $childarr = [
-                        "id" => $child->id,
-                        "name" => $child->name
+                        'id' => $child->id,
+                        'name' => $child->name
                     ];
                     array_push($ancient_provenances, $childarr);
-                } 
+                }
             }
         }
 
         $all_documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
-            }) 
+            })
             ->when($fulltext, function ($query) use ($fulltext, $role_id) {
                 $query->where(function ($query) use ($fulltext, $role_id) {
-                    $query->where('standard_name', 'like', "%{$fulltext}%")
+                    $query
+                        ->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('other_names', 'like', "%{$fulltext}%")
                         ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
@@ -358,18 +355,19 @@ class DocumentController extends Controller
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
                         ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
-                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : "notsomethinganyonewouldwrite");
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite');
                 });
             })
-            ->when($show_publication == "true", function ($query) use (
+            ->when($show_publication == 'true', function ($query) use (
                 $standard_name,
                 $publication,
                 $current_shelfmarks,
                 $trismegistos_id
             ) {
-                $query->when($standard_name, function ($query, $standard_name) {
-                    $query->where('standard_name', 'like', "%{$standard_name}%");
-                })
+                $query
+                    ->when($standard_name, function ($query, $standard_name) {
+                        $query->where('standard_name', 'like', "%{$standard_name}%");
+                    })
                     ->when($publication, function ($query, $publication) {
                         $query->where('publication', 'like', "%{$publication}%");
                     })
@@ -380,7 +378,7 @@ class DocumentController extends Controller
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     });
             })
-            ->when($show_content == "true", function ($query) use (
+            ->when($show_content == 'true', function ($query) use (
                 $title,
                 $ancient_author,
                 $languages,
@@ -390,11 +388,29 @@ class DocumentController extends Controller
                 $tags,
                 $tags_incl,
             ) {
-                $query->when($title, function ($query, $title) {
-                    $query->where('title', 'like', "%{$title}%");
-                })
-                    ->when($ancient_author, function ($query, $ancient_author) {
+                $query
+/*                    ->when($title, function ($query, $title) {
+                        $query->where('title', 'like', "%{$title}%");
+                    })*/
+                    ->when($title, function ($query, $title) {
+                        $query->whereHas('works', function ($query) use ($title) {
+                            $query->where('works.name', 'like', "%{$title}%")
+                            ->orWhereRaw("locate('$title', works.altnames)");
+                        });
+                    })
+/*                    ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                    })
+  */  
+
+                    ->when($ancient_author, function ($query, $ancient_author) {
+                        $authors = Author::where('name', 'like', "%{$ancient_author}%")
+                        ->orWhereRaw("locate('$ancient_author', altnames)")
+                        ->get()->all();
+                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                        $query->whereHas('works', function ($query) use ($works) {
+                            $query->whereIn('works.id', array_column($works, 'id'));
+                        });
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
@@ -402,39 +418,38 @@ class DocumentController extends Controller
                         });
                     })
                     ->when($languages && $languages_incl, function ($query) use ($languages) {
-                        foreach($languages as $language) {                                
-                            $query->whereHas('languages', function($query) use ($language) {
+                        foreach ($languages as $language) {
+                            $query->whereHas('languages', function ($query) use ($language) {
                                 $query->where('languages.id', '=', $language['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
                         });
                     })
                     ->when($genres && $genres_incl, function ($query) use ($genres) {
-                        foreach($genres as $genre) {                                
-                            $query->whereHas('genres', function($query) use ($genre) {
+                        foreach ($genres as $genre) {
+                            $query->whereHas('genres', function ($query) use ($genre) {
                                 $query->where('genres.id', '=', $genre['id']);
                             });
                         }
-                    }) 
-
+                    })
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
                         $query->whereHas('tags', function ($query) use ($tags) {
                             $query->whereIn('tags.id', array_column($tags, 'id'));
                         });
                     })
                     ->when($tags && $tags_incl, function ($query) use ($tags) {
-                        foreach($tags as $tag) {                                
-                            $query->whereHas('tags', function($query) use ($tag) {
+                        foreach ($tags as $tag) {
+                            $query->whereHas('tags', function ($query) use ($tag) {
                                 $query->where('tags.id', '=', $tag['id']);
                             });
                         }
-                    }); 
+                    });
             })
-            ->when($show_dating == "true", function ($query) use (
+            ->when($show_dating == 'true', function ($query) use (
                 $earliest_date,
                 $latest_date,
                 $exclusive_date,
@@ -442,39 +457,42 @@ class DocumentController extends Controller
                 $dating_methods_incl,
                 $dating_certainties
             ) {
-                $query->when($exclusive_date == "true", function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('start_year', '>=', $earliest_date);
+                $query
+                    ->when($exclusive_date == 'true', function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('start_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('end_year', '<=', $latest_date);
+                            });
+                    }, function ($query) use ($earliest_date, $latest_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('end_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('start_year', '<=', $latest_date);
+                            });
                     })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('end_year', '<=', $latest_date);
-                        });
-                }, function ($query) use ($earliest_date, $latest_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('end_year', '>=', $earliest_date);
-                    })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('start_year', '<=', $latest_date);
-                        });
-                })
                     ->when($dating_methods && !$dating_methods_incl, function ($query) use ($dating_methods) {
                         $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
                             $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
                         });
                     })
                     ->when($dating_methods && $dating_methods_incl, function ($query) use ($dating_methods) {
-                        foreach($dating_methods as $dating_method) {                                
-                            $query->whereHas('dating_methods', function($query) use ($dating_method) {
+                        foreach ($dating_methods as $dating_method) {
+                            $query->whereHas('dating_methods', function ($query) use ($dating_method) {
                                 $query->where('dating_methods.id', '=', $dating_method['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
                         $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
             })
             ->when(
-                $show_materiality == "true",
+                $show_materiality == 'true',
                 function ($query) use (
                     $materials,
                     $gregorys_rules,
@@ -487,7 +505,8 @@ class DocumentController extends Controller
                     $bifolianum_min,
                     $bifolianum_max
                 ) {
-                        $query->when($materials, function ($query, $materials) {
+                    $query
+                        ->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
                         })
                         ->when($gregorys_rules, function ($query, $gregorys_rules) {
@@ -499,12 +518,12 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($inks && $inks_incl, function ($query) use ($inks) {
-                            foreach($inks as $ink) {                                
-                                $query->whereHas('inks', function($query) use ($ink) {
+                            foreach ($inks as $ink) {
+                                $query->whereHas('inks', function ($query) use ($ink) {
                                     $query->where('inks.id', '=', $ink['id']);
                                 });
                             }
-                        })                      
+                        })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
                         })
@@ -525,9 +544,8 @@ class DocumentController extends Controller
                         });
                 }
             )
-
             ->when(
-                $show_measurement == "true",
+                $show_measurement == 'true',
                 function ($query) use (
                     $full_page_width_min,
                     $full_page_width_max,
@@ -545,7 +563,6 @@ class DocumentController extends Controller
                     $inner_margin_max,
                     $outer_margin_min,
                     $outer_margin_max,
-
                     $full_page_ratio_min,
                     $full_page_ratio_max,
                     $full_text_block_ratio_min,
@@ -554,15 +571,15 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
-
                     $columns_min,
                     $columns_max,
                     $columnlines_min,
                     $columnlines_max,
                 ) {
-                    $query->when($full_page_width_min, function ($query, $full_page_width_min) {
-                        $query->where('full_page_width', '>=', $full_page_width_min);
-                    })
+                    $query
+                        ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                            $query->where('full_page_width', '>=', $full_page_width_min);
+                        })
                         ->when($full_page_width_max, function ($query, $full_page_width_max) {
                             $query->where('full_page_width', '<=', $full_page_width_max);
                         })
@@ -608,8 +625,6 @@ class DocumentController extends Controller
                         ->when($outer_margin_max, function ($query, $outer_margin_max) {
                             $query->where('outer_margin', '<=', $outer_margin_max);
                         })
-
-
                         ->when($full_page_ratio_min, function ($query, $full_page_ratio_min) {
                             $query->where(DB::raw('full_page_width / NULLIF(full_page_height, 0)'), '>=', $full_page_ratio_min);
                         })
@@ -634,7 +649,6 @@ class DocumentController extends Controller
                         ->when($inout_margins_ratio_max, function ($query, $inout_margins_ratio_max) {
                             $query->where(DB::raw('inner_margin / NULLIF(outer_margin, 0)'), '<=', $inout_margins_ratio_max);
                         })
-
                         ->when($columns_min, function ($query, $columns_min) {
                             $query->where('columns', '>=', $columns_min);
                         })
@@ -650,7 +664,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_palaeography == "true",
+                $show_palaeography == 'true',
                 function ($query) use (
                     $hand_number_min,
                     $hand_number_max,
@@ -669,9 +683,10 @@ class DocumentController extends Controller
                     $paginations,
                     $quire_signatures
                 ) {
-                    $query->when($hand_number_min, function ($query, $hand_number_min) {
-                        $query->where('hand_number', '>=', $hand_number_min);
-                    })
+                    $query
+                        ->when($hand_number_min, function ($query, $hand_number_min) {
+                            $query->where('hand_number', '>=', $hand_number_min);
+                        })
                         ->when($hand_number_max, function ($query, $hand_number_max) {
                             $query->where('hand_number', '<=', $hand_number_max);
                         })
@@ -681,98 +696,99 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($scripts && $scripts_incl, function ($query) use ($scripts) {
-                            foreach($scripts as $script) {                                
-                                $query->whereHas('scripts', function($query) use ($script) {
+                            foreach ($scripts as $script) {
+                                $query->whereHas('scripts', function ($query) use ($script) {
                                     $query->where('scripts.id', '=', $script['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($diacritics && !$diacritics_incl, function ($query) use ($diacritics) {
                             $query->whereHas('diacritics', function ($query) use ($diacritics) {
                                 $query->whereIn('diacritics.id', array_column($diacritics, 'id'));
                             });
                         })
                         ->when($diacritics && $diacritics_incl, function ($query) use ($diacritics) {
-                            foreach($diacritics as $diacritic) {                                
-                                $query->whereHas('diacritics', function($query) use ($diacritic) {
+                            foreach ($diacritics as $diacritic) {
+                                $query->whereHas('diacritics', function ($query) use ($diacritic) {
                                     $query->where('diacritics.id', '=', $diacritic['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($punctuations && !$punctuations_incl, function ($query) use ($punctuations) {
                             $query->whereHas('punctuations', function ($query) use ($punctuations) {
                                 $query->whereIn('punctuations.id', array_column($punctuations, 'id'));
                             });
                         })
                         ->when($punctuations && $punctuations_incl, function ($query) use ($punctuations) {
-                            foreach($punctuations as $punctuation) {                                
-                                $query->whereHas('punctuations', function($query) use ($punctuation) {
+                            foreach ($punctuations as $punctuation) {
+                                $query->whereHas('punctuations', function ($query) use ($punctuation) {
                                     $query->where('punctuations.id', '=', $punctuation['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paratexts && !$paratexts_incl, function ($query) use ($paratexts) {
                             $query->whereHas('paratexts', function ($query) use ($paratexts) {
                                 $query->whereIn('paratexts.id', array_column($paratexts, 'id'));
                             });
                         })
                         ->when($paratexts && $paratexts_incl, function ($query) use ($paratexts) {
-                            foreach($paratexts as $paratext) {                                
-                                $query->whereHas('paratexts', function($query) use ($paratext) {
+                            foreach ($paratexts as $paratext) {
+                                $query->whereHas('paratexts', function ($query) use ($paratext) {
                                     $query->where('paratexts.id', '=', $paratext['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($decorations && !$decorations_incl, function ($query) use ($decorations) {
                             $query->whereHas('decorations', function ($query) use ($decorations) {
                                 $query->whereIn('decorations.id', array_column($decorations, 'id'));
                             });
                         })
                         ->when($decorations && $decorations_incl, function ($query) use ($decorations) {
-                            foreach($decorations as $decoration) {                                
-                                $query->whereHas('decorations', function($query) use ($decoration) {
+                            foreach ($decorations as $decoration) {
+                                $query->whereHas('decorations', function ($query) use ($decoration) {
                                     $query->where('decorations.id', '=', $decoration['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($critical_symbols && !$critical_symbols_incl, function ($query) use ($critical_symbols) {
                             $query->whereHas('critical_symbols', function ($query) use ($critical_symbols) {
                                 $query->whereIn('critical_symbols.id', array_column($critical_symbols, 'id'));
                             });
                         })
                         ->when($critical_symbols && $critical_symbols_incl, function ($query) use ($critical_symbols) {
-                            foreach($critical_symbols as $critical_symbol) {                                
-                                $query->whereHas('critical_symbols', function($query) use ($critical_symbol) {
+                            foreach ($critical_symbols as $critical_symbol) {
+                                $query->whereHas('critical_symbols', function ($query) use ($critical_symbol) {
                                     $query->where('critical_symbols.id', '=', $critical_symbol['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paginations, function ($query, $paginations) {
                             $query->whereIn('pagination_id', array_column($paginations, 'id'));
-                      })
+                        })
                         ->when($quire_signatures, function ($query, $quire_signatures) {
                             $query->whereIn('quire_signature_id', array_column($quire_signatures, 'id'));
                         });
                 }
             )
             ->when(
-                $show_consanal == "true",
+                $show_consanal == 'true',
                 function ($query) use (
                     $storage_conditions,
                     $analyses,
                     $analyses_incl,
                 ) {
-                    $query->when($storage_conditions, function ($query, $storage_conditions) {
-                        $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
-                    })
+                    $query
+                        ->when($storage_conditions, function ($query, $storage_conditions) {
+                            $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
+                        })
                         ->when($analyses && !$analyses_incl, function ($query) use ($analyses) {
                             $query->whereHas('analyses', function ($query) use ($analyses) {
                                 $query->whereIn('analyses.id', array_column($analyses, 'id'));
                             });
                         })
                         ->when($analyses && $analyses_incl, function ($query) use ($analyses) {
-                            foreach($analyses as $analysis) {                                
-                                $query->whereHas('analyses', function($query) use ($analysis) {
+                            foreach ($analyses as $analysis) {
+                                $query->whereHas('analyses', function ($query) use ($analysis) {
                                     $query->where('analyses.id', '=', $analysis['id']);
                                 });
                             }
@@ -780,7 +796,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_provenance == "true",
+                $show_provenance == 'true',
                 function ($query) use (
                     $scientifically_excavated,
                     $ancient_provenances,
@@ -791,9 +807,10 @@ class DocumentController extends Controller
                     $transaction_parties_incl,
                     $legal_classifications
                 ) {
-                    $query->when($scientifically_excavated, function ($query, $scientifically_excavated) {
-                        $query->where('scientifically_excavated', '=', 1);
-                    })
+                    $query
+                        ->when($scientifically_excavated, function ($query, $scientifically_excavated) {
+                            $query->where('scientifically_excavated', '=', 1);
+                        })
                         ->when($ancient_provenances, function ($query, $ancient_provenances) {
                             $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
                         })
@@ -806,27 +823,26 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
-                            foreach($transactions as $transaction) {                                
-                                $query->whereHas('transactions', function($query) use ($transaction) {
+                            foreach ($transactions as $transaction) {
+                                $query->whereHas('transactions', function ($query) use ($transaction) {
                                     $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
-                        }) 
-
+                        })
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
                             $tactions = Transaction::query()
                                 ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
                                     $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
-                                })->get()->all();
+                                })
+                                ->get()
+                                ->all();
                             $query->whereHas('transactions', function ($query) use ($tactions) {
                                 $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
-
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            
                             $query->whereHas('transactions', function ($query) use ($transaction_parties) {
-                                foreach($transaction_parties as $transaction_party) {
+                                foreach ($transaction_parties as $transaction_party) {
                                     $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
                                         $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
@@ -836,26 +852,24 @@ class DocumentController extends Controller
                         ->when($legal_classifications, function ($query, $legal_classifications) {
                             $query->whereIn('legal_classification_id', array_column($legal_classifications, 'id'));
                         });
-                    })
-
+                }
+            )
             ->orderBy($sortby, $direction)
             ->orderBy('end_year', $direction);
-            $documents = $all_documents->paginate(10)->withQueryString();
+        $documents = $all_documents->paginate(10)->withQueryString();
 
         $ancient_provenances = $ancient_provenances_original;
 
         return Inertia::render('Codices', [
             'documents' => $documents,
-
-            'show_publication' => $show_publication == "true" ? true : false,
-            'show_content' => $show_content == "true" ? true : false,
-            'show_dating' => $show_dating == "true" ? true : false,
-            'show_materiality' => $show_materiality == "true" ? true : false,
-            'show_measurement' => $show_measurement == "true" ? true : false,
-            'show_palaeography' => $show_palaeography == "true" ? true : false,
-            'show_consanal' => $show_consanal == "true" ? true : false,
-            'show_provenance' => $show_provenance == "true" ? true : false,
-
+            'show_publication' => $show_publication == 'true' ? true : false,
+            'show_content' => $show_content == 'true' ? true : false,
+            'show_dating' => $show_dating == 'true' ? true : false,
+            'show_materiality' => $show_materiality == 'true' ? true : false,
+            'show_measurement' => $show_measurement == 'true' ? true : false,
+            'show_palaeography' => $show_palaeography == 'true' ? true : false,
+            'show_consanal' => $show_consanal == 'true' ? true : false,
+            'show_provenance' => $show_provenance == 'true' ? true : false,
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
@@ -871,13 +885,13 @@ class DocumentController extends Controller
             'tags_incl' => $tags_incl,
             'earliest_date' => $earliest_date,
             'latest_date' => $latest_date,
-            'exclusive_date' => $exclusive_date == "true" ? true : false,
+            'exclusive_date' => $exclusive_date == 'true' ? true : false,
             'dating_methods_search' => $dating_methods,
             'dating_methods_incl' => $dating_methods_incl,
             'dating_certainties_search' => $dating_certainties,
             'materials_search' => $materials,
             'inks_search' => $inks,
-            'inks_incl' => $inks_incl == "true" ? true : false,
+            'inks_incl' => $inks_incl == 'true' ? true : false,
             'covers_search' => $covers,
             'quire_structures_search' => $quire_structures,
             'quirenum_min' => $quirenum_min,
@@ -900,7 +914,6 @@ class DocumentController extends Controller
             'inner_margin_max' => $inner_margin_max,
             'outer_margin_min' => $outer_margin_min,
             'outer_margin_max' => $outer_margin_max,
-
             'full_page_ratio_min' => $full_page_ratio_min,
             'full_page_ratio_max' => $full_page_ratio_max,
             'full_text_block_ratio_min' => $full_text_block_ratio_min,
@@ -909,13 +922,11 @@ class DocumentController extends Controller
             'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
-
             'gregorys_rules_search' => $gregorys_rules,
             'columns_min' => $columns_min,
             'columns_max' => $columns_max,
             'columnlines_min' => $columnlines_min,
             'columnlines_max' => $columnlines_max,
-        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -945,7 +956,6 @@ class DocumentController extends Controller
             'legal_classifications_search' => $legal_classifications,
             'sortfield' => $sortfield,
             'reverse' => $reverse,
-
             'analyses' => Analysis::all(),
             'critical_symbols' => CriticalSymbol::all(),
             'covers' => Cover::all(),
@@ -993,9 +1003,7 @@ class DocumentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -1010,7 +1018,7 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function show(Document  $document, Request $request)
+    public function show(Document $document, Request $request)
     {
         $this->authorize('view', $document);
 
@@ -1025,7 +1033,6 @@ class DocumentController extends Controller
             'show_palaeography' => 'nullable',
             'show_consanal' => 'nullable',
             'show_provenance' => 'nullable',
-
             'fulltext' => 'nullable',
             's_standard_name' => 'nullable',
             's_publication' => 'nullable',
@@ -1070,7 +1077,6 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
-
             's_full_page_ratio_min' => 'nullable',
             's_full_page_ratio_max' => 'nullable',
             's_full_text_block_ratio_min' => 'nullable',
@@ -1079,13 +1085,11 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
-
             's_gregorys_rules' => 'nullable',
             's_columns_min' => 'nullable',
-            's_columns_max'=> 'nullable',
-            's_columnlines_min'=> 'nullable',
-            's_columnlines_max'=> 'nullable',
-
+            's_columns_max' => 'nullable',
+            's_columnlines_min' => 'nullable',
+            's_columnlines_max' => 'nullable',
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -1129,26 +1133,26 @@ class DocumentController extends Controller
 
         $sortfield = $request->session()->get('sortfield');
         $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
-  
+
         $request->session()->put('sortfield', $sortfield);
         switch ($sortfield) {
             case 1:
-                $sortby = "standard_name";
+                $sortby = 'standard_name';
                 break;
             case 2:
-                $sortby = "ancient_author";
+                $sortby = 'ancient_author';
                 break;
             case 3:
-                $sortby = "title";
+                $sortby = 'title';
                 break;
             case 4:
-                $sortby = "start_year";
+                $sortby = 'start_year';
                 break;
             case 5:
-                $sortby = "end_year";
+                $sortby = 'end_year';
                 break;
             default:
-                $sortby = "start_year";
+                $sortby = 'start_year';
         }
 
         $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
@@ -1156,7 +1160,7 @@ class DocumentController extends Controller
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
 
-        $direction = $reverse ? "desc" : "asc";
+        $direction = $reverse ? 'desc' : 'asc';
 
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
@@ -1245,31 +1249,32 @@ class DocumentController extends Controller
         $transaction_parties = array_key_exists('s_transaction_parties', $search) ? $search['s_transaction_parties'] : null;
         $transaction_parties_incl = array_key_exists('s_transaction_parties_incl', $search) ? $search['s_transaction_parties_incl'] : null;
         $legal_classifications = array_key_exists('s_legal_classifications', $search) ? $search['s_legal_classifications'] : null;
-        
-        if($show_provenance AND $ancient_provenances) {
+
+        if ($show_provenance AND $ancient_provenances) {
             $children = [];
 
-            foreach($ancient_provenances as $ancient_provenance) {
+            foreach ($ancient_provenances as $ancient_provenance) {
                 $prov = AncientProvenance::find($ancient_provenance['id']);
                 $childrec = $prov->flatChildren();
 
-                foreach($childrec as $child) {
+                foreach ($childrec as $child) {
                     $childarr = [
-                        "id" => $child->id,
-                        "name" => $child->name
+                        'id' => $child->id,
+                        'name' => $child->name
                     ];
                     array_push($ancient_provenances, $childarr);
-                } 
+                }
             }
         }
- 
+
         $all_documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
-            }) 
+            })
             ->when($fulltext, function ($query) use ($fulltext, $role_id) {
                 $query->where(function ($query) use ($fulltext, $role_id) {
-                    $query->where('standard_name', 'like', "%{$fulltext}%")
+                    $query
+                        ->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('other_names', 'like', "%{$fulltext}%")
                         ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
@@ -1303,18 +1308,19 @@ class DocumentController extends Controller
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
                         ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
-                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : "notsomethinganyonewouldwrite");
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite');
                 });
             })
-            ->when($show_publication == "true", function ($query) use (
+            ->when($show_publication == 'true', function ($query) use (
                 $standard_name,
                 $publication,
                 $current_shelfmarks,
                 $trismegistos_id
             ) {
-                $query->when($standard_name, function ($query, $standard_name) {
-                    $query->where('standard_name', 'like', "%{$standard_name}%");
-                })
+                $query
+                    ->when($standard_name, function ($query, $standard_name) {
+                        $query->where('standard_name', 'like', "%{$standard_name}%");
+                    })
                     ->when($publication, function ($query, $publication) {
                         $query->where('publication', 'like', "%{$publication}%");
                     })
@@ -1325,7 +1331,7 @@ class DocumentController extends Controller
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     });
             })
-            ->when($show_content == "true", function ($query) use (
+            ->when($show_content == 'true', function ($query) use (
                 $title,
                 $ancient_author,
                 $languages,
@@ -1335,50 +1341,69 @@ class DocumentController extends Controller
                 $tags,
                 $tags_incl,
             ) {
-                $query->when($title, function ($query, $title) {
-                    $query->where('title', 'like', "%{$title}%");
-                })
-                    ->when($ancient_author, function ($query, $ancient_author) {
+                $query
+/*                    ->when($title, function ($query, $title) {
+                        $query->where('title', 'like', "%{$title}%");
+                    })*/
+                    ->when($title, function ($query, $title) {
+                        $query->whereHas('works', function ($query) use ($title) {
+                            $query->where('works.name', 'like', "%{$title}%")
+                            ->orWhereRaw("locate('$title', works.altnames)");
+                        });
+                    })
+/*                    ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+  */  
+
+                    ->when($ancient_author, function ($query, $ancient_author) {
+                        $authors = Author::where('name', 'like', "%{$ancient_author}%")
+                        ->orWhereRaw("locate('$ancient_author', altnames)")
+                        ->get()->all();
+                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                        $query->whereHas('works', function ($query) use ($works) {
+                            $query->whereIn('works.id', array_column($works, 'id'));
+                        });
+                    })
+
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));
                         });
                     })
                     ->when($languages && $languages_incl, function ($query) use ($languages) {
-                        foreach($languages as $language) {                                
-                            $query->whereHas('languages', function($query) use ($language) {
+                        foreach ($languages as $language) {
+                            $query->whereHas('languages', function ($query) use ($language) {
                                 $query->where('languages.id', '=', $language['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
                         });
                     })
                     ->when($genres && $genres_incl, function ($query) use ($genres) {
-                        foreach($genres as $genre) {                                
-                            $query->whereHas('genres', function($query) use ($genre) {
+                        foreach ($genres as $genre) {
+                            $query->whereHas('genres', function ($query) use ($genre) {
                                 $query->where('genres.id', '=', $genre['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
                         $query->whereHas('tags', function ($query) use ($tags) {
                             $query->whereIn('tags.id', array_column($tags, 'id'));
                         });
                     })
                     ->when($tags && $tags_incl, function ($query) use ($tags) {
-                        foreach($tags as $tag) {                                
-                            $query->whereHas('tags', function($query) use ($tag) {
+                        foreach ($tags as $tag) {
+                            $query->whereHas('tags', function ($query) use ($tag) {
                                 $query->where('tags.id', '=', $tag['id']);
                             });
                         }
-                    }); 
+                    });
             })
-            ->when($show_dating == "true", function ($query) use (
+            ->when($show_dating == 'true', function ($query) use (
                 $earliest_date,
                 $latest_date,
                 $exclusive_date,
@@ -1386,39 +1411,42 @@ class DocumentController extends Controller
                 $dating_methods_incl,
                 $dating_certainties
             ) {
-                $query->when($exclusive_date == "true", function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('start_year', '>=', $earliest_date);
+                $query
+                    ->when($exclusive_date == 'true', function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('start_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('end_year', '<=', $latest_date);
+                            });
+                    }, function ($query) use ($earliest_date, $latest_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('end_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('start_year', '<=', $latest_date);
+                            });
                     })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('end_year', '<=', $latest_date);
-                        });
-                }, function ($query) use ($earliest_date, $latest_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('end_year', '>=', $earliest_date);
-                    })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('start_year', '<=', $latest_date);
-                        });
-                })
                     ->when($dating_methods && !$dating_methods_incl, function ($query) use ($dating_methods) {
                         $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
                             $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
                         });
                     })
                     ->when($dating_methods && $dating_methods_incl, function ($query) use ($dating_methods) {
-                        foreach($dating_methods as $dating_method) {                                
-                            $query->whereHas('dating_methods', function($query) use ($dating_method) {
+                        foreach ($dating_methods as $dating_method) {
+                            $query->whereHas('dating_methods', function ($query) use ($dating_method) {
                                 $query->where('dating_methods.id', '=', $dating_method['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
                         $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
             })
             ->when(
-                $show_materiality == "true",
+                $show_materiality == 'true',
                 function ($query) use (
                     $materials,
                     $gregorys_rules,
@@ -1431,7 +1459,8 @@ class DocumentController extends Controller
                     $bifolianum_min,
                     $bifolianum_max
                 ) {
-                        $query->when($materials, function ($query, $materials) {
+                    $query
+                        ->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
                         })
                         ->when($gregorys_rules, function ($query, $gregorys_rules) {
@@ -1443,12 +1472,12 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($inks && $inks_incl, function ($query) use ($inks) {
-                            foreach($inks as $ink) {                                
-                                $query->whereHas('inks', function($query) use ($ink) {
+                            foreach ($inks as $ink) {
+                                $query->whereHas('inks', function ($query) use ($ink) {
                                     $query->where('inks.id', '=', $ink['id']);
                                 });
                             }
-                        })                      
+                        })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
                         })
@@ -1469,9 +1498,8 @@ class DocumentController extends Controller
                         });
                 }
             )
-
             ->when(
-                $show_measurement == "true",
+                $show_measurement == 'true',
                 function ($query) use (
                     $full_page_width_min,
                     $full_page_width_max,
@@ -1489,7 +1517,6 @@ class DocumentController extends Controller
                     $inner_margin_max,
                     $outer_margin_min,
                     $outer_margin_max,
-
                     $full_page_ratio_min,
                     $full_page_ratio_max,
                     $full_text_block_ratio_min,
@@ -1498,15 +1525,15 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
-
                     $columns_min,
                     $columns_max,
                     $columnlines_min,
                     $columnlines_max,
                 ) {
-                    $query->when($full_page_width_min, function ($query, $full_page_width_min) {
-                        $query->where('full_page_width', '>=', $full_page_width_min);
-                    })
+                    $query
+                        ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                            $query->where('full_page_width', '>=', $full_page_width_min);
+                        })
                         ->when($full_page_width_max, function ($query, $full_page_width_max) {
                             $query->where('full_page_width', '<=', $full_page_width_max);
                         })
@@ -1591,7 +1618,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_palaeography == "true",
+                $show_palaeography == 'true',
                 function ($query) use (
                     $hand_number_min,
                     $hand_number_max,
@@ -1610,9 +1637,10 @@ class DocumentController extends Controller
                     $paginations,
                     $quire_signatures
                 ) {
-                    $query->when($hand_number_min, function ($query, $hand_number_min) {
-                        $query->where('hand_number', '>=', $hand_number_min);
-                    })
+                    $query
+                        ->when($hand_number_min, function ($query, $hand_number_min) {
+                            $query->where('hand_number', '>=', $hand_number_min);
+                        })
                         ->when($hand_number_max, function ($query, $hand_number_max) {
                             $query->where('hand_number', '<=', $hand_number_max);
                         })
@@ -1622,72 +1650,72 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($scripts && $scripts_incl, function ($query) use ($scripts) {
-                            foreach($scripts as $script) {                                
-                                $query->whereHas('scripts', function($query) use ($script) {
+                            foreach ($scripts as $script) {
+                                $query->whereHas('scripts', function ($query) use ($script) {
                                     $query->where('scripts.id', '=', $script['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($diacritics && !$diacritics_incl, function ($query) use ($diacritics) {
                             $query->whereHas('diacritics', function ($query) use ($diacritics) {
                                 $query->whereIn('diacritics.id', array_column($diacritics, 'id'));
                             });
                         })
                         ->when($diacritics && $diacritics_incl, function ($query) use ($diacritics) {
-                            foreach($diacritics as $diacritic) {                                
-                                $query->whereHas('diacritics', function($query) use ($diacritic) {
+                            foreach ($diacritics as $diacritic) {
+                                $query->whereHas('diacritics', function ($query) use ($diacritic) {
                                     $query->where('diacritics.id', '=', $diacritic['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($punctuations && !$punctuations_incl, function ($query) use ($punctuations) {
                             $query->whereHas('punctuations', function ($query) use ($punctuations) {
                                 $query->whereIn('punctuations.id', array_column($punctuations, 'id'));
                             });
                         })
                         ->when($punctuations && $punctuations_incl, function ($query) use ($punctuations) {
-                            foreach($punctuations as $punctuation) {                                
-                                $query->whereHas('punctuations', function($query) use ($punctuation) {
+                            foreach ($punctuations as $punctuation) {
+                                $query->whereHas('punctuations', function ($query) use ($punctuation) {
                                     $query->where('punctuations.id', '=', $punctuation['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paratexts && !$paratexts_incl, function ($query) use ($paratexts) {
                             $query->whereHas('paratexts', function ($query) use ($paratexts) {
                                 $query->whereIn('paratexts.id', array_column($paratexts, 'id'));
                             });
                         })
                         ->when($paratexts && $paratexts_incl, function ($query) use ($paratexts) {
-                            foreach($paratexts as $paratext) {                                
-                                $query->whereHas('paratexts', function($query) use ($paratext) {
+                            foreach ($paratexts as $paratext) {
+                                $query->whereHas('paratexts', function ($query) use ($paratext) {
                                     $query->where('paratexts.id', '=', $paratext['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($decorations && !$decorations_incl, function ($query) use ($decorations) {
                             $query->whereHas('decorations', function ($query) use ($decorations) {
                                 $query->whereIn('decorations.id', array_column($decorations, 'id'));
                             });
                         })
                         ->when($decorations && $decorations_incl, function ($query) use ($decorations) {
-                            foreach($decorations as $decoration) {                                
-                                $query->whereHas('decorations', function($query) use ($decoration) {
+                            foreach ($decorations as $decoration) {
+                                $query->whereHas('decorations', function ($query) use ($decoration) {
                                     $query->where('decorations.id', '=', $decoration['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($critical_symbols && !$critical_symbols_incl, function ($query) use ($critical_symbols) {
                             $query->whereHas('critical_symbols', function ($query) use ($critical_symbols) {
                                 $query->whereIn('critical_symbols.id', array_column($critical_symbols, 'id'));
                             });
                         })
                         ->when($critical_symbols && $critical_symbols_incl, function ($query) use ($critical_symbols) {
-                            foreach($critical_symbols as $critical_symbol) {                                
-                                $query->whereHas('critical_symbols', function($query) use ($critical_symbol) {
+                            foreach ($critical_symbols as $critical_symbol) {
+                                $query->whereHas('critical_symbols', function ($query) use ($critical_symbol) {
                                     $query->where('critical_symbols.id', '=', $critical_symbol['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paginations, function ($query, $paginations) {
                             $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
@@ -1697,23 +1725,24 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_consanal == "true",
+                $show_consanal == 'true',
                 function ($query) use (
                     $storage_conditions,
                     $analyses,
                     $analyses_incl,
                 ) {
-                    $query->when($storage_conditions, function ($query, $storage_conditions) {
-                        $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
-                    })
+                    $query
+                        ->when($storage_conditions, function ($query, $storage_conditions) {
+                            $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
+                        })
                         ->when($analyses && !$analyses_incl, function ($query) use ($analyses) {
                             $query->whereHas('analyses', function ($query) use ($analyses) {
                                 $query->whereIn('analyses.id', array_column($analyses, 'id'));
                             });
                         })
                         ->when($analyses && $analyses_incl, function ($query) use ($analyses) {
-                            foreach($analyses as $analysis) {                                
-                                $query->whereHas('analyses', function($query) use ($analysis) {
+                            foreach ($analyses as $analysis) {
+                                $query->whereHas('analyses', function ($query) use ($analysis) {
                                     $query->where('analyses.id', '=', $analysis['id']);
                                 });
                             }
@@ -1721,7 +1750,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_provenance == "true",
+                $show_provenance == 'true',
                 function ($query) use (
                     $scientifically_excavated,
                     $ancient_provenances,
@@ -1732,9 +1761,10 @@ class DocumentController extends Controller
                     $transaction_parties_incl,
                     $legal_classifications
                 ) {
-                    $query->when($scientifically_excavated, function ($query, $scientifically_excavated) {
-                        $query->where('scientifically_excavated', '=', 1);
-                    })
+                    $query
+                        ->when($scientifically_excavated, function ($query, $scientifically_excavated) {
+                            $query->where('scientifically_excavated', '=', 1);
+                        })
                         ->when($ancient_provenances, function ($query, $ancient_provenances) {
                             $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
                         })
@@ -1747,27 +1777,26 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
-                            foreach($transactions as $transaction) {                                
-                                $query->whereHas('transactions', function($query) use ($transaction) {
+                            foreach ($transactions as $transaction) {
+                                $query->whereHas('transactions', function ($query) use ($transaction) {
                                     $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
-                        }) 
-
+                        })
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
                             $tactions = Transaction::query()
                                 ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
                                     $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
-                                })->get()->all();
+                                })
+                                ->get()
+                                ->all();
                             $query->whereHas('transactions', function ($query) use ($tactions) {
                                 $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
-
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            
                             $query->whereHas('transactions', function ($query) use ($transaction_parties) {
-                                foreach($transaction_parties as $transaction_party) {
+                                foreach ($transaction_parties as $transaction_party) {
                                     $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
                                         $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
@@ -1777,37 +1806,37 @@ class DocumentController extends Controller
                         ->when($legal_classifications, function ($query, $legal_classifications) {
                             $query->whereIn('legal_classification_id', array_column($legal_classifications, 'id'));
                         });
-                    })
-
+                }
+            )
             ->orderBy($sortby, $direction)
-            ->orderBy('end_year', $direction)->get();
+            ->orderBy('end_year', $direction)
+            ->get();
 
-            $prev = -1;
-            $next = -1;
-            $current = -1;
-            $savedprev = -1;
-            $found = false;
-            $count = 0;
-            $total = $all_documents->count();
+        $prev = -1;
+        $next = -1;
+        $current = -1;
+        $savedprev = -1;
+        $found = false;
+        $count = 0;
+        $total = $all_documents->count();
 
-            foreach ($all_documents as $doc){
-                if($found) {
-                    $next = $doc['id'];
-                    break;
-                }
-
-                $count++;
-
-                if($doc['id'] === $document['id']) {
-                    $found = true;
-                    $prev = $savedprev;
-                    $current = $count;
-                }
-                else {
-                    $found = false;
-                }
-                $savedprev = $doc['id'];
+        foreach ($all_documents as $doc) {
+            if ($found) {
+                $next = $doc['id'];
+                break;
             }
+
+            $count++;
+
+            if ($doc['id'] === $document['id']) {
+                $found = true;
+                $prev = $savedprev;
+                $current = $count;
+            } else {
+                $found = false;
+            }
+            $savedprev = $doc['id'];
+        }
 
         return (Inertia::render('CodexShow', [
             'document' => $document,
@@ -1831,19 +1860,21 @@ class DocumentController extends Controller
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
-            'transactions' => $document->transactions()
-                                        ->with('transaction_parties')->with('documents')->get()
-                                        ->sortBy('year')
-                                        ->sortBy('month')
-                                        ->sortBy('day')                                
-                                        ->makeHidden('pivot'),
+            'transactions' => $document
+                ->transactions()
+                ->with('transaction_parties')
+                ->with('documents')
+                ->get()
+                ->sortBy('year')
+                ->sortBy('month')
+                ->sortBy('day')
+                ->makeHidden('pivot'),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structure' => $document->quire_structure()->get(),
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
-
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
@@ -1859,13 +1890,13 @@ class DocumentController extends Controller
             'tags_incl' => $tags_incl,
             'earliest_date' => $earliest_date,
             'latest_date' => $latest_date,
-            'exclusive_date' => $exclusive_date == "true" ? true : false,
+            'exclusive_date' => $exclusive_date == 'true' ? true : false,
             'dating_methods_search' => $dating_methods,
             'dating_methods_incl' => $dating_methods_incl,
             'dating_certainties_search' => $dating_certainties,
             'materials_search' => $materials,
             'inks_search' => $inks,
-            'inks_incl' => $inks_incl == "true" ? true : false,
+            'inks_incl' => $inks_incl == 'true' ? true : false,
             'covers_search' => $covers,
             'quire_structures_search' => $quire_structures,
             'quirenum_min' => $quirenum_min,
@@ -1897,13 +1928,11 @@ class DocumentController extends Controller
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
             'hand_number_min' => $hand_number_min,
-
             'gregorys_rules_search' => $gregorys_rules,
             'columns_min' => $columns_min,
             'columns_max' => $columns_max,
             'columnlines_min' => $columnlines_min,
             'columnlines_max' => $columnlines_max,
-        
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
             'scripts_incl' => $scripts_incl,
@@ -1930,14 +1959,13 @@ class DocumentController extends Controller
             'transaction_parties_search' => $transaction_parties,
             'transaction_parties_incl' => $transaction_parties_incl,
             'legal_classifications_search' => $legal_classifications,
-
             'sortfield' => $sortfield,
             'reverse' => $reverse,
             'tab' => $tab,
             'prev' => $prev,
             'next' => $next,
             'current' => $current,
-            'total' => $total, 
+            'total' => $total,
         ]));
     }
 
@@ -1956,7 +1984,6 @@ class DocumentController extends Controller
             'show_palaeography' => 'nullable',
             'show_consanal' => 'nullable',
             'show_provenance' => 'nullable',
-
             'fulltext' => 'nullable',
             's_standard_name' => 'nullable',
             's_publication' => 'nullable',
@@ -2001,7 +2028,6 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
-
             's_full_page_ratio_min' => 'nullable',
             's_full_page_ratio_max' => 'nullable',
             's_full_text_block_ratio_min' => 'nullable',
@@ -2010,13 +2036,11 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
-
             's_gregorys_rules' => 'nullable',
             's_columns_min' => 'nullable',
-            's_columns_max'=> 'nullable',
-            's_columnlines_min'=> 'nullable',
-            's_columnlines_max'=> 'nullable',
-
+            's_columns_max' => 'nullable',
+            's_columnlines_min' => 'nullable',
+            's_columnlines_max' => 'nullable',
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -2048,7 +2072,7 @@ class DocumentController extends Controller
             'reverse' => 'nullable',
             'tab' => 'nullable',
         ]);
-     
+
         $show_publication = $request->session()->get('show_publication');
         $show_content = $request->session()->get('show_content');
         $show_dating = $request->session()->get('show_dating');
@@ -2060,26 +2084,26 @@ class DocumentController extends Controller
 
         $sortfield = $request->session()->get('sortfield');
         $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
-  
+
         $request->session()->put('sortfield', $sortfield);
         switch ($sortfield) {
             case 1:
-                $sortby = "standard_name";
+                $sortby = 'standard_name';
                 break;
             case 2:
-                $sortby = "ancient_author";
+                $sortby = 'ancient_author';
                 break;
             case 3:
-                $sortby = "title";
+                $sortby = 'title';
                 break;
             case 4:
-                $sortby = "start_year";
+                $sortby = 'start_year';
                 break;
             case 5:
-                $sortby = "end_year";
+                $sortby = 'end_year';
                 break;
             default:
-                $sortby = "start_year";
+                $sortby = 'start_year';
         }
 
         $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
@@ -2088,7 +2112,7 @@ class DocumentController extends Controller
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
         $request->session()->put('reverse', $reverse);
 
-        $direction = $reverse ? "desc" : "asc";
+        $direction = $reverse ? 'desc' : 'asc';
 
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
@@ -2177,31 +2201,32 @@ class DocumentController extends Controller
         $transaction_parties = array_key_exists('s_transaction_parties', $search) ? $search['s_transaction_parties'] : null;
         $transaction_parties_incl = array_key_exists('s_transaction_parties_incl', $search) ? $search['s_transaction_parties_incl'] : null;
         $legal_classifications = array_key_exists('s_legal_classifications', $search) ? $search['s_legal_classifications'] : null;
-        
-        if($show_provenance AND $ancient_provenances) {
+
+        if ($show_provenance AND $ancient_provenances) {
             $children = [];
 
-            foreach($ancient_provenances as $ancient_provenance) {
+            foreach ($ancient_provenances as $ancient_provenance) {
                 $prov = AncientProvenance::find($ancient_provenance['id']);
                 $childrec = $prov->flatChildren();
 
-                foreach($childrec as $child) {
+                foreach ($childrec as $child) {
                     $childarr = [
-                        "id" => $child->id,
-                        "name" => $child->name
+                        'id' => $child->id,
+                        'name' => $child->name
                     ];
                     array_push($ancient_provenances, $childarr);
-                } 
+                }
             }
         }
- 
+
         $all_documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
-            }) 
+            })
             ->when($fulltext, function ($query) use ($fulltext, $role_id) {
                 $query->where(function ($query) use ($fulltext, $role_id) {
-                    $query->where('standard_name', 'like', "%{$fulltext}%")
+                    $query
+                        ->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('other_names', 'like', "%{$fulltext}%")
                         ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
@@ -2235,18 +2260,19 @@ class DocumentController extends Controller
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
                         ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
-                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : "notsomethinganyonewouldwrite");
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite');
                 });
             })
-            ->when($show_publication == "true", function ($query) use (
+            ->when($show_publication == 'true', function ($query) use (
                 $standard_name,
                 $publication,
                 $current_shelfmarks,
                 $trismegistos_id
             ) {
-                $query->when($standard_name, function ($query, $standard_name) {
-                    $query->where('standard_name', 'like', "%{$standard_name}%");
-                })
+                $query
+                    ->when($standard_name, function ($query, $standard_name) {
+                        $query->where('standard_name', 'like', "%{$standard_name}%");
+                    })
                     ->when($publication, function ($query, $publication) {
                         $query->where('publication', 'like', "%{$publication}%");
                     })
@@ -2257,7 +2283,7 @@ class DocumentController extends Controller
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     });
             })
-            ->when($show_content == "true", function ($query) use (
+            ->when($show_content == 'true', function ($query) use (
                 $title,
                 $ancient_author,
                 $languages,
@@ -2267,50 +2293,69 @@ class DocumentController extends Controller
                 $tags,
                 $tags_incl,
             ) {
-                $query->when($title, function ($query, $title) {
-                    $query->where('title', 'like', "%{$title}%");
-                })
-                    ->when($ancient_author, function ($query, $ancient_author) {
+                $query
+/*                    ->when($title, function ($query, $title) {
+                        $query->where('title', 'like', "%{$title}%");
+                    })*/
+                    ->when($title, function ($query, $title) {
+                        $query->whereHas('works', function ($query) use ($title) {
+                            $query->where('works.name', 'like', "%{$title}%")
+                            ->orWhereRaw("locate('$title', works.altnames)");
+                        });
+                    })
+/*                    ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+  */  
+
+                    ->when($ancient_author, function ($query, $ancient_author) {
+                        $authors = Author::where('name', 'like', "%{$ancient_author}%")
+                        ->orWhereRaw("locate('$ancient_author', altnames)")
+                        ->get()->all();
+                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                        $query->whereHas('works', function ($query) use ($works) {
+                            $query->whereIn('works.id', array_column($works, 'id'));
+                        });
+                    })
+
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));
                         });
                     })
                     ->when($languages && $languages_incl, function ($query) use ($languages) {
-                        foreach($languages as $language) {                                
-                            $query->whereHas('languages', function($query) use ($language) {
+                        foreach ($languages as $language) {
+                            $query->whereHas('languages', function ($query) use ($language) {
                                 $query->where('languages.id', '=', $language['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
                         });
                     })
                     ->when($genres && $genres_incl, function ($query) use ($genres) {
-                        foreach($genres as $genre) {                                
-                            $query->whereHas('genres', function($query) use ($genre) {
+                        foreach ($genres as $genre) {
+                            $query->whereHas('genres', function ($query) use ($genre) {
                                 $query->where('genres.id', '=', $genre['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
                         $query->whereHas('tags', function ($query) use ($tags) {
                             $query->whereIn('tags.id', array_column($tags, 'id'));
                         });
                     })
                     ->when($tags && $tags_incl, function ($query) use ($tags) {
-                        foreach($tags as $tag) {                                
-                            $query->whereHas('tags', function($query) use ($tag) {
+                        foreach ($tags as $tag) {
+                            $query->whereHas('tags', function ($query) use ($tag) {
                                 $query->where('tags.id', '=', $tag['id']);
                             });
                         }
-                    }); 
+                    });
             })
-            ->when($show_dating == "true", function ($query) use (
+            ->when($show_dating == 'true', function ($query) use (
                 $earliest_date,
                 $latest_date,
                 $exclusive_date,
@@ -2318,39 +2363,42 @@ class DocumentController extends Controller
                 $dating_methods_incl,
                 $dating_certainties
             ) {
-                $query->when($exclusive_date == "true", function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('start_year', '>=', $earliest_date);
+                $query
+                    ->when($exclusive_date == 'true', function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('start_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('end_year', '<=', $latest_date);
+                            });
+                    }, function ($query) use ($earliest_date, $latest_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('end_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('start_year', '<=', $latest_date);
+                            });
                     })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('end_year', '<=', $latest_date);
-                        });
-                }, function ($query) use ($earliest_date, $latest_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('end_year', '>=', $earliest_date);
-                    })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('start_year', '<=', $latest_date);
-                        });
-                })
                     ->when($dating_methods && !$dating_methods_incl, function ($query) use ($dating_methods) {
                         $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
                             $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
                         });
                     })
                     ->when($dating_methods && $dating_methods_incl, function ($query) use ($dating_methods) {
-                        foreach($dating_methods as $dating_method) {                                
-                            $query->whereHas('dating_methods', function($query) use ($dating_method) {
+                        foreach ($dating_methods as $dating_method) {
+                            $query->whereHas('dating_methods', function ($query) use ($dating_method) {
                                 $query->where('dating_methods.id', '=', $dating_method['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
                         $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
             })
             ->when(
-                $show_materiality == "true",
+                $show_materiality == 'true',
                 function ($query) use (
                     $materials,
                     $gregorys_rules,
@@ -2363,7 +2411,8 @@ class DocumentController extends Controller
                     $bifolianum_min,
                     $bifolianum_max
                 ) {
-                        $query->when($materials, function ($query, $materials) {
+                    $query
+                        ->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
                         })
                         ->when($gregorys_rules, function ($query, $gregorys_rules) {
@@ -2375,12 +2424,12 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($inks && $inks_incl, function ($query) use ($inks) {
-                            foreach($inks as $ink) {                                
-                                $query->whereHas('inks', function($query) use ($ink) {
+                            foreach ($inks as $ink) {
+                                $query->whereHas('inks', function ($query) use ($ink) {
                                     $query->where('inks.id', '=', $ink['id']);
                                 });
                             }
-                        })                      
+                        })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
                         })
@@ -2401,9 +2450,8 @@ class DocumentController extends Controller
                         });
                 }
             )
-
             ->when(
-                $show_measurement == "true",
+                $show_measurement == 'true',
                 function ($query) use (
                     $full_page_width_min,
                     $full_page_width_max,
@@ -2421,7 +2469,6 @@ class DocumentController extends Controller
                     $inner_margin_max,
                     $outer_margin_min,
                     $outer_margin_max,
-
                     $full_page_ratio_min,
                     $full_page_ratio_max,
                     $full_text_block_ratio_min,
@@ -2430,15 +2477,15 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
-
                     $columns_min,
                     $columns_max,
                     $columnlines_min,
                     $columnlines_max,
                 ) {
-                    $query->when($full_page_width_min, function ($query, $full_page_width_min) {
-                        $query->where('full_page_width', '>=', $full_page_width_min);
-                    })
+                    $query
+                        ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                            $query->where('full_page_width', '>=', $full_page_width_min);
+                        })
                         ->when($full_page_width_max, function ($query, $full_page_width_max) {
                             $query->where('full_page_width', '<=', $full_page_width_max);
                         })
@@ -2523,7 +2570,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_palaeography == "true",
+                $show_palaeography == 'true',
                 function ($query) use (
                     $hand_number_min,
                     $hand_number_max,
@@ -2542,9 +2589,10 @@ class DocumentController extends Controller
                     $paginations,
                     $quire_signatures
                 ) {
-                    $query->when($hand_number_min, function ($query, $hand_number_min) {
-                        $query->where('hand_number', '>=', $hand_number_min);
-                    })
+                    $query
+                        ->when($hand_number_min, function ($query, $hand_number_min) {
+                            $query->where('hand_number', '>=', $hand_number_min);
+                        })
                         ->when($hand_number_max, function ($query, $hand_number_max) {
                             $query->where('hand_number', '<=', $hand_number_max);
                         })
@@ -2554,72 +2602,72 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($scripts && $scripts_incl, function ($query) use ($scripts) {
-                            foreach($scripts as $script) {                                
-                                $query->whereHas('scripts', function($query) use ($script) {
+                            foreach ($scripts as $script) {
+                                $query->whereHas('scripts', function ($query) use ($script) {
                                     $query->where('scripts.id', '=', $script['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($diacritics && !$diacritics_incl, function ($query) use ($diacritics) {
                             $query->whereHas('diacritics', function ($query) use ($diacritics) {
                                 $query->whereIn('diacritics.id', array_column($diacritics, 'id'));
                             });
                         })
                         ->when($diacritics && $diacritics_incl, function ($query) use ($diacritics) {
-                            foreach($diacritics as $diacritic) {                                
-                                $query->whereHas('diacritics', function($query) use ($diacritic) {
+                            foreach ($diacritics as $diacritic) {
+                                $query->whereHas('diacritics', function ($query) use ($diacritic) {
                                     $query->where('diacritics.id', '=', $diacritic['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($punctuations && !$punctuations_incl, function ($query) use ($punctuations) {
                             $query->whereHas('punctuations', function ($query) use ($punctuations) {
                                 $query->whereIn('punctuations.id', array_column($punctuations, 'id'));
                             });
                         })
                         ->when($punctuations && $punctuations_incl, function ($query) use ($punctuations) {
-                            foreach($punctuations as $punctuation) {                                
-                                $query->whereHas('punctuations', function($query) use ($punctuation) {
+                            foreach ($punctuations as $punctuation) {
+                                $query->whereHas('punctuations', function ($query) use ($punctuation) {
                                     $query->where('punctuations.id', '=', $punctuation['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paratexts && !$paratexts_incl, function ($query) use ($paratexts) {
                             $query->whereHas('paratexts', function ($query) use ($paratexts) {
                                 $query->whereIn('paratexts.id', array_column($paratexts, 'id'));
                             });
                         })
                         ->when($paratexts && $paratexts_incl, function ($query) use ($paratexts) {
-                            foreach($paratexts as $paratext) {                                
-                                $query->whereHas('paratexts', function($query) use ($paratext) {
+                            foreach ($paratexts as $paratext) {
+                                $query->whereHas('paratexts', function ($query) use ($paratext) {
                                     $query->where('paratexts.id', '=', $paratext['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($decorations && !$decorations_incl, function ($query) use ($decorations) {
                             $query->whereHas('decorations', function ($query) use ($decorations) {
                                 $query->whereIn('decorations.id', array_column($decorations, 'id'));
                             });
                         })
                         ->when($decorations && $decorations_incl, function ($query) use ($decorations) {
-                            foreach($decorations as $decoration) {                                
-                                $query->whereHas('decorations', function($query) use ($decoration) {
+                            foreach ($decorations as $decoration) {
+                                $query->whereHas('decorations', function ($query) use ($decoration) {
                                     $query->where('decorations.id', '=', $decoration['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($critical_symbols && !$critical_symbols_incl, function ($query) use ($critical_symbols) {
                             $query->whereHas('critical_symbols', function ($query) use ($critical_symbols) {
                                 $query->whereIn('critical_symbols.id', array_column($critical_symbols, 'id'));
                             });
                         })
                         ->when($critical_symbols && $critical_symbols_incl, function ($query) use ($critical_symbols) {
-                            foreach($critical_symbols as $critical_symbol) {                                
-                                $query->whereHas('critical_symbols', function($query) use ($critical_symbol) {
+                            foreach ($critical_symbols as $critical_symbol) {
+                                $query->whereHas('critical_symbols', function ($query) use ($critical_symbol) {
                                     $query->where('critical_symbols.id', '=', $critical_symbol['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paginations, function ($query, $paginations) {
                             $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
@@ -2629,23 +2677,24 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_consanal == "true",
+                $show_consanal == 'true',
                 function ($query) use (
                     $storage_conditions,
                     $analyses,
                     $analyses_incl,
                 ) {
-                    $query->when($storage_conditions, function ($query, $storage_conditions) {
-                        $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
-                    })
+                    $query
+                        ->when($storage_conditions, function ($query, $storage_conditions) {
+                            $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
+                        })
                         ->when($analyses && !$analyses_incl, function ($query) use ($analyses) {
                             $query->whereHas('analyses', function ($query) use ($analyses) {
                                 $query->whereIn('analyses.id', array_column($analyses, 'id'));
                             });
                         })
                         ->when($analyses && $analyses_incl, function ($query) use ($analyses) {
-                            foreach($analyses as $analysis) {                                
-                                $query->whereHas('analyses', function($query) use ($analysis) {
+                            foreach ($analyses as $analysis) {
+                                $query->whereHas('analyses', function ($query) use ($analysis) {
                                     $query->where('analyses.id', '=', $analysis['id']);
                                 });
                             }
@@ -2653,7 +2702,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_provenance == "true",
+                $show_provenance == 'true',
                 function ($query) use (
                     $scientifically_excavated,
                     $ancient_provenances,
@@ -2664,9 +2713,10 @@ class DocumentController extends Controller
                     $transaction_parties_incl,
                     $legal_classifications
                 ) {
-                    $query->when($scientifically_excavated, function ($query, $scientifically_excavated) {
-                        $query->where('scientifically_excavated', '=', 1);
-                    })
+                    $query
+                        ->when($scientifically_excavated, function ($query, $scientifically_excavated) {
+                            $query->where('scientifically_excavated', '=', 1);
+                        })
                         ->when($ancient_provenances, function ($query, $ancient_provenances) {
                             $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
                         })
@@ -2679,27 +2729,26 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
-                            foreach($transactions as $transaction) {                                
-                                $query->whereHas('transactions', function($query) use ($transaction) {
+                            foreach ($transactions as $transaction) {
+                                $query->whereHas('transactions', function ($query) use ($transaction) {
                                     $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
-                        }) 
-
+                        })
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
                             $tactions = Transaction::query()
                                 ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
                                     $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
-                                })->get()->all();
+                                })
+                                ->get()
+                                ->all();
                             $query->whereHas('transactions', function ($query) use ($tactions) {
                                 $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
-
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            
                             $query->whereHas('transactions', function ($query) use ($transaction_parties) {
-                                foreach($transaction_parties as $transaction_party) {
+                                foreach ($transaction_parties as $transaction_party) {
                                     $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
                                         $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
@@ -2709,35 +2758,36 @@ class DocumentController extends Controller
                         ->when($legal_classifications, function ($query, $legal_classifications) {
                             $query->whereIn('legal_classification_id', array_column($legal_classifications, 'id'));
                         });
-                    })
+                }
+            )
             ->orderBy($sortby, $direction)
-            ->orderBy('end_year', $direction)->get();
+            ->orderBy('end_year', $direction)
+            ->get();
 
-            $prev = -1;
-            $next = -1;
-            $current = -1;
-            $savedprev = -1;
-            $found = false;
-            $count = 0;
-            $total = $all_documents->count();
+        $prev = -1;
+        $next = -1;
+        $current = -1;
+        $savedprev = -1;
+        $found = false;
+        $count = 0;
+        $total = $all_documents->count();
 
-            foreach ($all_documents as $doc){
-                if($found) {
-                    $next = $doc['id'];
-                }
-
-                $count++;
-
-                if($doc['id'] === $document['id']) {
-                    $found = true;
-                    $prev = $savedprev;
-                    $current = $count;
-                }
-                else {
-                    $found = false;
-                }
-                $savedprev = $doc['id'];
+        foreach ($all_documents as $doc) {
+            if ($found) {
+                $next = $doc['id'];
             }
+
+            $count++;
+
+            if ($doc['id'] === $document['id']) {
+                $found = true;
+                $prev = $savedprev;
+                $current = $count;
+            } else {
+                $found = false;
+            }
+            $savedprev = $doc['id'];
+        }
 
         $transactions_all = DB::table('transactions')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
@@ -2783,11 +2833,13 @@ class DocumentController extends Controller
             'paratexts_all' => Paratext::all(),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'punctuations_all' => Punctuation::all(),
-            'transactions' => $document->transactions()
-                                            ->get()->makeHidden('pivot')
-                                            ->sortBy('year')
-                                            ->sortBy('month')
-                                            ->sortBy('day'),
+            'transactions' => $document
+                ->transactions()
+                ->get()
+                ->makeHidden('pivot')
+                ->sortBy('year')
+                ->sortBy('month')
+                ->sortBy('day'),
             'transactions_all' => $transactions_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
@@ -2801,7 +2853,6 @@ class DocumentController extends Controller
             'tags_all' => Tag::all(),
             'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
             'works_all' => Work::with('author')->orderBy('name')->get(),
-
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
@@ -2817,13 +2868,13 @@ class DocumentController extends Controller
             'tags_incl' => $tags_incl,
             'earliest_date' => $earliest_date,
             'latest_date' => $latest_date,
-            'exclusive_date' => $exclusive_date == "true" ? true : false,
+            'exclusive_date' => $exclusive_date == 'true' ? true : false,
             'dating_methods_search' => $dating_methods,
             'dating_methods_incl' => $dating_methods_incl,
             'dating_certainties_search' => $dating_certainties,
             'materials_search' => $materials,
             'inks_search' => $inks,
-            'inks_incl' => $inks_incl == "true" ? true : false,
+            'inks_incl' => $inks_incl == 'true' ? true : false,
             'covers_search' => $covers,
             'quire_structures_search' => $quire_structures,
             'quirenum_min' => $quirenum_min,
@@ -2854,13 +2905,11 @@ class DocumentController extends Controller
             'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
-
             'gregorys_rules_search' => $gregorys_rules,
             'columns_min' => $columns_min,
             'columns_max' => $columns_max,
             'columnlines_min' => $columnlines_min,
             'columnlines_max' => $columnlines_max,
-        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -2888,7 +2937,6 @@ class DocumentController extends Controller
             'transaction_parties_search' => $transaction_parties,
             'transaction_parties_incl' => $transaction_parties_incl,
             'legal_classifications_search' => $legal_classifications,
-
             'sortfield' => $sortfield,
             'reverse' => $reverse,
             'tab' => $tab,
@@ -2920,10 +2968,10 @@ class DocumentController extends Controller
             'publication' => 'nullable',
             'current_shelfmarks' => 'nullable',
             'trismegistos_id' => 'nullable',
+            'works' => 'nullable',
             'title' => 'nullable',
             'genres' => 'nullable',
             'ancient_author' => 'nullable',
-            'works' => 'nullable',
             'tags' => 'nullable',
             'content_description' => 'nullable',
             'start_year' => 'nullable',
@@ -3001,7 +3049,6 @@ class DocumentController extends Controller
             'images' => 'nullable',
         ]);
 
-
         $document->published = $fields['published'];
         $document->standard_name = $fields['standard_name'];
         $document->other_names = $fields['other_names'];
@@ -3061,7 +3108,7 @@ class DocumentController extends Controller
             $fields['bifolia'] = array_slice($fields['bifolia'], 0, 1);
         } else {
             $fields['quire_number'] = null;
-            $fields['bifolia'] = ["1"];
+            $fields['bifolia'] = ['1'];
         }
         $document->quire_number = $fields['quire_number'];
         $document->bifolia = $fields['bifolia'];
@@ -3098,7 +3145,6 @@ class DocumentController extends Controller
         $document->save();
 
         foreach ($img_fields['images'] as $fields) {
- 
             $image = Image::find($fields['id']);
 
             $image->description = $fields['description'];
@@ -3117,7 +3163,6 @@ class DocumentController extends Controller
             'show_palaeography' => 'nullable',
             'show_consanal' => 'nullable',
             'show_provenance' => 'nullable',
-
             'fulltext' => 'nullable',
             's_standard_name' => 'nullable',
             's_publication' => 'nullable',
@@ -3162,7 +3207,6 @@ class DocumentController extends Controller
             's_inner_margin_max' => 'nullable',
             's_outer_margin_min' => 'nullable',
             's_outer_margin_max' => 'nullable',
-
             's_full_page_ratio_min' => 'nullable',
             's_full_page_ratio_max' => 'nullable',
             's_full_text_block_ratio_min' => 'nullable',
@@ -3171,13 +3215,11 @@ class DocumentController extends Controller
             's_uplow_margins_ratio_max' => 'nullable',
             's_inout_margins_ratio_min' => 'nullable',
             's_inout_margins_ratio_max' => 'nullable',
-
             's_gregorys_rules' => 'nullable',
             's_columns_min' => 'nullable',
-            's_columns_max'=> 'nullable',
-            's_columnlines_min'=> 'nullable',
-            's_columnlines_max'=> 'nullable',
-
+            's_columns_max' => 'nullable',
+            's_columnlines_min' => 'nullable',
+            's_columnlines_max' => 'nullable',
             's_hand_number_min' => 'nullable',
             's_hand_number_max' => 'nullable',
             's_scripts' => 'nullable',
@@ -3221,36 +3263,35 @@ class DocumentController extends Controller
 
         $sortfield = $request->session()->get('sortfield');
         $sortfield = array_key_exists('sortfield', $search) ? $search['sortfield'] : $sortfield;
-  
+
         $request->session()->put('sortfield', $sortfield);
         switch ($sortfield) {
             case 1:
-                $sortby = "standard_name";
+                $sortby = 'standard_name';
                 break;
             case 2:
-                $sortby = "ancient_author";
+                $sortby = 'ancient_author';
                 break;
             case 3:
-                $sortby = "title";
+                $sortby = 'title';
                 break;
             case 4:
-                $sortby = "start_year";
+                $sortby = 'start_year';
                 break;
             case 5:
-                $sortby = "end_year";
+                $sortby = 'end_year';
                 break;
             default:
-                $sortby = "start_year";
+                $sortby = 'start_year';
         }
 
         $tab = array_key_exists('tab', $search) ? $search['tab'] : 'general';
-
 
         $reverse = $request->session()->get('reverse');
         $reverse = array_key_exists('reverse', $search) ? $search['reverse'] : $reverse;
         $request->session()->put('reverse', $reverse);
 
-        $direction = $reverse ? "desc" : "asc";
+        $direction = $reverse ? 'desc' : 'asc';
 
         $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
         $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
@@ -3339,31 +3380,32 @@ class DocumentController extends Controller
         $transaction_parties = array_key_exists('s_transaction_parties', $search) ? $search['s_transaction_parties'] : null;
         $transaction_parties_incl = array_key_exists('s_transaction_parties_incl', $search) ? $search['s_transaction_parties_incl'] : null;
         $legal_classifications = array_key_exists('s_legal_classifications', $search) ? $search['s_legal_classifications'] : null;
-        
-        if($show_provenance AND $ancient_provenances) {
+
+        if ($show_provenance AND $ancient_provenances) {
             $children = [];
 
-            foreach($ancient_provenances as $ancient_provenance) {
+            foreach ($ancient_provenances as $ancient_provenance) {
                 $prov = AncientProvenance::find($ancient_provenance['id']);
                 $childrec = $prov->flatChildren();
 
-                foreach($childrec as $child) {
+                foreach ($childrec as $child) {
                     $childarr = [
-                        "id" => $child->id,
-                        "name" => $child->name
+                        'id' => $child->id,
+                        'name' => $child->name
                     ];
                     array_push($ancient_provenances, $childarr);
-                } 
+                }
             }
         }
- 
+
         $all_documents = Document::query()
             ->when($role_id < 2, function ($query) {
                 $query->where('published', '=', true);
-            }) 
+            })
             ->when($fulltext, function ($query) use ($fulltext, $role_id) {
                 $query->where(function ($query) use ($fulltext, $role_id) {
-                    $query->where('standard_name', 'like', "%{$fulltext}%")
+                    $query
+                        ->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('other_names', 'like', "%{$fulltext}%")
                         ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
@@ -3397,18 +3439,19 @@ class DocumentController extends Controller
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
                         ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
-                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : "notsomethinganyonewouldwrite");
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite');
                 });
             })
-            ->when($show_publication == "true", function ($query) use (
+            ->when($show_publication == 'true', function ($query) use (
                 $standard_name,
                 $publication,
                 $current_shelfmarks,
                 $trismegistos_id
             ) {
-                $query->when($standard_name, function ($query, $standard_name) {
-                    $query->where('standard_name', 'like', "%{$standard_name}%");
-                })
+                $query
+                    ->when($standard_name, function ($query, $standard_name) {
+                        $query->where('standard_name', 'like', "%{$standard_name}%");
+                    })
                     ->when($publication, function ($query, $publication) {
                         $query->where('publication', 'like', "%{$publication}%");
                     })
@@ -3419,7 +3462,7 @@ class DocumentController extends Controller
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     });
             })
-            ->when($show_content == "true", function ($query) use (
+            ->when($show_content == 'true', function ($query) use (
                 $title,
                 $ancient_author,
                 $languages,
@@ -3429,50 +3472,69 @@ class DocumentController extends Controller
                 $tags,
                 $tags_incl,
             ) {
-                $query->when($title, function ($query, $title) {
-                    $query->where('title', 'like', "%{$title}%");
-                })
-                    ->when($ancient_author, function ($query, $ancient_author) {
+                $query
+/*                    ->when($title, function ($query, $title) {
+                        $query->where('title', 'like', "%{$title}%");
+                    })*/
+                    ->when($title, function ($query, $title) {
+                        $query->whereHas('works', function ($query) use ($title) {
+                            $query->where('works.name', 'like', "%{$title}%")
+                            ->orWhereRaw("locate('$title', works.altnames)");
+                        });
+                    })
+/*                    ->when($ancient_author, function ($query, $ancient_author) {
                         $query->where('ancient_author', 'like', "%{$ancient_author}%");
                     })
+  */  
+
+                    ->when($ancient_author, function ($query, $ancient_author) {
+                        $authors = Author::where('name', 'like', "%{$ancient_author}%")
+                        ->orWhereRaw("locate('$ancient_author', altnames)")
+                        ->get()->all();
+                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                        $query->whereHas('works', function ($query) use ($works) {
+                            $query->whereIn('works.id', array_column($works, 'id'));
+                        });
+                    })
+
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));
                         });
                     })
                     ->when($languages && $languages_incl, function ($query) use ($languages) {
-                        foreach($languages as $language) {                                
-                            $query->whereHas('languages', function($query) use ($language) {
+                        foreach ($languages as $language) {
+                            $query->whereHas('languages', function ($query) use ($language) {
                                 $query->where('languages.id', '=', $language['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
                         $query->whereHas('genres', function ($query) use ($genres) {
                             $query->whereIn('genres.id', array_column($genres, 'id'));
                         });
                     })
                     ->when($genres && $genres_incl, function ($query) use ($genres) {
-                        foreach($genres as $genre) {                                
-                            $query->whereHas('genres', function($query) use ($genre) {
+                        foreach ($genres as $genre) {
+                            $query->whereHas('genres', function ($query) use ($genre) {
                                 $query->where('genres.id', '=', $genre['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
                         $query->whereHas('tags', function ($query) use ($tags) {
                             $query->whereIn('tags.id', array_column($tags, 'id'));
                         });
                     })
                     ->when($tags && $tags_incl, function ($query) use ($tags) {
-                        foreach($tags as $tag) {                                
-                            $query->whereHas('tags', function($query) use ($tag) {
+                        foreach ($tags as $tag) {
+                            $query->whereHas('tags', function ($query) use ($tag) {
                                 $query->where('tags.id', '=', $tag['id']);
                             });
                         }
-                    }); 
+                    });
             })
-            ->when($show_dating == "true", function ($query) use (
+            ->when($show_dating == 'true', function ($query) use (
                 $earliest_date,
                 $latest_date,
                 $exclusive_date,
@@ -3480,39 +3542,42 @@ class DocumentController extends Controller
                 $dating_methods_incl,
                 $dating_certainties
             ) {
-                $query->when($exclusive_date == "true", function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('start_year', '>=', $earliest_date);
+                $query
+                    ->when($exclusive_date == 'true', function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('start_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('end_year', '<=', $latest_date);
+                            });
+                    }, function ($query) use ($earliest_date, $latest_date) {
+                        $query
+                            ->when($earliest_date, function ($query, $earliest_date) {
+                                $query->where('end_year', '>=', $earliest_date);
+                            })
+                            ->when($latest_date, function ($query, $latest_date) {
+                                $query->where('start_year', '<=', $latest_date);
+                            });
                     })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('end_year', '<=', $latest_date);
-                        });
-                }, function ($query) use ($earliest_date, $latest_date) {
-                    $query->when($earliest_date, function ($query, $earliest_date) {
-                        $query->where('end_year', '>=', $earliest_date);
-                    })
-                        ->when($latest_date, function ($query, $latest_date) {
-                            $query->where('start_year', '<=', $latest_date);
-                        });
-                })
                     ->when($dating_methods && !$dating_methods_incl, function ($query) use ($dating_methods) {
                         $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
                             $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
                         });
                     })
                     ->when($dating_methods && $dating_methods_incl, function ($query) use ($dating_methods) {
-                        foreach($dating_methods as $dating_method) {                                
-                            $query->whereHas('dating_methods', function($query) use ($dating_method) {
+                        foreach ($dating_methods as $dating_method) {
+                            $query->whereHas('dating_methods', function ($query) use ($dating_method) {
                                 $query->where('dating_methods.id', '=', $dating_method['id']);
                             });
                         }
-                    }) 
+                    })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
                         $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
             })
             ->when(
-                $show_materiality == "true",
+                $show_materiality == 'true',
                 function ($query) use (
                     $materials,
                     $gregorys_rules,
@@ -3525,7 +3590,8 @@ class DocumentController extends Controller
                     $bifolianum_min,
                     $bifolianum_max
                 ) {
-                        $query->when($materials, function ($query, $materials) {
+                    $query
+                        ->when($materials, function ($query, $materials) {
                             $query->whereIn('material_id', array_column($materials, 'id'));
                         })
                         ->when($gregorys_rules, function ($query, $gregorys_rules) {
@@ -3537,12 +3603,12 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($inks && $inks_incl, function ($query) use ($inks) {
-                            foreach($inks as $ink) {                                
-                                $query->whereHas('inks', function($query) use ($ink) {
+                            foreach ($inks as $ink) {
+                                $query->whereHas('inks', function ($query) use ($ink) {
                                     $query->where('inks.id', '=', $ink['id']);
                                 });
                             }
-                        })                      
+                        })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
                         })
@@ -3563,9 +3629,8 @@ class DocumentController extends Controller
                         });
                 }
             )
-
             ->when(
-                $show_measurement == "true",
+                $show_measurement == 'true',
                 function ($query) use (
                     $full_page_width_min,
                     $full_page_width_max,
@@ -3583,7 +3648,6 @@ class DocumentController extends Controller
                     $inner_margin_max,
                     $outer_margin_min,
                     $outer_margin_max,
-
                     $full_page_ratio_min,
                     $full_page_ratio_max,
                     $full_text_block_ratio_min,
@@ -3592,15 +3656,15 @@ class DocumentController extends Controller
                     $uplow_margins_ratio_max,
                     $inout_margins_ratio_min,
                     $inout_margins_ratio_max,
-                    
                     $columns_min,
                     $columns_max,
                     $columnlines_min,
                     $columnlines_max,
                 ) {
-                    $query->when($full_page_width_min, function ($query, $full_page_width_min) {
-                        $query->where('full_page_width', '>=', $full_page_width_min);
-                    })
+                    $query
+                        ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                            $query->where('full_page_width', '>=', $full_page_width_min);
+                        })
                         ->when($full_page_width_max, function ($query, $full_page_width_max) {
                             $query->where('full_page_width', '<=', $full_page_width_max);
                         })
@@ -3685,7 +3749,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_palaeography == "true",
+                $show_palaeography == 'true',
                 function ($query) use (
                     $hand_number_min,
                     $hand_number_max,
@@ -3704,9 +3768,10 @@ class DocumentController extends Controller
                     $paginations,
                     $quire_signatures
                 ) {
-                    $query->when($hand_number_min, function ($query, $hand_number_min) {
-                        $query->where('hand_number', '>=', $hand_number_min);
-                    })
+                    $query
+                        ->when($hand_number_min, function ($query, $hand_number_min) {
+                            $query->where('hand_number', '>=', $hand_number_min);
+                        })
                         ->when($hand_number_max, function ($query, $hand_number_max) {
                             $query->where('hand_number', '<=', $hand_number_max);
                         })
@@ -3716,72 +3781,72 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($scripts && $scripts_incl, function ($query) use ($scripts) {
-                            foreach($scripts as $script) {                                
-                                $query->whereHas('scripts', function($query) use ($script) {
+                            foreach ($scripts as $script) {
+                                $query->whereHas('scripts', function ($query) use ($script) {
                                     $query->where('scripts.id', '=', $script['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($diacritics && !$diacritics_incl, function ($query) use ($diacritics) {
                             $query->whereHas('diacritics', function ($query) use ($diacritics) {
                                 $query->whereIn('diacritics.id', array_column($diacritics, 'id'));
                             });
                         })
                         ->when($diacritics && $diacritics_incl, function ($query) use ($diacritics) {
-                            foreach($diacritics as $diacritic) {                                
-                                $query->whereHas('diacritics', function($query) use ($diacritic) {
+                            foreach ($diacritics as $diacritic) {
+                                $query->whereHas('diacritics', function ($query) use ($diacritic) {
                                     $query->where('diacritics.id', '=', $diacritic['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($punctuations && !$punctuations_incl, function ($query) use ($punctuations) {
                             $query->whereHas('punctuations', function ($query) use ($punctuations) {
                                 $query->whereIn('punctuations.id', array_column($punctuations, 'id'));
                             });
                         })
                         ->when($punctuations && $punctuations_incl, function ($query) use ($punctuations) {
-                            foreach($punctuations as $punctuation) {                                
-                                $query->whereHas('punctuations', function($query) use ($punctuation) {
+                            foreach ($punctuations as $punctuation) {
+                                $query->whereHas('punctuations', function ($query) use ($punctuation) {
                                     $query->where('punctuations.id', '=', $punctuation['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paratexts && !$paratexts_incl, function ($query) use ($paratexts) {
                             $query->whereHas('paratexts', function ($query) use ($paratexts) {
                                 $query->whereIn('paratexts.id', array_column($paratexts, 'id'));
                             });
                         })
                         ->when($paratexts && $paratexts_incl, function ($query) use ($paratexts) {
-                            foreach($paratexts as $paratext) {                                
-                                $query->whereHas('paratexts', function($query) use ($paratext) {
+                            foreach ($paratexts as $paratext) {
+                                $query->whereHas('paratexts', function ($query) use ($paratext) {
                                     $query->where('paratexts.id', '=', $paratext['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($decorations && !$decorations_incl, function ($query) use ($decorations) {
                             $query->whereHas('decorations', function ($query) use ($decorations) {
                                 $query->whereIn('decorations.id', array_column($decorations, 'id'));
                             });
                         })
                         ->when($decorations && $decorations_incl, function ($query) use ($decorations) {
-                            foreach($decorations as $decoration) {                                
-                                $query->whereHas('decorations', function($query) use ($decoration) {
+                            foreach ($decorations as $decoration) {
+                                $query->whereHas('decorations', function ($query) use ($decoration) {
                                     $query->where('decorations.id', '=', $decoration['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($critical_symbols && !$critical_symbols_incl, function ($query) use ($critical_symbols) {
                             $query->whereHas('critical_symbols', function ($query) use ($critical_symbols) {
                                 $query->whereIn('critical_symbols.id', array_column($critical_symbols, 'id'));
                             });
                         })
                         ->when($critical_symbols && $critical_symbols_incl, function ($query) use ($critical_symbols) {
-                            foreach($critical_symbols as $critical_symbol) {                                
-                                $query->whereHas('critical_symbols', function($query) use ($critical_symbol) {
+                            foreach ($critical_symbols as $critical_symbol) {
+                                $query->whereHas('critical_symbols', function ($query) use ($critical_symbol) {
                                     $query->where('critical_symbols.id', '=', $critical_symbol['id']);
                                 });
                             }
-                        }) 
+                        })
                         ->when($paginations, function ($query, $paginations) {
                             $query->whereIn('pagination_id', array_column($paginations, 'id'));
                         })
@@ -3791,23 +3856,24 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_consanal == "true",
+                $show_consanal == 'true',
                 function ($query) use (
                     $storage_conditions,
                     $analyses,
                     $analyses_incl,
                 ) {
-                    $query->when($storage_conditions, function ($query, $storage_conditions) {
-                        $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
-                    })
+                    $query
+                        ->when($storage_conditions, function ($query, $storage_conditions) {
+                            $query->whereIn('storage_condition_id', array_column($storage_conditions, 'id'));
+                        })
                         ->when($analyses && !$analyses_incl, function ($query) use ($analyses) {
                             $query->whereHas('analyses', function ($query) use ($analyses) {
                                 $query->whereIn('analyses.id', array_column($analyses, 'id'));
                             });
                         })
                         ->when($analyses && $analyses_incl, function ($query) use ($analyses) {
-                            foreach($analyses as $analysis) {                                
-                                $query->whereHas('analyses', function($query) use ($analysis) {
+                            foreach ($analyses as $analysis) {
+                                $query->whereHas('analyses', function ($query) use ($analysis) {
                                     $query->where('analyses.id', '=', $analysis['id']);
                                 });
                             }
@@ -3815,7 +3881,7 @@ class DocumentController extends Controller
                 }
             )
             ->when(
-                $show_provenance == "true",
+                $show_provenance == 'true',
                 function ($query) use (
                     $scientifically_excavated,
                     $ancient_provenances,
@@ -3826,9 +3892,10 @@ class DocumentController extends Controller
                     $transaction_parties_incl,
                     $legal_classifications
                 ) {
-                    $query->when($scientifically_excavated, function ($query, $scientifically_excavated) {
-                        $query->where('scientifically_excavated', '=', 1);
-                    })
+                    $query
+                        ->when($scientifically_excavated, function ($query, $scientifically_excavated) {
+                            $query->where('scientifically_excavated', '=', 1);
+                        })
                         ->when($ancient_provenances, function ($query, $ancient_provenances) {
                             $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
                         })
@@ -3841,27 +3908,26 @@ class DocumentController extends Controller
                             });
                         })
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
-                            foreach($transactions as $transaction) {                                
-                                $query->whereHas('transactions', function($query) use ($transaction) {
+                            foreach ($transactions as $transaction) {
+                                $query->whereHas('transactions', function ($query) use ($transaction) {
                                     $query->where('transactions.id', '=', $transaction['id']);
                                 });
                             }
-                        }) 
-
+                        })
                         ->when($transaction_parties && !$transaction_parties_incl, function ($query) use ($transaction_parties) {
                             $tactions = Transaction::query()
                                 ->whereHas('transaction_parties', function ($query) use ($transaction_parties) {
                                     $query->whereIn('transaction_parties.id', array_column($transaction_parties, 'id'));
-                                })->get()->all();
+                                })
+                                ->get()
+                                ->all();
                             $query->whereHas('transactions', function ($query) use ($tactions) {
                                 $query->whereIn('transactions.id', array_column($tactions, 'id'));
                             });
                         })
-
                         ->when($transaction_parties && $transaction_parties_incl, function ($query) use ($transaction_parties) {
-                            
                             $query->whereHas('transactions', function ($query) use ($transaction_parties) {
-                                foreach($transaction_parties as $transaction_party) {
+                                foreach ($transaction_parties as $transaction_party) {
                                     $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
                                         $query->where('transaction_parties.id', '=', $transaction_party['id']);
                                     });
@@ -3871,36 +3937,36 @@ class DocumentController extends Controller
                         ->when($legal_classifications, function ($query, $legal_classifications) {
                             $query->whereIn('legal_classification_id', array_column($legal_classifications, 'id'));
                         });
-                    })
-
+                }
+            )
             ->orderBy($sortby, $direction)
-            ->orderBy('end_year', $direction)->get();
+            ->orderBy('end_year', $direction)
+            ->get();
 
-            $prev = -1;
-            $next = -1;
-            $current = -1;
-            $savedprev = -1;
-            $found = false;
-            $count = 0;
-            $total = $all_documents->count();
+        $prev = -1;
+        $next = -1;
+        $current = -1;
+        $savedprev = -1;
+        $found = false;
+        $count = 0;
+        $total = $all_documents->count();
 
-            foreach ($all_documents as $doc){
-                if($found) {
-                    $next = $doc['id'];
-                }
-
-                $count++;
-
-                if($doc['id'] === $document['id']) {
-                    $found = true;
-                    $prev = $savedprev;
-                    $current = $count;
-                }
-                else {
-                    $found = false;
-                }
-                $savedprev = $doc['id'];
+        foreach ($all_documents as $doc) {
+            if ($found) {
+                $next = $doc['id'];
             }
+
+            $count++;
+
+            if ($doc['id'] === $document['id']) {
+                $found = true;
+                $prev = $savedprev;
+                $current = $count;
+            } else {
+                $found = false;
+            }
+            $savedprev = $doc['id'];
+        }
 
         $transactions_all = DB::table('transactions')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 
@@ -3944,11 +4010,13 @@ class DocumentController extends Controller
             'paratexts_all' => Paratext::all(),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
             'punctuations_all' => Punctuation::all(),
-            'transactions' => $document->transactions()
-                                            ->get()->makeHidden('pivot')
-                                            ->sortBy('year')
-                                            ->sortBy('month')
-                                            ->sortBy('day'),
+            'transactions' => $document
+                ->transactions()
+                ->get()
+                ->makeHidden('pivot')
+                ->sortBy('year')
+                ->sortBy('month')
+                ->sortBy('day'),
             'transactions_all' => $transactions_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
@@ -3964,7 +4032,6 @@ class DocumentController extends Controller
             'tags_all' => Tag::all(),
             'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
             'works_all' => Work::with('author')->orderBy('name')->get(),
-
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
@@ -3980,13 +4047,13 @@ class DocumentController extends Controller
             'tags_incl' => $tags_incl,
             'earliest_date' => $earliest_date,
             'latest_date' => $latest_date,
-            'exclusive_date' => $exclusive_date == "true" ? true : false,
+            'exclusive_date' => $exclusive_date == 'true' ? true : false,
             'dating_methods_search' => $dating_methods,
             'dating_methods_incl' => $dating_methods_incl,
             'dating_certainties_search' => $dating_certainties,
             'materials_search' => $materials,
             'inks_search' => $inks,
-            'inks_incl' => $inks_incl == "true" ? true : false,
+            'inks_incl' => $inks_incl == 'true' ? true : false,
             'covers_search' => $covers,
             'quire_structures_search' => $quire_structures,
             'quirenum_min' => $quirenum_min,
@@ -4017,13 +4084,11 @@ class DocumentController extends Controller
             'uplow_margins_ratio_max' => $uplow_margins_ratio_max,
             'inout_margins_ratio_min' => $inout_margins_ratio_min,
             'inout_margins_ratio_max' => $inout_margins_ratio_max,
-
             'gregorys_rules_search' => $gregorys_rules,
             'columns_min' => $columns_min,
             'columns_max' => $columns_max,
             'columnlines_min' => $columnlines_min,
             'columnlines_max' => $columnlines_max,
-        
             'hand_number_min' => $hand_number_min,
             'hand_number_max' => $hand_number_max,
             'scripts_search' => $scripts,
@@ -4051,7 +4116,6 @@ class DocumentController extends Controller
             'transaction_parties_search' => $transaction_parties,
             'transaction_parties_incl' => $transaction_parties_incl,
             'legal_classifications_search' => $legal_classifications,
-
             'sortfield' => $sortfield,
             'reverse' => $reverse,
             'tab' => $tab,
@@ -4081,6 +4145,8 @@ class DocumentController extends Controller
         $document->paratexts()->detach();
         $document->scripts()->detach();
         $document->inks()->detach();
+        $document->works()->detach();
+
         $document->delete();
         return redirect()->back();
     }
