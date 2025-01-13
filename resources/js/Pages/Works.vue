@@ -103,6 +103,7 @@
                     {{ work.altnames }}
                 </div>
                 <div
+                    :title="work.author.altnames ? work.author.altnames : ''"
                     class="work_fourth"
                     v-html="work.author == null ? '' : work.author.name"
                 />
@@ -187,7 +188,10 @@ const search_results = computed(() => {
                       : null) ||
                   (el.author != null
                       ? el.author.name.toLowerCase().includes(search.value.toLowerCase())
-                      : null)
+                      : null) ||
+                  (el.author.altnames != null
+                      ? el.author.altnames.toLowerCase().includes(search.value.toLowerCase())
+                      : null) 
               );
           })
         : props.works;
