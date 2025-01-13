@@ -164,7 +164,9 @@
                         :key="work.id"
                         class="showcodex_multi_stack"
                     >
-                        {{ work.name + " (" + (work.author != null ? work.author.name : "No Author") + ")"  }}
+                        <label :title="work.altnames">{{ work.name }}</label>
+                        <label :title="work.author.altnames"> {{ " (" + work.author.name+ ") "  }}</label>
+                        <lable>{{ work.pivot.passages ? work.pivot.passages : "" }}</lable>
                     </div>
                 </div>
 

@@ -245,7 +245,7 @@
                             <label :title="work.author.altnames">{{
                                 " (" + work.author.name + ") "
                             }}</label>
-                            <label>{{ work.passages }}</label>
+                            <label>{{ work.passages ? work.passages : "" }}</label>
                         </span>
                     </div>
                 </div>

@@ -354,7 +354,18 @@ class DocumentController extends Controller
                         ->orWhere('bibliography', 'like', "%{$fulltext}%")
                         ->orWhere('images_info', 'like', "%{$fulltext}%")
                         ->orWhere('excavation_comment', 'like', "%{$fulltext}%")
-                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite');
+                        ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite')
+                        ->orWhereHas('works', function ($query) use ($fulltext) {
+                            $authors = Author::where('name', 'like', "%{$fulltext}%")
+                            ->orWhereRaw("locate('$fulltext', altnames)")
+                            ->get()
+                            ->all();
+                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                        $query
+                            ->where('works.name', 'like', "%{$fulltext}%")
+                            ->orWhereRaw("locate('$fulltext', works.altnames)")
+                            ->orwhereIn('works.id', array_column($works, 'id'));
+                        });
                 });
             })
             ->when($show_publication == 'true', function ($query) use (
@@ -1876,7 +1887,7 @@ class DocumentController extends Controller
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'works' => $document->works()->with('author')->get()->sortBy('name')->makeHidden('pivot'),
+            'works' => $document->works()->with('author')->get()->sortBy('name'),
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
