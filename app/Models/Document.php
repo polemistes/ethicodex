@@ -152,7 +152,7 @@ class Document extends Model
 
     public function works()
     {
-        return $this->belongsToMany(Work::class);
+        return $this->belongsToMany(Work::class)->withPivot('passages');
     }
 
     public function authors()

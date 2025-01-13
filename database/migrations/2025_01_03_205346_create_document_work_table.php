@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('document_id');
             $table->foreignId('work_id');
+            $table->string('passages')->nullable();
+            $table->text('passage_comment')->nullable();
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Analysis;
 use App\Models\AncientProvenance;
 use App\Models\AncientProvenanceCertainty;
+use App\Models\Author;
 use App\Models\Cover;
 use App\Models\CriticalSymbol;
 use App\Models\DatingCertainty;
@@ -32,8 +33,6 @@ use App\Models\Tag;
 use App\Models\Transaction;
 use App\Models\TransactionParty;
 use App\Models\Work;
-use App\Models\Author;
-
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -389,24 +388,26 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
-/*                    ->when($title, function ($query, $title) {
-                        $query->where('title', 'like', "%{$title}%");
-                    })*/
+                    /*                    ->when($title, function ($query, $title) {
+                                            $query->where('title', 'like', "%{$title}%");
+                                        })*/
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
-                            $query->where('works.name', 'like', "%{$title}%")
-                            ->orWhereRaw("locate('$title', works.altnames)");
+                            $query
+                                ->where('works.name', 'like', "%{$title}%")
+                                ->orWhereRaw("locate('$title', works.altnames)");
                         });
                     })
-/*                    ->when($ancient_author, function ($query, $ancient_author) {
-                        $query->where('ancient_author', 'like', "%{$ancient_author}%");
-                    })
-  */  
-
+                    /*
+                     * ->when($ancient_author, function ($query, $ancient_author) {
+                     *                      $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                     *                  })
+                     */
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                        ->orWhereRaw("locate('$ancient_author', altnames)")
-                        ->get()->all();
+                            ->orWhereRaw("locate('$ancient_author', altnames)")
+                            ->get()
+                            ->all();
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
@@ -1342,30 +1343,31 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
-/*                    ->when($title, function ($query, $title) {
-                        $query->where('title', 'like', "%{$title}%");
-                    })*/
+                    /*                    ->when($title, function ($query, $title) {
+                                            $query->where('title', 'like', "%{$title}%");
+                                        })*/
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
-                            $query->where('works.name', 'like', "%{$title}%")
-                            ->orWhereRaw("locate('$title', works.altnames)");
+                            $query
+                                ->where('works.name', 'like', "%{$title}%")
+                                ->orWhereRaw("locate('$title', works.altnames)");
                         });
                     })
-/*                    ->when($ancient_author, function ($query, $ancient_author) {
-                        $query->where('ancient_author', 'like', "%{$ancient_author}%");
-                    })
-  */  
-
+                    /*
+                     * ->when($ancient_author, function ($query, $ancient_author) {
+                     *                      $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                     *                  })
+                     */
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                        ->orWhereRaw("locate('$ancient_author', altnames)")
-                        ->get()->all();
+                            ->orWhereRaw("locate('$ancient_author', altnames)")
+                            ->get()
+                            ->all();
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
                         });
                     })
-
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));
@@ -1874,7 +1876,7 @@ class DocumentController extends Controller
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
+            'works' => $document->works()->with('author')->get()->sortBy('name')->makeHidden('pivot'),
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,
@@ -2294,30 +2296,31 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
-/*                    ->when($title, function ($query, $title) {
-                        $query->where('title', 'like', "%{$title}%");
-                    })*/
+                    /*                    ->when($title, function ($query, $title) {
+                                            $query->where('title', 'like', "%{$title}%");
+                                        })*/
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
-                            $query->where('works.name', 'like', "%{$title}%")
-                            ->orWhereRaw("locate('$title', works.altnames)");
+                            $query
+                                ->where('works.name', 'like', "%{$title}%")
+                                ->orWhereRaw("locate('$title', works.altnames)");
                         });
                     })
-/*                    ->when($ancient_author, function ($query, $ancient_author) {
-                        $query->where('ancient_author', 'like', "%{$ancient_author}%");
-                    })
-  */  
-
+                    /*
+                     * ->when($ancient_author, function ($query, $ancient_author) {
+                     *                      $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                     *                  })
+                     */
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                        ->orWhereRaw("locate('$ancient_author', altnames)")
-                        ->get()->all();
+                            ->orWhereRaw("locate('$ancient_author', altnames)")
+                            ->get()
+                            ->all();
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
                         });
                     })
-
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));
@@ -2851,7 +2854,7 @@ class DocumentController extends Controller
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'tags_all' => Tag::all(),
-            'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
+            'works' => $document->works()->with('author')->get()->sortBy('name'),
             'works_all' => Work::with('author')->orderBy('name')->get(),
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
@@ -3140,7 +3143,13 @@ class DocumentController extends Controller
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
         $document->inks()->sync(array_column($fields['inks'], 'id'));
-        $document->works()->sync(array_column($fields['works'], 'id'));
+        
+        $works = [];
+        foreach ($fields['works'] as $work) {
+            $works[$work['id']] = ['passages' => $work['passages']];
+        }
+        
+        $document->works()->sync($works);
 
         $document->save();
 
@@ -3473,30 +3482,31 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
-/*                    ->when($title, function ($query, $title) {
-                        $query->where('title', 'like', "%{$title}%");
-                    })*/
+                    /*                    ->when($title, function ($query, $title) {
+                                            $query->where('title', 'like', "%{$title}%");
+                                        })*/
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
-                            $query->where('works.name', 'like', "%{$title}%")
-                            ->orWhereRaw("locate('$title', works.altnames)");
+                            $query
+                                ->where('works.name', 'like', "%{$title}%")
+                                ->orWhereRaw("locate('$title', works.altnames)");
                         });
                     })
-/*                    ->when($ancient_author, function ($query, $ancient_author) {
-                        $query->where('ancient_author', 'like', "%{$ancient_author}%");
-                    })
-  */  
-
+                    /*
+                     * ->when($ancient_author, function ($query, $ancient_author) {
+                     *                      $query->where('ancient_author', 'like', "%{$ancient_author}%");
+                     *                  })
+                     */
                     ->when($ancient_author, function ($query, $ancient_author) {
                         $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                        ->orWhereRaw("locate('$ancient_author', altnames)")
-                        ->get()->all();
+                            ->orWhereRaw("locate('$ancient_author', altnames)")
+                            ->get()
+                            ->all();
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
                         });
                     })
-
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
                             $query->whereIn('languages.id', array_column($languages, 'id'));

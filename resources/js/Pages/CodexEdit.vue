@@ -151,7 +151,6 @@
             <fieldset class="editcodex_contentgrid">
                 <legend class="sectionheading">Content</legend>
 
-
                 <div class="edit_title">
                     <EthInput
                         input_type="text"
@@ -171,16 +170,86 @@
                 </div>
 
                 <div class="edit_work">
-                    <EthInput
-                        input_type="work_choice"
-                        input_id="works"
-                        :choices="works_all"
-                        v-model="form.works"
+                    <label :for="input_id">Works</label>
+                    <button
+                        @click.prevent="dropdown = !dropdown"
+                        class="dropdownbutton"
                     >
-                        Works
-                    </EthInput>
+                        <span>Select</span>
+                        <span>⌄</span>
+                    </button>
+
+                    <div v-if="dropdown" class="dropdown-content">
+                        <div v-if="all_works.length > 12">
+                            <label :for="search">Search:</label>
+                            <input
+                                type="text"
+                                style="margin-left: 10px"
+                                v-model="search"
+                            />
+                        </div>
+
+                        <div class="dropdown-scrollwindow">
+                            <div
+                                v-for="choice in search_choices"
+                                :key="choice.id"
+                            >
+                                <input
+                                    type="checkbox"
+                                    :id="choice.id"
+                                    :value="choice"
+                                    v-model="form.works"
+                                    style="margin-right: 5px"
+                                />
+                                <label :title="choice.altnames"
+                                    >{{ choice.name }}
+                                </label>
+                                <label :title="choice.author.altnames">
+                                    {{ " (" + choice.author.name + ")" }}
+                                </label>
+                                <input
+                                    v-if="
+                                        form.works.some(
+                                            (e) => e.id === choice.id
+                                        )
+                                    "
+                                    type="text"
+                                    style="margin-left: 10px"
+                                    v-model="choice.passages"
+                                />
+                            </div>
+                        </div>
+                        <button
+                            @click.prevent="dropdown = false"
+                            class="closemenubutton"
+                        >
+                            Close
+                        </button>
+                    </div>
+                    <div class="choicelist-stack">
+                        <span
+                            v-for="work in form.works"
+                            :key="work.id"
+                            class="choiceelement-extrawide"
+                            :title="work.description"
+                        >
+                            <button
+                                @click.prevent="removework(work)"
+                                class="removebutton"
+                            >
+                                ✕
+                            </button>
+                            <label :title="work.altnames">{{
+                                work.name
+                            }}</label>
+                            <label :title="work.author.altnames">{{
+                                " (" + work.author.name + ") "
+                            }}</label>
+                            <label>{{ work.passages }}</label>
+                        </span>
+                    </div>
                 </div>
-                
+
                 <div class="edit_genre">
                     <EthInput
                         input_type="multi_choice"
@@ -1074,7 +1143,7 @@
 
 <script setup>
 import { router } from "@inertiajs/vue3";
-import { reactive, ref, onMounted, onUpdated } from "vue";
+import { reactive, ref, computed, onMounted, onUpdated } from "vue";
 import { createApp } from "vue";
 
 import { useForm } from "@inertiajs/vue3";
@@ -1256,6 +1325,20 @@ const props = defineProps({
     auth: Object,
 });
 
+const wks = [];
+
+for (let w of props.works) {
+    wks.push({
+        id: w.id,
+        name: w.name,
+        altnames: w.altnames,
+        author_id: w.author_id,
+        author: w.author,
+        description: w.description,
+        passages: w.pivot.passages,
+    });
+}
+
 const form = useForm("EditCodex", {
     id: props.document.id,
     published: props.document.published == 1 ? true : false,
@@ -1264,7 +1347,7 @@ const form = useForm("EditCodex", {
     publication: props.document.publication,
     current_shelfmarks: props.document.current_shelfmarks,
     trismegistos_id: props.document.trismegistos_id,
-    works: props.works,
+    works: wks,
     title: props.document.title,
     genres: props.genres,
     scientifically_excavated:
@@ -1564,6 +1647,56 @@ function delalert(image) {
             }
         );
     }
+}
+
+let search = ref("");
+let dropdown = ref(false);
+
+const search_choices = computed(() => {
+    return search.value != ""
+        ? all_works.filter(function (el) {
+              return (
+                  (el.name != null ? el.name.includes(search.value) : null) ||
+                  (el.altnames != null
+                      ? el.altnames
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                      : null) ||
+                  (el.description != null
+                      ? el.description
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                      : null) ||
+                  (el.author != null
+                      ? el.author.name
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                      : null)
+              );
+          })
+        : all_works;
+});
+
+function removework(choice) {
+    form.works = form.works.filter((obj) => {
+        return obj.id !== choice.id;
+    });
+}
+
+const all_works = reactive([]);
+
+for (let w of props.works_all) {
+    all_works.push({
+        id: w.id,
+        name: w.name,
+        altnames: w.altnames,
+        author_id: w.author_id,
+        author: w.author,
+        description: w.description,
+        passages: form.works.some((e) => e.id === w.id)
+            ? form.works.find((item) => item.id === w.id).passages
+            : null,
+    });
 }
 
 function delimage(image) {

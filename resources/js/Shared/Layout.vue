@@ -582,7 +582,7 @@ body {
     justify-items: flex-start;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    width: 800px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 20px;
@@ -631,6 +631,16 @@ body {
     font-size: 12px; /* Changing font size */
 }
 
+.choiceelement-extrawide {
+    display: inline-block;
+    background-color: #fff; /* Changing background color */
+    border-radius: 10px; /* Making border radius */
+    width: 800px; /* Making auto-sizable width */
+    height: auto; /* Making auto-sizable height */
+    padding: 2px 10px 2px 10px; /* Making space around letters */
+    margin: 2px;
+    font-size: 12px; /* Changing font size */
+}
 .choicelist {
     margin-top: 10px;
 }
