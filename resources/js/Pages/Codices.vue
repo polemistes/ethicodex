@@ -37,7 +37,7 @@
 
         <div class="pageline_sortfield">
             <EthInput
-                input_type="single_choice_search"
+                input_type="single_choice_event"
                 input_id="sortfield"
                 :choices="sortfields"
                 v-model="form.sortfield"
@@ -1166,7 +1166,7 @@ const props = defineProps({
     transaction_parties_incl: Boolean,
     legal_classifications_search: Array,
 
-    sortfield: String,
+    sortfield: Number,
     reverse: Number,
     auth: Object,
 });
