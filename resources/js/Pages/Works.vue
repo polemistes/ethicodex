@@ -39,7 +39,7 @@
         </div>
         <div class="work_fourth">
             <EthInput
-                input_type="single_choice_search"
+                input_type="single_choice_authors"
                 input_id="author_id"
                 :choices="authors"
                 v-model="form.author_id"
@@ -128,7 +128,7 @@
                 </div>
                 <div class="work_fourth">
                     <EthInput
-                        input_type="single_choice_search"
+                        input_type="single_choice_authors"
                         input_id="author_id"
                         :choices="authors"
                         v-model="editform.author_id"

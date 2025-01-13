@@ -166,7 +166,7 @@
                     >
                         <label :title="work.altnames">{{ work.name }}</label>
                         <label :title="work.author.altnames"> {{ " (" + work.author.name+ ") "  }}</label>
-                        <lable>{{ work.pivot.passages ? work.pivot.passages : "" }}</lable>
+                        <label>{{ work.pivot.passages ? work.pivot.passages : "" }}</label>
                     </div>
                 </div>
 

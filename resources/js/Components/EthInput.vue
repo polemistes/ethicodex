@@ -236,12 +236,12 @@
             @click.prevent="dropdown = !dropdown"
             class="dropdownbutton"
         >
-        <span v-if="checked == null">Select</span>
-        <span v-else v-for="choice in choices" :key="choice.id">
-            <span v-if="choice.id == checked">
-                {{ choice.name }}
+            <span v-if="checked == null">Select</span>
+            <span v-else v-for="choice in choices" :key="choice.id">
+                <span v-if="choice.id == checked">
+                    {{ choice.name }}
+                </span>
             </span>
-        </span>
             <span>⌄</span>
         </button>
         <div>
@@ -251,7 +251,7 @@
                 @mouseleave="dropdown = false"
             >
                 <div>
-                    <div v-if="choices.length > 3">
+                    <div v-if="choices.length > 10">
                         <label :for="search">Search:</label>
                         <input type="text" v-model="search" />
                     </div>
@@ -273,8 +273,51 @@
         </div>
     </div>
 
+    <div v-if="input_type == 'single_choice_authors'" class="inputfield">
+        <label :for="input_id"><slot /></label>
+        <button
+            :id="input_id"
+            @click.prevent="dropdown = !dropdown"
+            class="dropdownbutton"
+        >
+            <span v-if="checked == null">Select</span>
+            <span v-else v-for="choice in choices" :key="choice.id">
+                <span v-if="choice.id == checked">
+                    <label :title="choice.altnames">{{ choice.name }}</label>
+                </span>
+            </span>
+            <span>⌄</span>
+        </button>
+        <div>
+            <div
+                v-if="dropdown"
+                class="dropdown-content"
+                @mouseleave="dropdown = false"
+            >
+                <div>
+                    <div v-if="choices.length > 3">
+                        <label :for="search">Search:</label>
+                        <input type="text" v-model="search" />
+                    </div>
+                    <div class="dropdown-scrollwindow">
+                        <div v-for="choice in search_authors" :key="choice.id">
+                            <input
+                                type="radio"
+                                name="radio"
+                                :id="choice.id"
+                                :value="choice.id"
+                                v-model="checked"
+                                @change="$emit('update:modelValue', choice.id)"
+                            />
+                            <label :title='choice.altnames'>{{ choice.name }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!--
+    <!--
     <div v-if="input_type == 'single_choice_search'" class="inputfield-search">
         <label :for="input_id"><slot /></label>
         <div v-if="choices.length > 3">
@@ -405,7 +448,12 @@
                                 v-model="checked"
                                 @change="$emit('update:modelValue', checked)"
                             />
-                            <label>{{ choice.name + (choice.author != null ? " (" + choice.author.name + ")" : " (No Author)") }}</label>
+                            <label>{{
+                                choice.name +
+                                (choice.author != null
+                                    ? " (" + choice.author.name + ")"
+                                    : " (No Author)")
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -423,12 +471,16 @@
                         ✕
                     </button>
 
-                    {{ value.name + (value.author != null ? " (" + value.author.name + ")" : " (No Author)") }}
+                    {{
+                        value.name +
+                        (value.author != null
+                            ? " (" + value.author.name + ")"
+                            : " (No Author)")
+                    }}
                 </span>
             </div>
         </div>
     </div>
-
 
     <div v-if="input_type == 'transactions_choice'" class="inputfield">
         <label :for="input_id"><slot /></label>
@@ -1359,6 +1411,31 @@ const search_choices = computed(() => {
           })
         : props.choices;
 });
+
+const search_authors = computed(() => {
+    return search.value != ""
+        ? props.choices.filter(function (el) {
+              return (
+                  (el.name != null ? el.name.toLowerCase().includes(search.value.toLowerCase()) : null) ||
+                  (el.altnames != null
+                      ? el.altnames
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                      : null) ||
+                  (el.description != null
+                      ? el.description
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                      : null) 
+              );
+          })
+        : props.choices;
+});
+
+
+
+
+
 
 const search_choices_doc = computed(() => {
     return search.value != ""

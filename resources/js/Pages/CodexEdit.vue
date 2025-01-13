@@ -1656,7 +1656,7 @@ const search_choices = computed(() => {
     return search.value != ""
         ? all_works.filter(function (el) {
               return (
-                  (el.name != null ? el.name.includes(search.value) : null) ||
+                  (el.name != null ? el.name.toLowerCase.includes(search.value.toLowerCase) : null) ||
                   (el.altnames != null
                       ? el.altnames
                             .toLowerCase()
