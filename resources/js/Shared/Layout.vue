@@ -582,7 +582,7 @@ body {
     justify-items: flex-start;
     position: absolute;
     background-color: #f9f9f9;
-    width: 800px;
+    max-width: 1280px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 20px;
@@ -661,6 +661,7 @@ body {
     flex-direction: column;
     width: auto;
     background: white;
+    border-radius: 10px;
 
     margin-top: 10px;
 }
@@ -676,6 +677,16 @@ table {
 
 td, th {
     padding-left: 5px;
+    text-align: left;
+}
+
+td {
+    font-weight: lighter;
+}
+
+th {
+    font-weight: bolder;
+    font-size: large;
 }
 
 .dropdown-scrollwindow {
@@ -1713,8 +1724,8 @@ td, th {
     grid-template-rows: 1fr auto;
     grid-template-areas:
         "title title title author author author desc desc desc"
-        "work work work work work work desc desc desc"
-        "language language genre genre cont cont desc desc desc";
+        "work work work work work work work work work"
+        "language language language genre genre genre cont cont cont";
     gap: 20px;
     width: 99%;
     align-self: center;

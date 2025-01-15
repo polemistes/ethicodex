@@ -207,28 +207,26 @@
                                 <label :title="choice.author.altnames">
                                     {{ " (" + choice.author.name + ")" }}
                                 </label>
-                                <input
-                                    v-if="
+                                <span v-if="
                                         form.works.some(
                                             (e) => e.id === choice.id
                                         )
-                                    "
+                                    "> 
+                                <label>Passage:</label><input
+                                    
                                     type="text"
                                     style="margin-left: 10px"
                                     v-model="choice.passages"
                                     @change="changepassage(choice)"
                                 />
+                                <label>Comment:</label>
                                 <input
-                                    v-if="
-                                        form.works.some(
-                                            (e) => e.id === choice.id
-                                        )
-                                    "
                                     type="text"
                                     style="margin-left: 10px"
                                     v-model="choice.passage_comment"
                                     @change="changepassage(choice)"
                                 />
+                            </span>
                             </div>
                         </div>
                         <button
