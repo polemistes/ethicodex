@@ -216,6 +216,18 @@
                                     type="text"
                                     style="margin-left: 10px"
                                     v-model="choice.passages"
+                                    @change="changepassage(choice)"
+                                />
+                                <input
+                                    v-if="
+                                        form.works.some(
+                                            (e) => e.id === choice.id
+                                        )
+                                    "
+                                    type="text"
+                                    style="margin-left: 10px"
+                                    v-model="choice.passage_comment"
+                                    @change="changepassage(choice)"
                                 />
                             </div>
                         </div>
@@ -226,27 +238,41 @@
                             Close
                         </button>
                     </div>
-                    <div class="choicelist-stack">
-                        <span
+                   <div class="choicelist-table">
+                    <table>
+                        <tr><th></th><th>Title</th><th>Author</th><th>Passage</th><th>Comment</th></tr>
+                        <tr
                             v-for="work in form.works"
                             :key="work.id"
-                            class="choiceelement-extrawide"
-                            :title="work.description"
                         >
-                            <button
+            
+
+                        <td><button
                                 @click.prevent="removework(work)"
                                 class="removebutton"
+                                title="Delete"
                             >
                                 ✕
                             </button>
+                        </td>
+                        <td>
                             <label :title="work.altnames">{{
                                 work.name
                             }}</label>
+                        </td>
+                        <td>
                             <label :title="work.author.altnames">{{
-                                " (" + work.author.name + ") "
+                                work.author.name 
                             }}</label>
+                        </td>
+                        <td>
                             <label>{{ work.passages ? work.passages : "" }}</label>
-                        </span>
+                        </td>
+                        <td>
+                            <label>{{ work.passage_comment ? work.passage_comment : "" }}</label>
+                        </td>
+                        </tr>
+                    </table>
                     </div>
                 </div>
 
@@ -257,7 +283,7 @@
                         :choices="genres_all"
                         v-model="form.genres"
                     >
-                        Genre
+                        Genres
                     </EthInput>
                 </div>
 
@@ -1327,16 +1353,17 @@ const props = defineProps({
 
 const wks = [];
 
-for (let w of props.works) {
+for (const w of props.works) {
     wks.push({
         id: w.id,
         name: w.name,
         altnames: w.altnames,
         author_id: w.author_id,
-        author: w.author,
+        author: w.author, 
         description: w.description,
         passages: w.pivot.passages,
-    });
+        passage_comment: w.pivot.passage_comment,
+    }); 
 }
 
 const form = useForm("EditCodex", {
@@ -1696,7 +1723,15 @@ for (let w of props.works_all) {
         passages: form.works.some((e) => e.id === w.id)
             ? form.works.find((item) => item.id === w.id).passages
             : null,
+        passage_comment: form.works.some((e) => e.id === w.id)
+            ? form.works.find((item) => item.id === w.id).passage_comment
+            : null,
     });
+}
+
+function changepassage(w) {
+    form.works.find((item) => item.id === w.id).passages = w.passages
+    form.works.find((item) => item.id === w.id).passage_comment = w.passage_comment
 }
 
 function delimage(image) {

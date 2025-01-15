@@ -159,21 +159,28 @@
 
                 <div class="show_works">
                     <label>Works</label>
-                    <div
+                    <div class="choicelist-table">
+                    <table>
+                        <tr><th>Title</th><th>Author</th><th>Passage</th><th>Comment</th></tr>
+
+                    <tr
                         v-for="work in works"
                         :key="work.id"
-                        class="showcodex_multi_stack"
                     >
-                        <label :title="work.altnames">{{ work.name }}</label>
-                        <label :title="work.author.altnames"> {{ " (" + work.author.name+ ") "  }}</label>
-                        <label>{{ work.pivot.passages ? work.pivot.passages : "" }}</label>
+                       <td> <label :title="work.altnames">{{ work.name }}</label></td>
+                        <td><label :title="work.author.altnames"> {{ " (" + work.author.name+ ") "  }}</label></td>
+                        <td><label>{{ work.pivot.passages ? work.pivot.passages : "" }}</label></td>
+                        <td><label>{{ work.pivot.passage_comment ? work.pivot.passage_comment : "" }}</label></td>
+                        
+                    </tr>
+                </table>
                     </div>
                 </div>
 
 
 
                 <div class="show_genre">
-                    <label>Genre</label>
+                    <label>Genres</label>
                     <div
                         v-for="genre in genres"
                         :key="genre.id"

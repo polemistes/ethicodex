@@ -3176,12 +3176,13 @@ class DocumentController extends Controller
         $document->genres()->sync(array_column($fields['genres'], 'id'));
         $document->dating_methods()->sync(array_column($fields['dating_methods'], 'id'));
         $document->inks()->sync(array_column($fields['inks'], 'id'));
-        
+
         $works = [];
         foreach ($fields['works'] as $work) {
-            $works[$work['id']] = ['passages' => $work['passages']];
+            $works[$work['id']] = ['passages' => $work['passages'],
+                                'passage_comment' => $work['passage_comment'],];
         }
-        
+
         $document->works()->sync($works);
 
         $document->save();

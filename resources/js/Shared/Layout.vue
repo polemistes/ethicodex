@@ -645,11 +645,37 @@ body {
     margin-top: 10px;
 }
 
+.tableelement {
+    background-color: #fff; /* Changing background color */
+}
+
 .choicelist-stack {
     display: flex;
     flex-direction: column;
     width: auto;
     margin-top: 10px;
+}
+
+.choicelist-table {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    background: white;
+
+    margin-top: 10px;
+}
+
+.choicelist-table tr {
+    padding-left: 5px;
+    margin: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    padding-left: 5px;
 }
 
 .dropdown-scrollwindow {
