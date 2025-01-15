@@ -363,6 +363,7 @@ class DocumentController extends Controller
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query
                             ->where('works.name', 'like', "%{$fulltext}%")
+                            ->orWhereRaw("locate('$fulltext', document_work.passage_comment)")
                             ->orWhereRaw("locate('$fulltext', works.altnames)")
                             ->orwhereIn('works.id', array_column($works, 'id'));
                         });
@@ -407,7 +408,8 @@ class DocumentController extends Controller
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate('$title', works.altnames)");
-                        });
+                        })
+                            ->orWhere('title', 'like', "%{$title}%");
                     })
                     /*
                      * ->when($ancient_author, function ($query, $ancient_author) {
@@ -422,7 +424,8 @@ class DocumentController extends Controller
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
-                        });
+                        })
+                            ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
@@ -1373,7 +1376,8 @@ class DocumentController extends Controller
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate('$title', works.altnames)");
-                        });
+                        })
+                            ->orWhere('title', 'like', "%{$title}%");
                     })
                     /*
                      * ->when($ancient_author, function ($query, $ancient_author) {
@@ -1388,7 +1392,8 @@ class DocumentController extends Controller
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
-                        });
+                        })
+                            ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
@@ -2337,7 +2342,8 @@ class DocumentController extends Controller
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate('$title', works.altnames)");
-                        });
+                        })
+                            ->orWhere('title', 'like', "%{$title}%");
                     })
                     /*
                      * ->when($ancient_author, function ($query, $ancient_author) {
@@ -2352,7 +2358,8 @@ class DocumentController extends Controller
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
-                        });
+                        })
+                            ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
@@ -3535,7 +3542,8 @@ class DocumentController extends Controller
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate('$title', works.altnames)");
-                        });
+                        })
+                            ->orWhere('title', 'like', "%{$title}%");
                     })
                     /*
                      * ->when($ancient_author, function ($query, $ancient_author) {
@@ -3550,7 +3558,8 @@ class DocumentController extends Controller
                         $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                         $query->whereHas('works', function ($query) use ($works) {
                             $query->whereIn('works.id', array_column($works, 'id'));
-                        });
+                        })
+                            ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
                         $query->whereHas('languages', function ($query) use ($languages) {
