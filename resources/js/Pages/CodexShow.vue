@@ -168,7 +168,7 @@
                         :key="work.id"
                     >
                        <td> <label :title="work.altnames">{{ work.name }}</label></td>
-                        <td><label :title="work.author.altnames"> {{ " (" + work.author.name+ ") "  }}</label></td>
+                        <td><label :title="work.author.altnames"> {{  work.author.name  }}</label></td>
                         <td><label>{{ work.pivot.passages ? work.pivot.passages : "" }}</label></td>
                         <td><label>{{ work.pivot.passage_comment ? work.pivot.passage_comment : "" }}</label></td>
                         
