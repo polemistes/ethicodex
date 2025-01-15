@@ -1903,7 +1903,7 @@ class DocumentController extends Controller
             'scripts' => $document->scripts()->get()->makeHidden('pivot'),
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
-            'works' => $document->works()->with('author')->get()->sortBy('name'),
+            'works' => $document->works()->with('author')->get(),
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
             'publication' => $publication,

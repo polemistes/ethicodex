@@ -191,7 +191,9 @@
 
                         <div class="dropdown-scrollwindow">
                             <div
-                                v-for="choice in search_choices"
+                                v-for="choice in search_choices.sort((a, b) =>
+                                    a.author.name.localeCompare(b.author.name)
+                                )"
                                 :key="choice.id"
                             >
                                 <input
@@ -201,25 +203,25 @@
                                     v-model="form.works"
                                     style="margin-right: 5px"
                                 />
-                                <label :title="choice.altnames"
-                                    >{{ choice.name }}
-                                </label>
                                 <label :title="choice.author.altnames">
-                                    {{ " (" + choice.author.name + ")" }}
+                                    {{ choice.author.name }}
+                                </label>
+                                <label :title="choice.altnames"
+                                    >{{ "| " + choice.name }}
                                 </label>
                                 <span v-if="
                                         form.works.some(
                                             (e) => e.id === choice.id
                                         )
                                     "> 
-                                <label>Passage:</label><input
+                                <label>| Passage:</label><input
                                     
                                     type="text"
                                     style="margin-left: 10px"
                                     v-model="choice.passages"
                                     @change="changepassage(choice)"
                                 />
-                                <label>Comment:</label>
+                                <label>| Comment:</label>
                                 <input
                                     type="text"
                                     style="margin-left: 10px"
@@ -238,9 +240,11 @@
                     </div>
                    <div class="choicelist-table">
                     <table>
-                        <tr><th></th><th>Title</th><th>Author</th><th>Passage</th><th>Comment</th></tr>
+                        <tr><th></th><th>Author</th><th>Title</th><th>Passage</th><th>Comment</th></tr>
                         <tr
-                            v-for="work in form.works"
+                            v-for="work in form.works.sort((a, b) =>
+                                    a.author.name.localeCompare(b.author.name)
+                                )"
                             :key="work.id"
                         >
             
@@ -254,13 +258,13 @@
                             </button>
                         </td>
                         <td>
-                            <label :title="work.altnames">{{
-                                work.name
+                            <label :title="work.author.altnames">{{
+                                work.author.name 
                             }}</label>
                         </td>
                         <td>
-                            <label :title="work.author.altnames">{{
-                                work.author.name 
+                            <label :title="work.altnames">{{
+                                work.name
                             }}</label>
                         </td>
                         <td>
