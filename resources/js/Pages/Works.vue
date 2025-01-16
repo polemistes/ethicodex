@@ -200,6 +200,10 @@ const search_results = computed(() => {
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);
 
 function work_submit() {
+    if(!form.author_id) {
+        alert("The Work must have an Author.");
+        return;
+    }
     form.post("/works", {
         preserveState: false,
         onSuccess: () => {

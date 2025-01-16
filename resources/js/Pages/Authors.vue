@@ -185,6 +185,13 @@ function updateauthor(id) {
 }
 
 function deleteauthor(id) {
+    let author = props.authors.find((x) => x.id === id);
+
+    if(author.works.length > 0) {
+        alert("This author is assinged to one or more works and cannot be deleted.")
+        return;
+    }
+
     if (confirm("Are you sure you want to delete this author?")) {
         form.delete("/authors/" + id);
     }

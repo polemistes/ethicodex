@@ -17,7 +17,7 @@ class AuthorController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Author::class);
-        $authors = Author::orderBy('name')->get();
+        $authors = Author::with('works')->orderBy('name')->get();
         return Inertia::render('Authors', [
             'authors' => $authors,
         ]);
