@@ -2894,7 +2894,7 @@ class DocumentController extends Controller
             'storage_condition' => $document->storage_condition()->get(),
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'tags_all' => Tag::all(),
-            'works' => $document->works()->with('author')->get()->sortBy('name'),
+            'works' => $document->works()->with('author')->orderBy('name')->get(),
             'works_all' => Work::with('author')->orderBy('name')->get(),
             'fulltext' => $fulltext,
             'standard_name' => $standard_name,
