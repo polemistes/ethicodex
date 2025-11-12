@@ -89,9 +89,9 @@ class Document extends Model
         return $this->belongsTo(Material::class);
     }
 
-    public function modern_collections()
+    public function collections()
     {
-        return $this->belongsToMany(ModernCollection::class);
+        return $this->belongsToMany(TransactionParty::class);
     }
 
     public function pagination()

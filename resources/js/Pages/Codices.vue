@@ -931,10 +931,9 @@
         <div class="cod_zeroth"></div>
         <div class="cod_first"></div>
         <div class="cod_second"><b>Standard Name</b></div>
-        <div class="cod_third"><b>Author</b></div>
-        <div class="cod_fourth"><b>Title of Work</b></div>
-        <div class="cod_fifth"><b>Date</b></div>
-        <div class="cod_sixth"><b>Publication</b></div>
+        <div class="cod_third"><b>Content</b></div>
+        <div class="cod_fourth"><b>Date</b></div>
+        <div class="cod_fifth"><b>Current Collection(s)</b></div>
     </div>
 
     <div
@@ -988,14 +987,42 @@
         </div>
 
         <div class="cod_second" v-text="document.standard_name"></div>
-        <div class="cod_third" v-text="document.ancient_author"></div>
-        <div class="cod_fourth" v-text="document.title"></div>
+
+        <div v-if="document.works.length > 0" class="cod_third">
+            <ul>
+            <div v-for="work in document.works">
+                <span v-if="work.author.name == 'Unknown Author' && work.name == 'Unknown Work'"
+                    v-html="'<li>' +  
+                   (work.pivot.passage_comment ? work.pivot.passage_comment : '') +
+                   '</li>'"
+                >
+
+                </span>
+                <span v-else 
+                    v-html="'<li>' + 
+                    work.author.name + ', <i>' + work.name + '</i>' + 
+                   (work.pivot.passage_comment ? ' (' + work.pivot.passage_comment + ')' : '') +
+                   '</li>'">
+                </span>
+            
+            </div>
+            </ul>
+        </div>
+        <div v-else class="cod_fourth" v-html="document.content_description"></div>
+
         <div
-            class="cod_fifth"
+            class="cod_fourth"
             v-text="document.start_year + '–' + document.end_year"
         ></div>
 
-        <div class="cod_sixth" v-html="document.publication"></div>
+
+        <div class="cod_fifth">
+            <ul>
+            <span v-for="collection in document.collections" v-html="'<li>' + collection.name + '</li>'">
+            </span>
+            </ul>
+        </div>
+
     </div>
     <div class="pageline">
         <Link
@@ -1060,7 +1087,6 @@ const props = defineProps({
     tags: Array,
     ancient_provenances: Array,
     ancient_provenance_certainties: Array,
-    transactions: Array,
     transaction_parties: Array,
 
     show_publication: Boolean,
@@ -1311,8 +1337,8 @@ onMounted(() => {
 
 const sortfields = [
     { id: 1, name: "Standard Name" },
-    { id: 2, name: "Author" },
-    { id: 3, name: "Title" },
+/*    { id: 2, name: "Author" },
+    { id: 3, name: "Title" }, */
     { id: 4, name: "Date (Earliest Estimate)" },
     { id: 5, name: "Date (Latest Estimate)" },
 ];

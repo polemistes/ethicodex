@@ -14,4 +14,10 @@ class TransactionParty extends Model
     {
         return $this->belongsToMany(Transaction::class)->withPivot('party_role')->with('documents');
     }
+
+    public function documents()
+    {
+        return $this->belongsToMany(Document::class);
+    }
+    
 }

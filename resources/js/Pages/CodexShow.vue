@@ -865,7 +865,7 @@
                 <legend class="sectionheading">Provenance</legend>
                 <div class="show_sciex">
                     <label :for="scientifically_excavated"
-                        >Scientifically Excavated</label
+                        >Excavated by Permit</label
                     >
                     <div class="showcodex_bool">
                         {{ document.scientifically_excavated ? "Yes" : "No" }}
@@ -887,16 +887,6 @@
                     </div>
                 </div>
 
-                <div class="show_ancicert">
-                    <label>Certainty of Ancient Provenance</label>
-                    <div class="showcodex_string_short">
-                        {{
-                            ancient_provenance_certainty.length > 0
-                                ? ancient_provenance_certainty[0].name
-                                : ""
-                        }}
-                    </div>
-                </div>
 
                 <div class="show_ancicomm">
                     <label>Comments on Ancient Provenance</label>
@@ -924,6 +914,18 @@
                         v-html="document.legal_classification_explanation"
                     />
                 </div>
+
+                <div class="show_collections">
+                    <label>Current Collection(s)</label>
+                    <div
+                        v-for="collection in collections"
+                        :key="collection.id"
+                        class="showcodex_multi_stack"
+                    >
+                        {{ collection.name }}
+                    </div>
+                </div>
+
 
                 <div class="show_transactions">
                     <label>Transactions</label>
@@ -1083,7 +1085,7 @@ const props = defineProps({
     languages: Array,
     legal_classification: Array,
     material: Array,
-    modern_collections: Array,
+    collections: Array,
     newimages: Array,
     pagination: Array,
     paratexts: Array,

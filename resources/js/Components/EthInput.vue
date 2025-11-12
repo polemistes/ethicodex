@@ -523,11 +523,11 @@
                     </div>
                 </div>
             </div>
-            <div class="choicelist">
+            <div class="choicelist-stack">
                 <span
                     v-for="value in modelValue"
                     :key="value.id"
-                    class="choiceelement"
+                    class="choiceelement-wide"
                 >
                     <button
                         @click.prevent="removechoice(value)"

@@ -974,7 +974,7 @@
                 <legend class="sectionheading">Provenance</legend>
                 <div class="edit_sciex">
                     <label :for="scientifically_excavated"
-                        >Scientifically Excavated</label
+                        >Excavated by Permit</label
                     >
                     <input
                         :id="scientifically_excavated"
@@ -1002,17 +1002,6 @@
                         v-model="form.ancient_provenance_id"
                     >
                         Ancient Provenance
-                    </EthInput>
-                </div>
-
-                <div class="edit_ancicert">
-                    <EthInput
-                        input_type="single_choice"
-                        input_id="ancient_provenance_certainty"
-                        :choices="ancient_provenance_certainties"
-                        v-model="form.ancient_provenance_certainty_id"
-                    >
-                        Certainty of A. Provenance
                     </EthInput>
                 </div>
 
@@ -1056,6 +1045,19 @@
                         Transactions
                     </EthInput>
                 </div>
+
+                <div class="edit_collections">
+                    <EthInput
+                        input_type="multi_choice_stack"
+                        input_id="collections"
+                        :choices="collections_all"
+                        v-model="form.collections"
+                    >
+                        Current Collections
+                    </EthInput>
+                </div>
+
+
             </fieldset>
             <button
                 :class="form.isDirty ? 'submitbutton_red' : 'submitbutton'"
@@ -1213,8 +1215,8 @@ const props = defineProps({
     licenses: Array,
     material: Object,
     materials: Array,
-    modern_collections: Array,
-    modern_collections_all: Array,
+    collections: Array,
+    collections_all: Array,
     newimages: Array,
     pagination: Object,
     paginations: Array,
@@ -1392,6 +1394,7 @@ const form = useForm("EditCodex", {
     dating_certainty_id: props.document.dating_certainty_id,
     dating_comment: props.document.dating_comment,
     bibliography: props.document.bibliography,
+    collections: props.collections,
     internal_comment: props.document.internal_comment,
     general_comment: props.document.general_comment,
     material_id: props.document.material_id,

@@ -21,7 +21,6 @@ use App\Models\Language;
 use App\Models\LegalClassification;
 use App\Models\License;
 use App\Models\Material;
-use App\Models\ModernCollection;
 use App\Models\Pagination;
 use App\Models\Paratext;
 use App\Models\Punctuation;
@@ -869,6 +868,8 @@ class DocumentController extends Controller
                         });
                 }
             )
+            ->with('works.author')
+            ->with('collections')
             ->orderBy($sortby, $direction)
             ->orderBy('end_year', $direction);
         $documents = $all_documents->paginate(10)->withQueryString();
@@ -1885,7 +1886,7 @@ class DocumentController extends Controller
             'legal_classification' => $document->legal_classification()->get(),
             'material' => $document->material()->get(),
             'gregorys_rule' => $document->gregorys_rule()->get(),
-            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
+            'collections' => $document->collections()->get()->makeHidden('pivot'),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
             'punctuations' => $document->punctuations()->get()->makeHidden('pivot'),
@@ -2868,8 +2869,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
-            'modern_collections_all' => ModernCollection::all(),
+            'collections' => $document->collections()->get()->makeHidden('pivot'),
+            'collections_all' => TransactionParty::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),
@@ -3080,7 +3081,7 @@ class DocumentController extends Controller
             'ancient_provenance_comment' => 'nullable',
             'scientifically_excavated' => 'nullable',
             'excavation_comment' => 'nullable',
-            'modern_collections' => 'nullable',
+            'collections' => 'nullable',
             'legal_classification_id' => 'nullable',
             'legal_classification_explanation' => 'nullable',
             'transactions' => 'nullable',
@@ -3177,7 +3178,7 @@ class DocumentController extends Controller
         $document->critical_symbols()->sync(array_column($fields['critical_symbols'], 'id'));
         $document->decorations()->sync(array_column($fields['decorations'], 'id'));
         $document->analyses()->sync(array_column($fields['analyses'], 'id'));
-        $document->modern_collections()->sync(array_column($fields['modern_collections'], 'id'));
+        $document->collections()->sync(array_column($fields['collections'], 'id'));
         $document->transactions()->sync(array_column($fields['transactions'], 'id'));
         $document->tags()->sync(array_column($fields['tags'], 'id'));
         $document->genres()->sync(array_column($fields['genres'], 'id'));
@@ -4066,8 +4067,8 @@ class DocumentController extends Controller
             'licenses' => License::all(),
             'materials' => Material::all(),
             'material' => $document->material()->get(),
-            'modern_collections' => $document->modern_collections()->get()->makeHidden('pivot'),
-            'modern_collections_all' => ModernCollection::all(),
+            'collections' => $document->collections()->get()->makeHidden('pivot'),
+            'collections_all' => TransactionParty::all(),
             'paginations' => Pagination::all(),
             'pagination' => $document->pagination()->get(),
             'paratexts' => $document->paratexts()->get()->makeHidden('pivot'),

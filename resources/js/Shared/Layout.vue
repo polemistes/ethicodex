@@ -908,9 +908,9 @@ th {
 .cod_container {
     display: flex;
     border-style: none;
-    padding: 1em;
+    padding: 0.5em;
     margin: 0.5em 0em;
-    gap: 1em;
+    gap: 0.5em;
     background-color: #eee;
     width: 100%;
 }
@@ -921,7 +921,7 @@ th {
     border-style: none;
     padding-bottom: 1em;
     margin-bottom: 0.5em;
-    gap: 1em;
+    gap: 0.5em;
     background-color: #bbb;
     width: 100%;
 }
@@ -941,22 +941,18 @@ th {
 }
 
 .cod_second {
-    flex: 0 0 18%;
+    flex: 0 0 20%;
     align-self: center;
 }
 .cod_third {
-    flex: 0 0 15%;
+    flex: 0 0 40%;
     align-self: center;
 }
 .cod_fourth {
-    flex: 0 0 15%;
-    align-self: center;
-}
-.cod_fifth {
     flex: 0 0 10%;
     align-self: center;
 }
-.cod_sixth {
+.cod_fifth {
     flex: 0 0 20%;
     align-self: center;
 }
@@ -1501,13 +1497,15 @@ th {
 
 .showcodex_provenance {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-columns: 2fr 3fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "sciex anciprov ancicert"
-        "excomm ancicomm ancicomm"
-        "legalclass legalcomm legalcomm"
-        "transactions transinfo transinfo";
+        "anciprov ancicomm"
+        "sciex excomm"
+        "collections excomm"
+        "legalclass  legalcomm"
+        "transactions transinfo";
+
     gap: 20px;
     width: 99%;
     align-self: center;
@@ -2039,6 +2037,9 @@ th {
 .edit_transactions {
     grid-area: transactions;
 }
+.edit_collections {
+    grid-area: collections;
+}
 .edit_legalclass {
     grid-area: legalclass;
 }
@@ -2048,13 +2049,14 @@ th {
 
 .editcodex_provenance {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 3fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "sciex anciprov ancicert"
-        "excomm ancicomm ancicomm"
-        "transactions legalclass legalclass"
-        "transactions legalcomm legalcomm";
+        "anciprov ancicomm"
+        "sciex excomm"
+        "collections excomm"
+        "transactions legalclass"
+        "transactions legalcomm";
     gap: 20px;
     width: 99%;
     align-self: center;
