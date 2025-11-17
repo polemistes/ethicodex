@@ -1008,7 +1008,7 @@
             </div>
             </ul>
         </div>
-        <div v-else class="cod_fourth" v-html="document.content_description"></div>
+        <div v-else class="cod_third" v-html="document.content_description"></div>
 
         <div
             class="cod_fourth"
