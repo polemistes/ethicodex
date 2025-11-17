@@ -92,8 +92,10 @@
                     <Link href="/login">Log in</Link>
                 </li>
 
-                <li v-if="loggedin" style="float: right">
-                    <Link href="/logout" method="post">Log out</Link>
+                <li v-if="loggedin" 
+                    style="float: right"
+                >
+                    <Link href="/logout" method="post" class="">Log out</Link>
                 </li>
 
                 <li
@@ -250,8 +252,22 @@ body {
     text-decoration: none;
 }
 
+.layout-navigation li button {
+    all: unset;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
 .layout-navigation li a:hover:not(.active) {
     background-color: rgb(194, 181, 166);
+}
+
+.layout-navigation li button:hover:not(.active) {
+    background-color: rgb(194, 181, 166);
+    cursor: pointer;
 }
 
 .lo_active a {
@@ -261,6 +277,7 @@ body {
 .lo_active a:hover {
     background-color: rgb(119, 128, 111);
 }
+
 
 .layout-content {
     grid-area: content;
