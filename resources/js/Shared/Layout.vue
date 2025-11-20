@@ -2059,6 +2059,8 @@ th {
 }
 .edit_legalclass {
     grid-area: legalclass;
+    max-width:500px;
+
 }
 .edit_legalcomm {
     grid-area: legalcomm;
