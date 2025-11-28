@@ -60,7 +60,18 @@
                     v-for="transaction in transaction_party.transactions"
                     :key="transaction.id"
                 >
-                    <li>
+                    <li v-if="props.auth == null
+                        ? 0
+                        : props.auth.user.role.id >= 2
+                        ? 1
+                        : 0">
+                        <Link :href="'/transaction_edit/' + transaction.id">
+                        {{ transaction.name }} ({{
+                            transaction.pivot.party_role
+                        }})
+                        </Link>
+                    </li>
+                    <li v-else>
                         {{ transaction.name }} ({{
                             transaction.pivot.party_role
                         }})
