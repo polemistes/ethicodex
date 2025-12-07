@@ -1189,7 +1189,7 @@ class DocumentController extends Controller
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
-            'images' => $document->images()->with('license')->get(),
+            'images' => $document->images()->where('visible', '1')->with('license')->get(),
             'inks' => $document->inks()->get()->makeHidden('pivot'),
             'languages' => $document->languages()->get()->makeHidden('pivot'),
             'legal_classification' => $document->legal_classification()->get(),
@@ -1516,6 +1516,7 @@ class DocumentController extends Controller
         $fields = $request->validate([
             'id' => 'required',
             'published' => 'nullable',
+            'completed' => 'nullable',
             'standard_name' => 'nullable',
             'other_names' => 'nullable',
             'publication' => 'nullable',
@@ -1576,6 +1577,7 @@ class DocumentController extends Controller
             'quire_signature_id' => 'nullable',
             'quire_structure_id' => 'nullable',
             'quire_number' => 'nullable',
+            'quire_number_reconstructed' => 'nullable',
             'bifolia' => 'nullable',
             'quire_comment' => 'nullable',
             'binding_description' => 'nullable',
@@ -1603,6 +1605,7 @@ class DocumentController extends Controller
         ]);
 
         $document->published = $fields['published'];
+        $document->completed = $fields['completed'];
         $document->standard_name = $fields['standard_name'];
         $document->other_names = $fields['other_names'];
         $document->publication = $fields['publication'];
@@ -1709,6 +1712,7 @@ class DocumentController extends Controller
 
             $image->description = $fields['description'];
             $image->micrograph = $fields['micrograph'];
+            $image->visible = $fields['visible'];
             $image->license_id = $fields['license_id'];
             $image->source = $fields['source'];
             $image->save();

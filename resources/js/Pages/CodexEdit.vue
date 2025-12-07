@@ -89,6 +89,14 @@
                         style="margin-left: 5px"
                         v-model="form.published"
                     />
+                    <br>
+                    <label :for="completed">Completed</label>
+                    <input
+                        :id="completed"
+                        type="checkbox"
+                        style="margin-left: 5px"
+                        v-model="form.completed"
+                    />
                 </div>
 
                 <div class="edit_standard">
@@ -1138,6 +1146,15 @@
                                 style="margin-left: 5px"
                                 v-model="image.micrograph"
                             />
+                            <label style="padding-left: 10px">Visible</label>
+                            <input
+                                type="checkbox"
+                                true-value="1"
+                                false-value="0"
+                                style="margin-left: 5px"
+                                v-model="image.visible"
+                            />
+
                         </div>
 
                         <EthInput
@@ -1373,6 +1390,7 @@ for (const w of props.works) {
 const form = useForm("EditCodex", {
     id: props.document.id,
     published: props.document.published == 1 ? true : false,
+    completed: props.document.completed == 1 ? true : false,
     standard_name: props.document.standard_name,
     other_names: props.document.other_names,
     publication: props.document.publication,
@@ -1438,6 +1456,7 @@ const form = useForm("EditCodex", {
     quire_signatures_description: props.document.quire_signatures_description,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,
+    quire_number_reconstructed: props.document.quire_number_reconstructed,
     bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],
     quire_comment: props.document.quire_comment,
     binding_description: props.document.binding_description,

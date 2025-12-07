@@ -53,6 +53,8 @@ class ImageController extends Controller
             $new_image = Image::create([
                 'filename' => $path,
                 'description' => null,
+                'visible' => true,
+                'micrograph' => false,
                 'license_id' => null,
                 'source' => null,
                 'document_id' => $document_id,

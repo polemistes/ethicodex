@@ -89,6 +89,11 @@
                     <div class="showcodex_bool">
                         {{ document.published ? "Yes" : "No" }}
                     </div>
+                    <br>
+                    <label>Completed</label>
+                    <div class="showcodex_bool">
+                        {{ document.completed ? "Yes" : "No" }}
+                    </div>
                 </div>
 
                 <div class="show_standard">
