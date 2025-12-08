@@ -921,24 +921,36 @@
             </EthInput>
 
             <EthInput
-                input_type="multi_choice_event"
-                input_id="ancient_provenance_certainties"
-                :choices="ancient_provenance_certainties"
-                v-model="form.s_ancient_provenance_certainties"
-                @new-change="sendsearch()"
-            >
-                Certainty of A. Provenance
-            </EthInput>
-
-            <EthInput
                 input_type="single_choice_event"
                 input_id="scientifically_excavated"
                 :choices="yesnomenu"
                 v-model="form.s_scientifically_excavated"
                 @new-change="sendsearch()"
             >
-                Scientifically Excavated
+                Excavated by Permit
             </EthInput>
+
+            <div class="close-check-box">
+                <EthInput
+                    input_type="multi_choice_event"
+                    input_id="collections"
+                    :choices="collections"
+                    v-model="form.s_collections"
+                    @new-change="sendsearch()"
+                >
+                    Current Collections
+                </EthInput>
+
+                <EthInput
+                    helptext="Check to search for codices that are in all selected collections. Uncheck to search for codices that are in any of the selected collections."
+                    input_type="boolevent"
+                    input_id="collections_incl"
+                    v-model="form.s_collections_incl"
+                    @new-change="sendsearch()"
+                >
+                    All
+                </EthInput>
+            </div>
 
             <div class="close-check-box">
                 <EthInput
@@ -1156,6 +1168,7 @@ const props = defineProps({
     ancient_provenances: Array,
     ancient_provenance_certainties: Array,
     transaction_parties: Array,
+    collections: Array,
 
     show_publication: Boolean,
     show_content: Boolean,
@@ -1259,7 +1272,8 @@ const props = defineProps({
     /* Provenance */
     scientifically_excavated: Number,
     ancient_provenances_search: Array,
-    ancient_provenance_certainties_search: Array,
+    collections_search: Array,
+    collections_incl: Boolean,
     transactions_search: Array,
     transactions_incl: Boolean,
     transaction_parties_search: Array,
@@ -1390,12 +1404,10 @@ const form = useForm({
     s_ancient_provenances: props.ancient_provenances_search
         ? props.ancient_provenances_search
         : [],
-    s_ancient_provenance_certainties:
-        props.ancient_provenance_certainties_search
-            ? props.ancient_provenance_certainties_search
-            : [],
+    s_collections: props.collections_search ? props.collections_search : [],
+    s_collections_incl: props.collections_incl,
     s_transactions: props.transactions_search ? props.transactions_search : [],
-    s_transactions_incl: props.transaction_parties_incl,
+    s_transactions_incl: props.transactions_incl,
     s_transaction_parties: props.transaction_parties_search
         ? props.transaction_parties_search
         : [],

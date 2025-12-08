@@ -1209,6 +1209,8 @@ const props = defineProps({
     scientifically_excavated: Number,
     ancient_provenances_search: Array,
     ancient_provenance_certainties_search: Array,
+    collections_search: Array,
+    collections_incl: Boolean,
     transactions_search: Array,
     transactions_incl: Boolean,
     transaction_parties_search: Array,
@@ -1350,8 +1352,10 @@ const form = useForm({
         props.ancient_provenance_certainties_search
             ? props.ancient_provenance_certainties_search
             : [],
+    s_collections: props.collections_search ? props.collections_search : [],
+    s_collections_incl: props.collections_incl,
     s_transactions: props.transactions_search ? props.transactions_search : [],
-    s_transactions_incl: props.transaction_parties_incl,
+    s_transactions_incl: props.transactions_incl,
     s_transaction_parties: props.transaction_parties_search
         ? props.transaction_parties_search
         : [],

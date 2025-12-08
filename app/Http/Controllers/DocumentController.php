@@ -145,6 +145,8 @@ class DocumentController extends Controller
             's_scientifically_excavated' => 'nullable',
             's_ancient_provenances' => 'nullable',
             's_ancient_provenance_certainties' => 'nullable',
+            's_collections' => 'nullable',
+            's_collections_incl' => 'nullable',
             's_transactions' => 'nullable',
             's_transactions_incl' => 'nullable',
             's_transaction_parties' => 'nullable',
@@ -300,6 +302,8 @@ class DocumentController extends Controller
         $scientifically_excavated = array_key_exists('s_scientifically_excavated', $search) ? $search['s_scientifically_excavated'] : null;
         $ancient_provenances = array_key_exists('s_ancient_provenances', $search) ? $search['s_ancient_provenances'] : null;
         $ancient_provenance_certainties = array_key_exists('s_ancient_provenance_certainties', $search) ? $search['s_ancient_provenance_certainties'] : null;
+        $collections = array_key_exists('s_collections', $search) ? $search['s_collections'] : null;
+        $collections_incl = array_key_exists('s_collections_incl', $search) ? $search['s_collections_incl'] : null;
         $transactions = array_key_exists('s_transactions', $search) ? $search['s_transactions'] : null;
         $transactions_incl = array_key_exists('s_transactions_incl', $search) ? $search['s_transactions_incl'] : null;
         $transaction_parties = array_key_exists('s_transaction_parties', $search) ? $search['s_transaction_parties'] : null;
@@ -903,6 +907,8 @@ class DocumentController extends Controller
                     $scientifically_excavated,
                     $ancient_provenances,
                     $ancient_provenance_certainties,
+                    $collections,
+                    $collections_incl,
                     $transactions,
                     $transactions_incl,
                     $transaction_parties,
@@ -918,6 +924,18 @@ class DocumentController extends Controller
                         })
                         ->when($ancient_provenance_certainties, function ($query, $ancient_provenance_certainties) {
                             $query->whereIn('ancient_provenance_certainty_id', array_column($ancient_provenance_certainties, 'id'));
+                        })
+                        ->when($collections && !$collections_incl, function ($query) use ($collections) {
+                            $query->whereHas('collections', function ($query) use ($collections) {
+                                $query->whereIn('transaction_parties.id', array_column($collections, 'id'));
+                            });
+                        })
+                        ->when($collections && $collections_incl, function ($query) use ($collections) {
+                            foreach ($collections as $collection) {
+                                $query->whereHas('collections', function ($query) use ($collection) {
+                                    $query->where('transaction_parties.id', '=', $collection['id']);
+                                });
+                            }
                         })
                         ->when($transactions && !$transactions_incl, function ($query) use ($transactions) {
                             $query->whereHas('transactions', function ($query) use ($transactions) {
@@ -1060,6 +1078,8 @@ class DocumentController extends Controller
             'scientifically_excavated' => $scientifically_excavated,
             'ancient_provenances_search' => $ancient_provenances,
             'ancient_provenance_certainties_search' => $ancient_provenance_certainties,
+            'collections_search' => $collections,
+            'collections_incl' => $collections_incl,
             'transactions_search' => $transactions,
             'transactions_incl' => $transactions_incl,
             'transaction_parties_search' => $transaction_parties,
@@ -1170,6 +1190,8 @@ class DocumentController extends Controller
             'scientifically_excavated' => $data['scientifically_excavated'],
             'ancient_provenances_search' => $data['ancient_provenances_search'],
             'ancient_provenance_certainties_search' => $data['ancient_provenance_certainties_search'],
+            'collections_search' => $data['collections_search'],
+            'collections_incl' => $data['collections_incl'],
             'transactions_search' => $data['transactions_search'],
             'transactions_incl' => $data['transactions_incl'],
             'transaction_parties_search' => $data['transaction_parties_search'],
@@ -1202,6 +1224,7 @@ class DocumentController extends Controller
             'tags' => Tag::all(),
             'ancient_provenances' => AncientProvenance::all(),
             'ancient_provenance_certainties' => AncientProvenanceCertainty::all(),
+            'collections' => TransactionParty::all(),
             'transaction_parties' => TransactionParty::all(),
         ]);
     }
@@ -1405,6 +1428,8 @@ class DocumentController extends Controller
             'scientifically_excavated' => $data['scientifically_excavated'],
             'ancient_provenances_search' => $data['ancient_provenances_search'],
             'ancient_provenance_certainties_search' => $data['ancient_provenance_certainties_search'],
+            'collections_search' => $data['collections_search'],
+            'collections_incl' => $data['collections_incl'],
             'transactions_search' => $data['transactions_search'],
             'transactions_incl' => $data['transactions_incl'],
             'transaction_parties_search' => $data['transaction_parties_search'],
@@ -1611,6 +1636,8 @@ class DocumentController extends Controller
             'scientifically_excavated' => $data['scientifically_excavated'],
             'ancient_provenances_search' => $data['ancient_provenances_search'],
             'ancient_provenance_certainties_search' => $data['ancient_provenance_certainties_search'],
+            'collections_search' => $data['collections_search'],
+            'collections_incl' => $data['collections_incl'],
             'transactions_search' => $data['transactions_search'],
             'transactions_incl' => $data['transactions_incl'],
             'transaction_parties_search' => $data['transaction_parties_search'],
@@ -2031,6 +2058,8 @@ class DocumentController extends Controller
             'scientifically_excavated' => $data['scientifically_excavated'],
             'ancient_provenances_search' => $data['ancient_provenances_search'],
             'ancient_provenance_certainties_search' => $data['ancient_provenance_certainties_search'],
+            'collections_search' => $data['collections_search'],
+            'collections_incl' => $data['collections_incl'],
             'transactions_search' => $data['transactions_search'],
             'transactions_incl' => $data['transactions_incl'],
             'transaction_parties_search' => $data['transaction_parties_search'],
