@@ -82,6 +82,32 @@
     <div class="searchblockbackground">
         <div v-if="form.show_publication" class="searchblock">
             <div class="searchblocktitle">Publication Search</div>
+
+            <div v-if="props.auth == null
+                        ? 0
+                        : props.auth.user.role.id >= 2
+                        ? 1
+                        : 0">
+                <EthInput
+                    helptext="Show only codices with incomplete data entry."
+                    input_type="boolevent-horiz"
+                    input_id="completed"
+                    v-model="form.s_completed"
+                    @new-change="sendsearch()"
+                >
+                    Incomplete
+                </EthInput>
+
+                <EthInput
+                    helptext="Show only unpublished codices."
+                    input_type="boolevent-horiz"
+                    input_id="published"
+                    v-model="form.s_published"
+                    @new-change="sendsearch()"
+                >
+                    Unpublished
+                </EthInput>
+            </div>
             <EthInput
                 input_type="textevent"
                 input_id="standard_name"
@@ -114,6 +140,26 @@
             >
                 Trismegistos ID
             </EthInput>
+            <div>
+                <EthInput
+                    helptext="Show only codices with links to images."
+                    input_type="boolevent-horiz"
+                    input_id="imagelinks"
+                    v-model="form.s_imagelinks"
+                    @new-change="sendsearch()"
+                >
+                    Image Links
+                </EthInput>
+                <EthInput
+                    helptext="Show only codices with images on site."
+                    input_type="boolevent-horiz"
+                    input_id="imagesonsite"
+                    v-model="form.s_imagesonsite"
+                    @new-change="sendsearch()"
+                >
+                    Images on Site
+                </EthInput>
+            </div>
         </div>
 
         <div v-if="form.show_content" class="searchblock">
@@ -296,6 +342,15 @@
                 >
                     All
                 </EthInput>
+                <EthInput
+                    helptext="Check to search for codices that have only selected inks. Uncheck to search for codices with any of the selected inks."
+                    input_type="boolevent"
+                    input_id="inks_only"
+                    v-model="form.s_inks_only"
+                    @new-change="sendsearch()"
+                >
+                    Only
+                </EthInput>
             </div>
 
             <EthInput
@@ -368,8 +423,21 @@
         <div v-if="form.show_measurement" class="searchblock-outer">
             <div class="searchblocktitle">Measurements Search</div>
 
+            <div class="searchbox-inner">
+                <EthInput
+                    helptext="Check to include codices for which the page dimensions are estimated.search for codices that have all selected inks."
+                    input_type="boolevent-horiz"
+                    input_id="include_estimated"
+                    v-model="form.s_include_estimated"
+                    @new-change="sendsearch()"
+                >
+                    Include Estimated Page Dimensions
+                </EthInput>
+            </div>
             <!-- Page width, block width, upper margin, inner margin -->
+
             <div class="searchblock-inner">
+
                 <EthInput
                     input_type="numberevent"
                     input_id="full_page_width_min"
@@ -1104,6 +1172,10 @@ const props = defineProps({
     publication: String,
     current_shelfmarks: String,
     trismegistos_id: String,
+    completed: Boolean,
+    published: Boolean,
+    imagelinks: Boolean,
+    imagesonsite: Boolean,
     /* Content */
     title: String,
     ancient_author: String,
@@ -1125,6 +1197,7 @@ const props = defineProps({
     gregorys_rules_search: Array,
     inks_search: Array,
     inks_incl: Boolean,
+    inks_only: Boolean,
     covers_search: Array,
     quire_structures_search: Array,
     quirenum_min: Number,
@@ -1132,6 +1205,7 @@ const props = defineProps({
     bifolianum_min: Number,
     bifolianum_max: Number,
     /* Measurement */
+    include_estimted: Boolean,
     full_page_width_min: Number,
     full_page_width_max: Number,
     full_page_height_min: Number,
@@ -1213,6 +1287,10 @@ const form = useForm({
     s_publication: props.publication,
     s_current_shelfmarks: props.current_shelfmarks,
     s_trismegistos_id: props.trismegistos_id,
+    s_completed: props.completed,
+    s_published: props.published,
+    s_imagelinks: props.imagelinks,
+    s_imagesonsite: props.imagesonsite,
     /* Content */
     s_title: props.title,
     s_ancient_author: props.ancient_author,
@@ -1240,6 +1318,7 @@ const form = useForm({
         : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
+    s_inks_only: props.inks_only,
     s_covers: props.covers_search ? props.covers_search : [],
     s_quire_structures: props.quire_structures_search
         ? props.quire_structures_search
@@ -1249,6 +1328,7 @@ const form = useForm({
     s_bifolianum_min: props.bifolianum_min,
     s_bifolianum_max: props.bifolianum_max,
     /* Measurement */
+    s_include_estimated: props.include_estimted,
     s_full_page_width_min: props.full_page_width_min,
     s_full_page_width_max: props.full_page_width_max,
     s_full_page_height_min: props.full_page_height_min,

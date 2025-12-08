@@ -94,7 +94,7 @@
         class="inputfield"
         style="align-self: start"
     >
-        <div :title="helptext" style="display: flex; flex-direction: column">
+        <div :title="helptext" style="display: flex; flex-direction: column;">
             <label :for="input_id" style="margin-left: 20px"><slot /></label>
 
             <input
@@ -109,6 +109,27 @@
             />
         </div>
     </div>
+
+    <div
+        v-if="input_type == 'boolevent-horiz'"
+        class="inputfield"
+        style="align-self: start"
+    >
+        <div :title="helptext" style="padding-top: 10px; display: flex; flex-direction: row;">
+            <input
+                :id="input_id"
+                type="checkbox"
+                v-model="checked"
+                style="transform: scale(2); margin-top: 15px; margin-left: 10px"
+                @change="
+                    $emit('update:modelValue', checked);
+                    $emit('newChange');
+                "
+            />
+            <label :for="input_id" style="margin-left: 20px"><slot /></label>
+        </div>
+    </div>
+
 
     <div v-if="input_type == 'year'" class="inputfield">
         <label :for="input_id"><slot /></label>

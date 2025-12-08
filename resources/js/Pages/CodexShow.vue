@@ -496,6 +496,9 @@
                 </template>
 
                 <template v-if="document.page_dimensions_known">
+                    <div v-if="document.page_dimensions_estimated" class="show_dimest">
+                        Page Dimentions Estimated
+                    </div>
                     <div class="show_pagewidth">
                         <label>Full Page Width (cm)</label>
                         <div class="showcodex_string_short">
@@ -1118,6 +1121,10 @@ const props = defineProps({
     publication: String,
     current_shelfmarks: String,
     trismegistos_id: String,
+    completed: Boolean,
+    published: Boolean,
+    imagelinks: Boolean,
+    imagesonsite: Boolean,
     /* Content */
     title: String,
     ancient_author: String,
@@ -1146,6 +1153,7 @@ const props = defineProps({
     bifolianum_min: Number,
     bifolianum_max: Number,
     /* Measurement */
+    include_estimated: Boolean,
     full_page_width_min: Number,
     full_page_width_max: Number,
     full_page_height_min: Number,
@@ -1234,6 +1242,10 @@ const form = useForm({
     s_publication: props.publication,
     s_current_shelfmarks: props.current_shelfmarks,
     s_trismegistos_id: props.trismegistos_id,
+    s_completed: props.completed,
+    s_published: props.published,
+    s_imagelinks: props.imagelinks,
+    s_imagesonsite: props.imagesonsite,
     /* Content */
     s_title: props.title,
     s_ancient_author: props.ancient_author,
@@ -1270,6 +1282,7 @@ const form = useForm({
     s_bifolianum_min: props.bifolianum_min,
     s_bifolianum_max: props.bifolianum_max,
     /* Measurement */
+    s_include_estimated: props.include_estimated,
     s_full_page_width_min: props.full_page_width_min,
     s_full_page_width_max: props.full_page_width_max,
     s_full_page_height_min: props.full_page_height_min,

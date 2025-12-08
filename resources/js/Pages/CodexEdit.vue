@@ -614,6 +614,18 @@
                 </template>
 
                 <template v-if="form.page_dimensions_known">
+                    <div class="edit_dimest">
+                        <label :for="page_dimensions_estimated"
+                            >Estimated</label
+                        >
+                        <input
+                            :id="page_dimensions_estimated"
+                            type="checkbox"
+                            style="margin-left: 5px"
+                            v-model="form.page_dimensions_estimated"
+                        />
+                    </div>
+
                     <div class="edit_pagewidth">
                         <EthInput
                             input_type="text"
@@ -1272,6 +1284,10 @@ const props = defineProps({
     publication: String,
     current_shelfmarks: String,
     trismegistos_id: String,
+    completed: Boolean,
+    published: Boolean,
+    imagelinks: Boolean,
+    imagesonsite: Boolean,
     /* Content */
     title: String,
     ancient_author: String,
@@ -1300,6 +1316,7 @@ const props = defineProps({
     bifolianum_min: Number,
     bifolianum_max: Number,
     /* Measurement */
+    include_estimated: Boolean,
     full_page_width_min: Number,
     full_page_width_max: Number,
     full_page_height_min: Number,
@@ -1418,6 +1435,8 @@ const form = useForm("EditCodex", {
     material_id: props.document.material_id,
     page_dimensions_known:
         props.document.page_dimensions_known == 1 ? true : false,
+    page_dimensions_estimated:
+        props.document.page_dimensions_estimated == 1 ? true : false,        
     fragment_width: props.document.fragment_width,
     fragment_height: props.document.fragment_height,
     full_page_width: props.document.full_page_width,
@@ -1456,7 +1475,6 @@ const form = useForm("EditCodex", {
     quire_signatures_description: props.document.quire_signatures_description,
     quire_structure_id: props.document.quire_structure_id,
     quire_number: props.document.quire_number,
-    quire_number_reconstructed: props.document.quire_number_reconstructed,
     bifolia: props.document.bifolia ? JSON.parse(props.document.bifolia) : [],
     quire_comment: props.document.quire_comment,
     binding_description: props.document.binding_description,
@@ -1494,6 +1512,10 @@ const form = useForm("EditCodex", {
     s_publication: props.publication,
     s_current_shelfmarks: props.current_shelfmarks,
     s_trismegistos_id: props.trismegistos_id,
+    s_completed: props.completed,
+    s_published: props.published,
+    s_imagelinks: props.imagelinks,
+    s_imagesonsite: props.imagesonsite,
     /* Content */
     s_title: props.title,
     s_ancient_author: props.ancient_author,
@@ -1530,6 +1552,7 @@ const form = useForm("EditCodex", {
     s_bifolianum_min: props.bifolianum_min,
     s_bifolianum_max: props.bifolianum_max,
     /* Measurement */
+    s_include_estimated: props.include_estimated,
     s_full_page_width_min: props.full_page_width_min,
     s_full_page_width_max: props.full_page_width_max,
     s_full_page_height_min: props.full_page_height_min,

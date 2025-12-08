@@ -65,6 +65,10 @@ class DocumentController extends Controller
             's_publication' => 'nullable',
             's_current_shelfmarks' => 'nullable',
             's_trismegistos_id' => 'nullable',
+            's_completed' => 'nullable',
+            's_published' => 'nullable',
+            's_imagelinks' => 'nullable',
+            's_imagesonsite' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
             's_languages' => 'nullable',
@@ -82,12 +86,14 @@ class DocumentController extends Controller
             's_materials' => 'nullable',
             's_inks' => 'nullable',
             's_inks_incl' => 'nullable',
+            's_inks_only' => 'nullable',
             's_covers' => 'nullable',
             's_quire_structures' => 'nullable',
             's_quirenum_min' => 'nullable',
             's_quirenum_max' => 'nullable',
             's_bifolianum_min' => 'nullable',
             's_bifolianum_max' => 'nullable',
+            's_include_estimated' => 'nullable',
             's_full_page_width_min' => 'nullable',
             's_full_page_width_max' => 'nullable',
             's_full_page_height_min' => 'nullable',
@@ -211,6 +217,10 @@ class DocumentController extends Controller
         $publication = array_key_exists('s_publication', $search) ? $search['s_publication'] : null;
         $current_shelfmarks = array_key_exists('s_current_shelfmarks', $search) ? $search['s_current_shelfmarks'] : null;
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
+        $completed = array_key_exists('s_completed', $search) ? $search['s_completed'] : null;
+        $published = array_key_exists('s_published', $search) ? $search['s_published'] : null;
+        $imagelinks = array_key_exists('s_imagelinks', $search) ? $search['s_imagelinks'] : null;
+        $imagesonsite = array_key_exists('s_imagesonsite', $search) ? $search['s_imagesonsite'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
         $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
@@ -228,12 +238,14 @@ class DocumentController extends Controller
         $materials = array_key_exists('s_materials', $search) ? $search['s_materials'] : null;
         $inks = array_key_exists('s_inks', $search) ? $search['s_inks'] : null;
         $inks_incl = array_key_exists('s_inks_incl', $search) ? $search['s_inks_incl'] : null;
+        $inks_only = array_key_exists('s_inks_only', $search) ? $search['s_inks_only'] : null;
         $covers = array_key_exists('s_covers', $search) ? $search['s_covers'] : null;
         $quire_structures = array_key_exists('s_quire_structures', $search) ? $search['s_quire_structures'] : null;
         $quirenum_min = array_key_exists('s_quirenum_min', $search) ? $search['s_quirenum_min'] : null;
         $quirenum_max = array_key_exists('s_quirenum_max', $search) ? $search['s_quirenum_max'] : null;
         $bifolianum_min = array_key_exists('s_bifolianum_min', $search) ? $search['s_bifolianum_min'] : null;
         $bifolianum_max = array_key_exists('s_bifolianum_max', $search) ? $search['s_bifolianum_max'] : null;
+        $include_estimated = array_key_exists('s_include_estimated', $search) ? $search['s_include_estimated'] : null;
         $full_page_width_min = array_key_exists('s_full_page_width_min', $search) ? $search['s_full_page_width_min'] : null;
         $full_page_width_max = array_key_exists('s_full_page_width_max', $search) ? $search['s_full_page_width_max'] : null;
         $full_page_height_min = array_key_exists('s_full_page_height_min', $search) ? $search['s_full_page_height_min'] : null;
@@ -373,7 +385,11 @@ class DocumentController extends Controller
                 $standard_name,
                 $publication,
                 $current_shelfmarks,
-                $trismegistos_id
+                $trismegistos_id,
+                $completed,
+                $published,
+                $imagelinks,
+                $imagesonsite
             ) {
                 $query
                     ->when($standard_name, function ($query, $standard_name) {
@@ -387,6 +403,26 @@ class DocumentController extends Controller
                     })
                     ->when($trismegistos_id, function ($query, $trismegistos_id) {
                         $query->where('trismegistos_id', '=', $trismegistos_id);
+                    })
+                    ->when($completed, function ($query) {
+                        $query->where('completed', '!=', true)
+                        ->orWhereNull('completed');
+                    })
+                    ->when($published, function ($query) {
+                        $query->where('published', '!=', true)
+                        ->orWhereNull('published');
+                    })
+                    ->when($imagelinks, function ($query) {
+                        $query->whereNotNull('images_info');
+                    })
+                    ->when($imagesonsite, function ($query) {
+                        $query->whereHas('images', function ($query) {
+                            $query->where('visible', true)
+                            ->where(function($query) {
+                                $query->where('micrograph', false)
+                                ->orWhereNull('micrograph');
+                            });
+                        });
                     });
             })
             ->when($show_content == 'true', function ($query) use (
@@ -513,6 +549,7 @@ class DocumentController extends Controller
                     $gregorys_rules,
                     $inks,
                     $inks_incl,
+                    $inks_only,
                     $covers,
                     $quire_structures,
                     $quirenum_min,
@@ -539,6 +576,11 @@ class DocumentController extends Controller
                                 });
                             }
                         })
+                        ->when($inks && $inks_only, function($query) use ($inks) {
+                            $query->whereDoesntHave('inks', function ($query) use ($inks) {
+                                $query->whereNotIn('inks.id', array_column($inks,'id'));
+                            });
+                        })
                         ->when($covers, function ($query, $covers) {
                             $query->whereIn('cover_id', array_column($covers, 'id'));
                         })
@@ -562,6 +604,7 @@ class DocumentController extends Controller
             ->when(
                 $show_measurement == 'true',
                 function ($query) use (
+                    $include_estimated,
                     $full_page_width_min,
                     $full_page_width_max,
                     $full_page_height_min,
@@ -591,19 +634,63 @@ class DocumentController extends Controller
                     $columnlines_min,
                     $columnlines_max,
                 ) {
-                    $query
-                        ->when($full_page_width_min, function ($query, $full_page_width_min) {
-                            $query->where('full_page_width', '>=', $full_page_width_min);
+                    $query->when($include_estimated, function($query) use (
+                        $full_page_width_min,
+                        $full_page_width_max,
+                        $full_page_height_min,
+                        $full_page_height_max,) 
+                        {
+                            $query
+                                ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                                    $query->where('full_page_width', '>=', $full_page_width_min);
+                                })
+                                ->when($full_page_width_max, function ($query, $full_page_width_max) {
+                                    $query->where('full_page_width', '<=', $full_page_width_max);
+                                })
+                                ->when($full_page_height_min, function ($query, $full_page_height_min) {
+                                    $query->where('full_page_height', '>=', $full_page_height_min);
+                                })
+                                ->when($full_page_height_max, function ($query, $full_page_height_max) {
+                                    $query->where('full_page_height', '<=', $full_page_height_max);
+                                });
                         })
-                        ->when($full_page_width_max, function ($query, $full_page_width_max) {
-                            $query->where('full_page_width', '<=', $full_page_width_max);
-                        })
-                        ->when($full_page_height_min, function ($query, $full_page_height_min) {
-                            $query->where('full_page_height', '>=', $full_page_height_min);
-                        })
-                        ->when($full_page_height_max, function ($query, $full_page_height_max) {
-                            $query->where('full_page_height', '<=', $full_page_height_max);
-                        })
+                        ->when(!$include_estimated, function($query) use (
+                        $full_page_width_min,
+                        $full_page_width_max,
+                        $full_page_height_min,
+                        $full_page_height_max,) 
+                        {
+                            $query
+                                ->when($full_page_width_min, function ($query, $full_page_width_min) {
+                                    $query->where('full_page_width', '>=', $full_page_width_min)
+                                        ->where(function ($query) {
+                                            $query->where('page_dimensions_estimated', false)
+                                            ->orWhereNull('page_dimensions_estimated');
+                                    });
+
+                                })
+                                ->when($full_page_width_max, function ($query, $full_page_width_max) {
+                                    $query->where('full_page_width', '<=', $full_page_width_max)
+                                    ->where(function ($query) {
+                                        $query->where('page_dimensions_estimated', false)
+                                            ->orWhereNull('page_dimensions_estimated');
+                                    });
+                                })
+                                ->when($full_page_height_min, function ($query, $full_page_height_min) {
+                                    $query->where('full_page_height', '>=', $full_page_height_min)
+                                    ->where(function ($query) {
+                                        $query->where('page_dimensions_estimated', false)
+                                            ->orWhereNull('page_dimensions_estimated');
+                                    });
+                                })
+                                ->when($full_page_height_max, function ($query, $full_page_height_max) {
+                                    $query->where('full_page_height', '<=', $full_page_height_max)
+                                    ->where(function ($query) {
+                                        $query->where('page_dimensions_estimated', false)
+                                            ->orWhereNull('page_dimensions_estimated');
+                                    });
+                                });
+                            })
                         ->when($full_text_block_width_min, function ($query, $full_text_block_width_min) {
                             $query->where('full_text_block_width', '>=', $full_text_block_width_min);
                         })
@@ -894,6 +981,10 @@ class DocumentController extends Controller
             'publication' => $publication,
             'current_shelfmarks' => $current_shelfmarks,
             'trismegistos_id' => $trismegistos_id,
+            'completed' => $completed,
+            'published' => $published,
+            'imagelinks' => $imagelinks,
+            'imagesonsite' => $imagesonsite,
             'title' => $title,
             'ancient_author' => $ancient_author,
             'languages_search' => $languages,
@@ -999,6 +1090,10 @@ class DocumentController extends Controller
             'publication' => $data['publication'],
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
+            'completed' => $data['completed'],
+            'published' => $data['published'],
+            'imagelinks' => $data['imagelinks'],
+            'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
             'ancient_author' => $data['ancient_author'],
             'languages_search' => $data['languages_search'],
@@ -1215,11 +1310,24 @@ class DocumentController extends Controller
             'tags' => $document->tags()->get()->makeHidden('pivot'),
             'works' => $document->works()->with('author')->get(),
 
+            'show_publication' => $data['show_publication'],
+            'show_content' => $data['show_content'],
+            'show_dating' => $data['show_dating'],
+            'show_materiality' => $data['show_materiality'],
+            'show_measurement' => $data['show_measurement'],
+            'show_palaeography' => $data['show_palaeography'],
+            'show_consanal' => $data['show_consanal'],
+            'show_provenance' => $data['show_provenance'],
+
             'fulltext' => $data['fulltext'],       
             'standard_name' => $data['standard_name'],
             'publication' => $data['publication'],
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
+            'completed' => $data['completed'],
+            'published' => $data['published'],
+            'imagelinks' => $data['imagelinks'],
+            'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
             'ancient_author' => $data['ancient_author'],
             'languages_search' => $data['languages_search'],
@@ -1407,11 +1515,24 @@ class DocumentController extends Controller
             'works' => $document->works()->with('author')->orderBy('name')->get(),
             'works_all' => Work::with('author')->orderBy('name')->get(),
 
+            'show_publication' => $data['show_publication'],
+            'show_content' => $data['show_content'],
+            'show_dating' => $data['show_dating'],
+            'show_materiality' => $data['show_materiality'],
+            'show_measurement' => $data['show_measurement'],
+            'show_palaeography' => $data['show_palaeography'],
+            'show_consanal' => $data['show_consanal'],
+            'show_provenance' => $data['show_provenance'],
+
             'fulltext' => $data['fulltext'],       
             'standard_name' => $data['standard_name'],
             'publication' => $data['publication'],
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
+            'completed' => $data['completed'],
+            'published' => $data['published'],
+            'imagelinks' => $data['imagelinks'],
+            'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
             'ancient_author' => $data['ancient_author'],
             'languages_search' => $data['languages_search'],
@@ -1539,6 +1660,7 @@ class DocumentController extends Controller
             'general_comment' => 'nullable',
             'material_id' => 'nullable',
             'page_dimensions_known' => 'nullable',
+            'page_dimensions_estimated' => 'nullable',
             'fragment_width' => 'nullable',
             'fragment_height' => 'nullable',
             'textbox_size_stable' => 'nullable',
@@ -1622,7 +1744,8 @@ class DocumentController extends Controller
         $document->internal_comment = $fields['internal_comment'];
         $document->general_comment = $fields['general_comment'];
         $document->material_id = $fields['material_id'];
-        $document->page_dimensions_known = $fields['page_dimensions_known'];
+        $document->page_dimensions_known = $fields['page_dimensions_known'];        
+        $document->page_dimensions_estimated = $fields['page_dimensions_estimated'];        
         $document->fragment_width = $fields['fragment_width'];
         $document->fragment_height = $fields['fragment_height'];
         $document->full_page_width = $fields['full_page_width'];
@@ -1811,12 +1934,24 @@ class DocumentController extends Controller
             'works' => $document->works()->with('author')->orderBy('name')->get()->makeHidden('pivot'),
             'works_all' => Work::with('author')->orderBy('name')->get(),
 
+            'show_publication' => $data['show_publication'],
+            'show_content' => $data['show_content'],
+            'show_dating' => $data['show_dating'],
+            'show_materiality' => $data['show_materiality'],
+            'show_measurement' => $data['show_measurement'],
+            'show_palaeography' => $data['show_palaeography'],
+            'show_consanal' => $data['show_consanal'],
+            'show_provenance' => $data['show_provenance'],
 
             'fulltext' => $data['fulltext'],       
             'standard_name' => $data['standard_name'],
             'publication' => $data['publication'],
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
+            'completed' => $data['completed'],
+            'published' => $data['published'],
+            'imagelinks' => $data['imagelinks'],
+            'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
             'ancient_author' => $data['ancient_author'],
             'languages_search' => $data['languages_search'],
@@ -1927,6 +2062,7 @@ class DocumentController extends Controller
         $document->scripts()->detach();
         $document->inks()->detach();
         $document->works()->detach();
+        $document->collections()->detach();
 
         $document->delete();
         return redirect()->back();

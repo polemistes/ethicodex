@@ -1285,8 +1285,8 @@ th {
     border-radius: 10px;
 }
 
-.show_dimknown {
-    grid-area: dimknown;
+.show_dimest {
+    grid-area: dimest;
 }
 .show_meascomm {
     grid-area: meascomm;
@@ -1349,7 +1349,7 @@ th {
     grid-template-columns: 1fr 1fr 1fr 2fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "dimknown . . meascomm"
+        "dimest . . meascomm"
         "pagewidth pageheight pratio meascomm"
         "stable . . meascomm"
         "uppmarg lowmarg ulratio meascomm"
@@ -1862,6 +1862,9 @@ th {
 .edit_dimknown {
     grid-area: dimknown;
 }
+.edit_dimest {
+    grid-area: dimest;
+}
 .edit_meascomm {
     grid-area: meascomm;
 }
@@ -1919,7 +1922,7 @@ th {
     grid-template-columns: 1fr 1fr 1fr 2fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "dimknown . . meascomm"
+        "dimknown dimest . meascomm"
         "pagewidth pageheight pratio meascomm"
         "stable . . meascomm"
         "uppmarg lowmarg ulratio meascomm"
