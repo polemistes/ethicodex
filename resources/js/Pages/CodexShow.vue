@@ -1146,6 +1146,7 @@ const props = defineProps({
     gregorys_rules_search: Array,
     inks_search: Array,
     inks_incl: Boolean,
+    inks_only: Boolean,
     covers_search: Array,
     quire_structures_search: Array,
     quirenum_min: Number,
@@ -1273,6 +1274,7 @@ const form = useForm({
         : [],
     s_inks: props.inks_search ? props.inks_search : [],
     s_inks_incl: props.inks_incl,
+    s_inks_only: props.inks_only,
     s_covers: props.covers_search ? props.covers_search : [],
     s_quire_structures: props.quire_structures_search
         ? props.quire_structures_search
