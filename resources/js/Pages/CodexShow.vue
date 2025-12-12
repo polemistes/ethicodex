@@ -166,14 +166,14 @@
                     <label>Works</label>
                     <div class="choicelist-table">
                         <table>
-                            <tr>
+                            <thead><tr>
                                 <th>Author</th>
                                 <th>Title</th>
                                 <th>Passage</th>
                                 <th>Comment</th>
-                            </tr>
+                            </tr></thead>
 
-                            <tr
+                            <tbody><tr
                                 v-for="work in works.sort((a, b) =>
                                     a.author.name.localeCompare(b.author.name)
                                 )"
@@ -203,7 +203,7 @@
                                             : ""
                                     }}</label>
                                 </td>
-                            </tr>
+                            </tr></tbody>
                         </table>
                     </div>
                 </div>

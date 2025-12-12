@@ -248,8 +248,8 @@
                     </div>
                    <div class="choicelist-table">
                     <table>
-                        <tr><th></th><th>Author</th><th>Title</th><th>Passage</th><th>Comment</th></tr>
-                        <tr
+                        <thead><tr><th></th><th>Author</th><th>Title</th><th>Passage</th><th>Comment</th></tr></thead>
+                        <tbody><tr
                             v-for="work in form.works.sort((a, b) =>
                                     a.author.name.localeCompare(b.author.name)
                                 )"
@@ -281,7 +281,7 @@
                         <td>
                             <label>{{ work.passage_comment ? work.passage_comment : "" }}</label>
                         </td>
-                        </tr>
+                        </tr></tbody>
                     </table>
                     </div>
                 </div>
