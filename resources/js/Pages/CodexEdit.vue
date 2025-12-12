@@ -322,6 +322,7 @@
                         input_type="multi_choice"
                         input_id="languages"
                         :choices="languages_all"
+                        :nosort="true"
                         v-model="form.languages"
                     >
                         Languages
@@ -354,6 +355,7 @@
                         input_type="multi_choice"
                         input_id="dating_methods"
                         :choices="dating_methods_all"
+                        :nosort="true"
                         v-model="form.dating_methods"
                     >
                         Basis of Date

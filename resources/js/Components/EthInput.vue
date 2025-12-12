@@ -1358,6 +1358,7 @@ const props = defineProps({
     palaeography: Boolean,
     consanal: Boolean,
     provenance: Boolean,
+    nosort: Boolean,
 });
 
 let checked = ref(props.modelValue);
@@ -1426,11 +1427,14 @@ function findchildren(item) {
 }
 
 const search_choices = computed(() => {
-    return search.value != ""
+
+    var result = search.value != ""
         ? props.choices.filter(function (el) {
               return el.name != null ? el.name.includes(search.value) : null;
           })
         : props.choices;
+
+    return props.nosort ? result : result.sort((a, b) => a.name.localeCompare(b.name)); 
 });
 
 const search_authors = computed(() => {
@@ -1459,15 +1463,19 @@ const search_authors = computed(() => {
 
 
 const search_choices_doc = computed(() => {
-    return search.value != ""
+    let result = search.value != ""
         ? props.choices.filter(function (el) {
               return el.standard_name != null
                   ? el.standard_name.includes(search.value)
                   : null || el.trismegistos_id != null
                   ? el.trismegistos_id.toString().includes(search.value)
-                  : null;
+             : null
           })
-        : props.choices;
+        : props.choices.filter(function (el) {
+            return el.standard_name != null
+        });
+
+        return result.sort((a, b) => a.standard_name.localeCompare(b.standard_name));  
 });
 </script>
 

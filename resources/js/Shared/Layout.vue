@@ -576,6 +576,7 @@ body {
     height: fit-content;
     border-radius: 10px;
     margin-top: 10px;
+    margin-left: 10px;
     padding: 5px 10px;
     font-size: 16px;
     border: none;

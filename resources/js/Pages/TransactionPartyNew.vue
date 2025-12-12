@@ -55,9 +55,15 @@
                         <div v-if="all_transactions.length > 12">
                             <label :for="search">Search:</label>
                             <input type="text" v-model="search" />
+                            <button
+                                @click.prevent="dropdown = false"
+                                class="closemenubutton"
+                            >
+                                Close
+                            </button>
                         </div>
 
-                        <div class="scrollwindow">
+                        <div class="dropdown-scrollwindow">
                             <div
                                 v-for="choice in search_choices"
                                 :key="choice.id"
@@ -95,12 +101,6 @@
                                     </option>
                                 </select>
                             </div>
-                            <button
-                                @click.prevent="dropdown = false"
-                                class="dropdownbutton"
-                            >
-                                Close
-                            </button>
                         </div>
                     </div>
                     <div class="choicelist-stack">
@@ -207,11 +207,13 @@ window.onpopstate = function (event) {
 let search = ref("");
 
 const search_choices = computed(() => {
-    return search.value != ""
+    let result = search.value != ""
         ? all_transactions.filter(function (el) {
               return el.name != null ? el.name.includes(search.value) : null;
           })
         : all_transactions;
+
+    return result.sort((a, b) => a.name.localeCompare(b.name));
 });
 
 function changerole(id, value) {

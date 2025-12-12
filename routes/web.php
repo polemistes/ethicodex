@@ -53,6 +53,7 @@ Route::get('/transactions', [TransactionController::class, 'index'])->name('Tran
 Route::get('/transaction_edit/{transaction}', [TransactionController::class, 'edit'])->name('TransactionEdit');
 Route::post('/transaction_update/{transaction}', [TransactionController::class, 'update']);
 Route::post('/transaction_new', [TransactionController::class, 'create']);
+Route::get('/transaction_new', [TransactionController::class, 'create']);
 Route::post('/transaction_store', [TransactionController::class, 'store']);
 Route::post('/transaction_delete/{transaction}', [TransactionController::class, 'destroy']);
 
@@ -60,6 +61,7 @@ Route::get('/transaction_parties', [TransactionPartyController::class, 'index'])
 Route::get('/transaction_party_edit/{transactionParty}', [TransactionPartyController::class, 'edit'])->name('TransactionPartyEdit');
 Route::post('/transaction_party_update/{transactionParty}', [TransactionPartyController::class, 'update']);
 Route::post('/transaction_party_new', [TransactionPartyController::class, 'create']);
+Route::get('/transaction_party_new', [TransactionPartyController::class, 'create']);
 Route::post('/transaction_party_store', [TransactionPartyController::class, 'store']);
 Route::post('/transaction_party_delete/{transactionParty}', [TransactionPartyController::class, 'destroy']);
 

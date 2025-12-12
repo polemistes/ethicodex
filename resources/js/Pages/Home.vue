@@ -2,16 +2,21 @@
   <div class="homecontainer">
     <img src="/storage/front_page_1.jpg" width="300" />
     <div class="homeparagraphs">
-  
-    <p>Welcome to the EthiCodex database of early codices. This database 
-      provides both physical descriptive details and provenance
-      histories for Greek and Latin codices of the first five 
-      centuries of the common era.</p>
-    <p></p>
+      <p>Welcome to the EthiCodex database of early codices. This database 
+        provides both physical descriptive details and provenance
+        histories for Greek and Latin codices of the first five 
+        centuries of the common era.
+      </p>
+      <p>
 
+      </p>
+      <div class="bottomimages">
+      <img src="/storage/casr.jpg" width="350" />
+      <img src="/storage/nfr.png" width="350" />
     </div>
-
+    </div>
   </div>
+
 </template>
 
 <script setup>
@@ -49,5 +54,10 @@ function toggle() {
   flex-direction: column;
   gap: 10px;
   max-width: 700px;
+}
+
+.bottomimages {
+  position: absolute;
+  bottom: 100px;
 }
 </style>

@@ -187,6 +187,7 @@
                     input_type="multi_choice_event"
                     input_id="languages"
                     :choices="languages"
+                    :nosort="true"
                     v-model="form.s_languages"
                     @new-change="sendsearch()"
                 >
@@ -357,6 +358,7 @@
                 input_type="multi_choice_event"
                 input_id="covers"
                 :choices="covers"
+                :nosort="true"
                 v-model="form.s_covers"
                 @new-change="sendsearch()"
             >
@@ -413,6 +415,7 @@
                 input_type="multi_choice_event"
                 input_id="gregorys_rules"
                 :choices="gregorys_rules"
+                :nosort="true"
                 v-model="form.s_gregorys_rules"
                 @new-change="sendsearch()"
             >
@@ -856,6 +859,7 @@
                     input_type="multi_choice_event"
                     input_id="paginations"
                     :choices="paginations"
+                    :nosort="true"
                     v-model="form.s_paginations"
                     @new-change="sendsearch()"
                 >
@@ -866,6 +870,7 @@
                     input_type="multi_choice_event"
                     input_id="quire_signatures"
                     :choices="quire_signatures"
+                    :nosort="true"
                     v-model="form.s_quire_signatures"
                     @new-change="sendsearch()"
                 >

@@ -83,9 +83,15 @@
                         <div v-if="all_transaction_parties.length > 12">
                             <label :for="search">Search:</label>
                             <input type="text" v-model="search" />
+                            <button
+                                @click.prevent="dropdown = false"
+                                class="closemenubutton"
+                                >
+                                Close
+                            </button>
                         </div>
-
-                        <div class="scrollwindow">
+                         
+                        <div class="dropdown-scrollwindow">
                             <div
                                 v-for="choice in search_choices"
                                 :key="choice.id"
@@ -123,12 +129,6 @@
                                     </option>
                                 </select>
                             </div>
-                            <button
-                                @click.prevent="dropdown = false"
-                                class="closemenubutton"
-                            >
-                                Close
-                            </button>
                         </div>
                     </div>
                     <div class="choicelist">
@@ -257,11 +257,14 @@ for (let p of props.transaction_parties_all) {
 let search = ref("");
 
 const search_choices = computed(() => {
-    return search.value != ""
+    
+    let result = search.value != ""
         ? all_transaction_parties.filter(function (el) {
               return el.name != null ? el.name.includes(search.value) : null;
           })
         : all_transaction_parties;
+
+        return result.sort((a, b) => a.name.localeCompare(b.name)); 
 });
 
 function changerole(id, value) {
