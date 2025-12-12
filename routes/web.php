@@ -38,6 +38,7 @@ Route::get('/about', function () { return (Inertia::render('About')); });
 
 Route::get('/codices', [DocumentController::class, 'index'])->name('Codices');
 Route::post('/codices', [DocumentController::class, 'index'])->name('Codices');
+Route::post('/codices/export', [Documentcontroller::class, 'export'])->name('codices.export');
 
 Route::post('/codex_show/{document}', [DocumentController::class, 'show']);
 Route::get('/codex_show/{document}', [DocumentController::class, 'show']);

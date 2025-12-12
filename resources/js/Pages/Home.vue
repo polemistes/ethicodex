@@ -1,9 +1,16 @@
 <template>
   <div class="homecontainer">
-    <h1>Ethicodex Home</h1>
+    <img src="/storage/front_page_1.jpg" width="300" />
+    <div class="homeparagraphs">
+  
     <p>Welcome to the EthiCodex database of early codices. This database 
-      attempts to provide both physical descriptive details and provenance
-      histories for Greek and Latin codices of the first five centuries of the common era.</p>
+      provides both physical descriptive details and provenance
+      histories for Greek and Latin codices of the first five 
+      centuries of the common era.</p>
+    <p></p>
+
+    </div>
+
   </div>
 </template>
 
@@ -24,7 +31,11 @@ function toggle() {
 
 
 .homecontainer {
-  width: 60%;
+  display: flex;
+  flex-direction: row;
+  width: 79%;
+  padding-top: 20px;
+  gap: 20px;
   margin: auto;
 }
 
@@ -33,4 +44,10 @@ function toggle() {
   font-size: larger;
 }
 
+.homeparagraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 700px;
+}
 </style>

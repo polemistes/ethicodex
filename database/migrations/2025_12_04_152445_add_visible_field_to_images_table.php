@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->boolean('visible')->nullable()->after('micrograph');
+            $table->boolean('visible')->default('false')->nullable()->after('micrograph');
         });
     }
 

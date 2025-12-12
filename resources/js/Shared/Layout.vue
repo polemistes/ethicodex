@@ -315,9 +315,11 @@ body {
 }
 
 .addbutton {
-    padding: 2px 2px;
+    padding: 6px 2px;
     margin-bottom: 20px;
     margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     height: fit-content;
     width: fit-content;
 }

@@ -1113,6 +1113,15 @@
         >
             Add Codex
         </Link>
+        <div style="padding-left: 10px;">
+            <button
+                class="addbutton"
+                @click="exportCsv"
+            >
+                Export Search
+            </button>
+        </div>
+
         <div class="pageline_pages" style="margin-left: auto; margin-top: 20px">
             <button
                 v-for="link in documents.links"
@@ -1449,6 +1458,43 @@ function sendsearch() {
         preserveState: true,
         preserveScroll: true,
     });
+}
+
+function exportsearch() {
+    form.resetpage = true;
+    form.post("/codices/export", {
+        queryStringArrayFormat: "indices",
+        preserveState: true,
+        preserveScroll: true,
+    });
+}
+
+function exportCsv() {
+    
+    if(!confirm("This will generate a cvs file with your search results.\nYou are free to use the contents of the file under the CC BY 4.0 License:\n\nhttps://creativecommons.org/licenses/by/4.0/\n\nDo you want to generate and download the file?"))
+    {return;}
+
+    const htmlForm = document.createElement('form');
+    htmlForm.method = 'POST';
+    htmlForm.action = '/codices/export';
+    htmlForm.target = '_blank';
+
+    // CSRF
+    const token = document.createElement('input');
+    token.type = 'hidden';
+    token.name = '_token';
+    token.value = document.querySelector('meta[name=csrf-token]').content;
+    htmlForm.appendChild(token);
+
+    // Add one hidden field with the entire form as JSON
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'searchData';
+    input.value = JSON.stringify(form);    // <= your Inertia form!
+    htmlForm.appendChild(input);
+
+    document.body.appendChild(htmlForm);
+    htmlForm.submit();
 }
 
 function show_codex(id) {
