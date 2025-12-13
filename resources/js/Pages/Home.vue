@@ -1,6 +1,6 @@
 <template>
   <div class="homecontainer">
-    <img src="/storage/front_page_1.jpg" width="300" />
+    <img src="/front_page_1.jpg" width="300" />
     <div class="homeparagraphs">
       <p>Welcome to the EthiCodex database of early codices. This database 
         provides both physical descriptive details and provenance
@@ -11,8 +11,8 @@
 
       </p>
       <div class="bottomimages">
-      <img src="/storage/casr.jpg" width="350" />
-      <img src="/storage/nfr.png" width="350" />
+      <img src="/casr.jpg" width="350" />
+      <img src="/nfr.png" width="350" />
     </div>
     </div>
   </div>
