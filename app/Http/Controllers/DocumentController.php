@@ -393,7 +393,8 @@ class DocumentController extends Controller
                 $completed,
                 $published,
                 $imagelinks,
-                $imagesonsite
+                $imagesonsite,
+                $role_id
             ) {
                 $query
                     ->when($standard_name, function ($query, $standard_name) {
@@ -419,13 +420,23 @@ class DocumentController extends Controller
                     ->when($imagelinks, function ($query) {
                         $query->whereNotNull('images_info');
                     })
-                    ->when($imagesonsite, function ($query) {
-                        $query->whereHas('images', function ($query) {
-                            $query->where('visible', true)
-                            ->where(function($query) {
-                                $query->where('micrograph', false)
-                                ->orWhereNull('micrograph');
-                            });
+                    ->when($imagesonsite, function ($query) use($role_id) {
+                        $query->whereHas('images', function ($query) use($role_id) {
+                            $query->when($role_id < 2, function ($query) {
+                                $query->where('visible', true)
+                                    ->where(function($query) {
+                                        $query->where('micrograph', false)
+                                        ->orWhereNull('micrograph');
+                                    });
+
+                                })
+                                ->when($role_id >= 2, function ($query) {
+                                    $query->where('micrograph', false)
+                                        ->orWhereNull('micrograph');
+                                    });
+
+            
+                            
                         });
                     });
             })
@@ -1491,6 +1502,7 @@ class DocumentController extends Controller
     public function show(Document $document, Request $request)
     {
         $this->authorize('view', $document);
+        $role_id = $request->user() ? $request->user()->role_id : 0;
 
         $data = $this->codexsearch($request);
         $all_documents = $data['all_documents']->get();
@@ -1534,7 +1546,8 @@ class DocumentController extends Controller
             'decorations' => $document->decorations()->get()->makeHidden('pivot'),
             'diacritics' => $document->diacritics()->get()->makeHidden('pivot'),
             'genres' => $document->genres()->get()->makeHidden('pivot'),
-            'images' => $document->images()->where('visible', '1')->with('license')->get(),
+            'images' => $document->images()->when($role_id < 2)->where('visible', '1')->with('license')->get(),
+
             'inks' => $document->inks()->get()->makeHidden('pivot'),
             'languages' => $document->languages()->get()->makeHidden('pivot'),
             'legal_classification' => $document->legal_classification()->get(),
