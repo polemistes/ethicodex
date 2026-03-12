@@ -118,9 +118,9 @@
 
                 <div class="show_shelf">
                     <label>Current Shelfmarks</label>
-                    <div class="showcodex_string">
-                        {{ document.current_shelfmarks }}
-                    </div>
+                    <div class="showcodex_string"
+                         v-html="document.current_shelfmarks"
+                    />
                 </div>
 
                 <div class="show_trismegistos">
