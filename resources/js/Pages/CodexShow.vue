@@ -94,6 +94,17 @@
                     <div class="showcodex_bool">
                         {{ document.completed ? "Yes" : "No" }}
                     </div>
+                    <br>
+                    <label>Last Updated</label>
+                    <div class="showcodex_string">
+                        {{ updated }}
+                    </div>
+                </div>
+                <div v-else class="show_published">
+                    <label>Last Updated</label>
+                    <div class="showcodex_string">
+                        {{ updated }}
+                    </div>
                 </div>
 
                 <div class="show_standard">
@@ -1374,6 +1385,8 @@ const bifolia = props.document.bifolia
 if (!bifolia) {
     bifolia[0] = 0;
 }
+
+const updated = new Date(props.document.updated_at).toLocaleString();
 
 let ancient_provenance_full = "";
 const prov = props.ancient_provenance;
