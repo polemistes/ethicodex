@@ -1138,10 +1138,10 @@ class DocumentController extends Controller
         $columns = [
             'id',
             'standard_name',
+            'trismegistos_id',
             'other_names',
             'publication',
             'current_shelfmarks',
-            'trismegistos_id',
             'works',
             'genres',
             'tags',
@@ -1242,10 +1242,10 @@ class DocumentController extends Controller
             fputcsv($file, [
             $row->id,
             $row->standard_name,
+            $row->trismegistos_id,
             $row->other_names,
             $row->publication,
             $row->current_shelfmarks,
-            $row->trismegistos_id,
             $worksAuthor,
             $row->genres->pluck('name')->implode('; '),
             $row->tags->pluck('name')->implode('; '),
