@@ -356,6 +356,14 @@ body {
     float: right;
 }
 
+.updatedheading {
+    padding-bottom: 20px;
+    background-color: #eee;
+    border-style: none;
+    float: left;
+    font-size: small;
+}
+
 .codexmenu {
     display: flex;
     overflow: hidden;
@@ -1157,8 +1165,7 @@ th {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr auto;
     grid-template-areas:
-        "works works works works works works desc desc desc"
-        "title title title author author author desc desc desc"
+        "works works works works works works works works works"
         "language language genre genre cont cont desc desc desc";
     gap: 20px;
     width: 99%;

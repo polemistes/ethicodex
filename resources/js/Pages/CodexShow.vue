@@ -68,9 +68,14 @@
             Previous
         </button>
 
+        <div class="updatedheading">
+            Updated: {{ updated }}
+        </div>
+
         <div class="nameheading">
             {{ document.standard_name }}
         </div>
+
 
         <div v-if="activetab == 'general'" class="maincontainer">
             <fieldset class="showcodex_generalgrid">
@@ -93,17 +98,6 @@
                     <label>Completed</label>
                     <div class="showcodex_bool">
                         {{ document.completed ? "Yes" : "No" }}
-                    </div>
-                    <br>
-                    <label>Last Updated</label>
-                    <div class="showcodex_string">
-                        {{ updated }}
-                    </div>
-                </div>
-                <div v-else class="show_published">
-                    <label>Last Updated</label>
-                    <div class="showcodex_string">
-                        {{ updated }}
                     </div>
                 </div>
 
@@ -160,18 +154,6 @@
 
             <fieldset class="showcodex_contentgrid">
                 <legend class="sectionheading">Content</legend>
-
-                <div class="show_title">
-                    <label>Title of Work</label>
-                    <div class="showcodex_string">{{ document.title }}</div>
-                </div>
-
-                <div class="show_author">
-                    <label>Author</label>
-                    <div class="showcodex_string">
-                        {{ document.ancient_author }}
-                    </div>
-                </div>
 
                 <div class="show_works">
                     <label>Works</label>
