@@ -2,7 +2,8 @@
   <div class="homecontainer">
     <div class="leftimage">
     <img src="/front_page.jpg" height="640" />
-    <br><a href="https://digital.bodleian.ox.ac.uk/objects/dd8ccc42-6edc-4074-85f7-0a404417587e/surfaces/6db41ef9-f384-4134-8b0d-e84990e95abc/">© Bodleian Libraries, University of Oxford. </a>
+    <br><a href="https://digital.bodleian.ox.ac.uk/objects/dd8ccc42-6edc-4074-85f7-0a404417587e/surfaces/6db41ef9-f384-4134-8b0d-e84990e95abc/">
+      © Bodleian Libraries, University of Oxford. </a>
     <a href="https://creativecommons.org/licenses/by-nc/4.0/"> CC BY-NC 4.0</a>
     </div>
     <div class="homeparagraphs">
@@ -41,7 +42,7 @@
       The project is based at the Centre for the Advanced Study of Religion at MF 
       Norwegian School of Theology, Religion, and Society.</p>
 
-      <div class="bottomimages">
+      <div>
       <img src="/casr.jpg" width="350" />
       <img src="/nfr.png" width="350" />
     </div>
@@ -90,8 +91,5 @@ function toggle() {
 .leftimage {
   font-size:smaller;
 }
-.bottomimages {
-  position: absolute;
-  bottom: 40px;
-}
+
 </style>
