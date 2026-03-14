@@ -41,10 +41,11 @@
       funded by the Research Council of Norway (2021-2026, project number 314240). 
       The project is based at the Centre for the Advanced Study of Religion at MF 
       Norwegian School of Theology, Religion, and Society.</p>
-
-      <div>
-      <img src="/casr.jpg" width="350" />
+        <div class="bottomimages">
+            <img src="/casr.jpg" width="350" />
       <img src="/nfr.png" width="350" />
+      </div>
+      <div>
     </div>
     </div>
   </div>
@@ -90,6 +91,15 @@ function toggle() {
 
 .leftimage {
   font-size:smaller;
+}
+
+.bottomimages {
+    display: flex;
+}
+
+.bottomimages img {
+    width: 50%;          /* each image takes half */
+    height: auto;        /* keep aspect ratio */
 }
 
 </style>
