@@ -30,7 +30,7 @@ class DocumentPolicy
      */
     public function view(User $user, Document $document)
     {
-        return $document->published ? $user->role->id >= 1 : $user->role->id >= 2;
+        return $document->published ? true : $user->role->id >= 2;
     }
 
     /**

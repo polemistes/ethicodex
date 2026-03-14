@@ -20,7 +20,7 @@ class TransactionPartyController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', TransactionParty::class);
+//        $this->authorize('viewAny', TransactionParty::class);
 
         $transaction_parties = TransactionParty::with('transactions')->orderBy('name')->get();
 

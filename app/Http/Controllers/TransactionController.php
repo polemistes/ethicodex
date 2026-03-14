@@ -20,7 +20,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Transaction::class);
+//        $this->authorize('viewAny', Transaction::class);
 
         $transactions = Transaction::with('transaction_parties', 'documents')->orderBy('year')->orderBy('month')->orderBy('day')->get();
 

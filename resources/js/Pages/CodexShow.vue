@@ -297,7 +297,13 @@
 
             <fieldset class="showcodex_comments">
                 <legend class="sectionheading">Comments</legend>
-                <div class="show_internal">
+                <div v-if="
+                        props.auth == null
+                            ? 0
+                            : props.auth.user.role.id >= 2
+                            ? 1
+                            : 0
+                    " class="show_internal">
                     <label>Internal Comments</label>
                     <div
                         class="showcodex_text"

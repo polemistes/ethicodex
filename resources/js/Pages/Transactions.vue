@@ -1,6 +1,7 @@
 <template>
     <div class="pageline">
         <Link
+            v-if="edit"
             class="addbutton"
             href="/transaction_new"
             method="post"
@@ -21,7 +22,7 @@
     </div>
 
     <div class="transactioncontainer" style="background-color: #ccc">
-        <div class="pur_first"></div>
+        <div v-if="edit" class="pur_first"></div>
         <div class="pur_second"><b>Date</b></div>
         <div class="pur_third"><b>Transaction</b></div>
         <div class="pur_fourth"><b>Description</b></div>
@@ -33,7 +34,7 @@
         :key="transaction.id"
         class="transactioncontainer"
     >
-        <div class="pur_first cod_buttons">
+        <div v-if="edit" class="pur_first cod_buttons">
             <Link
                 :href="'/transaction_edit/' + transaction.id"
                 as="button"
@@ -62,7 +63,14 @@
                     v-for="document in transaction.documents"
                     :key="document.id"
                 >
-                    <li>
+                    <li v-if="
+                    document.published
+                    ? 1
+                    : props.auth == null
+                    ? 0
+                    : props.auth.user.role.id >= 2
+                    ? 1
+                    : 0">
                         <Link :href="'/codex_show/' + document.id">
                             {{ document.standard_name }}
                         </Link>

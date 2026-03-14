@@ -1501,8 +1501,14 @@ class DocumentController extends Controller
      */
     public function show(Document $document, Request $request)
     {
-        $this->authorize('view', $document);
+//        $this->authorize('view', $document);
+
         $role_id = $request->user() ? $request->user()->role_id : 0;
+
+        if (!$document['published'] && $role_id < 2)
+        {
+            return to_route('Codices');
+        }
 
         $data = $this->codexsearch($request);
         $all_documents = $data['all_documents']->get();

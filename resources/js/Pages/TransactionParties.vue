@@ -1,6 +1,7 @@
 <template>
     <div class="pageline">
         <Link
+            v-if="edit"
             class="addbutton"
             href="/transaction_party_new"
             method="post"
@@ -21,7 +22,7 @@
     </div>
 
     <div class="partycontainer" style="background-color: #ccc">
-        <div class="par_first"></div>
+        <div v-if="edit" class="par_first"></div>
         <div class="par_second"><b>Transaction Party</b></div>
         <div class="par_third"><b>Description</b></div>
         <div class="par_fourth"><b>Type</b></div>
@@ -85,7 +86,14 @@
                     v-for="document in documents[transaction_party.id]"
                     :key="document.id"
                 >
-                    <li>
+                    <li v-if="
+                    document.published
+                    ? 1
+                    : props.auth == null
+                    ? 0
+                    : props.auth.user.role.id >= 2
+                    ? 1
+                    : 0">
                         <Link :href="'/codex_show/' + document.id">
                             {{ document.standard_name }}
                         </Link>

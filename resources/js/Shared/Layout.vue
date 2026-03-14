@@ -12,7 +12,6 @@
             <span v-if="loggedin">
                 Username: {{ name }}, {{ role ? role.name : "" }}
             </span>
-            <span v-else> Not logged in. </span>
         </div>
 
         <nav class="layout-navigation">
@@ -24,58 +23,56 @@
                 >
                     <Link href="/">Home</Link>
                 </li>
-                <template v-if="loggedin">
-                    <li :class="{ lo_active: pagename.includes('cod') }">
-                        <Link href="/codices">Codices</Link>
-                    </li>
+                <li :class="{ lo_active: pagename.includes('cod') }">
+                    <Link href="/codices">Codices</Link>
+                </li>
 
-                    <li
-                        :class="{
-                            lo_active:
-                                pagename.includes('transactions') &&
-                                !pagename.includes('part'),
-                        }"
+                <li
+                    :class="{
+                        lo_active:
+                            pagename.includes('transactions') &&
+                            !pagename.includes('part'),
+                    }"
+                >
+                    <Link href="/transactions">Transactions</Link>
+                </li>
+
+                <li :class="{ lo_active: pagename.includes('part') }">
+                    <Link href="/transaction_parties"
+                        >Transaction Parties</Link
                     >
-                        <Link href="/transactions">Transactions</Link>
-                    </li>
+                </li>
 
-                    <li :class="{ lo_active: pagename.includes('part') }">
-                        <Link href="/transaction_parties"
-                            >Transaction Parties</Link
-                        >
-                    </li>
-
-                    <li
-                        v-if="
-                            props.auth == null
-                                ? 0
-                                : props.auth.user.role.id >= 2
-                                ? 1
-                                : 0
+                <li
+                    v-if="
+                        props.auth == null
+                            ? 0
+                            : props.auth.user.role.id >= 2
+                            ? 1
+                            : 0
                         "
-                        :class="{ lo_active: pagename.includes('works') }"
+                    :class="{ lo_active: pagename.includes('works') }"
+                >
+                    <Link href="/works"
+                     >Works</Link
                     >
-                        <Link href="/works"
-                            >Works</Link
-                        >
-                    </li>
+                </li>
 
-                    <li
-                        v-if="
-                            props.auth == null
-                                ? 0
-                                : props.auth.user.role.id >= 2
-                                ? 1
-                                : 0
+                <li
+                    v-if="
+                        props.auth == null
+                            ? 0
+                            : props.auth.user.role.id >= 2
+                            ? 1
+                            : 0
                         "
-                        :class="{ lo_active: pagename.includes('authors') }"
+                    :class="{ lo_active: pagename.includes('authors') }"
+                >
+                    <Link href="/authors"
+                        >Authors</Link
                     >
-                        <Link href="/authors"
-                            >Authors</Link
-                        >
-                    </li>
-                </template>
-
+                </li>
+<!--                
                 <li
                     v-if="!loggedin"
                     :class="{ lo_active: pagename == '/user_register' }"
@@ -91,19 +88,20 @@
                 >
                     <Link href="/login">Log in</Link>
                 </li>
-
+-->
                 <li v-if="loggedin" 
                     style="float: right"
                 >
                     <Link href="/logout" method="post" class="">Log out</Link>
                 </li>
-
+<!--
                 <li
                     :class="{ lo_active: pagename == '/about' }"
                     style="float: right"
                 >
                     <Link href="/about">About</Link>
                 </li>
+-->
             </ul>
         </nav>
 
@@ -1219,11 +1217,11 @@ th {
 
 .showcodex_comments {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "general internal"
-        "general published";
+        "general"
+        "internal";
     gap: 20px;
     width: 99%;
     align-self: center;
