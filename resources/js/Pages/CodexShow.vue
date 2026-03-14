@@ -1069,8 +1069,7 @@
 </template>
 
 <script setup>
-import { router } from "@inertiajs/vue3";
-import { reactive, ref, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import EthRatio from "../Components/EthRatio.vue";
 
@@ -1374,7 +1373,9 @@ if (!bifolia) {
     bifolia[0] = 0;
 }
 
-const updated = new Date(props.document.updated_at).toLocaleString();
+const updated = computed(() => {
+    return new Date(props.document.updated_at).toLocaleString();
+})
 
 let ancient_provenance_full = "";
 const prov = props.ancient_provenance;
