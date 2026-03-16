@@ -69,6 +69,7 @@ class DocumentController extends Controller
             's_published' => 'nullable',
             's_imagelinks' => 'nullable',
             's_imagesonsite' => 'nullable',
+            's_noworks' => 'nullable',
             's_title' => 'nullable',
             's_ancient_author' => 'nullable',
             's_languages' => 'nullable',
@@ -77,6 +78,7 @@ class DocumentController extends Controller
             's_genres_incl' => 'nullable',
             's_tags' => 'nullable',
             's_tags_incl' => 'nullable',
+            's_nobasis' => 'nullable',
             's_earliest_date' => 'nullable',
             's_latest_date' => 'nullable',
             's_exclusive_date' => 'nullable',
@@ -223,6 +225,7 @@ class DocumentController extends Controller
         $published = array_key_exists('s_published', $search) ? $search['s_published'] : null;
         $imagelinks = array_key_exists('s_imagelinks', $search) ? $search['s_imagelinks'] : null;
         $imagesonsite = array_key_exists('s_imagesonsite', $search) ? $search['s_imagesonsite'] : null;
+        $noworks = array_key_exists('s_noworks', $search) ? $search['s_noworks'] : null;
         $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
         $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
@@ -231,6 +234,7 @@ class DocumentController extends Controller
         $genres_incl = array_key_exists('s_genres_incl', $search) ? $search['s_genres_incl'] : null;
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
         $tags_incl = array_key_exists('s_tags_incl', $search) ? $search['s_tags_incl'] : null;
+        $nobasis = array_key_exists('s_nobasis', $search) ? $search['s_nobasis'] : null;     
         $earliest_date = array_key_exists('s_earliest_date', $search) ? $search['s_earliest_date'] : null;
         $latest_date = array_key_exists('s_latest_date', $search) ? $search['s_latest_date'] : null;
         $exclusive_date = array_key_exists('s_exclusive_date', $search) ? $search['s_exclusive_date'] : false;
@@ -439,6 +443,7 @@ class DocumentController extends Controller
                     });
             })
             ->when($show_content == 'true', function ($query) use (
+                $noworks,
                 $title,
                 $ancient_author,
                 $languages,
@@ -449,6 +454,9 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
+                    ->when($noworks, function ($query) {
+                        $query->whereDoesntHave('works');
+                    })
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
                             $query
@@ -518,6 +526,7 @@ class DocumentController extends Controller
                     });
             })
             ->when($show_dating == 'true', function ($query) use (
+                $nobasis,
                 $earliest_date,
                 $latest_date,
                 $exclusive_date,
@@ -526,6 +535,9 @@ class DocumentController extends Controller
                 $dating_certainties
             ) {
                 $query
+                    ->when($nobasis, function ($query) {
+                        $query->whereDoesntHave('dating_methods');
+                    })
                     ->when($exclusive_date == 'true', function ($query) use ($earliest_date, $latest_date, $exclusive_date) {
                         $query
                             ->when($earliest_date, function ($query, $earliest_date) {

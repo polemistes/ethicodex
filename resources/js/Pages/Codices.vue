@@ -164,6 +164,22 @@
 
         <div v-if="form.show_content" class="searchblock">
             <div class="searchblocktitle">Content Search</div>
+            <div v-if="props.auth == null
+                        ? 0
+                        : props.auth.user.role.id >= 2
+                        ? 1
+                        : 0">
+                <EthInput
+                    helptext="Show only codices without works."
+                    input_type="boolevent-horiz"
+                    input_id="noworks"
+                    v-model="form.s_noworks"
+                    @new-change="sendsearch()"
+                >
+                    No Works
+                </EthInput>
+            </div>
+
             <EthInput
                 input_type="textevent"
                 input_id="title"
@@ -249,6 +265,24 @@
 
         <div v-if="form.show_dating" class="searchblock">
             <div class="searchblocktitle">Date Search</div>
+
+                <div v-if="props.auth == null
+                        ? 0
+                        : props.auth.user.role.id >= 2
+                        ? 1
+                        : 0">
+                <EthInput
+                    helptext="Show only codices without basis of date."
+                    input_type="boolevent-horiz"
+                    input_id="nobasis"
+                    v-model="form.s_nobasis"
+                    @new-change="sendsearch()"
+                >
+                    No Basis of Date
+                </EthInput>
+            </div>
+
+
             <div class="pushleft">
                 <EthInput
                     input_type="numberevent"
@@ -1204,6 +1238,7 @@ const props = defineProps({
     imagelinks: Boolean,
     imagesonsite: Boolean,
     /* Content */
+    noworks: Boolean,
     title: String,
     ancient_author: String,
     languages_search: Array,
@@ -1213,6 +1248,7 @@ const props = defineProps({
     tags_search: Array,
     tags_incl: Boolean,
     /* Dating */
+    nobasis: Boolean,
     earliest_date: Number,
     latest_date: Number,
     exclusive_date: Boolean,
@@ -1320,6 +1356,7 @@ const form = useForm({
     s_imagelinks: props.imagelinks,
     s_imagesonsite: props.imagesonsite,
     /* Content */
+    s_noworks: props.noworks,
     s_title: props.title,
     s_ancient_author: props.ancient_author,
     s_languages: props.languages_search ? props.languages_search : [],
@@ -1329,6 +1366,7 @@ const form = useForm({
     s_tags: props.tags_search ? props.tags_search : [],
     s_tags_incl: props.tags_incl,
     /* Dating */
+    s_nobasis: props.nobasis,
     s_earliest_date: props.earliest_date,
     s_latest_date: props.latest_date,
     s_exclusive_date: props.exclusive_date,
