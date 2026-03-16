@@ -342,8 +342,6 @@ class DocumentController extends Controller
                         ->orWhere('trismegistos_id', 'like', "%{$fulltext}%")
                         ->orWhere('publication', 'like', "%{$fulltext}%")
                         ->orWhere('current_shelfmarks', 'like', "%{$fulltext}%")
-                        ->orWhere('title', 'like', "%{$fulltext}%")
-                        ->orWhere('ancient_author', 'like', "%{$fulltext}%")
                         ->orWhere('content_description', 'like', "%{$fulltext}%")
                         ->orWhere('language_comment', 'like', "%{$fulltext}%")
                         ->orWhere('dating_comment', 'like', "%{$fulltext}%")
@@ -376,12 +374,13 @@ class DocumentController extends Controller
                             ->orWhereRaw("locate('$fulltext', altnames)")
                             ->get()
                             ->all();
-                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
-                        $query
-                            ->where('works.name', 'like', "%{$fulltext}%")
-                            ->orWhereRaw("locate('$fulltext', document_work.passage_comment)")
-                            ->orWhereRaw("locate('$fulltext', works.altnames)")
-                            ->orwhereIn('works.id', array_column($works, 'id'));
+
+                            $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                            $query
+                                ->where('works.name', 'like', "%{$fulltext}%")
+                                ->orWhereRaw("locate('$fulltext', document_work.passage_comment)")
+                                ->orWhereRaw("locate('$fulltext', works.altnames)")
+                                ->orwhereIn('works.id', array_column($works, 'id'));
                         });
                 });
             })
@@ -428,15 +427,13 @@ class DocumentController extends Controller
                                         $query->where('micrograph', false)
                                         ->orWhereNull('micrograph');
                                     });
-
                                 })
                                 ->when($role_id >= 2, function ($query) {
-                                    $query->where('micrograph', false)
-                                        ->orWhereNull('micrograph');
+                                    $query->where(function($query) {
+                                        $query->where('micrograph', false)
+                                            ->orWhereNull('micrograph');
                                     });
-
-            
-                            
+                                });
                         });
                     });
             })
@@ -451,68 +448,73 @@ class DocumentController extends Controller
                 $tags_incl,
             ) {
                 $query
-                    /*                    ->when($title, function ($query, $title) {
-                                            $query->where('title', 'like', "%{$title}%");
-                                        })*/
                     ->when($title, function ($query, $title) {
                         $query->whereHas('works', function ($query) use ($title) {
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate('$title', works.altnames)");
-                        })
-                            ->orWhere('title', 'like', "%{$title}%");
+                        });
                     })
-                    /*
-                     * ->when($ancient_author, function ($query, $ancient_author) {
-                     *                      $query->where('ancient_author', 'like', "%{$ancient_author}%");
-                     *                  })
-                     */
-                    ->when($ancient_author, function ($query, $ancient_author) {
-                        $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                            ->orWhereRaw("locate('$ancient_author', altnames)")
-                            ->get()
-                            ->all();
-                        $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
-                        $query->whereHas('works', function ($query) use ($works) {
-                            $query->whereIn('works.id', array_column($works, 'id'));
-                        })
-                            ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
+                    ->when($ancient_author, function ($query) use ($ancient_author) {
+                        $query->where(function($query) use ($ancient_author) {
+                            $authors = Author::where('name', 'like', "%{$ancient_author}%")
+                                ->orWhereRaw("locate('$ancient_author', altnames)")
+                                ->get()
+                                ->all();
+                            $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                            $query->whereHas('works', function ($query) use ($works) {
+                               $query->whereIn('works.id', array_column($works, 'id'));
+                           })
+                                ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
+                        });
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
-                        $query->whereHas('languages', function ($query) use ($languages) {
-                            $query->whereIn('languages.id', array_column($languages, 'id'));
+                        $query->where(function ($query) use ($languages) {
+                            $query->whereHas('languages', function ($query) use ($languages) {
+                                $query->whereIn('languages.id', array_column($languages, 'id'));
+                            });
                         });
                     })
                     ->when($languages && $languages_incl, function ($query) use ($languages) {
-                        foreach ($languages as $language) {
-                            $query->whereHas('languages', function ($query) use ($language) {
-                                $query->where('languages.id', '=', $language['id']);
-                            });
-                        }
+                        $query->where(function ($query) use ($languages) {
+                            foreach ($languages as $language) {
+                                $query->whereHas('languages', function ($query) use ($language) {
+                                    $query->where('languages.id', '=', $language['id']);
+                                });
+                            }
+                        });    
                     })
                     ->when($genres && !$genres_incl, function ($query) use ($genres) {
-                        $query->whereHas('genres', function ($query) use ($genres) {
-                            $query->whereIn('genres.id', array_column($genres, 'id'));
+                        $query->where(function ($query) use ($genres) {
+                            $query->whereHas('genres', function ($query) use ($genres) {
+                                $query->whereIn('genres.id', array_column($genres, 'id'));
+                            });
                         });
                     })
                     ->when($genres && $genres_incl, function ($query) use ($genres) {
-                        foreach ($genres as $genre) {
-                            $query->whereHas('genres', function ($query) use ($genre) {
-                                $query->where('genres.id', '=', $genre['id']);
-                            });
-                        }
+                        $query->where(function ($query) use ($genres) {
+                            foreach ($genres as $genre) {
+                                $query->whereHas('genres', function ($query) use ($genre) {
+                                    $query->where('genres.id', '=', $genre['id']);
+                                });
+                            }
+                        });
                     })
                     ->when($tags && !$tags_incl, function ($query) use ($tags) {
-                        $query->whereHas('tags', function ($query) use ($tags) {
-                            $query->whereIn('tags.id', array_column($tags, 'id'));
+                        $query->where(function ($query) use ($tags) {
+                            $query->whereHas('tags', function ($query) use ($tags) {
+                                $query->whereIn('tags.id', array_column($tags, 'id'));
+                            });
                         });
                     })
                     ->when($tags && $tags_incl, function ($query) use ($tags) {
-                        foreach ($tags as $tag) {
-                            $query->whereHas('tags', function ($query) use ($tag) {
-                                $query->where('tags.id', '=', $tag['id']);
-                            });
-                        }
+                        $query->where(function ($query) use ($tags) {
+                            foreach ($tags as $tag) {
+                                $query->whereHas('tags', function ($query) use ($tag) {
+                                    $query->where('tags.id', '=', $tag['id']);
+                                });
+                            }
+                        });
                     });
             })
             ->when($show_dating == 'true', function ($query) use (
@@ -542,20 +544,26 @@ class DocumentController extends Controller
                             });
                     })
                     ->when($dating_methods && !$dating_methods_incl, function ($query) use ($dating_methods) {
-                        $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
-                            $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
+                        $query->where(function ($query) use ($dating_methods) {
+                            $query->whereHas('dating_methods', function ($query) use ($dating_methods) {
+                                $query->whereIn('dating_methods.id', array_column($dating_methods, 'id'));
+                            });
                         });
                     })
                     ->when($dating_methods && $dating_methods_incl, function ($query) use ($dating_methods) {
-                        foreach ($dating_methods as $dating_method) {
-                            $query->whereHas('dating_methods', function ($query) use ($dating_method) {
-                                $query->where('dating_methods.id', '=', $dating_method['id']);
-                            });
-                        }
+                        $query->where(function ($query) use ($dating_methods) {
+                            foreach ($dating_methods as $dating_method) {
+                                $query->whereHas('dating_methods', function ($query) use ($dating_method) {
+                                    $query->where('dating_methods.id', '=', $dating_method['id']);
+                                });
+                            }
+                        });
                     })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
-                        $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
+                        $query->where(function ($query, $dating_certainties) {
+                            $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
+                });
             })
             ->when(
                 $show_materiality == 'true',
@@ -989,7 +997,7 @@ class DocumentController extends Controller
             ->with('collections')
             ->orderBy($sortby, $direction)
             ->orderBy('end_year', $direction);
-
+        
         $ancient_provenances = $ancient_provenances_original;
 
         return [
