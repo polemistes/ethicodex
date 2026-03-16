@@ -560,7 +560,7 @@ class DocumentController extends Controller
                         });
                     })
                     ->when($dating_certainties, function ($query, $dating_certainties) {
-                        $query->where(function ($query, $dating_certainties) {
+                        $query->where(function ($query) use($dating_certainties) {
                             $query->whereIn('dating_certainty_id', array_column($dating_certainties, 'id'));
                     });
                 });
