@@ -376,6 +376,7 @@ class DocumentController extends Controller
                             ->all();
 
                             $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
+                            
                             $query
                                 ->where('works.name', 'like', "%{$fulltext}%")
                                 ->orWhereRaw("locate('$fulltext', document_work.passage_comment)")
@@ -464,8 +465,7 @@ class DocumentController extends Controller
                             $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
                             $query->whereHas('works', function ($query) use ($works) {
                                $query->whereIn('works.id', array_column($works, 'id'));
-                           })
-                                ->orWhere('ancient_author', 'like', "%{$ancient_author}%");
+                           });
                         });
                     })
                     ->when($languages && !$languages_incl, function ($query) use ($languages) {
