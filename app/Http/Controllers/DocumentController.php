@@ -37,6 +37,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Mews\Purifier\Facades\Purifier;
 
 class DocumentController extends Controller
 {
@@ -216,18 +217,18 @@ class DocumentController extends Controller
 
         $direction = $reverse ? 'desc' : 'asc';
 
-        $fulltext = array_key_exists('fulltext', $search) ? $search['fulltext'] : null;
-        $standard_name = array_key_exists('s_standard_name', $search) ? $search['s_standard_name'] : null;
-        $publication = array_key_exists('s_publication', $search) ? $search['s_publication'] : null;
-        $current_shelfmarks = array_key_exists('s_current_shelfmarks', $search) ? $search['s_current_shelfmarks'] : null;
-        $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? $search['s_trismegistos_id'] : null;
+        $fulltext = array_key_exists('fulltext', $search) ? Purifier::clean($search['fulltext']) : null;
+        $standard_name = array_key_exists('s_standard_name', $search) ? Purifier::clean($search['s_standard_name']) : null;
+        $publication = array_key_exists('s_publication', $search) ? Purifier::clean($search['s_publication']) : null;
+        $current_shelfmarks = array_key_exists('s_current_shelfmarks', $search) ? Purifier::clean($search['s_current_shelfmarks']) : null;
+        $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? Purifier::clean($search['s_trismegistos_id']) : null;
         $completed = array_key_exists('s_completed', $search) ? $search['s_completed'] : null;
         $published = array_key_exists('s_published', $search) ? $search['s_published'] : null;
         $imagelinks = array_key_exists('s_imagelinks', $search) ? $search['s_imagelinks'] : null;
-        $imagesonsite = array_key_exists('s_imagesonsite', $search) ? $search['s_imagesonsite'] : null;
+        $imagesonsite = array_key_exists('s_imagesonsite', $search) ? Purifier::clean($search['s_imagesonsite']) : null;
         $noworks = array_key_exists('s_noworks', $search) ? $search['s_noworks'] : null;
-        $title = array_key_exists('s_title', $search) ? $search['s_title'] : null;
-        $ancient_author = array_key_exists('s_ancient_author', $search) ? $search['s_ancient_author'] : null;
+        $title = array_key_exists('s_title', $search) ? Purifier::clean($search['s_title']) : null;
+        $ancient_author = array_key_exists('s_ancient_author', $search) ? Purifier::clean($search['s_ancient_author']) : null;
         $languages = array_key_exists('s_languages', $search) ? $search['s_languages'] : null;
         $languages_incl = array_key_exists('s_languages_incl', $search) ? $search['s_languages_incl'] : null;
         $genres = array_key_exists('s_genres', $search) ? $search['s_genres'] : null;
@@ -235,8 +236,8 @@ class DocumentController extends Controller
         $tags = array_key_exists('s_tags', $search) ? $search['s_tags'] : null;
         $tags_incl = array_key_exists('s_tags_incl', $search) ? $search['s_tags_incl'] : null;
         $nobasis = array_key_exists('s_nobasis', $search) ? $search['s_nobasis'] : null;     
-        $earliest_date = array_key_exists('s_earliest_date', $search) ? $search['s_earliest_date'] : null;
-        $latest_date = array_key_exists('s_latest_date', $search) ? $search['s_latest_date'] : null;
+        $earliest_date = array_key_exists('s_earliest_date', $search) ? Purifier::clean($search['s_earliest_date']) : null;
+        $latest_date = array_key_exists('s_latest_date', $search) ? Purifier::clean($search['s_latest_date']) : null;
         $exclusive_date = array_key_exists('s_exclusive_date', $search) ? $search['s_exclusive_date'] : false;
         $dating_methods = array_key_exists('s_dating_methods', $search) ? $search['s_dating_methods'] : null;
         $dating_methods_incl = array_key_exists('s_dating_methods_incl', $search) ? $search['s_dating_methods_incl'] : null;
@@ -247,45 +248,45 @@ class DocumentController extends Controller
         $inks_only = array_key_exists('s_inks_only', $search) ? $search['s_inks_only'] : null;
         $covers = array_key_exists('s_covers', $search) ? $search['s_covers'] : null;
         $quire_structures = array_key_exists('s_quire_structures', $search) ? $search['s_quire_structures'] : null;
-        $quirenum_min = array_key_exists('s_quirenum_min', $search) ? $search['s_quirenum_min'] : null;
-        $quirenum_max = array_key_exists('s_quirenum_max', $search) ? $search['s_quirenum_max'] : null;
-        $bifolianum_min = array_key_exists('s_bifolianum_min', $search) ? $search['s_bifolianum_min'] : null;
-        $bifolianum_max = array_key_exists('s_bifolianum_max', $search) ? $search['s_bifolianum_max'] : null;
-        $include_estimated = array_key_exists('s_include_estimated', $search) ? $search['s_include_estimated'] : null;
-        $full_page_width_min = array_key_exists('s_full_page_width_min', $search) ? $search['s_full_page_width_min'] : null;
-        $full_page_width_max = array_key_exists('s_full_page_width_max', $search) ? $search['s_full_page_width_max'] : null;
-        $full_page_height_min = array_key_exists('s_full_page_height_min', $search) ? $search['s_full_page_height_min'] : null;
-        $full_page_height_max = array_key_exists('s_full_page_height_max', $search) ? $search['s_full_page_height_max'] : null;
-        $full_text_block_width_min = array_key_exists('s_full_text_block_width_min', $search) ? $search['s_full_text_block_width_min'] : null;
-        $full_text_block_width_max = array_key_exists('s_full_text_block_width_max', $search) ? $search['s_full_text_block_width_max'] : null;
-        $full_text_block_height_min = array_key_exists('s_full_text_block_height_min', $search) ? $search['s_full_text_block_height_min'] : null;
-        $full_text_block_height_max = array_key_exists('s_full_text_block_height_max', $search) ? $search['s_full_text_block_height_max'] : null;
-        $upper_margin_min = array_key_exists('s_upper_margin_min', $search) ? $search['s_upper_margin_min'] : null;
-        $upper_margin_max = array_key_exists('s_upper_margin_max', $search) ? $search['s_upper_margin_max'] : null;
-        $lower_margin_min = array_key_exists('s_lower_margin_min', $search) ? $search['s_lower_margin_min'] : null;
-        $lower_margin_max = array_key_exists('s_lower_margin_max', $search) ? $search['s_lower_margin_max'] : null;
-        $inner_margin_min = array_key_exists('s_inner_margin_min', $search) ? $search['s_inner_margin_min'] : null;
-        $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? $search['s_inner_margin_max'] : null;
-        $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? $search['s_outer_margin_min'] : null;
-        $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? $search['s_outer_margin_max'] : null;
+        $quirenum_min = array_key_exists('s_quirenum_min', $search) ? Purifier::clean($search['s_quirenum_min']) : null;
+        $quirenum_max = array_key_exists('s_quirenum_max', $search) ? Purifier::clean($search['s_quirenum_max']) : null;
+        $bifolianum_min = array_key_exists('s_bifolianum_min', $search) ? Purifier::clean($search['s_bifolianum_min']) : null;
+        $bifolianum_max = array_key_exists('s_bifolianum_max', $search) ? Purifier::clean($search['s_bifolianum_max']) : null;
+        $include_estimated = array_key_exists('s_include_estimated', $search) ? Purifier::clean($search['s_include_estimated']) : null;
+        $full_page_width_min = array_key_exists('s_full_page_width_min', $search) ? Purifier::clean($search['s_full_page_width_min']) : null;
+        $full_page_width_max = array_key_exists('s_full_page_width_max', $search) ? Purifier::clean($search['s_full_page_width_max']) : null;
+        $full_page_height_min = array_key_exists('s_full_page_height_min', $search) ? Purifier::clean($search['s_full_page_height_min']) : null;
+        $full_page_height_max = array_key_exists('s_full_page_height_max', $search) ? Purifier::clean($search['s_full_page_height_max']) : null;
+        $full_text_block_width_min = array_key_exists('s_full_text_block_width_min', $search) ? Purifier::clean($search['s_full_text_block_width_min']) : null;
+        $full_text_block_width_max = array_key_exists('s_full_text_block_width_max', $search) ? Purifier::clean($search['s_full_text_block_width_max']) : null;
+        $full_text_block_height_min = array_key_exists('s_full_text_block_height_min', $search) ? Purifier::clean($search['s_full_text_block_height_min']) : null;
+        $full_text_block_height_max = array_key_exists('s_full_text_block_height_max', $search) ? Purifier::clean($search['s_full_text_block_height_max']) : null;
+        $upper_margin_min = array_key_exists('s_upper_margin_min', $search) ? Purifier::clean($search['s_upper_margin_min']) : null;
+        $upper_margin_max = array_key_exists('s_upper_margin_max', $search) ? Purifier::clean($search['s_upper_margin_max']) : null;
+        $lower_margin_min = array_key_exists('s_lower_margin_min', $search) ? Purifier::clean($search['s_lower_margin_min']) : null;
+        $lower_margin_max = array_key_exists('s_lower_margin_max', $search) ? Purifier::clean($search['s_lower_margin_max']) : null;
+        $inner_margin_min = array_key_exists('s_inner_margin_min', $search) ? Purifier::clean($search['s_inner_margin_min']) : null;
+        $inner_margin_max = array_key_exists('s_inner_margin_max', $search) ? Purifier::clean($search['s_inner_margin_max']) : null;
+        $outer_margin_min = array_key_exists('s_outer_margin_min', $search) ? Purifier::clean($search['s_outer_margin_min']) : null;
+        $outer_margin_max = array_key_exists('s_outer_margin_max', $search) ? Purifier::clean($search['s_outer_margin_max']) : null;
 
-        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? $search['s_full_page_ratio_min'] : null;
-        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? $search['s_full_page_ratio_max'] : null;
-        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? $search['s_full_text_block_ratio_min'] : null;
-        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? $search['s_full_text_block_ratio_max'] : null;
-        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? $search['s_uplow_margins_ratio_min'] : null;
-        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? $search['s_uplow_margins_ratio_max'] : null;
-        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? $search['s_inout_margins_ratio_min'] : null;
-        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? $search['s_inout_margins_ratio_max'] : null;
+        $full_page_ratio_min = array_key_exists('s_full_page_ratio_min', $search) ? Purifier::clean($search['s_full_page_ratio_min']) : null;
+        $full_page_ratio_max = array_key_exists('s_full_page_ratio_max', $search) ? Purifier::clean($search['s_full_page_ratio_max']) : null;
+        $full_text_block_ratio_min = array_key_exists('s_full_text_block_ratio_min', $search) ? Purifier::clean($search['s_full_text_block_ratio_min']) : null;
+        $full_text_block_ratio_max = array_key_exists('s_full_text_block_ratio_max', $search) ? Purifier::clean($search['s_full_text_block_ratio_max']) : null;
+        $uplow_margins_ratio_min = array_key_exists('s_uplow_margins_ratio_min', $search) ? Purifier::clean($search['s_uplow_margins_ratio_min']) : null;
+        $uplow_margins_ratio_max = array_key_exists('s_uplow_margins_ratio_max', $search) ? Purifier::clean($search['s_uplow_margins_ratio_max']) : null;
+        $inout_margins_ratio_min = array_key_exists('s_inout_margins_ratio_min', $search) ? Purifier::clean($search['s_inout_margins_ratio_min']) : null;
+        $inout_margins_ratio_max = array_key_exists('s_inout_margins_ratio_max', $search) ? Purifier::clean($search['s_inout_margins_ratio_max']) : null;
 
         $gregorys_rules = array_key_exists('s_gregorys_rules', $search) ? $search['s_gregorys_rules'] : null;
-        $columns_min = array_key_exists('s_columns_min', $search) ? $search['s_columns_min'] : null;
-        $columns_max = array_key_exists('s_columns_max', $search) ? $search['s_columns_max'] : null;
-        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? $search['s_columnlines_min'] : null;
-        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? $search['s_columnlines_max'] : null;
+        $columns_min = array_key_exists('s_columns_min', $search) ? Purifier::clean($search['s_columns_min']) : null;
+        $columns_max = array_key_exists('s_columns_max', $search) ? Purifier::clean($search['s_columns_max']) : null;
+        $columnlines_min = array_key_exists('s_columnlines_min', $search) ? Purifier::clean($search['s_columnlines_min']) : null;
+        $columnlines_max = array_key_exists('s_columnlines_max', $search) ? Purifier::clean($search['s_columnlines_max']) : null;
 
-        $hand_number_min = array_key_exists('s_hand_number_min', $search) ? $search['s_hand_number_min'] : null;
-        $hand_number_max = array_key_exists('s_hand_number_max', $search) ? $search['s_hand_number_max'] : null;
+        $hand_number_min = array_key_exists('s_hand_number_min', $search) ? Purifier::clean($search['s_hand_number_min']) : null;
+        $hand_number_max = array_key_exists('s_hand_number_max', $search) ? Purifier::clean($search['s_hand_number_max']) : null;
         $scripts = array_key_exists('s_scripts', $search) ? $search['s_scripts'] : null;
         $scripts_incl = array_key_exists('s_scripts_incl', $search) ? $search['s_scripts_incl'] : null;
         $diacritics = array_key_exists('s_diacritics', $search) ? $search['s_diacritics'] : null;
@@ -487,7 +488,7 @@ class DocumentController extends Controller
                         $query->where(function ($query) use ($languages) {
                             foreach ($languages as $language) {
                                 $query->whereHas('languages', function ($query) use ($language) {
-                                    $query->where('languages.id', '=', $language['id']);
+                                    $query->where('languages.id', '=', Purifier::clean($language['id']));
                                 });
                             }
                         });    
@@ -503,7 +504,7 @@ class DocumentController extends Controller
                         $query->where(function ($query) use ($genres) {
                             foreach ($genres as $genre) {
                                 $query->whereHas('genres', function ($query) use ($genre) {
-                                    $query->where('genres.id', '=', $genre['id']);
+                                    $query->where('genres.id', '=', Purifier::clean($genre['id']));
                                 });
                             }
                         });
@@ -519,7 +520,7 @@ class DocumentController extends Controller
                         $query->where(function ($query) use ($tags) {
                             foreach ($tags as $tag) {
                                 $query->whereHas('tags', function ($query) use ($tag) {
-                                    $query->where('tags.id', '=', $tag['id']);
+                                    $query->where('tags.id', '=', Purifier::clean($tag['id']));
                                 });
                             }
                         });
@@ -566,7 +567,7 @@ class DocumentController extends Controller
                         $query->where(function ($query) use ($dating_methods) {
                             foreach ($dating_methods as $dating_method) {
                                 $query->whereHas('dating_methods', function ($query) use ($dating_method) {
-                                    $query->where('dating_methods.id', '=', $dating_method['id']);
+                                    $query->where('dating_methods.id', '=', Purifier::clean($dating_method['id']));
                                 });
                             }
                         });
@@ -607,7 +608,7 @@ class DocumentController extends Controller
                         ->when($inks && $inks_incl, function ($query) use ($inks) {
                             foreach ($inks as $ink) {
                                 $query->whereHas('inks', function ($query) use ($ink) {
-                                    $query->where('inks.id', '=', $ink['id']);
+                                    $query->where('inks.id', '=', Purifier::clean($ink['id']));
                                 });
                             }
                         })
@@ -835,7 +836,7 @@ class DocumentController extends Controller
                         ->when($scripts && $scripts_incl, function ($query) use ($scripts) {
                             foreach ($scripts as $script) {
                                 $query->whereHas('scripts', function ($query) use ($script) {
-                                    $query->where('scripts.id', '=', $script['id']);
+                                    $query->where('scripts.id', '=', Purifier::clean($script['id']));
                                 });
                             }
                         })
@@ -847,7 +848,7 @@ class DocumentController extends Controller
                         ->when($diacritics && $diacritics_incl, function ($query) use ($diacritics) {
                             foreach ($diacritics as $diacritic) {
                                 $query->whereHas('diacritics', function ($query) use ($diacritic) {
-                                    $query->where('diacritics.id', '=', $diacritic['id']);
+                                    $query->where('diacritics.id', '=', Purifier::clean($diacritic['id']));
                                 });
                             }
                         })
@@ -859,7 +860,7 @@ class DocumentController extends Controller
                         ->when($punctuations && $punctuations_incl, function ($query) use ($punctuations) {
                             foreach ($punctuations as $punctuation) {
                                 $query->whereHas('punctuations', function ($query) use ($punctuation) {
-                                    $query->where('punctuations.id', '=', $punctuation['id']);
+                                    $query->where('punctuations.id', '=', Purifier::clean($punctuation['id']));
                                 });
                             }
                         })
@@ -871,7 +872,7 @@ class DocumentController extends Controller
                         ->when($paratexts && $paratexts_incl, function ($query) use ($paratexts) {
                             foreach ($paratexts as $paratext) {
                                 $query->whereHas('paratexts', function ($query) use ($paratext) {
-                                    $query->where('paratexts.id', '=', $paratext['id']);
+                                    $query->where('paratexts.id', '=', Purifier::clean($paratext['id']));
                                 });
                             }
                         })
@@ -883,7 +884,7 @@ class DocumentController extends Controller
                         ->when($decorations && $decorations_incl, function ($query) use ($decorations) {
                             foreach ($decorations as $decoration) {
                                 $query->whereHas('decorations', function ($query) use ($decoration) {
-                                    $query->where('decorations.id', '=', $decoration['id']);
+                                    $query->where('decorations.id', '=', Purifier::clean($decoration['id']));
                                 });
                             }
                         })
@@ -895,7 +896,7 @@ class DocumentController extends Controller
                         ->when($critical_symbols && $critical_symbols_incl, function ($query) use ($critical_symbols) {
                             foreach ($critical_symbols as $critical_symbol) {
                                 $query->whereHas('critical_symbols', function ($query) use ($critical_symbol) {
-                                    $query->where('critical_symbols.id', '=', $critical_symbol['id']);
+                                    $query->where('critical_symbols.id', '=', Purifier::clean($critical_symbol['id']));
                                 });
                             }
                         })
@@ -926,7 +927,7 @@ class DocumentController extends Controller
                         ->when($analyses && $analyses_incl, function ($query) use ($analyses) {
                             foreach ($analyses as $analysis) {
                                 $query->whereHas('analyses', function ($query) use ($analysis) {
-                                    $query->where('analyses.id', '=', $analysis['id']);
+                                    $query->where('analyses.id', '=', Purifier::clean($analysis['id']));
                                 });
                             }
                         });
@@ -947,8 +948,8 @@ class DocumentController extends Controller
                     $legal_classifications
                 ) {
                     $query
-                        ->when($scientifically_excavated, function ($query, $scientifically_excavated) {
-                            $query->where('scientifically_excavated', '=', 1);
+                        ->when(isset($scientifically_excavated), function ($query) use ($scientifically_excavated) {
+                            $query->where('scientifically_excavated', '=', $scientifically_excavated);
                         })
                         ->when($ancient_provenances, function ($query, $ancient_provenances) {
                             $query->whereIn('ancient_provenance_id', array_column($ancient_provenances, 'id'));
@@ -964,7 +965,7 @@ class DocumentController extends Controller
                         ->when($collections && $collections_incl, function ($query) use ($collections) {
                             foreach ($collections as $collection) {
                                 $query->whereHas('collections', function ($query) use ($collection) {
-                                    $query->where('transaction_parties.id', '=', $collection['id']);
+                                    $query->where('transaction_parties.id', '=', Purifier::clean($collection['id']));
                                 });
                             }
                         })
@@ -976,7 +977,7 @@ class DocumentController extends Controller
                         ->when($transactions && $transactions_incl, function ($query) use ($transactions) {
                             foreach ($transactions as $transaction) {
                                 $query->whereHas('transactions', function ($query) use ($transaction) {
-                                    $query->where('transactions.id', '=', $transaction['id']);
+                                    $query->where('transactions.id', '=', Purifier::clean($transaction['id']));
                                 });
                             }
                         })
@@ -995,7 +996,7 @@ class DocumentController extends Controller
                             $query->whereHas('transactions', function ($query) use ($transaction_parties) {
                                 foreach ($transaction_parties as $transaction_party) {
                                     $query->whereHas('transaction_parties', function ($query) use ($transaction_party) {
-                                        $query->where('transaction_parties.id', '=', $transaction_party['id']);
+                                        $query->where('transaction_parties.id', '=', Purifier::clean($transaction_party['id']));
                                     });
                                 }
                             });

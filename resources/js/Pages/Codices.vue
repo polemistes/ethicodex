@@ -1489,7 +1489,7 @@ const sortfields = [
 
 const yesnomenu = [
     { id: 1, name: "Yes" },
-    { id: 2, name: "No" },
+    { id: 0, name: "No" },
 ];
 
 let edit = ref(props.auth == null ? 0 : props.auth.user.role.id >= 2 ? 1 : 0);

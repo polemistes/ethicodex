@@ -875,7 +875,8 @@
                         >Excavated by Permit</label
                     >
                     <div class="showcodex_bool">
-                        {{ document.scientifically_excavated ? "Yes" : "No" }}
+                        {{ document.scientifically_excavated == null ? "No data" : 
+                            document.scientifically_excavated ? "Yes" : "No" }}
                     </div>
                 </div>
 
