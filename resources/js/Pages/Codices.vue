@@ -426,7 +426,7 @@
             >
                 Max Quires
             </EthInput>
-
+<!--
             <EthInput
                 input_type="numberevent"
                 input_id="bifolianum_min"
@@ -444,7 +444,7 @@
             >
                 Max Bifolia
             </EthInput>
-
+-->
             <EthInput
                 input_type="multi_choice_event"
                 input_id="gregorys_rules"

@@ -630,12 +630,13 @@ class DocumentController extends Controller
                         ->when($quirenum_max, function ($query, $quirenum_max) {
                             $query->where('quire_number', '<=', $quirenum_max);
                         })
+                        /*
                         ->when($bifolianum_min, function ($query, $bifolianum_min) {
                             $query->where('bifolia_number', '>=', $bifolianum_min);
                         })
                         ->when($bifolianum_max, function ($query, $bifolianum_max) {
                             $query->where('bifolia_number', '<=', $bifolianum_max);
-                        });
+                        })*/;
                 }
             )
             ->when(
