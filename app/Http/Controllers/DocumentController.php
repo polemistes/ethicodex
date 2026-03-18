@@ -340,6 +340,7 @@ class DocumentController extends Controller
             })
             ->when($fulltext, function ($query) use ($fulltext, $role_id) {
                 $query->where(function ($query) use ($fulltext, $role_id) {
+                    
                     $query
                         ->where('standard_name', 'like', "%{$fulltext}%")
                         ->orWhere('standard_name', 'like', "%{$fulltext}%")
@@ -376,7 +377,7 @@ class DocumentController extends Controller
                         ->orWhere('internal_comment', 'like', $role_id >= 2 ? "%{$fulltext}%" : 'notsomethinganyonewouldwrite')
                         ->orWhereHas('works', function ($query) use ($fulltext) {
                             $authors = Author::where('name', 'like', "%{$fulltext}%")
-                            ->orWhereRaw("locate('$fulltext', altnames)")
+                            ->orWhereRaw("locate(?, altnames)", [$fulltext])
                             ->get()
                             ->all();
 
@@ -384,8 +385,8 @@ class DocumentController extends Controller
                             
                             $query
                                 ->where('works.name', 'like', "%{$fulltext}%")
-                                ->orWhereRaw("locate('$fulltext', document_work.passage_comment)")
-                                ->orWhereRaw("locate('$fulltext', works.altnames)")
+                                ->orWhereRaw("locate(?, document_work.passage_comment)", [$fulltext])
+                                ->orWhereRaw("locate(?, works.altnames)", [$fulltext])
                                 ->orwhereIn('works.id', array_column($works, 'id'));
                         });
                 });
@@ -462,13 +463,13 @@ class DocumentController extends Controller
                         $query->whereHas('works', function ($query) use ($title) {
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
-                                ->orWhereRaw("locate('$title', works.altnames)");
+                                ->orWhereRaw("locate(?, works.altnames)", [$title]);
                         });
                     })
                     ->when($ancient_author, function ($query) use ($ancient_author) {
                         $query->where(function($query) use ($ancient_author) {
                             $authors = Author::where('name', 'like', "%{$ancient_author}%")
-                                ->orWhereRaw("locate('$ancient_author', altnames)")
+                                ->orWhereRaw("locate(?, altnames)", [$ancient_author])
                                 ->get()
                                 ->all();
                             $works = Work::whereIn('author_id', array_column($authors, 'id'))->get()->all();
