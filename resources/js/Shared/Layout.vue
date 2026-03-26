@@ -178,7 +178,7 @@ const props = defineProps({
 html,
 body {
     width: 90%;
-    min-width: 1024px;
+    min-width: 1280px;
     height: 100%;
     margin: auto;
     background-color: #ddd;
@@ -981,6 +981,7 @@ th {
 .cod_fifth {
     flex: 0 0 20%;
     align-self: center;
+    padding-right: 20px;
 }
 
 
