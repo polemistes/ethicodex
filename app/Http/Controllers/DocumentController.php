@@ -464,7 +464,8 @@ class DocumentController extends Controller
                             $query
                                 ->where('works.name', 'like', "%{$title}%")
                                 ->orWhereRaw("locate(?, works.altnames)", [$title]);
-                        });
+                        })
+                        ->orWhereRaw("locate(?, document_work.passage_comment)", [$title]);
                     })
                     ->when($ancient_author, function ($query) use ($ancient_author) {
                         $query->where(function($query) use ($ancient_author) {
