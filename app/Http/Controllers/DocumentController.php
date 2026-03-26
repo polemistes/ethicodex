@@ -1592,9 +1592,11 @@ class DocumentController extends Controller
                 ->with('transaction_parties')
                 ->with('documents')
                 ->get()
-                ->sortBy('year')
-                ->sortBy('month')
-                ->sortBy('day')
+                ->sortBy([
+                        ['year', 'asc'],
+                        ['month', 'asc'],
+                        ['day', 'asc'],
+                        ])->values()
                 ->makeHidden('pivot'),
             'quire_signature' => $document->quire_signature()->get(),
             'quire_structure' => $document->quire_structure()->get(),
@@ -1794,9 +1796,11 @@ class DocumentController extends Controller
                 ->transactions()
                 ->get()
                 ->makeHidden('pivot')
-                ->sortBy('year')
-                ->sortBy('month')
-                ->sortBy('day'),
+                ->sortBy([
+                        ['year', 'asc'],
+                        ['month', 'asc'],
+                        ['day', 'asc'],
+                        ])->values(),
             'transactions_all' => $transactions_all,
             'quire_signatures' => QuireSignature::all(),
             'quire_signature' => $document->quire_signature()->get(),
