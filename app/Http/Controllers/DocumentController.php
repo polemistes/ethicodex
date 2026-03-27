@@ -225,7 +225,7 @@ class DocumentController extends Controller
         $completed = array_key_exists('s_completed', $search) ? $search['s_completed'] : null;
         $published = array_key_exists('s_published', $search) ? $search['s_published'] : null;
         $imagelinks = array_key_exists('s_imagelinks', $search) ? $search['s_imagelinks'] : null;
-        $imagesonsite = array_key_exists('s_imagesonsite', $search) ? Purifier::clean($search['s_imagesonsite']) : null;
+        $imagesonsite = array_key_exists('s_imagesonsite', $search) ? $search['s_imagesonsite'] : null;
         $noworks = array_key_exists('s_noworks', $search) ? $search['s_noworks'] : null;
         $title = array_key_exists('s_title', $search) ? Purifier::clean($search['s_title']) : null;
         $ancient_author = array_key_exists('s_ancient_author', $search) ? Purifier::clean($search['s_ancient_author']) : null;
