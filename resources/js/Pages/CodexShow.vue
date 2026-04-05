@@ -1070,13 +1070,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import EthRatio from "../Components/EthRatio.vue";
 
 const props = defineProps({
     analyses: Array,
-    ancient_provenance: Array,
+    ancient_provenance: Object,
     ancient_provenance_certainty: Array,
     cover: Array,
     critical_symbols: Array,
@@ -1378,19 +1378,22 @@ const updated = computed(() => {
     return new Date(props.document.updated_at).toLocaleString();
 })
 
-let ancient_provenance_full = "";
-const prov = props.ancient_provenance;
-if (prov ? prov.length > 0 : false) {
-    ancient_provenance_full = ancient_provenance_full.concat(prov[0].name);
-    let parent = prov[0].parent_recursive;
-    while (parent) {
-        ancient_provenance_full = ancient_provenance_full.concat(
-            ", ",
-            parent.name
-        );
-        parent = parent.parent_recursive;
+const ancient_provenance_full = computed(() => {
+    let apf = "";
+    const prov = props.ancient_provenance;
+    if (prov ? prov.length > 0 : false) {
+        apf = apf.concat(prov[0].name);
+        let parent = prov[0].parent_recursive;
+        while (parent) {
+            apf = apf.concat(
+                ", ",
+                parent.name
+            );
+            parent = parent.parent_recursive;
+        }
     }
-}
+    return apf;
+})
 
 const loadImages = ref(null);
 
