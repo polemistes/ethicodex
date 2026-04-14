@@ -390,7 +390,7 @@
                             )"
                             :key="n"
                         >
-                            {{ n }}: {{ bifolia[n - 1] }}
+                            Quire {{ n }}: {{ bifolia[n - 1] }}
                         </div>
                     </div>
                 </div>
