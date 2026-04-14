@@ -113,14 +113,6 @@
                     <div class="showcodex_text" v-html="document.other_names" />
                 </div>
 
-                <div class="show_publ">
-                    <label>Publication</label>
-                    <div
-                        class="showcodex_string"
-                        v-html="document.publication"
-                    />
-                </div>
-
                 <div class="show_shelf">
                     <label>Current Shelfmarks</label>
                     <div class="showcodex_string"

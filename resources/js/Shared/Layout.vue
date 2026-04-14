@@ -1102,9 +1102,6 @@ th {
 .show_other {
     grid-area: other;
 }
-.show_publ {
-    grid-area: publ;
-}
 .show_shelf {
     grid-area: shelf;
 }
@@ -1119,11 +1116,8 @@ th {
     grid-template-areas:
         "published . . ."
         "trismegistos standard standard other"
-        "trismegistos standard standard other"
-        "publ publ publ other"
-        "publ publ publ biblio"
-        "shelf shelf shelf biblio"
-        "shelf shelf shelf biblio";
+        "shelf shelf shelf other"
+        "biblio biblio biblio biblio";
     gap: 20px;
     width: 99%;
     align-self: center;
