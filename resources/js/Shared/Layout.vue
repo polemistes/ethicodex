@@ -112,7 +112,7 @@
         <footer class="layout-bottom">
             <p>
                 A New Methodology and Ethics for Manuscript Studies
-                (EthiCodex)<span style="float: right">v1.06</span>
+                (EthiCodex)<span style="float: right">v1.07</span>
             </p>
         </footer>
     </div>
