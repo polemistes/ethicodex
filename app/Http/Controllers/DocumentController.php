@@ -422,15 +422,19 @@ class DocumentController extends Controller
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     })
                     ->when($incompleted, function ($query) {
-                        $query->where('completed', '!=', true)
-                        ->orWhereNull('completed');
+                        $query->where(function($query) {
+                            $query->where('completed', '!=', true)
+                            ->orWhereNull('completed');
+                        });
                     })
                     ->when($completed, function ($query) {
                         $query->where('completed', '=', true);
                     })
                     ->when($unpublished, function ($query) {
-                        $query->where('published', '!=', true)
-                        ->orWhereNull('published');
+                        $query->where(function($query) {
+                            $query->where('published', '!=', true)
+                            ->orWhereNull('published');
+                        });
                     })
                     ->when($published, function ($query) {
                         $query->where('published', '=', true);
