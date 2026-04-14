@@ -67,7 +67,9 @@ class DocumentController extends Controller
             's_current_shelfmarks' => 'nullable',
             's_trismegistos_id' => 'nullable',
             's_completed' => 'nullable',
+            's_incompleted' => 'nullable',
             's_published' => 'nullable',
+            's_unpublished' => 'nullable',
             's_imagelinks' => 'nullable',
             's_imagesonsite' => 'nullable',
             's_noworks' => 'nullable',
@@ -223,7 +225,9 @@ class DocumentController extends Controller
         $current_shelfmarks = array_key_exists('s_current_shelfmarks', $search) ? Purifier::clean($search['s_current_shelfmarks']) : null;
         $trismegistos_id = array_key_exists('s_trismegistos_id', $search) ? Purifier::clean($search['s_trismegistos_id']) : null;
         $completed = array_key_exists('s_completed', $search) ? $search['s_completed'] : null;
+        $incompleted = array_key_exists('s_incompleted', $search) ? $search['s_incompleted'] : null;
         $published = array_key_exists('s_published', $search) ? $search['s_published'] : null;
+        $unpublished = array_key_exists('s_unpublished', $search) ? $search['s_unpublished'] : null;
         $imagelinks = array_key_exists('s_imagelinks', $search) ? $search['s_imagelinks'] : null;
         $imagesonsite = array_key_exists('s_imagesonsite', $search) ? $search['s_imagesonsite'] : null;
         $noworks = array_key_exists('s_noworks', $search) ? $search['s_noworks'] : null;
@@ -397,7 +401,9 @@ class DocumentController extends Controller
                 $current_shelfmarks,
                 $trismegistos_id,
                 $completed,
+                $incompleted,
                 $published,
+                $unpublished,
                 $imagelinks,
                 $imagesonsite,
                 $role_id
@@ -415,13 +421,19 @@ class DocumentController extends Controller
                     ->when($trismegistos_id, function ($query, $trismegistos_id) {
                         $query->where('trismegistos_id', '=', $trismegistos_id);
                     })
-                    ->when($completed, function ($query) {
+                    ->when($incompleted, function ($query) {
                         $query->where('completed', '!=', true)
                         ->orWhereNull('completed');
                     })
-                    ->when($published, function ($query) {
+                    ->when($completed, function ($query) {
+                        $query->where('completed', '=', true);
+                    })
+                    ->when($unpublished, function ($query) {
                         $query->where('published', '!=', true)
                         ->orWhereNull('published');
+                    })
+                    ->when($published, function ($query) {
+                        $query->where('published', '=', true);
                     })
                     ->when($imagelinks, function ($query) {
                         $query->whereNotNull('images_info');
@@ -1035,7 +1047,9 @@ class DocumentController extends Controller
             'current_shelfmarks' => $current_shelfmarks,
             'trismegistos_id' => $trismegistos_id,
             'completed' => $completed,
+            'incompleted' => $incompleted,
             'published' => $published,
+            'unpublished' => $unpublished,
             'imagelinks' => $imagelinks,
             'imagesonsite' => $imagesonsite,
             'title' => $title,
@@ -1372,7 +1386,9 @@ class DocumentController extends Controller
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
             'completed' => $data['completed'],
+            'incompleted' => $data['incompleted'],
             'published' => $data['published'],
+            'unpublished' => $data['unpublished'],
             'imagelinks' => $data['imagelinks'],
             'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
@@ -1620,7 +1636,9 @@ class DocumentController extends Controller
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
             'completed' => $data['completed'],
+            'incompleted' => $data['incompleted'],
             'published' => $data['published'],
+            'unpublished' => $data['unpublished'],
             'imagelinks' => $data['imagelinks'],
             'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
@@ -1830,7 +1848,9 @@ class DocumentController extends Controller
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
             'completed' => $data['completed'],
+            'incompleted' => $data['incompleted'],
             'published' => $data['published'],
+            'unpublished' => $data['unpublished'],
             'imagelinks' => $data['imagelinks'],
             'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],
@@ -2252,7 +2272,9 @@ class DocumentController extends Controller
             'current_shelfmarks' => $data['current_shelfmarks'],
             'trismegistos_id' => $data['trismegistos_id'],
             'completed' => $data['completed'],
+            'incompleted' => $data['incompleted'],
             'published' => $data['published'],
+            'unpublished' => $data['unpublished'],
             'imagelinks' => $data['imagelinks'],
             'imagesonsite' => $data['imagesonsite'],
             'title' => $data['title'],

@@ -89,20 +89,39 @@
                         ? 1
                         : 0">
                 <EthInput
-                    helptext="Show only codices with incomplete data entry."
+                    helptext="Show only codices with complete data entry."
                     input_type="boolevent-horiz"
                     input_id="completed"
                     v-model="form.s_completed"
+                    @new-change="sendsearch()"
+                >
+                    Complete
+                </EthInput>
+                                <EthInput
+                    helptext="Show only codices with incomplete data entry."
+                    input_type="boolevent-horiz"
+                    input_id="incompleted"
+                    v-model="form.s_incompleted"
                     @new-change="sendsearch()"
                 >
                     Incomplete
                 </EthInput>
 
                 <EthInput
-                    helptext="Show only unpublished codices."
+                    helptext="Show only published codices."
                     input_type="boolevent-horiz"
                     input_id="published"
                     v-model="form.s_published"
+                    @new-change="sendsearch()"
+                >
+                    Published
+                </EthInput>
+
+                <EthInput
+                    helptext="Show only unpublished codices."
+                    input_type="boolevent-horiz"
+                    input_id="unpublished"
+                    v-model="form.s_unpublished"
                     @new-change="sendsearch()"
                 >
                     Unpublished
@@ -1183,8 +1202,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from "vue";
-import { router } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import EthInput from "../Components/EthInput.vue";
 
@@ -1234,7 +1252,9 @@ const props = defineProps({
     current_shelfmarks: String,
     trismegistos_id: String,
     completed: Boolean,
+    incompleted: Boolean,
     published: Boolean,
+    unpublished: Boolean,
     imagelinks: Boolean,
     imagesonsite: Boolean,
     /* Content */
@@ -1352,7 +1372,9 @@ const form = useForm({
     s_current_shelfmarks: props.current_shelfmarks,
     s_trismegistos_id: props.trismegistos_id,
     s_completed: props.completed,
+    s_incompleted: props.incompleted,
     s_published: props.published,
+    s_unpublished: props.unpublished,
     s_imagelinks: props.imagelinks,
     s_imagesonsite: props.imagesonsite,
     /* Content */
