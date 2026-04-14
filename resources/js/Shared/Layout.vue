@@ -1270,7 +1270,7 @@ th {
 
 .showcodex_materiality {
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 1fr 3fr;
     grid-template-rows: auto;
     grid-template-areas:
         "material bindingdesc"
