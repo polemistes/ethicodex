@@ -36,8 +36,8 @@
       will not yet reflect the entire corpus.</p>
 
 
-      <p>This database is an output of The Early History of the Codex: A New 
-      Methodology and Ethics for Manuscript Studies (EthiCodex), a project 
+      <p>This database is an output of <a href="https://earlyhistoryofthecodex.com/">The Early History of the Codex: A New 
+      Methodology and Ethics for Manuscript Studies (EthiCodex)</a>, a project 
       funded by the Research Council of Norway (2021-2026, project number 314240). 
       The project is based at the Centre for the Advanced Study of Religion at MF 
       Norwegian School of Theology, Religion, and Society.</p>
