@@ -475,13 +475,15 @@ class DocumentController extends Controller
                     ->when($noworks, function ($query) {
                         $query->whereDoesntHave('works');
                     })
-                    ->when($title, function ($query, $title) {
-                        $query->whereHas('works', function ($query) use ($title) {
-                            $query
-                                ->where('works.name', 'like', "%{$title}%")
-                                ->orWhereRaw("locate(?, works.altnames)", [$title]);
-                        })
-                        ->orWhereRaw("locate(?, document_work.passage_comment)", [$title]);
+                    ->when($title, function ($query) use ($title) {
+                        $query->where(function($query) use ($title) {
+                            $query->whereHas('works', function ($query) use ($title) {
+                                $query
+                                    ->where('works.name', 'like', "%{$title}%")
+                                    ->orWhereRaw("locate(?, works.altnames)", [$title])
+                                    ->orWhereRaw("locate(?, document_work.passage_comment)", [$title]);
+                            });
+                        });
                     })
                     ->when($ancient_author, function ($query) use ($ancient_author) {
                         $query->where(function($query) use ($ancient_author) {
